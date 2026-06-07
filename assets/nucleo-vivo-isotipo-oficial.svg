@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 456" role="img" aria-labelledby="title desc">
+  <title id="title">Núcleo Vivo</title>
+  <desc id="desc">Isotipo de Núcleo Vivo con núcleo central y tres nodos conectados.</desc>
+  <defs>
+    <linearGradient id="leftArc" x1="108" y1="96" x2="222" y2="326" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0b5660"/>
+      <stop offset="1" stop-color="#082a38"/>
+    </linearGradient>
+    <linearGradient id="rightArc" x1="324" y1="58" x2="446" y2="242" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d6a963"/>
+      <stop offset="1" stop-color="#9e642f"/>
+    </linearGradient>
+    <linearGradient id="bottomArc" x1="88" y1="300" x2="376" y2="348" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0c5961"/>
+      <stop offset="0.52" stop-color="#062834"/>
+      <stop offset="1" stop-color="#082b38"/>
+    </linearGradient>
+    <radialGradient id="nodeTeal" cx="38%" cy="30%" r="78%">
+      <stop offset="0" stop-color="#0f6870"/>
+      <stop offset="1" stop-color="#082a38"/>
+    </radialGradient>
+    <radialGradient id="nodeCopper" cx="32%" cy="28%" r="80%">
+      <stop offset="0" stop-color="#d8aa63"/>
+      <stop offset="1" stop-color="#9b602f"/>
+    </radialGradient>
+    <radialGradient id="core" cx="36%" cy="28%" r="82%">
+      <stop offset="0" stop-color="#123f4d"/>
+      <stop offset="1" stop-color="#061b29"/>
+    </radialGradient>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M147 292C110 216 123 129 197 72C230 47 264 35 304 31" stroke="url(#leftArc)" stroke-width="50"/>
+    <path d="M348 42C410 79 447 143 441 215C439 236 435 254 428 272" stroke="url(#rightArc)" stroke-width="44"/>
+    <path d="M88 333C145 367 219 372 282 346C305 337 326 324 346 309" stroke="url(#bottomArc)" stroke-width="54"/>
+  </g>
+  <circle cx="96" cy="329" r="38" fill="url(#nodeTeal)"/>
+  <circle cx="342" cy="306" r="46" fill="url(#core)"/>
+  <circle cx="328" cy="42" r="39" fill="url(#nodeCopper)"/>
+  <circle cx="232" cy="214" r="45" fill="url(#core)"/>
+</svg>

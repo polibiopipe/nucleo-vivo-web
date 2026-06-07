@@ -11,7 +11,17 @@
     <link rel="icon" href="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" type="image/png" />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body class="splash-active">
+    <div class="splash-screen" aria-hidden="true">
+      <div class="splash-card">
+        <img
+          class="splash-logo"
+          src="assets/nucleo-vivo-logotipo-exacto-del-moodboard.png"
+          alt="Núcleo Vivo"
+        />
+      </div>
+    </div>
+
     <header class="site-header js-reveal">
       <div class="header-inner">
         <a class="brand" href="#inicio" aria-label="Ir al inicio">
@@ -24,6 +34,7 @@
         <nav class="header-nav" aria-label="Navegación principal">
           <a href="#propuesta">Proyecto</a>
           <a href="#lineas">Líneas</a>
+          <a href="#proceso">Proceso</a>
           <a href="#valores">Valores</a>
           <a href="#contacto">Contacto</a>
         </nav>
@@ -49,103 +60,211 @@
           </div>
         </div>
 
-        <aside class="editorial-panel js-reveal" aria-label="Enfoque de Núcleo Vivo">
-          <img
-            src="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png"
-            alt=""
-            class="panel-watermark"
-            aria-hidden="true"
-          />
-          <div class="panel-lines" aria-hidden="true"></div>
-          <div class="panel-content">
-            <span>Ecosistema vivo</span>
-            <p>Diagnóstico profundo.</p>
-            <p>Conversaciones significativas.</p>
-            <p>Aprendizajes aplicados.</p>
-            <p>Acciones con impacto.</p>
+        <aside class="hero-visual js-reveal" aria-label="Composición visual de Núcleo Vivo">
+          <figure class="hero-photo-card">
+            <img
+              src="assets/nucleo-vivo-mesa-diagnostico.png"
+              alt="Mesa de trabajo con materiales de diagnóstico y acompañamiento organizacional"
+            />
+            <figcaption>
+              <span>Diagnóstico</span>
+              <span>Acompañamiento</span>
+            </figcaption>
+          </figure>
+
+          <div class="editorial-panel hero-insight-panel">
+            <img
+              src="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png"
+              alt=""
+              class="panel-watermark"
+              aria-hidden="true"
+            />
+            <div class="panel-lines" aria-hidden="true"></div>
+            <div class="panel-content">
+              <span>Ecosistema vivo</span>
+              <p>Diagnóstico profundo.</p>
+              <p>Conversaciones significativas.</p>
+              <p>Acciones con impacto real.</p>
+            </div>
           </div>
         </aside>
       </section>
 
       <section class="project-section" id="propuesta">
-        <div class="section-shell project-grid">
-          <div class="section-label js-reveal">Proyecto</div>
-          <div class="project-content js-reveal">
+        <div class="section-shell project-editorial">
+          <div class="project-kicker js-reveal">
+            <span class="section-label">Proyecto</span>
+            <p>
+              Un ecosistema en construcción para pensar, diseñar y sostener
+              procesos de desarrollo humano-organizacional.
+            </p>
+          </div>
+          <div class="project-story js-reveal">
             <h2>Un proyecto con mirada de futuro</h2>
             <p>
-              Núcleo Vivo se proyecta como una plataforma de desarrollo humano
-              y organizacional que articula consultoría, formación, tecnología
-              y bienestar. Su primera etapa estará enfocada en acompañar
+              Núcleo Vivo se proyecta como una plataforma de desarrollo humano y
+              organizacional que articula consultoría, formación, tecnología y
+              bienestar. Su primera etapa estará enfocada en acompañar
               organizaciones, colegios, fundaciones y equipos que buscan
               transformar sus culturas desde una mirada más consciente,
               colaborativa y sostenible.
             </p>
           </div>
+          <aside class="project-compass js-reveal" aria-label="Dirección estratégica de Núcleo Vivo">
+            <img
+              src="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png"
+              alt=""
+              aria-hidden="true"
+            />
+            <span>Dirección estratégica</span>
+            <strong>Comprender. Diseñar. Sostener.</strong>
+            <p>
+              La consultoría como proceso: leer lo que ocurre, abrir conversaciones
+              relevantes y convertir aprendizaje en prácticas instalables.
+            </p>
+          </aside>
         </div>
       </section>
 
       <section class="value-section section-shell" aria-labelledby="valor-title">
-        <div class="value-statement js-reveal">
-          <span class="section-label">Propuesta de valor</span>
-          <h2 id="valor-title">Un ecosistema para transformar cultura, bienestar y aprendizaje.</h2>
-          <p>
-            Núcleo Vivo nace para integrar mirada humana, estrategia organizacional
-            y herramientas aplicadas en un mismo ecosistema. Acompañamos a
-            organizaciones, equipos e instituciones a comprender sus dinámicas,
-            fortalecer sus liderazgos y construir procesos de bienestar y
-            transformación sostenibles.
-          </p>
-          <p class="value-note">
-            No buscamos intervenir desde soluciones aisladas, sino construir
-            procesos con sentido, evidencia, participación y continuidad.
-          </p>
+        <div class="value-editorial js-reveal">
+          <div class="value-lead">
+            <span class="section-label">Propuesta de valor</span>
+            <h2 id="valor-title">Un ecosistema para transformar cultura, bienestar y aprendizaje.</h2>
+            <p>
+              Núcleo Vivo no parte desde recetas ni talleres sueltos. Leemos la
+              cultura viva de cada organización, abrimos conversaciones
+              significativas y traducimos diagnósticos en decisiones, prácticas y
+              aprendizajes aplicados.
+            </p>
+            <p class="value-note">
+              La transformación se vuelve sostenible cuando las personas entienden
+              el sentido del cambio y cuentan con herramientas para sostenerlo en
+              el tiempo.
+            </p>
+          </div>
+          <div class="value-map" aria-label="Mapa de valor de Núcleo Vivo">
+            <div class="value-node value-node-core">
+              <span>Cultura viva</span>
+            </div>
+            <div class="value-node">
+              <span>Diagnóstico profundo</span>
+            </div>
+            <div class="value-node">
+              <span>Liderazgo consciente</span>
+            </div>
+            <div class="value-node">
+              <span>Bienestar organizacional</span>
+            </div>
+            <div class="value-node">
+              <span>Acciones con impacto real</span>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section class="pillars-section section-shell" id="lineas" aria-labelledby="lineas-title">
-        <div class="section-heading js-reveal">
-          <span class="section-label">Líneas iniciales</span>
-          <h2 id="lineas-title">Primeras líneas de desarrollo del ecosistema.</h2>
+      <section class="lines-section" id="lineas" aria-labelledby="lineas-title">
+        <div class="section-shell lines-layout">
+          <div class="lines-intro js-reveal">
+            <span class="section-label">Líneas iniciales</span>
+            <h2 id="lineas-title">Tres puertas de entrada para activar el ecosistema.</h2>
+            <p>
+              La primera etapa prioriza líneas viables y conectadas entre sí:
+              acompañamiento, continuidad y aprendizaje aplicado.
+            </p>
+          </div>
+          <div class="lines-stack">
+            <article class="line-item js-reveal">
+              <span class="line-number">01</span>
+              <div>
+                <h3>Consultoría humana y organizacional</h3>
+                <p>Diagnóstico, cultura organizacional, liderazgo, clima, comunicación interna y acompañamiento de equipos.</p>
+              </div>
+              <small>Foco inicial</small>
+            </article>
+            <article class="line-item js-reveal">
+              <span class="line-number">02</span>
+              <div>
+                <h3>Bienestar organizacional por suscripción</h3>
+                <p>Modelo de acompañamiento continuo para instalar prácticas sostenibles de cuidado, formación y desarrollo.</p>
+              </div>
+              <small>Continuidad</small>
+            </article>
+            <article class="line-item js-reveal">
+              <span class="line-number">03</span>
+              <div>
+                <h3>Tecnología y formación en desarrollo</h3>
+                <p>Simuladores, recursos educativos, podcast y herramientas digitales orientadas al aprendizaje aplicado.</p>
+              </div>
+              <small>Proyección</small>
+            </article>
+          </div>
         </div>
-        <div class="pillar-grid">
-          <article class="pillar-card js-reveal">
-            <span class="pillar-number">01</span>
-            <h3>Consultoría humana y organizacional</h3>
-            <p>Diagnóstico, cultura organizacional, liderazgo, clima, comunicación interna y acompañamiento de equipos.</p>
-          </article>
-          <article class="pillar-card js-reveal">
-            <span class="pillar-number">02</span>
-            <h3>Bienestar organizacional por suscripción</h3>
-            <p>Modelo de acompañamiento continuo para organizaciones que necesitan instalar prácticas sostenibles de cuidado, formación y desarrollo.</p>
-          </article>
-          <article class="pillar-card js-reveal">
-            <span class="pillar-number">03</span>
-            <h3>Tecnología y formación en desarrollo</h3>
-            <p>Simuladores, recursos educativos, podcast y herramientas digitales orientadas al aprendizaje aplicado y la transformación organizacional.</p>
-          </article>
+      </section>
+
+      <section class="process-section" id="proceso" aria-labelledby="proceso-title">
+        <div class="section-shell process-editorial">
+          <div class="process-intro js-reveal">
+            <span class="section-label">Proceso</span>
+            <h2 id="proceso-title">Una forma de acompañar que convierte conversaciones en continuidad.</h2>
+          </div>
+          <div class="process-path" aria-label="Etapas de acompañamiento">
+            <article class="process-step js-reveal">
+              <span>01</span>
+              <h3>Comprender</h3>
+              <p>Leemos dinámicas, tensiones, oportunidades y relatos que dan forma a la cultura.</p>
+            </article>
+            <article class="process-step js-reveal">
+              <span>02</span>
+              <h3>Diseñar</h3>
+              <p>Traducimos hallazgos en experiencias, prácticas y herramientas aplicables.</p>
+            </article>
+            <article class="process-step js-reveal">
+              <span>03</span>
+              <h3>Acompañar</h3>
+              <p>Sostenemos procesos con participación, evidencia y aprendizajes iterativos.</p>
+            </article>
+          </div>
+          <aside class="process-note js-reveal">
+            <span>Metodología viva</span>
+            <p>
+              Cada proceso combina diagnóstico, conversación, diseño y seguimiento.
+              No busca producir un documento más, sino habilitar decisiones y
+              prácticas que puedan sostenerse.
+            </p>
+          </aside>
         </div>
       </section>
 
       <section class="values-section" id="valores">
-        <div class="section-shell values-grid">
-          <div class="section-heading js-reveal">
+        <div class="section-shell values-editorial">
+          <div class="values-quote js-reveal">
             <span class="section-label">Valores</span>
             <h2>Principios para construir procesos con sentido.</h2>
+            <p>
+              La mirada humana no es un tono comunicacional: es una forma de
+              diseñar con rigor, escuchar con responsabilidad e instalar cambios
+              junto a las personas que viven la cultura todos los días.
+            </p>
           </div>
           <div class="value-cards">
             <article class="value-card js-reveal">
+              <span>01</span>
               <h3>Humanidad</h3>
               <p>Las personas al centro de todo proceso.</p>
             </article>
             <article class="value-card js-reveal">
+              <span>02</span>
               <h3>Ética</h3>
               <p>Rigurosidad, responsabilidad y cuidado.</p>
             </article>
             <article class="value-card js-reveal">
+              <span>03</span>
               <h3>Innovación</h3>
               <p>Herramientas nuevas para desafíos reales.</p>
             </article>
             <article class="value-card js-reveal">
+              <span>04</span>
               <h3>Colaboración</h3>
               <p>Procesos construidos con otros, no impuestos desde fuera.</p>
             </article>
@@ -153,23 +272,51 @@
         </div>
       </section>
 
-      <section class="status-section">
-        <div class="section-shell status-panel js-reveal">
-          <div>
+      <section class="build-section">
+        <div class="section-shell build-grid">
+          <div class="status-panel js-reveal">
             <span class="section-label">Estado del sitio</span>
             <h2>Estamos construyendo nuestra nueva experiencia digital.</h2>
+            <p>
+              Pronto publicaremos nuestros servicios, programas, contenidos,
+              podcast y espacios de contacto. Esta primera versión presenta la
+              dirección estratégica de Núcleo Vivo y abre el camino para sus
+              próximas etapas.
+            </p>
           </div>
-          <p>
-            Pronto publicaremos nuestros servicios, programas, contenidos,
-            podcast y espacios de contacto. Esta primera versión presenta la
-            dirección estratégica de Núcleo Vivo y abre el camino para sus
-            próximas etapas.
-          </p>
+          <article class="podcast-panel js-reveal">
+            <img
+              src="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png"
+              alt=""
+              class="podcast-mark"
+              aria-hidden="true"
+            />
+            <span class="section-label">Núcleo Vivo Podcast</span>
+            <h2>Primer pulso del proyecto</h2>
+            <p>
+              Mientras construimos nuestra plataforma, abrimos también un espacio
+              de conversación sobre cultura, liderazgo, bienestar y transformación
+              humana en organizaciones, equipos e instituciones.
+            </p>
+            <a
+              class="button button-primary podcast-button"
+              href="https://open.spotify.com/episode/5S6WP5eromVUSB72ycFcej?si=1k7CZgR3Qny89s47LpR31Q&nd=1&dlsi=360d05a083b14ce7"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Escuchar en Spotify
+            </a>
+          </article>
         </div>
       </section>
 
       <section class="contact-section section-shell" id="contacto" aria-labelledby="contacto-title">
-        <div class="contact-heading js-reveal">
+        <div class="contact-panel js-reveal">
+          <img
+            src="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png"
+            alt=""
+            aria-hidden="true"
+          />
           <span class="section-label">Contacto</span>
           <h2 id="contacto-title">Conversemos el próximo paso</h2>
           <p>
