@@ -5,6 +5,12 @@ const splash = document.querySelector(".splash-screen");
 const menuToggle = document.querySelector(".menu-toggle");
 const mainNav = document.querySelector("#main-nav");
 
+if (window.location.protocol === "file:") {
+  document.querySelectorAll("[data-local-href]").forEach((link) => {
+    link.setAttribute("href", link.dataset.localHref);
+  });
+}
+
 function showPage() {
   splash?.remove();
   document.body.classList.remove("splash-active");

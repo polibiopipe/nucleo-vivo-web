@@ -7,7 +7,7 @@
       name="description"
       content="Núcleo Vivo acompaña a personas, equipos y organizaciones en procesos de cultura, liderazgo, bienestar y transformación."
     />
-    <meta name="theme-color" content="#062f35" />
+    <meta name="theme-color" content="#071d3a" />
     <title>Núcleo Vivo | Personas al centro. Organizaciones en evolución.</title>
     <link rel="icon" href="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" type="image/png" />
     <link rel="preload" as="image" href="assets/nucleo-vivo-hero-camino-proposito.png" />
@@ -50,8 +50,8 @@
 
         <nav class="header-nav" id="main-nav" aria-label="Navegación principal">
           <a href="#proyecto">Proyecto</a>
-          <a href="#lineas">Líneas</a>
-          <a href="#cuadernos">Cuadernos</a>
+          <a href="/lineas" data-local-href="lineas/index.html">Líneas</a>
+          <a href="/cuadernos" data-local-href="cuadernos/index.html">Cuadernos</a>
           <a href="#podcast">Podcast</a>
           <a href="#contacto">Contacto</a>
         </nav>
@@ -91,8 +91,8 @@
 
             <div class="hero-actions" aria-label="Acciones principales">
               <a class="button button-primary" href="#proyecto">Conócenos</a>
-              <a class="button button-secondary" href="#lineas">Nuestros servicios</a>
-              <a class="button button-quiet" href="#cuadernos">Cuadernos de Núcleo Vivo</a>
+              <a class="button button-secondary" href="/lineas" data-local-href="lineas/index.html">Líneas de trabajo</a>
+              <a class="button button-quiet" href="/cuadernos" data-local-href="cuadernos/index.html">Cuadernos de Núcleo Vivo</a>
               <a class="button button-quiet" href="mailto:contacto@nucleovivo.net">Escríbenos</a>
             </div>
           </div>
@@ -110,6 +110,14 @@
           <div class="project-heading js-reveal">
             <span class="section-label">Quiénes somos</span>
             <h2 id="project-title">No somos una consultora tradicional.</h2>
+            <figure class="project-visual">
+              <img
+                src="assets/cuaderno-humano-resultados.png"
+                alt="Círculo de sillas preparado para una conversación significativa"
+                loading="lazy"
+              />
+              <figcaption>Escuchar también es una forma de transformar.</figcaption>
+            </figure>
           </div>
 
           <div class="project-copy js-reveal">
@@ -127,6 +135,12 @@
               estrategia organizacional y herramientas aplicadas para fortalecer
               culturas más conscientes, colaborativas y sostenibles.
             </p>
+            <div class="project-signals" aria-label="Ámbitos de Núcleo Vivo">
+              <span>Diagnóstico</span>
+              <span>Acompañamiento</span>
+              <span>Aprendizaje</span>
+              <span>Bienestar</span>
+            </div>
           </div>
         </div>
 
@@ -148,61 +162,70 @@
           <div class="editorial-heading js-reveal">
             <div>
               <span class="section-label">Líneas de trabajo</span>
-              <h2 id="work-title">Un mismo propósito, distintas formas de acompañar.</h2>
+              <h2 id="work-title">Un ecosistema de iniciativas conectadas.</h2>
             </div>
             <p>
-              Cada línea nace de la misma mirada: comprender antes de intervenir,
-              construir con otros y convertir el aprendizaje en una capacidad que
-              permanezca.
+              Distintas formas de acompañar un mismo desafío: construir culturas,
+              aprendizajes y vínculos capaces de evolucionar con sentido.
             </p>
           </div>
 
-          <div class="work-list">
-            <article class="work-item js-reveal">
-              <span class="work-number">01</span>
-              <div>
+          <div class="initiative-grid">
+            <article class="initiative-card initiative-consulting js-reveal">
+              <div class="initiative-graphic" aria-hidden="true">
+                <span>01</span>
+                <img src="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" alt="" />
+              </div>
+              <div class="initiative-copy">
+                <span class="initiative-category">Consultoría y acompañamiento</span>
                 <h3>Consultoría humana y organizacional</h3>
                 <p>Cultura organizacional, liderazgo, bienestar y transformación.</p>
+                <a class="initiative-link" href="/lineas#consultoria" data-local-href="lineas/index.html#consultoria">Conocer la línea <span aria-hidden="true">→</span></a>
               </div>
-              <span class="work-kind">Acompañamiento</span>
             </article>
 
-            <article class="work-item js-reveal">
-              <span class="work-number">02</span>
-              <div>
+            <article class="initiative-card initiative-sembrar js-reveal">
+              <div class="initiative-graphic" aria-hidden="true"><span>02</span></div>
+              <div class="initiative-copy">
+                <span class="initiative-category">Educación y comunidad</span>
                 <h3>Sembrar</h3>
-                <p>Educación, bienestar y comunidad.</p>
+                <p>Educación, bienestar y comunidad. Una iniciativa de Núcleo Vivo.</p>
+                <a class="initiative-link" href="/lineas#sembrar" data-local-href="lineas/index.html#sembrar">Conocer Sembrar <span aria-hidden="true">→</span></a>
               </div>
-              <span class="work-kind">Una iniciativa de Núcleo Vivo</span>
             </article>
 
-            <article class="work-item js-reveal">
-              <span class="work-number">03</span>
-              <div>
+            <article class="initiative-card initiative-escena js-reveal">
+              <div class="initiative-graphic" aria-hidden="true"><span>03</span></div>
+              <div class="initiative-copy">
+                <span class="initiative-category">Arte y aprendizaje</span>
                 <h3>Escena Viva</h3>
-                <p>Teatro aplicado para el desarrollo humano.</p>
+                <p>Teatro aplicado para el desarrollo humano. Una iniciativa de Núcleo Vivo.</p>
+                <a class="initiative-link" href="/lineas#escena-viva" data-local-href="lineas/index.html#escena-viva">Conocer Escena Viva <span aria-hidden="true">→</span></a>
               </div>
-              <span class="work-kind">Una iniciativa de Núcleo Vivo</span>
             </article>
 
-            <article class="work-item js-reveal">
-              <span class="work-number">04</span>
-              <div>
+            <article class="initiative-card initiative-podcast js-reveal">
+              <div class="initiative-graphic sound-graphic" aria-hidden="true"><span>04</span></div>
+              <div class="initiative-copy">
+                <span class="initiative-category">Conversaciones</span>
                 <h3>Podcast</h3>
                 <p>Conversaciones sobre personas, trabajo y sociedad.</p>
+                <a class="initiative-link" href="#podcast">Escuchar el primer pulso <span aria-hidden="true">→</span></a>
               </div>
-              <a class="work-link" href="#podcast">Escuchar</a>
             </article>
 
-            <article class="work-item js-reveal">
-              <span class="work-number">05</span>
-              <div>
+            <article class="initiative-card initiative-cuadernos js-reveal">
+              <div class="initiative-graphic pages-graphic" aria-hidden="true"><span>05</span></div>
+              <div class="initiative-copy">
+                <span class="initiative-category">Publicación editorial</span>
                 <h3>Cuadernos de Núcleo Vivo</h3>
                 <p>Ideas sobre personas, trabajo y sociedad.</p>
+                <a class="initiative-link" href="/cuadernos" data-local-href="cuadernos/index.html">Explorar Cuadernos <span aria-hidden="true">→</span></a>
               </div>
-              <a class="work-link" href="#cuadernos">Explorar</a>
             </article>
           </div>
+
+          <a class="section-link js-reveal" href="/lineas" data-local-href="lineas/index.html">Ver todas las líneas de trabajo <span aria-hidden="true">→</span></a>
         </div>
       </section>
 
@@ -268,81 +291,50 @@
         <div class="section-shell articles-grid">
           <article class="article-card article-featured js-reveal">
             <div class="article-cover">
-              <img
-                src="assets/cuaderno-modelo-equilibrio.png"
-                alt="Piedras equilibradas junto a un sendero al amanecer"
-                loading="lazy"
-              />
+              <img src="assets/cuaderno-modelo-equilibrio.png" alt="Piedras equilibradas junto a un sendero al amanecer" loading="lazy" />
             </div>
             <div class="article-content">
               <span class="article-category">Sociedad y trabajo</span>
               <h3>¿Qué modelo necesitamos para estos tiempos?</h3>
               <p>Un equilibrio entre crecimiento, bienestar y humanidad.</p>
-              <div class="article-meta">
-                <time datetime="2026-06-20">20 junio 2026</time>
-                <span>6 min de lectura</span>
-              </div>
-              <button class="article-link" type="button" data-article="article-modelo">
-                Leer artículo <span aria-hidden="true">→</span>
-              </button>
+              <div class="article-meta"><time datetime="2026-06-20">20 junio 2026</time><span>6 min de lectura</span></div>
+              <a class="article-link" href="/cuadernos/que-modelo-necesitamos-para-estos-tiempos" data-local-href="cuadernos/que-modelo-necesitamos-para-estos-tiempos/index.html">Leer artículo <span aria-hidden="true">→</span></a>
             </div>
           </article>
 
           <article class="article-card js-reveal">
             <div class="article-cover">
-              <img
-                src="assets/cuaderno-humano-resultados.png"
-                alt="Círculo de sillas de madera dispuesto para una conversación"
-                loading="lazy"
-              />
+              <img src="assets/cuaderno-humano-resultados.png" alt="Círculo de sillas dispuesto para una conversación" loading="lazy" />
             </div>
             <div class="article-content">
               <span class="article-category">Liderazgo y cultura</span>
               <h3>Lo humano también produce resultados</h3>
-              <p>
-                Por qué las organizaciones que cuidan mejor a sus personas también
-                se vuelven más sostenibles.
-              </p>
-              <div class="article-meta">
-                <time datetime="2026-06-20">20 junio 2026</time>
-                <span>5 min de lectura</span>
-              </div>
-              <button class="article-link" type="button" data-article="article-humano">
-                Leer artículo <span aria-hidden="true">→</span>
-              </button>
+              <p>Por qué las organizaciones que cuidan mejor a sus personas también se vuelven más sostenibles.</p>
+              <div class="article-meta"><time datetime="2026-06-20">20 junio 2026</time><span>5 min de lectura</span></div>
+              <a class="article-link" href="/cuadernos/lo-humano-tambien-produce-resultados" data-local-href="cuadernos/lo-humano-tambien-produce-resultados/index.html">Leer artículo <span aria-hidden="true">→</span></a>
             </div>
           </article>
 
           <article class="article-card js-reveal">
             <div class="article-cover">
-              <img
-                src="assets/cuaderno-nuevas-generaciones.png"
-                alt="Mesa de aprendizaje con cuadernos, materiales y plantas bajo luz natural"
-                loading="lazy"
-              />
+              <img src="assets/cuaderno-nuevas-generaciones.png" alt="Mesa de aprendizaje con cuadernos y plantas bajo luz natural" loading="lazy" />
             </div>
             <div class="article-content">
               <span class="article-category">Nuevas generaciones</span>
               <h3>Nuevas generaciones, nuevas organizaciones</h3>
               <p>Por qué el futuro del trabajo será más humano y más estratégico.</p>
-              <div class="article-meta">
-                <time datetime="2026-06-20">20 junio 2026</time>
-                <span>5 min de lectura</span>
-              </div>
-              <button class="article-link" type="button" data-article="article-generaciones">
-                Leer artículo <span aria-hidden="true">→</span>
-              </button>
+              <div class="article-meta"><time datetime="2026-06-20">20 junio 2026</time><span>5 min de lectura</span></div>
+              <a class="article-link" href="/cuadernos/nuevas-generaciones-nuevas-organizaciones" data-local-href="cuadernos/nuevas-generaciones-nuevas-organizaciones/index.html">Leer artículo <span aria-hidden="true">→</span></a>
             </div>
           </article>
         </div>
 
-        <div class="section-shell category-line js-reveal" aria-label="Temas de Cuadernos">
-          <span>Sociedad y trabajo</span>
-          <span>Liderazgo y cultura</span>
-          <span>Nuevas generaciones</span>
-          <span>Inteligencia artificial y futuro</span>
-          <span>Bienestar y salud mental</span>
-          <span>Educación y aprendizaje</span>
+        <div class="section-shell notebooks-footer js-reveal">
+          <div class="category-line" aria-label="Temas de Cuadernos">
+            <span>Sociedad y trabajo</span><span>Liderazgo y cultura</span><span>Nuevas generaciones</span>
+            <span>Inteligencia artificial y futuro</span><span>Bienestar y salud mental</span><span>Educación y aprendizaje</span>
+          </div>
+          <a class="section-link" href="/cuadernos" data-local-href="cuadernos/index.html">Entrar a Cuadernos <span aria-hidden="true">→</span></a>
         </div>
       </section>
 
@@ -356,20 +348,10 @@
               trabajo, cultura, bienestar y los cambios que están dando forma a
               nuestra vida en común.
             </p>
-            <a
-              class="button button-primary"
-              href="https://open.spotify.com/episode/5S6WP5eromVUSB72ycFcej?si=1k7CZgR3Qny89s47LpR31Q&nd=1&dlsi=360d05a083b14ce7"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Escuchar en Spotify
-            </a>
+            <a class="button button-primary" href="https://open.spotify.com/episode/5S6WP5eromVUSB72ycFcej?si=1k7CZgR3Qny89s47LpR31Q&nd=1&dlsi=360d05a083b14ce7" target="_blank" rel="noopener noreferrer">Escuchar en Spotify</a>
           </div>
 
           <div class="podcast-visual js-reveal" aria-hidden="true">
-            <span class="pulse pulse-one"></span>
-            <span class="pulse pulse-two"></span>
-            <span class="pulse pulse-three"></span>
             <img src="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" alt="" />
           </div>
         </div>
@@ -388,14 +370,8 @@
           </div>
 
           <div class="contact-links js-reveal">
-            <a href="mailto:contacto@nucleovivo.net">
-              <span>Proyectos y consultas</span>
-              <strong>contacto@nucleovivo.net</strong>
-            </a>
-            <a href="mailto:podcast@nucleovivo.net">
-              <span>Podcast y contenidos</span>
-              <strong>podcast@nucleovivo.net</strong>
-            </a>
+            <a href="mailto:contacto@nucleovivo.net"><span>Proyectos y consultas</span><strong>contacto@nucleovivo.net</strong></a>
+            <a href="mailto:podcast@nucleovivo.net"><span>Podcast y contenidos</span><strong>podcast@nucleovivo.net</strong></a>
           </div>
         </div>
       </section>
@@ -403,197 +379,18 @@
 
     <footer class="site-footer">
       <div class="section-shell footer-main">
-        <img
-          src="assets/nucleo-vivo-logotipo-exacto-del-moodboard.png"
-          alt="Núcleo Vivo"
-          class="footer-logo"
-        />
-        <p>Personas al centro. Organizaciones en evolución.</p>
+        <img src="assets/nucleo-vivo-logotipo-exacto-del-moodboard.png" alt="Núcleo Vivo" class="footer-logo" />
+        <div class="footer-statement">
+          <p>Personas al centro. Organizaciones en evolución.</p>
+          <span>Acompañamos procesos de cultura, liderazgo, bienestar y transformación desde una mirada humana y aplicada.</span>
+        </div>
         <nav aria-label="Navegación del pie de página">
-          <a href="#proyecto">Proyecto</a>
-          <a href="#lineas">Líneas</a>
-          <a href="#cuadernos">Cuadernos</a>
-          <a href="#contacto">Contacto</a>
+          <a href="#proyecto">Proyecto</a><a href="/lineas" data-local-href="lineas/index.html">Líneas</a><a href="/cuadernos" data-local-href="cuadernos/index.html">Cuadernos</a>
+          <a href="#podcast">Podcast</a><a href="#contacto">Contacto</a>
         </nav>
       </div>
-      <div class="section-shell footer-bottom">
-        <p>© 2026 Núcleo Vivo.</p>
-        <p>Cultura · Liderazgo · Bienestar · Transformación.</p>
-      </div>
+      <div class="section-shell footer-bottom"><p>© 2026 Núcleo Vivo.</p><p>contacto@nucleovivo.net</p></div>
     </footer>
-
-    <dialog class="article-dialog" id="article-modelo" aria-labelledby="article-modelo-title">
-      <div class="dialog-shell">
-        <button class="dialog-close" type="button" data-close-dialog aria-label="Cerrar artículo" title="Cerrar">×</button>
-        <div class="dialog-cover">
-          <img src="assets/cuaderno-modelo-equilibrio.png" alt="" />
-        </div>
-        <article class="dialog-article">
-          <span class="article-category">Sociedad y trabajo</span>
-          <h2 id="article-modelo-title">¿Qué modelo necesitamos para estos tiempos?</h2>
-          <p class="article-deck">Un equilibrio entre crecimiento, bienestar y humanidad.</p>
-          <div class="article-meta">
-            <time datetime="2026-06-20">20 junio 2026</time>
-            <span>6 min de lectura</span>
-          </div>
-
-          <p class="article-lead">
-            Durante mucho tiempo tratamos el crecimiento y el bienestar como si
-            fueran objetivos que compiten. Esa separación ya no alcanza para leer
-            la complejidad de nuestras organizaciones ni de nuestra vida social.
-          </p>
-          <h3>El límite de los extremos</h3>
-          <p>
-            Un modelo centrado exclusivamente en resultados termina agotando las
-            capacidades que necesita para sostenerlos. Pero un modelo que habla de
-            bienestar sin dirección, responsabilidad ni propósito tampoco logra
-            transformar la realidad. El desafío no es elegir uno u otro: es
-            construir una relación más madura entre ambos.
-          </p>
-          <p>
-            Crecer de manera sostenible exige mirar cómo se toman las decisiones,
-            qué conversaciones se evitan, qué aprendizajes se vuelven práctica y
-            qué costos humanos permanecen invisibles. Esas preguntas no frenan el
-            desempeño. Le dan profundidad y continuidad.
-          </p>
-          <blockquote>
-            El bienestar no es la ausencia de exigencia. Es la capacidad de
-            responder a ella sin perder sentido, vínculo ni salud.
-          </blockquote>
-          <h3>Un modelo de doble capacidad</h3>
-          <p>
-            Las organizaciones de nuestro tiempo necesitan desarrollar dos
-            capacidades simultáneas: producir valor y regenerar las condiciones
-            humanas que lo hacen posible. Eso implica liderazgos que orienten sin
-            rigidizar, culturas que permitan aprender del error y sistemas de
-            trabajo capaces de cuidar la energía colectiva.
-          </p>
-          <p>
-            El modelo que necesitamos no llegará como una receta universal. Se
-            construirá en cada organización a través de diagnósticos honestos,
-            acuerdos explícitos y decisiones coherentes. El equilibrio no es un
-            punto fijo: es una práctica continua de observación y ajuste.
-          </p>
-          <footer class="article-signoff">Cuadernos de Núcleo Vivo</footer>
-        </article>
-      </div>
-    </dialog>
-
-    <dialog class="article-dialog" id="article-humano" aria-labelledby="article-humano-title">
-      <div class="dialog-shell">
-        <button class="dialog-close" type="button" data-close-dialog aria-label="Cerrar artículo" title="Cerrar">×</button>
-        <div class="dialog-cover">
-          <img src="assets/cuaderno-humano-resultados.png" alt="" />
-        </div>
-        <article class="dialog-article">
-          <span class="article-category">Liderazgo y cultura</span>
-          <h2 id="article-humano-title">Lo humano también produce resultados</h2>
-          <p class="article-deck">
-            Por qué las organizaciones que cuidan mejor a sus personas también se
-            vuelven más sostenibles.
-          </p>
-          <div class="article-meta">
-            <time datetime="2026-06-20">20 junio 2026</time>
-            <span>5 min de lectura</span>
-          </div>
-
-          <p class="article-lead">
-            Cuidar a las personas suele aparecer en el lenguaje organizacional como
-            un gesto deseable, pero secundario. Esa lectura desconoce algo básico:
-            todo resultado depende de capacidades humanas que necesitan condiciones
-            para desplegarse.
-          </p>
-          <h3>El cuidado no compite con el desempeño</h3>
-          <p>
-            La confianza facilita que los problemas aparezcan antes de volverse
-            crisis. La claridad reduce energía desperdiciada. La seguridad
-            psicológica permite preguntar, disentir y aprender. El reconocimiento
-            fortalece el compromiso. Ninguna de estas dimensiones es decorativa;
-            todas influyen en cómo una organización decide y actúa.
-          </p>
-          <p>
-            Cuando el cuidado se limita a beneficios aislados, pierde capacidad de
-            transformación. Se vuelve significativo cuando alcanza la carga de
-            trabajo, el estilo de liderazgo, la calidad de las reuniones y la forma
-            en que se resuelven las tensiones.
-          </p>
-          <blockquote>
-            Una cultura humana no evita las conversaciones difíciles. Crea las
-            condiciones para sostenerlas con respeto y propósito.
-          </blockquote>
-          <h3>Resultados que pueden sostenerse</h3>
-          <p>
-            Las organizaciones sostenibles no son aquellas donde nunca hay
-            presión. Son las que pueden atravesarla sin normalizar el desgaste,
-            perder talento o romper la confianza. Para eso, el bienestar debe
-            entrar en la estrategia y no quedar relegado a una actividad paralela.
-          </p>
-          <p>
-            Poner a las personas al centro no significa renunciar a los resultados.
-            Significa comprender de dónde vienen y qué condiciones permiten
-            sostenerlos en el tiempo.
-          </p>
-          <footer class="article-signoff">Cuadernos de Núcleo Vivo</footer>
-        </article>
-      </div>
-    </dialog>
-
-    <dialog class="article-dialog" id="article-generaciones" aria-labelledby="article-generaciones-title">
-      <div class="dialog-shell">
-        <button class="dialog-close" type="button" data-close-dialog aria-label="Cerrar artículo" title="Cerrar">×</button>
-        <div class="dialog-cover">
-          <img src="assets/cuaderno-nuevas-generaciones.png" alt="" />
-        </div>
-        <article class="dialog-article">
-          <span class="article-category">Nuevas generaciones</span>
-          <h2 id="article-generaciones-title">Nuevas generaciones, nuevas organizaciones</h2>
-          <p class="article-deck">Por qué el futuro del trabajo será más humano y más estratégico.</p>
-          <div class="article-meta">
-            <time datetime="2026-06-20">20 junio 2026</time>
-            <span>5 min de lectura</span>
-          </div>
-
-          <p class="article-lead">
-            Las nuevas generaciones no están llegando únicamente con otras
-            herramientas. Están haciendo preguntas diferentes sobre el sentido del
-            trabajo, la autoridad, el aprendizaje y el lugar que ocupa la vida
-            dentro de una trayectoria profesional.
-          </p>
-          <h3>No es falta de compromiso</h3>
-          <p>
-            Muchas tensiones generacionales nacen cuando interpretamos expectativas
-            nuevas con categorías antiguas. Pedir flexibilidad, retroalimentación o
-            coherencia no equivale necesariamente a una menor disposición al
-            esfuerzo. A menudo expresa una relación más consciente con el tiempo,
-            la identidad y el propósito.
-          </p>
-          <p>
-            Las organizaciones que respondan solo con discursos de adaptación
-            perderán una oportunidad. Las que escuchen estas preguntas podrán
-            revisar prácticas que ya estaban agotadas para todos, no únicamente
-            para quienes recién ingresan al mundo laboral.
-          </p>
-          <blockquote>
-            El desafío no es domesticar expectativas nuevas, sino convertirlas en
-            una conversación estratégica sobre el futuro del trabajo.
-          </blockquote>
-          <h3>Organizaciones que aprenden</h3>
-          <p>
-            El futuro exigirá estructuras capaces de transferir experiencia sin
-            imponer inmovilidad, y de incorporar innovación sin despreciar la
-            memoria. Eso requiere mentoría, aprendizaje continuo y liderazgos que
-            puedan traducir entre distintas formas de entender el trabajo.
-          </p>
-          <p>
-            Más humano y más estratégico no son direcciones opuestas. Una
-            organización que comprende mejor a las personas también comprende mejor
-            sus riesgos, sus capacidades y las posibilidades de evolución que ya
-            existen dentro de ella.
-          </p>
-          <footer class="article-signoff">Cuadernos de Núcleo Vivo</footer>
-        </article>
-      </div>
-    </dialog>
 
     <script src="script.js" defer></script>
   </body>
