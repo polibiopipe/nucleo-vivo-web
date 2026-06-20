@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Núcleo Vivo es una iniciativa en construcción orientada a desarrollo humano, consultoría organizacional, formación, bienestar y transformación sostenible."
+      content="Núcleo Vivo acompaña a personas, equipos y organizaciones en procesos de cultura, liderazgo, bienestar y transformación."
     />
-    <title>Núcleo Vivo | Bienestar con propósito</title>
+    <meta name="theme-color" content="#062f35" />
+    <title>Núcleo Vivo | Personas al centro. Organizaciones en evolución.</title>
     <link rel="icon" href="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" type="image/png" />
+    <link rel="preload" as="image" href="assets/nucleo-vivo-hero-camino-proposito.png" />
     <link rel="stylesheet" href="styles.css" />
     <noscript>
       <style>
@@ -36,331 +38,363 @@
       </div>
     </div>
 
-    <header class="site-header js-reveal">
+    <header class="site-header">
       <div class="section-shell header-inner">
-        <a class="brand" href="#inicio" aria-label="Ir al inicio">
+        <a class="brand" href="#inicio" aria-label="Ir al inicio de Núcleo Vivo">
           <img
             src="assets/nucleo-vivo-logotipo-exacto-del-moodboard.png"
             alt="Núcleo Vivo"
             class="brand-logo"
           />
         </a>
-        <nav class="header-nav" aria-label="Navegación principal">
+
+        <nav class="header-nav" id="main-nav" aria-label="Navegación principal">
           <a href="#proyecto">Proyecto</a>
-          <a href="#proposito">Propósito</a>
           <a href="#lineas">Líneas</a>
-          <a href="#proceso">Cómo trabajamos</a>
-          <a href="#valores">Valores</a>
+          <a href="#cuadernos">Cuadernos</a>
           <a href="#podcast">Podcast</a>
           <a href="#contacto">Contacto</a>
         </nav>
+
         <a class="header-button" href="mailto:contacto@nucleovivo.net">Escríbenos</a>
+
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="main-nav"
+          aria-label="Abrir menú"
+          title="Abrir menú"
+        >
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </header>
 
     <main id="inicio">
-      <section class="hero">
-        <div class="section-shell hero-grid">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="section-shell hero-inner">
           <div class="hero-copy js-reveal">
-            <span class="status-pill">Sitio en desarrollo</span>
-            <p class="overline">Cultura · Liderazgo · Bienestar</p>
-            <h1>
+            <p class="hero-brand">Núcleo Vivo</p>
+            <p class="overline">Consultoría humana y organizacional</p>
+            <h1 id="hero-title">
               Personas al centro.<br />
-              Bienestar con propósito.
+              Organizaciones en evolución.
             </h1>
             <p class="hero-text">
-              Núcleo Vivo es una iniciativa en construcción orientada a acompañar
-              procesos de desarrollo humano y organizacional a través de
-              consultoría, formación, bienestar y herramientas innovadoras para el
-              aprendizaje y la transformación sostenible.
+              Acompañamos a personas, equipos y organizaciones que buscan crecer,
+              aprender y adaptarse a los desafíos de nuestro tiempo sin perder de
+              vista lo humano.
             </p>
             <p class="hero-scope">Cultura · Liderazgo · Bienestar · Transformación</p>
+
             <div class="hero-actions" aria-label="Acciones principales">
-              <a class="button button-primary" href="mailto:contacto@nucleovivo.net">Escríbenos</a>
-              <a class="button button-secondary" href="#proyecto">Conoce el proyecto</a>
+              <a class="button button-primary" href="#proyecto">Conócenos</a>
+              <a class="button button-secondary" href="#lineas">Nuestros servicios</a>
+              <a class="button button-quiet" href="#cuadernos">Cuadernos de Núcleo Vivo</a>
+              <a class="button button-quiet" href="mailto:contacto@nucleovivo.net">Escríbenos</a>
             </div>
           </div>
 
-          <aside class="hero-panel hero-image-panel js-reveal" aria-label="Mesa de diagnóstico y aprendizaje organizacional">
-            <div class="hero-image-frame">
-              <img
-                src="assets/nucleo-vivo-hero-camino-proposito.png"
-                alt="Camino hacia un horizonte de montañas al amanecer como símbolo de propósito, aprendizaje y transformación sostenible"
-              />
-            </div>
-            <div class="hero-panel-card">
-              <div class="panel-topline">
-                <span>Proyecto en construcción</span>
-                <span>Primera etapa</span>
-              </div>
-              <h2>Ecosistema vivo</h2>
-              <p>
-                Diagnóstico profundo. Conversaciones significativas. Aprendizajes
-                aplicados. Acciones con impacto.
-              </p>
-              <div class="panel-signals" aria-label="Ámbitos iniciales">
-                <span>Consultoría</span>
-                <span>Academy</span>
-                <span>Bienestar</span>
-                <span>Podcast</span>
-              </div>
-            </div>
-          </aside>
+          <div class="hero-caption js-reveal" aria-hidden="true">
+            <span>Mirada humana</span>
+            <span>Estrategia aplicada</span>
+            <span>Transformación sostenible</span>
+          </div>
         </div>
       </section>
 
-      <section class="project-section" id="proyecto">
-        <div class="section-shell project-layout">
-          <div class="section-copy js-reveal">
-            <span class="section-label">Proyecto</span>
-            <h2>Un proyecto en construcción, con servicios posibles desde hoy.</h2>
-            <p>
-              Núcleo Vivo abre una primera presencia institucional mientras
-              desarrolla su plataforma completa. En esta etapa, el foco está en
-              acompañar a organizaciones, equipos e instituciones mediante
-              consultoría humana y organizacional, formación inicial, bienestar
-              organizacional y contenidos con sentido.
-            </p>
+      <section class="project-section" id="proyecto" aria-labelledby="project-title">
+        <div class="section-shell project-grid">
+          <div class="project-heading js-reveal">
+            <span class="section-label">Quiénes somos</span>
+            <h2 id="project-title">No somos una consultora tradicional.</h2>
           </div>
 
-          <div class="project-card js-reveal">
-            <span>Propuesta de valor</span>
-            <h3>Convertir conocimiento aplicado en bienestar real y procesos sostenibles.</h3>
+          <div class="project-copy js-reveal">
+            <p class="project-lead">
+              Creemos que el desarrollo organizacional y el desarrollo humano no
+              son caminos separados.
+            </p>
             <p>
-              Integramos mirada humana, estrategia organizacional, formación y
-              herramientas en desarrollo para fortalecer culturas más conscientes,
-              colaborativas y sostenibles.
+              Trabajamos acompañando personas, equipos y organizaciones que buscan
+              crecer, aprender y adaptarse a los desafíos de nuestro tiempo.
+            </p>
+            <p>
+              Núcleo Vivo nace para transformar diagnósticos, conversaciones y
+              aprendizajes en acciones concretas. Integramos mirada humana,
+              estrategia organizacional y herramientas aplicadas para fortalecer
+              culturas más conscientes, colaborativas y sostenibles.
             </p>
           </div>
         </div>
-      </section>
 
-      <section class="value-section">
-        <div class="section-shell value-panel js-reveal">
-          <span class="section-label">Propuesta de valor</span>
-          <h2>Consultoría, formación y bienestar conectados por un propósito común.</h2>
-          <p>
-            Núcleo Vivo no parte desde productos aislados, sino desde preguntas
-            humanas y organizacionales: cómo se cuida una cultura, cómo se aprende
-            en equipo, cómo se lidera con sentido y cómo se transforman prácticas
-            cotidianas en bienestar sostenible.
-          </p>
-          <p>
-            Desde esa mirada acompañamos procesos de diagnóstico, diseño formativo,
-            cursos iniciales, conversaciones estratégicas, contenidos y bienestar
-            organizacional, con tecnología como soporte en desarrollo.
-          </p>
-        </div>
-      </section>
-
-      <section class="vision-section" id="proposito">
-        <div class="section-shell vision-layout">
-          <div class="vision-statement js-reveal">
-            <span class="section-label">Propósito</span>
-            <h2>
-              Transformar conocimiento psicológico en bienestar real para personas,
-              organizaciones y comunidades.
-            </h2>
-          </div>
-          <div class="vision-balance">
-            <article class="vision-card js-reveal">
-              <span>Hoy</span>
-              <h3>Acompañamiento posible</h3>
-              <p>Consultoría, cursos iniciales, bienestar organizacional, podcast y contenidos.</p>
-            </article>
-            <article class="vision-card js-reveal">
-              <span>En construcción</span>
-              <h3>Herramientas y plataforma</h3>
-              <p>Recursos digitales, programas formativos y modelos de seguimiento aplicados.</p>
-            </article>
-            <article class="vision-card js-reveal">
-              <span>Futuro</span>
-              <h3>Transformación sostenible</h3>
-              <p>Un ecosistema humano-organizacional con aprendizaje, innovación y bienestar.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="lines-section" id="lineas" aria-labelledby="lineas-title">
-        <div class="section-shell">
-          <div class="section-heading js-reveal">
-            <span class="section-label">Líneas iniciales</span>
-            <h2 id="lineas-title">Lo que podemos hacer hoy, y lo que estamos desarrollando.</h2>
-          </div>
-
-          <div class="initial-lines">
-            <article class="line-card line-consultoria js-reveal">
-              <span>01</span>
-              <h3>Consultoría humana y organizacional</h3>
-              <p>
-                Diagnóstico, cultura organizacional, liderazgo, clima, comunicación
-                interna y acompañamiento de equipos.
-              </p>
-            </article>
-            <article class="line-card line-academy js-reveal">
-              <span>02</span>
-              <h3>Formación, Academy y cursos</h3>
-              <p>
-                Experiencias formativas iniciales para fortalecer liderazgo,
-                aprendizaje aplicado, convivencia y desarrollo de equipos.
-              </p>
-            </article>
-            <article class="line-card line-bienestar js-reveal">
-              <span>03</span>
-              <h3>Bienestar organizacional</h3>
-              <p>
-                Acompañamiento continuo para instalar prácticas sostenibles de
-                cuidado, formación y desarrollo humano.
-              </p>
-            </article>
-            <article class="line-card line-podcast js-reveal">
-              <span>04</span>
-              <h3>Podcast y contenidos</h3>
-              <p>
-                Conversaciones, ideas y recursos sobre cultura, liderazgo,
-                bienestar y transformación humana.
-              </p>
-            </article>
-            <article class="line-card line-tools js-reveal">
-              <span>05</span>
-              <h3>Tecnología y herramientas en desarrollo</h3>
-              <p>
-                Recursos digitales, simuladores y herramientas de aprendizaje que
-                se integrarán progresivamente al ecosistema.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="process-section" id="proceso">
-        <div class="section-shell process-layout">
-          <div class="process-intro js-reveal">
-            <span class="section-label">Proceso</span>
-            <h2>Comprender, diseñar y acompañar con continuidad.</h2>
-            <p>
-              La transformación sostenible no ocurre por una acción aislada. Nace
-              de comprender el contexto, diseñar respuestas pertinentes y acompañar
-              los aprendizajes hasta convertirlos en práctica.
-            </p>
-          </div>
-
-          <div class="process-steps">
-            <article class="process-step js-reveal">
-              <span>01</span>
-              <h3>Comprender</h3>
-              <p>Escuchar, diagnosticar y leer dinámicas culturales, humanas y organizacionales.</p>
-            </article>
-            <article class="process-step js-reveal">
-              <span>02</span>
-              <h3>Diseñar</h3>
-              <p>Crear experiencias, cursos y herramientas ajustadas al contexto real de cada equipo.</p>
-            </article>
-            <article class="process-step js-reveal">
-              <span>03</span>
-              <h3>Acompañar</h3>
-              <p>Sostener conversaciones, prácticas y decisiones que movilicen cambios posibles.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="values-section" id="valores">
-        <div class="section-shell">
-          <div class="section-heading js-reveal">
-            <span class="section-label">Valores</span>
-            <h2>Una iniciativa humanista, profesional y con proyección.</h2>
-          </div>
-
-          <div class="values-grid">
-            <article class="value-card js-reveal">
-              <h3>Humanidad</h3>
-              <p>Las personas al centro de todo proceso.</p>
-            </article>
-            <article class="value-card js-reveal">
-              <h3>Ética</h3>
-              <p>Rigurosidad, responsabilidad y cuidado.</p>
-            </article>
-            <article class="value-card js-reveal">
-              <h3>Innovación</h3>
-              <p>Herramientas nuevas para desafíos reales.</p>
-            </article>
-            <article class="value-card js-reveal">
-              <h3>Colaboración</h3>
-              <p>Procesos construidos con otros, no impuestos desde fuera.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="status-section">
-        <div class="section-shell status-panel js-reveal">
-          <div>
-            <span class="section-label">Estado del sitio</span>
-            <h2>Estamos construyendo nuestra nueva experiencia digital.</h2>
-          </div>
-          <p>
-            Pronto publicaremos servicios, cursos, programas, contenidos, podcast
-            y espacios de contacto. Esta primera versión presenta el propósito de
-            Núcleo Vivo, sus líneas iniciales y la visión que guiará sus próximas
-            etapas.
-          </p>
-        </div>
-      </section>
-
-      <section class="podcast-section" id="podcast">
-        <div class="section-shell podcast-panel js-reveal">
+        <div class="section-shell purpose-panel js-reveal">
           <img
             src="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png"
             alt=""
-            class="podcast-mark"
             aria-hidden="true"
+            class="purpose-mark"
           />
-          <div>
-            <span class="section-label">Núcleo Vivo Podcast</span>
-            <h2>Ya puedes escuchar nuestro primer avance.</h2>
-            <p>
-              Mientras construimos nuestra plataforma, abrimos también un espacio
-              de conversación sobre cultura, liderazgo, bienestar, aprendizaje y
-              transformación humana en organizaciones, equipos e instituciones.
-            </p>
-          </div>
-          <a
-            class="button button-primary podcast-button"
-            href="https://open.spotify.com/episode/5S6WP5eromVUSB72ycFcej?si=1k7CZgR3Qny89s47LpR31Q&nd=1&dlsi=360d05a083b14ce7"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Escuchar en Spotify
-          </a>
+          <p>Una idea simple orienta nuestro trabajo</p>
+          <blockquote>Lo humano no es un complemento de la estrategia. Es su núcleo.</blockquote>
+          <span>Núcleo Vivo no está terminado. Está vivo.</span>
         </div>
       </section>
 
-      <section class="contact-section" id="contacto" aria-labelledby="contacto-title">
-        <div class="section-shell contact-grid">
-          <div class="contact-panel js-reveal">
-            <img
-              src="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png"
-              alt=""
-              aria-hidden="true"
-            />
-            <span class="section-label">Contacto</span>
-            <h2 id="contacto-title">Conversemos el próximo paso</h2>
+      <section class="work-section" id="lineas" aria-labelledby="work-title">
+        <div class="section-shell">
+          <div class="editorial-heading js-reveal">
+            <div>
+              <span class="section-label">Líneas de trabajo</span>
+              <h2 id="work-title">Un mismo propósito, distintas formas de acompañar.</h2>
+            </div>
             <p>
-              Si formas parte de una organización, colegio, fundación o equipo que
-              busca fortalecer su cultura, liderazgo, bienestar o formación,
-              puedes escribirnos.
+              Cada línea nace de la misma mirada: comprender antes de intervenir,
+              construir con otros y convertir el aprendizaje en una capacidad que
+              permanezca.
             </p>
           </div>
-          <div class="contact-list js-reveal">
+
+          <div class="work-list">
+            <article class="work-item js-reveal">
+              <span class="work-number">01</span>
+              <div>
+                <h3>Consultoría humana y organizacional</h3>
+                <p>Cultura organizacional, liderazgo, bienestar y transformación.</p>
+              </div>
+              <span class="work-kind">Acompañamiento</span>
+            </article>
+
+            <article class="work-item js-reveal">
+              <span class="work-number">02</span>
+              <div>
+                <h3>Sembrar</h3>
+                <p>Educación, bienestar y comunidad.</p>
+              </div>
+              <span class="work-kind">Una iniciativa de Núcleo Vivo</span>
+            </article>
+
+            <article class="work-item js-reveal">
+              <span class="work-number">03</span>
+              <div>
+                <h3>Escena Viva</h3>
+                <p>Teatro aplicado para el desarrollo humano.</p>
+              </div>
+              <span class="work-kind">Una iniciativa de Núcleo Vivo</span>
+            </article>
+
+            <article class="work-item js-reveal">
+              <span class="work-number">04</span>
+              <div>
+                <h3>Podcast</h3>
+                <p>Conversaciones sobre personas, trabajo y sociedad.</p>
+              </div>
+              <a class="work-link" href="#podcast">Escuchar</a>
+            </article>
+
+            <article class="work-item js-reveal">
+              <span class="work-number">05</span>
+              <div>
+                <h3>Cuadernos de Núcleo Vivo</h3>
+                <p>Ideas sobre personas, trabajo y sociedad.</p>
+              </div>
+              <a class="work-link" href="#cuadernos">Explorar</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="approach-section" aria-labelledby="approach-title">
+        <div class="section-shell approach-grid">
+          <div class="approach-intro js-reveal">
+            <span class="section-label">Cómo acompañamos</span>
+            <h2 id="approach-title">La transformación necesita tiempo, lectura y continuidad.</h2>
+            <p>
+              No llegamos con respuestas cerradas. Leemos el contexto, diseñamos
+              junto a quienes lo habitan y acompañamos la puesta en práctica.
+            </p>
+          </div>
+
+          <ol class="approach-steps">
+            <li class="js-reveal">
+              <span>01</span>
+              <div>
+                <h3>Comprender</h3>
+                <p>Escuchar, diagnosticar y reconocer las dinámicas que ya están vivas.</p>
+              </div>
+            </li>
+            <li class="js-reveal">
+              <span>02</span>
+              <div>
+                <h3>Diseñar</h3>
+                <p>Construir respuestas pertinentes, aplicables y conectadas con el propósito.</p>
+              </div>
+            </li>
+            <li class="js-reveal">
+              <span>03</span>
+              <div>
+                <h3>Acompañar</h3>
+                <p>Sostener el aprendizaje hasta convertirlo en prácticas y capacidades.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="section-shell principles" aria-label="Principios de Núcleo Vivo">
+          <span>Humanidad</span>
+          <span>Ética</span>
+          <span>Innovación</span>
+          <span>Colaboración</span>
+        </div>
+      </section>
+
+      <section class="notebooks-section" id="cuadernos" aria-labelledby="notebooks-title">
+        <div class="section-shell notebooks-intro js-reveal">
+          <p class="publication-name">Cuadernos de Núcleo Vivo</p>
+          <h2 id="notebooks-title">Ideas sobre personas, trabajo y sociedad.</h2>
+          <p>
+            Un espacio para mirar con calma lo que está cambiando: cómo trabajamos,
+            cómo lideramos, cómo aprendemos y cómo construimos bienestar en tiempos
+            donde todo parece moverse demasiado rápido.
+          </p>
+          <p>
+            Porque entender mejor lo que nos pasa también es una forma de
+            transformar lo que hacemos.
+          </p>
+        </div>
+
+        <div class="section-shell articles-grid">
+          <article class="article-card article-featured js-reveal">
+            <div class="article-cover">
+              <img
+                src="assets/cuaderno-modelo-equilibrio.png"
+                alt="Piedras equilibradas junto a un sendero al amanecer"
+                loading="lazy"
+              />
+            </div>
+            <div class="article-content">
+              <span class="article-category">Sociedad y trabajo</span>
+              <h3>¿Qué modelo necesitamos para estos tiempos?</h3>
+              <p>Un equilibrio entre crecimiento, bienestar y humanidad.</p>
+              <div class="article-meta">
+                <time datetime="2026-06-20">20 junio 2026</time>
+                <span>6 min de lectura</span>
+              </div>
+              <button class="article-link" type="button" data-article="article-modelo">
+                Leer artículo <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </article>
+
+          <article class="article-card js-reveal">
+            <div class="article-cover">
+              <img
+                src="assets/cuaderno-humano-resultados.png"
+                alt="Círculo de sillas de madera dispuesto para una conversación"
+                loading="lazy"
+              />
+            </div>
+            <div class="article-content">
+              <span class="article-category">Liderazgo y cultura</span>
+              <h3>Lo humano también produce resultados</h3>
+              <p>
+                Por qué las organizaciones que cuidan mejor a sus personas también
+                se vuelven más sostenibles.
+              </p>
+              <div class="article-meta">
+                <time datetime="2026-06-20">20 junio 2026</time>
+                <span>5 min de lectura</span>
+              </div>
+              <button class="article-link" type="button" data-article="article-humano">
+                Leer artículo <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </article>
+
+          <article class="article-card js-reveal">
+            <div class="article-cover">
+              <img
+                src="assets/cuaderno-nuevas-generaciones.png"
+                alt="Mesa de aprendizaje con cuadernos, materiales y plantas bajo luz natural"
+                loading="lazy"
+              />
+            </div>
+            <div class="article-content">
+              <span class="article-category">Nuevas generaciones</span>
+              <h3>Nuevas generaciones, nuevas organizaciones</h3>
+              <p>Por qué el futuro del trabajo será más humano y más estratégico.</p>
+              <div class="article-meta">
+                <time datetime="2026-06-20">20 junio 2026</time>
+                <span>5 min de lectura</span>
+              </div>
+              <button class="article-link" type="button" data-article="article-generaciones">
+                Leer artículo <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </article>
+        </div>
+
+        <div class="section-shell category-line js-reveal" aria-label="Temas de Cuadernos">
+          <span>Sociedad y trabajo</span>
+          <span>Liderazgo y cultura</span>
+          <span>Nuevas generaciones</span>
+          <span>Inteligencia artificial y futuro</span>
+          <span>Bienestar y salud mental</span>
+          <span>Educación y aprendizaje</span>
+        </div>
+      </section>
+
+      <section class="podcast-section" id="podcast" aria-labelledby="podcast-title">
+        <div class="section-shell podcast-layout">
+          <div class="podcast-copy js-reveal">
+            <span class="section-label">Núcleo Vivo Podcast</span>
+            <h2 id="podcast-title">Primer pulso de Núcleo Vivo</h2>
+            <p>
+              Un espacio para conversar con más profundidad sobre personas,
+              trabajo, cultura, bienestar y los cambios que están dando forma a
+              nuestra vida en común.
+            </p>
+            <a
+              class="button button-primary"
+              href="https://open.spotify.com/episode/5S6WP5eromVUSB72ycFcej?si=1k7CZgR3Qny89s47LpR31Q&nd=1&dlsi=360d05a083b14ce7"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Escuchar en Spotify
+            </a>
+          </div>
+
+          <div class="podcast-visual js-reveal" aria-hidden="true">
+            <span class="pulse pulse-one"></span>
+            <span class="pulse pulse-two"></span>
+            <span class="pulse pulse-three"></span>
+            <img src="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" alt="" />
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-section" id="contacto" aria-labelledby="contact-title">
+        <div class="section-shell contact-layout">
+          <div class="contact-copy js-reveal">
+            <span class="section-label">Contacto</span>
+            <h2 id="contact-title">Conversemos sobre lo que necesita evolucionar.</h2>
+            <p>
+              Si formas parte de una empresa, colegio, fundación, institución o
+              equipo que quiere fortalecer su cultura, liderazgo o bienestar,
+              podemos comenzar por una conversación.
+            </p>
+          </div>
+
+          <div class="contact-links js-reveal">
             <a href="mailto:contacto@nucleovivo.net">
-              <span>Contacto general</span>
-              contacto@nucleovivo.net
+              <span>Proyectos y consultas</span>
+              <strong>contacto@nucleovivo.net</strong>
             </a>
             <a href="mailto:podcast@nucleovivo.net">
               <span>Podcast y contenidos</span>
-              podcast@nucleovivo.net
+              <strong>podcast@nucleovivo.net</strong>
             </a>
           </div>
         </div>
@@ -368,16 +402,198 @@
     </main>
 
     <footer class="site-footer">
-      <div class="section-shell footer-inner">
+      <div class="section-shell footer-main">
         <img
           src="assets/nucleo-vivo-logotipo-exacto-del-moodboard.png"
           alt="Núcleo Vivo"
           class="footer-logo"
         />
+        <p>Personas al centro. Organizaciones en evolución.</p>
+        <nav aria-label="Navegación del pie de página">
+          <a href="#proyecto">Proyecto</a>
+          <a href="#lineas">Líneas</a>
+          <a href="#cuadernos">Cuadernos</a>
+          <a href="#contacto">Contacto</a>
+        </nav>
+      </div>
+      <div class="section-shell footer-bottom">
         <p>© 2026 Núcleo Vivo.</p>
-        <p>Cultura · Liderazgo · Bienestar · Transformación humana.</p>
+        <p>Cultura · Liderazgo · Bienestar · Transformación.</p>
       </div>
     </footer>
+
+    <dialog class="article-dialog" id="article-modelo" aria-labelledby="article-modelo-title">
+      <div class="dialog-shell">
+        <button class="dialog-close" type="button" data-close-dialog aria-label="Cerrar artículo" title="Cerrar">×</button>
+        <div class="dialog-cover">
+          <img src="assets/cuaderno-modelo-equilibrio.png" alt="" />
+        </div>
+        <article class="dialog-article">
+          <span class="article-category">Sociedad y trabajo</span>
+          <h2 id="article-modelo-title">¿Qué modelo necesitamos para estos tiempos?</h2>
+          <p class="article-deck">Un equilibrio entre crecimiento, bienestar y humanidad.</p>
+          <div class="article-meta">
+            <time datetime="2026-06-20">20 junio 2026</time>
+            <span>6 min de lectura</span>
+          </div>
+
+          <p class="article-lead">
+            Durante mucho tiempo tratamos el crecimiento y el bienestar como si
+            fueran objetivos que compiten. Esa separación ya no alcanza para leer
+            la complejidad de nuestras organizaciones ni de nuestra vida social.
+          </p>
+          <h3>El límite de los extremos</h3>
+          <p>
+            Un modelo centrado exclusivamente en resultados termina agotando las
+            capacidades que necesita para sostenerlos. Pero un modelo que habla de
+            bienestar sin dirección, responsabilidad ni propósito tampoco logra
+            transformar la realidad. El desafío no es elegir uno u otro: es
+            construir una relación más madura entre ambos.
+          </p>
+          <p>
+            Crecer de manera sostenible exige mirar cómo se toman las decisiones,
+            qué conversaciones se evitan, qué aprendizajes se vuelven práctica y
+            qué costos humanos permanecen invisibles. Esas preguntas no frenan el
+            desempeño. Le dan profundidad y continuidad.
+          </p>
+          <blockquote>
+            El bienestar no es la ausencia de exigencia. Es la capacidad de
+            responder a ella sin perder sentido, vínculo ni salud.
+          </blockquote>
+          <h3>Un modelo de doble capacidad</h3>
+          <p>
+            Las organizaciones de nuestro tiempo necesitan desarrollar dos
+            capacidades simultáneas: producir valor y regenerar las condiciones
+            humanas que lo hacen posible. Eso implica liderazgos que orienten sin
+            rigidizar, culturas que permitan aprender del error y sistemas de
+            trabajo capaces de cuidar la energía colectiva.
+          </p>
+          <p>
+            El modelo que necesitamos no llegará como una receta universal. Se
+            construirá en cada organización a través de diagnósticos honestos,
+            acuerdos explícitos y decisiones coherentes. El equilibrio no es un
+            punto fijo: es una práctica continua de observación y ajuste.
+          </p>
+          <footer class="article-signoff">Cuadernos de Núcleo Vivo</footer>
+        </article>
+      </div>
+    </dialog>
+
+    <dialog class="article-dialog" id="article-humano" aria-labelledby="article-humano-title">
+      <div class="dialog-shell">
+        <button class="dialog-close" type="button" data-close-dialog aria-label="Cerrar artículo" title="Cerrar">×</button>
+        <div class="dialog-cover">
+          <img src="assets/cuaderno-humano-resultados.png" alt="" />
+        </div>
+        <article class="dialog-article">
+          <span class="article-category">Liderazgo y cultura</span>
+          <h2 id="article-humano-title">Lo humano también produce resultados</h2>
+          <p class="article-deck">
+            Por qué las organizaciones que cuidan mejor a sus personas también se
+            vuelven más sostenibles.
+          </p>
+          <div class="article-meta">
+            <time datetime="2026-06-20">20 junio 2026</time>
+            <span>5 min de lectura</span>
+          </div>
+
+          <p class="article-lead">
+            Cuidar a las personas suele aparecer en el lenguaje organizacional como
+            un gesto deseable, pero secundario. Esa lectura desconoce algo básico:
+            todo resultado depende de capacidades humanas que necesitan condiciones
+            para desplegarse.
+          </p>
+          <h3>El cuidado no compite con el desempeño</h3>
+          <p>
+            La confianza facilita que los problemas aparezcan antes de volverse
+            crisis. La claridad reduce energía desperdiciada. La seguridad
+            psicológica permite preguntar, disentir y aprender. El reconocimiento
+            fortalece el compromiso. Ninguna de estas dimensiones es decorativa;
+            todas influyen en cómo una organización decide y actúa.
+          </p>
+          <p>
+            Cuando el cuidado se limita a beneficios aislados, pierde capacidad de
+            transformación. Se vuelve significativo cuando alcanza la carga de
+            trabajo, el estilo de liderazgo, la calidad de las reuniones y la forma
+            en que se resuelven las tensiones.
+          </p>
+          <blockquote>
+            Una cultura humana no evita las conversaciones difíciles. Crea las
+            condiciones para sostenerlas con respeto y propósito.
+          </blockquote>
+          <h3>Resultados que pueden sostenerse</h3>
+          <p>
+            Las organizaciones sostenibles no son aquellas donde nunca hay
+            presión. Son las que pueden atravesarla sin normalizar el desgaste,
+            perder talento o romper la confianza. Para eso, el bienestar debe
+            entrar en la estrategia y no quedar relegado a una actividad paralela.
+          </p>
+          <p>
+            Poner a las personas al centro no significa renunciar a los resultados.
+            Significa comprender de dónde vienen y qué condiciones permiten
+            sostenerlos en el tiempo.
+          </p>
+          <footer class="article-signoff">Cuadernos de Núcleo Vivo</footer>
+        </article>
+      </div>
+    </dialog>
+
+    <dialog class="article-dialog" id="article-generaciones" aria-labelledby="article-generaciones-title">
+      <div class="dialog-shell">
+        <button class="dialog-close" type="button" data-close-dialog aria-label="Cerrar artículo" title="Cerrar">×</button>
+        <div class="dialog-cover">
+          <img src="assets/cuaderno-nuevas-generaciones.png" alt="" />
+        </div>
+        <article class="dialog-article">
+          <span class="article-category">Nuevas generaciones</span>
+          <h2 id="article-generaciones-title">Nuevas generaciones, nuevas organizaciones</h2>
+          <p class="article-deck">Por qué el futuro del trabajo será más humano y más estratégico.</p>
+          <div class="article-meta">
+            <time datetime="2026-06-20">20 junio 2026</time>
+            <span>5 min de lectura</span>
+          </div>
+
+          <p class="article-lead">
+            Las nuevas generaciones no están llegando únicamente con otras
+            herramientas. Están haciendo preguntas diferentes sobre el sentido del
+            trabajo, la autoridad, el aprendizaje y el lugar que ocupa la vida
+            dentro de una trayectoria profesional.
+          </p>
+          <h3>No es falta de compromiso</h3>
+          <p>
+            Muchas tensiones generacionales nacen cuando interpretamos expectativas
+            nuevas con categorías antiguas. Pedir flexibilidad, retroalimentación o
+            coherencia no equivale necesariamente a una menor disposición al
+            esfuerzo. A menudo expresa una relación más consciente con el tiempo,
+            la identidad y el propósito.
+          </p>
+          <p>
+            Las organizaciones que respondan solo con discursos de adaptación
+            perderán una oportunidad. Las que escuchen estas preguntas podrán
+            revisar prácticas que ya estaban agotadas para todos, no únicamente
+            para quienes recién ingresan al mundo laboral.
+          </p>
+          <blockquote>
+            El desafío no es domesticar expectativas nuevas, sino convertirlas en
+            una conversación estratégica sobre el futuro del trabajo.
+          </blockquote>
+          <h3>Organizaciones que aprenden</h3>
+          <p>
+            El futuro exigirá estructuras capaces de transferir experiencia sin
+            imponer inmovilidad, y de incorporar innovación sin despreciar la
+            memoria. Eso requiere mentoría, aprendizaje continuo y liderazgos que
+            puedan traducir entre distintas formas de entender el trabajo.
+          </p>
+          <p>
+            Más humano y más estratégico no son direcciones opuestas. Una
+            organización que comprende mejor a las personas también comprende mejor
+            sus riesgos, sus capacidades y las posibilidades de evolución que ya
+            existen dentro de ella.
+          </p>
+          <footer class="article-signoff">Cuadernos de Núcleo Vivo</footer>
+        </article>
+      </div>
+    </dialog>
 
     <script src="script.js" defer></script>
   </body>
