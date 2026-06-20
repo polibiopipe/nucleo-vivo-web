@@ -996,6 +996,17 @@ body.splash-complete .site-footer {
   transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.article-cover-poster {
+  aspect-ratio: 16 / 10;
+  background:
+    linear-gradient(135deg, rgba(42, 157, 160, 0.14), transparent),
+    var(--arena);
+}
+
+.article-cover-poster img {
+  object-position: center top;
+}
+
 .article-card:hover .article-cover img {
   transform: scale(1.025);
 }

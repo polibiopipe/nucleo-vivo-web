@@ -392,6 +392,24 @@
   object-fit: cover;
 }
 
+.article-poster-stage {
+  height: 780px;
+  padding: 38px;
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(135deg, rgba(42, 157, 160, 0.24), transparent 58%),
+    var(--azul-profundo);
+}
+
+.article-poster-stage img {
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  box-shadow: 0 28px 70px rgba(2, 31, 40, 0.3);
+}
+
 .article-reading {
   padding: 80px 0 104px;
   background: var(--blanco-calido);
@@ -519,6 +537,7 @@
   width: 100%;
   aspect-ratio: 16 / 8;
   object-fit: cover;
+  object-position: center top;
 }
 
 .related-card span {
@@ -648,6 +667,16 @@
   .article-main-image {
     width: 100%;
     aspect-ratio: 4 / 3;
+  }
+
+  .article-poster-stage {
+    height: auto;
+    padding: 18px 14px;
+  }
+
+  .article-poster-stage img {
+    width: 100%;
+    height: auto;
   }
 
   .article-body .article-lead {
