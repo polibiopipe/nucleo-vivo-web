@@ -648,11 +648,11 @@ body.splash-complete .site-footer {
 .initiative-card {
   position: relative;
   grid-column: span 4;
-  min-height: 370px;
+  min-height: 440px;
   border: 1px solid rgba(8, 38, 50, 0.14);
   border-radius: 6px;
   display: grid;
-  grid-template-rows: 126px 1fr;
+  grid-template-rows: 198px 1fr;
   overflow: hidden;
   box-shadow: 0 18px 48px rgba(7, 29, 58, 0.08);
   transition: transform 220ms ease, box-shadow 220ms ease;
@@ -696,12 +696,12 @@ body.splash-complete .site-footer {
 
 .initiative-graphic {
   position: relative;
-  padding: 22px 24px;
+  padding: 0;
   border-bottom: 1px solid currentColor;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  opacity: 0.82;
+  opacity: 1;
   overflow: hidden;
 }
 
@@ -718,32 +718,76 @@ body.splash-complete .site-footer {
   content: "";
 }
 
+.initiative-graphic::before {
+  display: none;
+}
+
 .initiative-graphic::after {
-  right: 78px;
-  bottom: -56px;
+  inset: 0;
+  z-index: 1;
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  display: block;
+  background: linear-gradient(180deg, rgba(2, 31, 40, 0.42), transparent 46%, rgba(2, 31, 40, 0.18));
+  opacity: 1;
 }
 
 .initiative-graphic > span {
-  position: relative;
-  z-index: 1;
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 2;
+  min-width: 40px;
+  min-height: 32px;
+  padding: 5px 9px;
+  border: 1px solid rgba(250, 247, 239, 0.34);
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  color: var(--blanco-calido);
+  background: rgba(2, 31, 40, 0.68);
   font-size: 0.78rem;
   font-weight: 850;
 }
 
 .initiative-graphic img {
   position: absolute;
-  top: 10px;
-  right: 24px;
-  width: 86px;
-  opacity: 0.2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 1;
+}
+
+.initiative-consulting .initiative-graphic img {
+  object-position: center 46%;
+}
+
+.initiative-sembrar .initiative-graphic img {
+  object-position: center 42%;
+}
+
+.initiative-escena .initiative-graphic img {
+  object-position: center 48%;
+}
+
+.initiative-podcast .initiative-graphic img {
+  object-position: center 50%;
+}
+
+.initiative-cuadernos .initiative-graphic img {
+  object-position: center 52%;
 }
 
 .sound-graphic {
-  background: repeating-linear-gradient(90deg, transparent 0 18px, rgba(250, 247, 239, 0.1) 19px 20px);
+  background: var(--petroleo-profundo);
 }
 
 .pages-graphic {
-  background: linear-gradient(135deg, transparent 54%, rgba(0, 124, 137, 0.1) 55% 58%, transparent 59%);
+  background: var(--arena);
 }
 
 .initiative-copy {
@@ -1720,7 +1764,8 @@ body.splash-complete .site-footer {
   }
 
   .initiative-card {
-    min-height: 340px;
+    min-height: 390px;
+    grid-template-rows: 176px 1fr;
   }
 
   .initiative-copy {
