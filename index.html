@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Núcleo Vivo acompaña a personas, equipos y organizaciones en procesos de cultura, liderazgo, bienestar y transformación."
+      content="Núcleo Vivo desarrolla experiencias, herramientas y soluciones para fortalecer el aprendizaje, el bienestar y el desarrollo de personas, equipos, organizaciones y comunidades."
     />
-    <meta name="theme-color" content="#071d3a" />
-    <title>Núcleo Vivo | Personas al centro. Organizaciones en evolución.</title>
+    <meta name="theme-color" content="#00295D" />
+    <title>Núcleo Vivo | Educación, innovación, creatividad y tecnología</title>
+    <meta property="og:title" content="Núcleo Vivo | Educación, innovación, creatividad y tecnología" />
+    <meta property="og:description" content="Experiencias, herramientas y soluciones para aprendizaje, bienestar y desarrollo con foco humano." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="assets/nucleo-vivo-hero-camino-proposito.png" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" type="image/png" />
     <link rel="preload" as="image" href="assets/nucleo-vivo-hero-camino-proposito.png" />
     <link rel="stylesheet" href="styles.css" />
@@ -40,7 +45,7 @@
 
     <header class="site-header">
       <div class="section-shell header-inner">
-        <a class="brand" href="#inicio" aria-label="Ir al inicio de Núcleo Vivo">
+        <a class="brand" href="/" data-local-href="index.html" aria-label="Ir al inicio de Núcleo Vivo" aria-current="page">
           <img
             src="assets/nucleo-vivo-logotipo-exacto-del-moodboard.png"
             alt="Núcleo Vivo"
@@ -48,16 +53,35 @@
           />
         </a>
 
-        <nav class="header-nav" id="main-nav" aria-label="Navegación principal">
-          <a href="#proyecto">Proyecto</a>
-          <a href="/lineas" data-local-href="lineas/index.html">Líneas</a>
-          <a href="/cuadernos" data-local-href="cuadernos/index.html">Cuadernos</a>
-          <a href="#podcast">Podcast</a>
-          <a href="#contacto">Contacto</a>
+                                <nav class="header-nav" id="main-nav" aria-label="Navegaci&oacute;n principal">
+          <a href="/" data-local-href="index.html" aria-current="page">Inicio</a>
+          <div class="nav-group">
+            <a class="nav-parent" href="/lineas/" data-local-href="lineas/index.html">Ecosistema</a>
+            <div class="nav-dropdown" aria-label="&Aacute;reas del ecosistema">
+              <a href="/consultoria/" data-local-href="consultoria/index.html">Consultor&iacute;a</a>
+              <a href="/sembrar/" data-local-href="sembrar/index.html">Sembrar</a>
+              <a href="/escena-viva/" data-local-href="escena-viva/index.html">Escena Viva</a>
+              <a href="/lab/" data-local-href="lab/index.html">N&uacute;cleo Vivo Lab</a>
+              <a href="/nucleo-operativo/" data-local-href="nucleo-operativo/index.html">N&uacute;cleo Operativo</a>
+            </div>
+          </div>
+          <div class="nav-group">
+            <a class="nav-parent" href="/sembrar/cursos/" data-local-href="sembrar/cursos/index.html">Formaci&oacute;n</a>
+            <div class="nav-dropdown" aria-label="Formaci&oacute;n de Sembrar">
+              <a href="/sembrar/" data-local-href="sembrar/index.html">Sembrar</a>
+              <a href="/sembrar/cursos/" data-local-href="sembrar/cursos/index.html">Cursos gratuitos</a>
+              <a href="/sembrar/aula/" data-local-href="sembrar/aula/index.html">Mi Aula</a>
+            </div>
+          </div>
+          <div class="nav-group">
+            <a class="nav-parent" href="/cuadernos/" data-local-href="cuadernos/index.html">Contenidos</a>
+            <div class="nav-dropdown" aria-label="Contenidos de N&uacute;cleo Vivo">
+              <a href="/cuadernos/" data-local-href="cuadernos/index.html">Cuadernos</a>
+              <a href="/podcast/" data-local-href="podcast/index.html">Podcast</a>
+            </div>
+          </div>
+          <a href="/contacto/" data-local-href="contacto/index.html">Contacto</a>
         </nav>
-
-        <a class="header-button" href="mailto:contacto@nucleovivo.net">Escríbenos</a>
-
         <button
           class="menu-toggle"
           type="button"
@@ -73,305 +97,243 @@
     </header>
 
     <main id="inicio">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="section-shell hero-inner">
-          <div class="hero-copy js-reveal">
-            <p class="hero-brand">Núcleo Vivo</p>
-            <p class="overline">Consultoría humana y organizacional</p>
+      <section class="home-hero" aria-labelledby="hero-title">
+        <div class="section-shell home-hero-grid">
+          <div class="home-hero-copy js-reveal">
+            <p class="hero-brand">Personas al centro</p>
+            <p class="overline">Educación · Innovación · Creatividad · Tecnología</p>
             <h1 id="hero-title">
-              Personas al centro.<br />
-              Organizaciones en evolución.
+              Creamos soluciones para aprender, avanzar y transformar.
             </h1>
             <p class="hero-text">
-              Acompañamos a personas, equipos y organizaciones que buscan crecer,
-              aprender y adaptarse a los desafíos de nuestro tiempo sin perder de
-              vista lo humano.
+              Núcleo Vivo integra educación, innovación, creatividad y tecnología para fortalecer
+              a personas, equipos, organizaciones y comunidades.
             </p>
-            <p class="hero-scope">Cultura · Liderazgo · Bienestar · Transformación</p>
 
             <div class="hero-actions" aria-label="Acciones principales">
-              <a class="button button-primary" href="#proyecto">Conócenos</a>
-              <a class="button button-secondary" href="/lineas" data-local-href="lineas/index.html">Líneas de trabajo</a>
-              <a class="button button-quiet" href="/cuadernos" data-local-href="cuadernos/index.html">Cuadernos de Núcleo Vivo</a>
-              <a class="button button-quiet" href="mailto:contacto@nucleovivo.net">Escríbenos</a>
+              <a class="button button-primary" href="#ecosistema">Conocer el ecosistema</a>
+              <a class="button button-quiet" href="/lab" data-local-href="lab/index.html">Explorar Núcleo Vivo Lab</a>
             </div>
           </div>
 
-          <div class="hero-caption js-reveal" aria-hidden="true">
-            <span>Mirada humana</span>
-            <span>Estrategia aplicada</span>
-            <span>Transformación sostenible</span>
+          <div class="home-hero-visual js-reveal">
+            <img
+              src="assets/nucleo-vivo-hero-camino-proposito.png"
+              alt="Persona frente a un camino amplio, como símbolo de desarrollo, propósito y futuro"
+            />
+            <div class="hero-note">
+              <span>Personas · Aprendizaje · Organizaciones · Comunidad</span>
+              <strong>Tecnología que libera tiempo. Educación que transforma. Experiencias que conectan.</strong>
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="project-section" id="proyecto" aria-labelledby="project-title">
-        <div class="section-shell project-grid">
-          <div class="project-heading js-reveal">
-            <span class="section-label">Quiénes somos</span>
-            <h2 id="project-title">No somos una consultora tradicional.</h2>
-            <figure class="project-visual">
-              <img
-                src="assets/cuaderno-humano-resultados.png"
-                alt="Círculo de sillas preparado para una conversación significativa"
-                loading="lazy"
-              />
-              <figcaption>Escuchar también es una forma de transformar.</figcaption>
-            </figure>
-          </div>
-
-          <div class="project-copy js-reveal">
-            <p class="project-lead">
-              Creemos que el desarrollo organizacional y el desarrollo humano no
-              son caminos separados.
-            </p>
-            <p>
-              Trabajamos acompañando personas, equipos y organizaciones que buscan
-              crecer, aprender y adaptarse a los desafíos de nuestro tiempo.
-            </p>
-            <p>
-              Núcleo Vivo nace para transformar diagnósticos, conversaciones y
-              aprendizajes en acciones concretas. Integramos mirada humana,
-              estrategia organizacional y herramientas aplicadas para fortalecer
-              culturas más conscientes, colaborativas y sostenibles.
-            </p>
-            <div class="project-signals" aria-label="Ámbitos de Núcleo Vivo">
-              <span>Diagnóstico</span>
-              <span>Acompañamiento</span>
-              <span>Aprendizaje</span>
-              <span>Bienestar</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="section-shell purpose-panel js-reveal">
-          <img
-            src="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png"
-            alt=""
-            aria-hidden="true"
-            class="purpose-mark"
-          />
-          <p>Una idea simple orienta nuestro trabajo</p>
-          <blockquote>Lo humano no es un complemento de la estrategia. Es su núcleo.</blockquote>
-          <span>Núcleo Vivo no está terminado. Está vivo.</span>
+      <section class="positioning-strip" aria-label="Posicionamiento de Núcleo Vivo">
+        <div class="section-shell positioning-strip-inner js-reveal">
+          <p>
+            Educación, innovación, creatividad y tecnología conectadas por un mismo propósito:
+            desarrollar soluciones útiles, humanas y sostenibles.
+          </p>
+          <ul aria-label="Verbos clave del ecosistema">
+            <li>Aprender</li>
+            <li>Crear</li>
+            <li>Conectar</li>
+            <li>Transformar</li>
+          </ul>
         </div>
       </section>
 
-      <section class="work-section" id="lineas" aria-labelledby="work-title">
+      <section class="ecosystem-section" id="ecosistema" aria-labelledby="ecosistema-title">
         <div class="section-shell">
           <div class="editorial-heading js-reveal">
             <div>
-              <span class="section-label">Líneas de trabajo</span>
-              <h2 id="work-title">Un ecosistema de iniciativas conectadas.</h2>
+              <span class="section-label">El Ecosistema Núcleo Vivo</span>
+              <h2 id="ecosistema-title">Un ecosistema que conecta personas, aprendizaje y transformación.</h2>
             </div>
             <p>
-              Distintas formas de acompañar un mismo desafío: construir culturas,
-              aprendizajes y vínculos capaces de evolucionar con sentido.
+              Cada área cumple una función distinta, pero todas comparten un mismo propósito:
+              crear soluciones útiles, humanas y sostenibles.
             </p>
           </div>
 
-          <div class="initiative-grid">
-            <article class="initiative-card initiative-consulting js-reveal">
-              <div class="initiative-graphic" aria-hidden="true">
-                <span>01</span>
-                <img src="assets/ecosistemas/01-consultoria-humana.webp" alt="" loading="lazy" />
-              </div>
-              <div class="initiative-copy">
-                <span class="initiative-category">Consultoría y acompañamiento</span>
-                <h3>Consultoría humana y organizacional</h3>
-                <p>Cultura organizacional, liderazgo, bienestar y transformación.</p>
-                <a class="initiative-link" href="/lineas#consultoria" data-local-href="lineas/index.html#consultoria">Conocer la línea <span aria-hidden="true">→</span></a>
-              </div>
+          <div class="ecosystem-map ecosystem-grid js-reveal">
+            <article class="ecosystem-card ecosystem-card-lab">
+              <span>01 · Lab</span>
+              <h3>Núcleo Vivo Lab</h3>
+              <p>Espacio de innovación y experimentación donde desarrollamos simuladores, herramientas digitales, recursos formativos y soluciones apoyadas por inteligencia artificial.</p>
+              <a href="/lab" data-local-href="lab/index.html">Explorar Núcleo Vivo Lab</a>
             </article>
 
-            <article class="initiative-card initiative-sembrar js-reveal">
-              <div class="initiative-graphic" aria-hidden="true"><span>02</span><img src="assets/ecosistemas/02-sembrar.webp" alt="" loading="lazy" /></div>
-              <div class="initiative-copy">
-                <span class="initiative-category">Educación y comunidad</span>
-                <h3>Sembrar</h3>
-                <p>Educación, bienestar y comunidad. Una iniciativa de Núcleo Vivo.</p>
-                <a class="initiative-link" href="/lineas#sembrar" data-local-href="lineas/index.html#sembrar">Conocer Sembrar <span aria-hidden="true">→</span></a>
-              </div>
+            <article class="ecosystem-card">
+              <span>02 · Consultoría</span>
+              <h3>Consultoría</h3>
+              <p>Acompañamos a organizaciones y equipos en cultura, liderazgo, comunicación, bienestar, experiencia de las personas y procesos de transformación.</p>
+              <a href="/consultoria" data-local-href="consultoria/index.html">Conocer Consultoría</a>
             </article>
 
-            <article class="initiative-card initiative-escena js-reveal">
-              <div class="initiative-graphic" aria-hidden="true"><span>03</span><img src="assets/ecosistemas/03-escena-viva.webp" alt="" loading="lazy" /></div>
-              <div class="initiative-copy">
-                <span class="initiative-category">Arte y aprendizaje</span>
-                <h3>Escena Viva</h3>
-                <p>Teatro aplicado para el desarrollo humano. Una iniciativa de Núcleo Vivo.</p>
-                <a class="initiative-link" href="/lineas#escena-viva" data-local-href="lineas/index.html#escena-viva">Conocer Escena Viva <span aria-hidden="true">→</span></a>
-              </div>
+            <article class="ecosystem-card">
+              <span>03 · Formación</span>
+              <h3>Sembrar</h3>
+              <p>Creamos cursos, talleres y experiencias de aprendizaje para fortalecer habilidades, bienestar, convivencia y desarrollo humano.</p>
+              <a href="/sembrar" data-local-href="sembrar/index.html">Descubrir Sembrar</a>
             </article>
 
-            <article class="initiative-card initiative-podcast js-reveal">
-              <div class="initiative-graphic sound-graphic" aria-hidden="true"><span>04</span><img src="assets/ecosistemas/04-podcast.webp" alt="" loading="lazy" /></div>
-              <div class="initiative-copy">
-                <span class="initiative-category">Conversaciones</span>
-                <h3>Podcast</h3>
-                <p>Conversaciones sobre personas, trabajo y sociedad.</p>
-                <a class="initiative-link" href="#podcast">Escuchar el primer pulso <span aria-hidden="true">→</span></a>
-              </div>
+            <article class="ecosystem-card">
+              <span>04 · Creatividad</span>
+              <h3>Escena Viva</h3>
+              <p>Utilizamos teatro aplicado, creatividad y narración para convertir situaciones humanas, educativas y laborales en experiencias de aprendizaje.</p>
+              <a href="/escena-viva" data-local-href="escena-viva/index.html">Conocer Escena Viva</a>
             </article>
 
-            <article class="initiative-card initiative-cuadernos js-reveal">
-              <div class="initiative-graphic pages-graphic" aria-hidden="true"><span>05</span><img src="assets/ecosistemas/05-cuadernos.webp" alt="" loading="lazy" /></div>
-              <div class="initiative-copy">
-                <span class="initiative-category">Publicación editorial</span>
-                <h3>Cuadernos de Núcleo Vivo</h3>
-                <p>Ideas sobre personas, trabajo y sociedad.</p>
-                <a class="initiative-link" href="/cuadernos" data-local-href="cuadernos/index.html">Explorar Cuadernos <span aria-hidden="true">→</span></a>
-              </div>
+            <article class="ecosystem-card">
+              <span>05 · Operación</span>
+              <h3>Núcleo Operativo</h3>
+              <p>Diseñamos automatizaciones accesibles que ordenan procesos, disminuyen tareas repetitivas y devuelven tiempo a las personas.</p>
+              <a href="/nucleo-operativo" data-local-href="nucleo-operativo/index.html">Explorar soluciones</a>
+            </article>
+
+            <article class="ecosystem-card">
+              <span>06 · Comunidad</span>
+              <h3>Contenidos y comunidad</h3>
+              <p>Generamos conversaciones, artículos, podcast, publicaciones y recursos para reflexionar sobre personas, educación, trabajo, tecnología y sociedad.</p>
+              <a href="/cuadernos" data-local-href="cuadernos/index.html">Explorar contenidos</a>
             </article>
           </div>
-
-          <a class="section-link js-reveal" href="/lineas" data-local-href="lineas/index.html">Ver todas las líneas de trabajo <span aria-hidden="true">→</span></a>
         </div>
       </section>
 
-      <section class="approach-section" aria-labelledby="approach-title">
-        <div class="section-shell approach-grid">
-          <div class="approach-intro js-reveal">
-            <span class="section-label">Cómo acompañamos</span>
-            <h2 id="approach-title">La transformación necesita tiempo, lectura y continuidad.</h2>
+      <section class="formation-highlight" aria-labelledby="formation-home-title">
+        <div class="section-shell formation-highlight-grid">
+          <div class="formation-highlight-copy js-reveal">
+            <span class="section-label">Formación abierta</span>
+            <h2 id="formation-home-title">Habilidades Humanas para 2030</h2>
             <p>
-              No llegamos con respuestas cerradas. Leemos el contexto, diseñamos
-              junto a quienes lo habitan y acompañamos la puesta en práctica.
+              Una ruta de cursos gratuitos para desarrollar las capacidades que necesitamos en un mundo
+              marcado por la transformación tecnológica, los cambios en el trabajo y nuevas formas de
+              aprender y relacionarnos.
+            </p>
+            <p>
+              Aprendizajes breves, prácticos y accesibles para avanzar sin perder el criterio,
+              el vínculo ni la humanidad.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="/sembrar/cursos/" data-local-href="sembrar/cursos/index.html">Explorar cursos gratuitos</a>
+              <a class="button button-secondary formation-secondary" href="/sembrar" data-local-href="sembrar/index.html">Conocer Sembrar</a>
+            </div>
+          </div>
+          <div class="formation-panel js-reveal" aria-label="Cursos iniciales de Sembrar">
+            <span>01 · Habilidades Humanas para 2030</span>
+            <span>02 · IA con Personas al Centro</span>
+            <span>03 · Comunicación, Empatía y Escucha Activa</span>
+            <small>Programas gratuitos en preparación dentro de Sembrar.</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div class="section-shell method-grid">
+          <div class="method-intro js-reveal">
+            <span class="section-label">Método</span>
+            <h2 id="method-title">Diseñamos procesos, no piezas aisladas.</h2>
+            <p>
+              La transformación sostenible necesita lectura de contexto, participación y continuidad.
+              Por eso combinamos diagnóstico, diseño de experiencias y acompañamiento aplicado.
             </p>
           </div>
 
-          <ol class="approach-steps">
+          <ol class="method-steps">
             <li class="js-reveal">
               <span>01</span>
-              <div>
-                <h3>Comprender</h3>
-                <p>Escuchar, diagnosticar y reconocer las dinámicas que ya están vivas.</p>
-              </div>
+              <h3>Comprender</h3>
+              <p>Escuchar el contexto, reconocer dinámicas y formular preguntas que abran posibilidades reales.</p>
             </li>
             <li class="js-reveal">
               <span>02</span>
-              <div>
-                <h3>Diseñar</h3>
-                <p>Construir respuestas pertinentes, aplicables y conectadas con el propósito.</p>
-              </div>
+              <h3>Diseñar</h3>
+              <p>Crear experiencias, herramientas y procesos pertinentes para cada organización o comunidad.</p>
             </li>
             <li class="js-reveal">
               <span>03</span>
-              <div>
-                <h3>Acompañar</h3>
-                <p>Sostener el aprendizaje hasta convertirlo en prácticas y capacidades.</p>
-              </div>
+              <h3>Acompañar</h3>
+              <p>Sostener el aprendizaje hasta convertirlo en prácticas, hábitos y capacidades instaladas.</p>
             </li>
           </ol>
         </div>
-
-        <div class="section-shell principles" aria-label="Principios de Núcleo Vivo">
-          <span>Humanidad</span>
-          <span>Ética</span>
-          <span>Innovación</span>
-          <span>Colaboración</span>
-        </div>
       </section>
 
-      <section class="notebooks-section" id="cuadernos" aria-labelledby="notebooks-title">
-        <div class="section-shell notebooks-intro js-reveal">
-          <p class="publication-name">Cuadernos de Núcleo Vivo</p>
-          <h2 id="notebooks-title">Ideas sobre personas, trabajo y sociedad.</h2>
-          <p>
-            Un espacio para mirar con calma lo que está cambiando: cómo trabajamos,
-            cómo lideramos, cómo aprendemos y cómo construimos bienestar en tiempos
-            donde todo parece moverse demasiado rápido.
-          </p>
-          <p>
-            Porque entender mejor lo que nos pasa también es una forma de
-            transformar lo que hacemos.
-          </p>
-        </div>
-
-        <div class="section-shell articles-grid">
-          <article class="article-card article-featured js-reveal">
-            <div class="article-cover article-cover-poster">
-              <img src="assets/cuaderno-personas-centro-organizacion.png" alt="Portada editorial Personas al centro: qué gana una organización" loading="lazy" />
-            </div>
-            <div class="article-content">
-              <span class="article-category">Bienestar y organizaciones</span>
-              <h3>Personas al centro: ¿qué gana una organización?</h3>
-              <p>Bienestar, compromiso y resultados no son opuestos. Se potencian.</p>
-              <div class="article-meta"><time datetime="2026-06-20">20 junio 2026</time><span>7 min de lectura</span></div>
-              <a class="article-link" href="/cuadernos/personas-al-centro-que-gana-una-organizacion" data-local-href="cuadernos/personas-al-centro-que-gana-una-organizacion/index.html">Leer artículo <span aria-hidden="true">→</span></a>
-            </div>
-          </article>
-
-          <article class="article-card js-reveal">
-            <div class="article-cover article-cover-poster">
-              <img src="assets/cuaderno-lo-humano-resultados-referencia.png" alt="Portada editorial Lo humano también produce resultados" loading="lazy" />
-            </div>
-            <div class="article-content">
-              <span class="article-category">Liderazgo y cultura</span>
-              <h3>Lo humano también produce resultados</h3>
-              <p>Por qué las organizaciones que cuidan mejor a sus personas también se vuelven más sostenibles.</p>
-              <div class="article-meta"><time datetime="2026-06-20">20 junio 2026</time><span>5 min de lectura</span></div>
-              <a class="article-link" href="/cuadernos/lo-humano-tambien-produce-resultados" data-local-href="cuadernos/lo-humano-tambien-produce-resultados/index.html">Leer artículo <span aria-hidden="true">→</span></a>
-            </div>
-          </article>
-
-          <article class="article-card js-reveal">
-            <div class="article-cover article-cover-poster">
-              <img src="assets/cuaderno-nuevas-generaciones-referencia.png" alt="Portada editorial Nuevas generaciones, nuevas organizaciones" loading="lazy" />
-            </div>
-            <div class="article-content">
-              <span class="article-category">Nuevas generaciones</span>
-              <h3>Nuevas generaciones, nuevas organizaciones</h3>
-              <p>Por qué el futuro del trabajo será más humano y más estratégico.</p>
-              <div class="article-meta"><time datetime="2026-06-20">20 junio 2026</time><span>5 min de lectura</span></div>
-              <a class="article-link" href="/cuadernos/nuevas-generaciones-nuevas-organizaciones" data-local-href="cuadernos/nuevas-generaciones-nuevas-organizaciones/index.html">Leer artículo <span aria-hidden="true">→</span></a>
-            </div>
-          </article>
-        </div>
-
-        <div class="section-shell notebooks-footer js-reveal">
-          <div class="category-line" aria-label="Temas de Cuadernos">
-            <span>Sociedad y trabajo</span><span>Liderazgo y cultura</span><span>Nuevas generaciones</span>
-            <span>Inteligencia artificial y futuro</span><span>Bienestar y salud mental</span><span>Educación y aprendizaje</span>
+      <section class="principles-section" aria-labelledby="principles-title">
+        <div class="section-shell">
+          <div class="compact-heading js-reveal">
+            <span class="section-label">Principios transversales</span>
+            <h2 id="principles-title">Lo que conecta todo lo que hacemos.</h2>
           </div>
-          <a class="section-link" href="/cuadernos" data-local-href="cuadernos/index.html">Entrar a Cuadernos <span aria-hidden="true">→</span></a>
+          <ul class="principles-cloud js-reveal">
+            <li>Personas al centro</li>
+            <li>Innovación con propósito</li>
+            <li>Educación y aprendizaje</li>
+            <li>Uso responsable de la tecnología</li>
+            <li>Creatividad</li>
+            <li>Colaboración</li>
+            <li>Inclusión</li>
+            <li>Impacto sostenible</li>
+          </ul>
         </div>
       </section>
 
-      <section class="podcast-section" id="podcast" aria-labelledby="podcast-title">
-        <div class="section-shell podcast-layout">
-          <div class="podcast-copy js-reveal">
-            <span class="section-label">Núcleo Vivo Podcast</span>
-            <h2 id="podcast-title">Primer pulso de Núcleo Vivo</h2>
+      <section class="technology-section" aria-labelledby="lab-home-title">
+        <div class="section-shell lab-spotlight-grid">
+          <div class="js-reveal">
+            <span class="section-label">Tecnología con foco humano</span>
+            <h2 id="lab-home-title">Tecnología para ampliar capacidades, no para reemplazar vínculos.</h2>
             <p>
-              Un espacio para conversar con más profundidad sobre personas,
-              trabajo, cultura, bienestar y los cambios que están dando forma a
-              nuestra vida en común.
+              Utilizamos la tecnología para facilitar aprendizajes, abrir espacios de práctica
+              y liberar tiempo, cuidando siempre el criterio humano que da sentido al proceso.
             </p>
-            <a class="button button-primary" href="https://open.spotify.com/episode/5S6WP5eromVUSB72ycFcej?si=1k7CZgR3Qny89s47LpR31Q&nd=1&dlsi=360d05a083b14ce7" target="_blank" rel="noopener noreferrer">Escuchar en Spotify</a>
           </div>
-
-          <div class="podcast-visual js-reveal" aria-hidden="true">
-            <img src="assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" alt="" />
+          <div class="technology-points js-reveal">
+            <article>
+              <span>01</span>
+              <h3>Aprendizaje aplicado</h3>
+              <p>Herramientas diseñadas para practicar, observar y mejorar habilidades en contextos formativos.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>Criterio humano</h3>
+              <p>La tecnología acompaña procesos de aprendizaje; no sustituye el vínculo, la reflexión ni la responsabilidad pedagógica.</p>
+            </article>
           </div>
         </div>
       </section>
 
-      <section class="contact-section" id="contacto" aria-labelledby="contact-title">
+      <section class="content-band" aria-labelledby="content-title">
+        <div class="section-shell content-band-grid">
+          <div class="js-reveal">
+            <span class="section-label">Pensamiento y voz</span>
+            <h2 id="content-title">Contenido para construir reputación, conversación y sentido.</h2>
+          </div>
+          <div class="content-actions js-reveal">
+            <a href="/cuadernos" data-local-href="cuadernos/index.html">Leer Cuadernos</a>
+            <a href="/podcast" data-local-href="podcast/index.html">Escuchar Podcast</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-section" aria-labelledby="contact-title">
         <div class="section-shell contact-layout">
           <div class="contact-copy js-reveal">
             <span class="section-label">Contacto</span>
-            <h2 id="contact-title">Conversemos sobre lo que necesita evolucionar.</h2>
+            <h2 id="contact-title">Conversemos antes de la feria.</h2>
             <p>
-              Si formas parte de una empresa, colegio, fundación, institución o
-              equipo que quiere fortalecer su cultura, liderazgo o bienestar,
-              podemos comenzar por una conversación.
+              Si quieres conocer las líneas de trabajo, explorar una colaboración o revisar
+              cómo Núcleo Vivo Lab puede apoyar procesos formativos, podemos partir por una conversación clara.
             </p>
           </div>
 
           <div class="contact-links js-reveal">
             <a href="mailto:contacto@nucleovivo.net"><span>Proyectos y consultas</span><strong>contacto@nucleovivo.net</strong></a>
             <a href="mailto:podcast@nucleovivo.net"><span>Podcast y contenidos</span><strong>podcast@nucleovivo.net</strong></a>
+            <a href="/contacto" data-local-href="contacto/index.html"><span>Visitantes feria de emprendimiento</span><strong>Ir a Contacto</strong></a>
           </div>
         </div>
       </section>
@@ -382,12 +344,9 @@
         <img src="assets/nucleo-vivo-logotipo-exacto-del-moodboard.png" alt="Núcleo Vivo" class="footer-logo" />
         <div class="footer-statement">
           <p>Personas al centro. Organizaciones en evolución.</p>
-          <span>Acompañamos procesos de cultura, liderazgo, bienestar y transformación desde una mirada humana y aplicada.</span>
+          <span>Creamos experiencias, herramientas y soluciones para aprendizaje, bienestar y desarrollo con foco humano.</span>
         </div>
-        <nav aria-label="Navegación del pie de página">
-          <a href="#proyecto">Proyecto</a><a href="/lineas" data-local-href="lineas/index.html">Líneas</a><a href="/cuadernos" data-local-href="cuadernos/index.html">Cuadernos</a>
-          <a href="#podcast">Podcast</a><a href="#contacto">Contacto</a>
-        </nav>
+        <nav aria-label="Navegaci&oacute;n del pie de p&aacute;gina"><a href="/" data-local-href="index.html">Inicio</a><a href="/lineas/" data-local-href="lineas/index.html">Ecosistema</a><a href="/consultoria/" data-local-href="consultoria/index.html">Consultor&iacute;a</a><a href="/sembrar/" data-local-href="sembrar/index.html">Sembrar</a><a href="/sembrar/cursos/" data-local-href="sembrar/cursos/index.html">Cursos gratuitos</a><a href="/sembrar/aula/" data-local-href="sembrar/aula/index.html">Mi Aula</a><a href="/lab/" data-local-href="lab/index.html">Lab</a><a href="/cuadernos/" data-local-href="cuadernos/index.html">Cuadernos</a><a href="/podcast/" data-local-href="podcast/index.html">Podcast</a><a href="/privacidad/" data-local-href="privacidad/index.html">Privacidad</a><a href="/terminos/" data-local-href="terminos/index.html">T&eacute;rminos</a><a href="/contacto/" data-local-href="contacto/index.html">Contacto</a></nav>
       </div>
       <div class="section-shell footer-bottom"><p>© 2026 Núcleo Vivo.</p><p>contacto@nucleovivo.net</p></div>
     </footer>

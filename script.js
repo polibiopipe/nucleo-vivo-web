@@ -4,6 +4,8 @@ const header = document.querySelector(".site-header");
 const splash = document.querySelector(".splash-screen");
 const menuToggle = document.querySelector(".menu-toggle");
 const mainNav = document.querySelector("#main-nav");
+const splashWasShown = window.sessionStorage?.getItem("nucleoVivoSplashShown") === "true";
+const shouldSkipSplash = splashWasShown || reducedMotion || Boolean(window.location.hash);
 
 if (window.location.protocol === "file:") {
   document.querySelectorAll("[data-local-href]").forEach((link) => {
@@ -18,7 +20,15 @@ function showPage() {
 }
 
 if (splash) {
-  window.setTimeout(showPage, reducedMotion ? 120 : 2750);
+  if (shouldSkipSplash) {
+    window.sessionStorage?.setItem("nucleoVivoSplashShown", "true");
+    showPage();
+  } else {
+    window.setTimeout(() => {
+      window.sessionStorage?.setItem("nucleoVivoSplashShown", "true");
+      showPage();
+    }, reducedMotion ? 120 : 2750);
+  }
 } else {
   showPage();
 }
@@ -73,7 +83,7 @@ mainNav?.querySelectorAll("a").forEach((link) => {
 });
 
 window.addEventListener("resize", () => {
-  if (window.innerWidth > 820) closeMenu();
+  if (window.innerWidth > 1160) closeMenu();
 });
 
 document.addEventListener("keydown", (event) => {
