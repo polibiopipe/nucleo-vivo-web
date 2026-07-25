@@ -6,14 +6,26 @@ begin;
 
 create extension if not exists pgcrypto;
 
+create schema if not exists private;
+revoke all on schema private from public;
+revoke all on schema private from anon;
+grant usage on schema private to authenticated;
+
 create table if not exists public.aula_profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text,
-  role text not null default 'learner'
-    check (role in ('learner', 'facilitator', 'academic_admin', 'admin')),
+  role text not null default 'student'
+    check (role in ('student', 'facilitator', 'academic_admin', 'admin')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table public.aula_profiles alter column role set default 'student';
+alter table public.aula_profiles drop constraint if exists aula_profiles_role_check;
+update public.aula_profiles set role = 'student' where role = 'learner';
+alter table public.aula_profiles
+  add constraint aula_profiles_role_check
+  check (role in ('student', 'facilitator', 'academic_admin', 'admin'));
 
 create table if not exists public.aula_courses (
   id uuid primary key default gen_random_uuid(),
@@ -167,12 +179,12 @@ create trigger aula_progress_touch
 before update on public.aula_lesson_progress
 for each row execute function public.aula_touch_updated_at();
 
-create or replace function public.aula_is_staff()
+create or replace function private.aula_is_staff()
 returns boolean
 language sql
 stable
 security definer
-set search_path = public
+set search_path = pg_catalog
 as $$
   select exists (
     select 1
@@ -182,8 +194,9 @@ as $$
   );
 $$;
 
-revoke all on function public.aula_is_staff() from public;
-grant execute on function public.aula_is_staff() to anon, authenticated;
+revoke all on function private.aula_is_staff() from public;
+revoke all on function private.aula_is_staff() from anon;
+grant execute on function private.aula_is_staff() to authenticated;
 
 create or replace function public.aula_handle_new_user()
 returns trigger
@@ -195,8 +208,8 @@ declare
   privacy_version text;
   accepted_at timestamptz;
 begin
-  insert into public.aula_profiles (id, full_name)
-  values (new.id, nullif(trim(coalesce(new.raw_user_meta_data ->> 'full_name', '')), ''))
+  insert into public.aula_profiles (id, full_name, role)
+  values (new.id, nullif(trim(coalesce(new.raw_user_meta_data ->> 'full_name', '')), ''), 'student')
   on conflict (id) do update
     set full_name = coalesce(excluded.full_name, public.aula_profiles.full_name);
 
@@ -235,8 +248,8 @@ create trigger on_auth_user_created_aula_viva
 after insert on auth.users
 for each row execute function public.aula_handle_new_user();
 
-insert into public.aula_profiles (id, full_name)
-select id, nullif(trim(coalesce(raw_user_meta_data ->> 'full_name', '')), '')
+insert into public.aula_profiles (id, full_name, role)
+select id, nullif(trim(coalesce(raw_user_meta_data ->> 'full_name', '')), ''), 'student'
 from auth.users
 on conflict (id) do nothing;
 
@@ -255,36 +268,43 @@ drop policy if exists "aula profiles own select" on public.aula_profiles;
 create policy "aula profiles own select"
 on public.aula_profiles for select
 to authenticated
-using (id = auth.uid() or public.aula_is_staff());
+using (id = auth.uid() or private.aula_is_staff());
 
 drop policy if exists "aula profiles own update" on public.aula_profiles;
 create policy "aula profiles own update"
 on public.aula_profiles for update
 to authenticated
-using (id = auth.uid() or public.aula_is_staff())
-with check (id = auth.uid() or public.aula_is_staff());
+using (id = auth.uid() or private.aula_is_staff())
+with check (id = auth.uid() or private.aula_is_staff());
 
 drop policy if exists "aula published courses read" on public.aula_courses;
 create policy "aula published courses read"
 on public.aula_courses for select
-to anon, authenticated
-using (status = 'published' or public.aula_is_staff());
+to authenticated
+using (status = 'published' or private.aula_is_staff());
 
 drop policy if exists "aula staff courses manage" on public.aula_courses;
 create policy "aula staff courses manage"
 on public.aula_courses for all
 to authenticated
-using (public.aula_is_staff())
-with check (public.aula_is_staff());
+using (private.aula_is_staff())
+with check (private.aula_is_staff());
 
 drop policy if exists "aula published modules read" on public.aula_modules;
 create policy "aula published modules read"
 on public.aula_modules for select
-to anon, authenticated
+to authenticated
 using (
+  private.aula_is_staff()
+  or
   exists (
-    select 1 from public.aula_courses c
-    where c.id = course_id and (c.status = 'published' or public.aula_is_staff())
+    select 1
+    from public.aula_courses c
+    join public.aula_enrollments e on e.course_id = c.id
+    where c.id = public.aula_modules.course_id
+      and c.status = 'published'
+      and e.user_id = auth.uid()
+      and e.status in ('active', 'completed')
   )
 );
 
@@ -292,17 +312,24 @@ drop policy if exists "aula staff modules manage" on public.aula_modules;
 create policy "aula staff modules manage"
 on public.aula_modules for all
 to authenticated
-using (public.aula_is_staff())
-with check (public.aula_is_staff());
+using (private.aula_is_staff())
+with check (private.aula_is_staff());
 
 drop policy if exists "aula published lessons read" on public.aula_lessons;
 create policy "aula published lessons read"
 on public.aula_lessons for select
-to anon, authenticated
+to authenticated
 using (
+  private.aula_is_staff()
+  or
   exists (
-    select 1 from public.aula_courses c
-    where c.id = course_id and (c.status = 'published' or public.aula_is_staff())
+    select 1
+    from public.aula_courses c
+    join public.aula_enrollments e on e.course_id = c.id
+    where c.id = public.aula_lessons.course_id
+      and c.status = 'published'
+      and e.user_id = auth.uid()
+      and e.status in ('active', 'completed')
   )
 );
 
@@ -310,14 +337,14 @@ drop policy if exists "aula staff lessons manage" on public.aula_lessons;
 create policy "aula staff lessons manage"
 on public.aula_lessons for all
 to authenticated
-using (public.aula_is_staff())
-with check (public.aula_is_staff());
+using (private.aula_is_staff())
+with check (private.aula_is_staff());
 
 drop policy if exists "aula enrollments own select" on public.aula_enrollments;
 create policy "aula enrollments own select"
 on public.aula_enrollments for select
 to authenticated
-using (user_id = auth.uid() or public.aula_is_staff());
+using (user_id = auth.uid() or private.aula_is_staff());
 
 drop policy if exists "aula enrollments own insert" on public.aula_enrollments;
 create policy "aula enrollments own insert"
@@ -335,9 +362,9 @@ drop policy if exists "aula enrollments own update" on public.aula_enrollments;
 create policy "aula enrollments own update"
 on public.aula_enrollments for update
 to authenticated
-using (user_id = auth.uid() or public.aula_is_staff())
+using (user_id = auth.uid() or private.aula_is_staff())
 with check (
-  public.aula_is_staff()
+  private.aula_is_staff()
   or (
     user_id = auth.uid()
     and exists (
@@ -351,7 +378,7 @@ drop policy if exists "aula progress own select" on public.aula_lesson_progress;
 create policy "aula progress own select"
 on public.aula_lesson_progress for select
 to authenticated
-using (user_id = auth.uid() or public.aula_is_staff());
+using (user_id = auth.uid() or private.aula_is_staff());
 
 drop policy if exists "aula progress own insert" on public.aula_lesson_progress;
 create policy "aula progress own insert"
@@ -374,9 +401,9 @@ drop policy if exists "aula progress own update" on public.aula_lesson_progress;
 create policy "aula progress own update"
 on public.aula_lesson_progress for update
 to authenticated
-using (user_id = auth.uid() or public.aula_is_staff())
+using (user_id = auth.uid() or private.aula_is_staff())
 with check (
-  public.aula_is_staff()
+  private.aula_is_staff()
   or (
     user_id = auth.uid()
     and exists (
@@ -395,7 +422,7 @@ drop policy if exists "aula consent own select" on public.aula_consent_records;
 create policy "aula consent own select"
 on public.aula_consent_records for select
 to authenticated
-using (user_id = auth.uid() or public.aula_is_staff());
+using (user_id = auth.uid() or private.aula_is_staff());
 
 drop policy if exists "aula consent own insert" on public.aula_consent_records;
 create policy "aula consent own insert"
@@ -407,7 +434,7 @@ drop policy if exists "aula assessment own select" on public.aula_assessment_att
 create policy "aula assessment own select"
 on public.aula_assessment_attempts for select
 to authenticated
-using (user_id = auth.uid() or public.aula_is_staff());
+using (user_id = auth.uid() or private.aula_is_staff());
 
 drop policy if exists "aula assessment own insert" on public.aula_assessment_attempts;
 create policy "aula assessment own insert"
@@ -427,37 +454,37 @@ drop policy if exists "aula staff assessment update" on public.aula_assessment_a
 create policy "aula staff assessment update"
 on public.aula_assessment_attempts for update
 to authenticated
-using (public.aula_is_staff())
-with check (public.aula_is_staff());
+using (private.aula_is_staff())
+with check (private.aula_is_staff());
 
 drop policy if exists "aula certificates own select" on public.aula_certificates;
 create policy "aula certificates own select"
 on public.aula_certificates for select
 to authenticated
-using (user_id = auth.uid() or public.aula_is_staff());
+using (user_id = auth.uid() or private.aula_is_staff());
 
 drop policy if exists "aula certificates staff manage" on public.aula_certificates;
 create policy "aula certificates staff manage"
 on public.aula_certificates for all
 to authenticated
-using (public.aula_is_staff())
-with check (public.aula_is_staff());
+using (private.aula_is_staff())
+with check (private.aula_is_staff());
 
 drop policy if exists "aula reviews own select" on public.aula_spaced_reviews;
 create policy "aula reviews own select"
 on public.aula_spaced_reviews for select
 to authenticated
-using (user_id = auth.uid() or public.aula_is_staff());
+using (user_id = auth.uid() or private.aula_is_staff());
 
 drop policy if exists "aula reviews own update" on public.aula_spaced_reviews;
 create policy "aula reviews own update"
 on public.aula_spaced_reviews for update
 to authenticated
-using (user_id = auth.uid() or public.aula_is_staff())
-with check (user_id = auth.uid() or public.aula_is_staff());
+using (user_id = auth.uid() or private.aula_is_staff())
+with check (user_id = auth.uid() or private.aula_is_staff());
 
 grant usage on schema public to anon, authenticated;
-grant select on public.aula_courses, public.aula_modules, public.aula_lessons to anon, authenticated;
+grant select on public.aula_courses, public.aula_modules, public.aula_lessons to authenticated;
 grant insert, update, delete on public.aula_courses, public.aula_modules, public.aula_lessons to authenticated;
 revoke all on public.aula_profiles from anon, authenticated;
 grant select on public.aula_profiles to authenticated;
@@ -468,6 +495,8 @@ grant select, insert on public.aula_consent_records to authenticated;
 grant select, insert, update on public.aula_assessment_attempts to authenticated;
 grant select, insert, update, delete on public.aula_certificates to authenticated;
 grant select, update on public.aula_spaced_reviews to authenticated;
+
+drop function if exists public.aula_is_staff();
 
 insert into public.aula_courses (
   slug, title, subtitle, description, status, estimated_minutes,
