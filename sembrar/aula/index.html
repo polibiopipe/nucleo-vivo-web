@@ -1,134 +1,187 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Mi Aula de Sembrar reúne el acceso formativo de Núcleo Vivo para rutas, cursos, materiales y acompañamiento educativo."
-    />
-    <meta name="theme-color" content="#00295D" />
-    <title>Mi Aula | Sembrar | Núcleo Vivo</title>
-    <link rel="icon" href="../../assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" type="image/png" />
-    <link rel="stylesheet" href="../../styles.css" />
-    <link rel="stylesheet" href="../../pages.css" />
-  </head>
-  <body class="subpage">
-    <header class="site-header">
-      <div class="section-shell header-inner">
-        <a class="brand" href="../../index.html" aria-label="Ir al inicio de Núcleo Vivo"><img src="../../assets/nucleo-vivo-logotipo-exacto-del-moodboard.png" alt="Núcleo Vivo" class="brand-logo" /></a>
-                        <nav class="header-nav" id="main-nav" aria-label="Navegaci&oacute;n principal">
-          <a href="/" data-local-href="../../index.html">Inicio</a>
-          <div class="nav-group">
-            <a class="nav-parent" href="/lineas/" data-local-href="../../lineas/index.html">Ecosistema</a>
-            <div class="nav-dropdown" aria-label="&Aacute;reas del ecosistema">
-              <a href="/consultoria/" data-local-href="../../consultoria/index.html">Consultor&iacute;a</a>
-              <a href="/sembrar/" data-local-href="../index.html">Sembrar</a>
-              <a href="/escena-viva/" data-local-href="../../escena-viva/index.html">Escena Viva</a>
-              <a href="/lab/" data-local-href="../../lab/index.html">N&uacute;cleo Vivo Lab</a>
-              <a href="/nucleo-operativo/" data-local-href="../../nucleo-operativo/index.html">N&uacute;cleo Operativo</a>
-            </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Aula Viva de Núcleo Vivo: cursos basados en práctica, criterio humano, retroalimentación y transferencia al trabajo." />
+  <meta name="theme-color" content="#062b5f" />
+  <title>Mi Aula | Aula Viva · Núcleo Vivo</title>
+  <link rel="icon" href="../../assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" type="image/png" />
+  <link rel="stylesheet" href="../../styles.css" />
+  <link rel="stylesheet" href="../../pages.css" />
+  <link rel="stylesheet" href="aula.css" />
+</head>
+<body class="subpage aula-page">
+  <a class="skip-link" href="#aula-main">Saltar al contenido</a>
+  <header class="site-header">
+    <div class="section-shell header-inner">
+      <a class="brand" href="../../index.html" aria-label="Ir al inicio de Núcleo Vivo">
+        <img src="../../assets/nucleo-vivo-logotipo-exacto-del-moodboard.png" alt="Núcleo Vivo" class="brand-logo" />
+      </a>
+      <nav class="header-nav" id="main-nav" aria-label="Navegación principal">
+        <a href="/" data-local-href="../../index.html">Inicio</a>
+        <div class="nav-group">
+          <a class="nav-parent" href="/lineas/" data-local-href="../../lineas/index.html">Ecosistema</a>
+          <div class="nav-dropdown" aria-label="Áreas del ecosistema">
+            <a href="/consultoria/" data-local-href="../../consultoria/index.html">Consultoría</a>
+            <a href="/sembrar/" data-local-href="../index.html">Sembrar</a>
+            <a href="/escena-viva/" data-local-href="../../escena-viva/index.html">Escena Viva</a>
+            <a href="/lab/" data-local-href="../../lab/index.html">Núcleo Vivo Lab</a>
+            <a href="/nucleo-operativo/" data-local-href="../../nucleo-operativo/index.html">Núcleo Operativo</a>
           </div>
-          <div class="nav-group">
-            <a class="nav-parent" href="/sembrar/cursos/" data-local-href="../cursos/index.html">Formaci&oacute;n</a>
-            <div class="nav-dropdown" aria-label="Formaci&oacute;n de Sembrar">
-              <a href="/sembrar/" data-local-href="../index.html">Sembrar</a>
-              <a href="/sembrar/cursos/" data-local-href="../cursos/index.html">Cursos gratuitos</a>
-              <a href="/sembrar/aula/" data-local-href="index.html" aria-current="page">Mi Aula</a>
-            </div>
+        </div>
+        <div class="nav-group">
+          <a class="nav-parent" href="/sembrar/cursos/" data-local-href="../cursos/index.html">Formación</a>
+          <div class="nav-dropdown" aria-label="Formación de Sembrar">
+            <a href="/sembrar/cursos/" data-local-href="../cursos/index.html">Cursos</a>
+            <a href="/sembrar/aula/" data-local-href="index.html" aria-current="page">Mi Aula</a>
           </div>
-          <div class="nav-group">
-            <a class="nav-parent" href="/cuadernos/" data-local-href="../../cuadernos/index.html">Contenidos</a>
-            <div class="nav-dropdown" aria-label="Contenidos de N&uacute;cleo Vivo">
-              <a href="/cuadernos/" data-local-href="../../cuadernos/index.html">Cuadernos</a>
-              <a href="/podcast/" data-local-href="../../podcast/index.html">Podcast</a>
-            </div>
+        </div>
+        <a href="/contacto/" data-local-href="../../contacto/index.html">Contacto</a>
+      </nav>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú" title="Abrir menú"><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main id="aula-main">
+    <section class="aula-hero" aria-labelledby="aula-title">
+      <div class="section-shell aula-hero-grid">
+        <div>
+          <p class="aula-eyebrow">Sembrar · Aula Viva</p>
+          <h1 id="aula-title">Aprender para actuar con más criterio.</h1>
+          <p class="aula-lead">Una experiencia serena y aplicada: situaciones reales, práctica, retroalimentación, reintentos y evidencia de aprendizaje.</p>
+          <div class="aula-hero-actions">
+            <button class="button button-primary" type="button" data-open-auth="signup">Crear mi cuenta</button>
+            <button class="button button-secondary" type="button" data-open-auth="signin">Ingresar</button>
           </div>
-          <a href="/contacto/" data-local-href="../../contacto/index.html">Contacto</a>
-        </nav>
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú" title="Abrir menú"><span></span><span></span></button>
+          <p class="aula-trust">No solicitamos datos reales de su empresa para realizar las actividades.</p>
+        </div>
+        <aside class="aula-hero-panel" aria-label="Resumen de la experiencia">
+          <span>Primera experiencia disponible</span>
+          <h2>IA con criterio humano</h2>
+          <p>Productividad, seguridad y decisiones responsables en el trabajo.</p>
+          <ul>
+            <li>7 horas de núcleo aplicado</li>
+            <li>9 módulos y refuerzos espaciados</li>
+            <li>Evaluación basada en evidencia</li>
+          </ul>
+        </aside>
       </div>
-    </header>
+    </section>
 
-    <main class="subpage-main">
-      <section class="subpage-hero page-hero-sembrar" aria-labelledby="aula-title">
-        <div class="section-shell subpage-hero-grid js-reveal">
-          <div>
-            <nav class="breadcrumb" aria-label="Migas de pan"><a href="../../index.html">Inicio</a><span>/</span><a href="/sembrar" data-local-href="../index.html">Sembrar</a><span>/</span><span>Mi Aula</span></nav>
-            <p class="subpage-kicker">Espacio formativo</p>
-            <h1 id="aula-title">Mi Aula</h1>
-            <p class="subpage-lead">
-              Un punto de acceso para organizar rutas formativas, materiales y seguimiento educativo
-              de Sembrar cuando una experiencia o cohorte esté activa.
-            </p>
-            <div class="subpage-actions">
-              <a class="button button-primary" href="/sembrar/cursos/" data-local-href="../cursos/index.html">Ver cursos gratuitos</a>
-              <a class="button button-secondary" href="mailto:contacto@nucleovivo.net?subject=Acceso%20a%20Mi%20Aula%20Sembrar">Solicitar acceso</a>
+    <section class="aula-dashboard-section" aria-live="polite">
+      <div class="section-shell">
+        <div id="system-banner" class="aula-system-banner" hidden></div>
+
+        <div id="guest-view" class="aula-guest-grid">
+          <article class="aula-principle-card">
+            <span>01</span><h2>Comprender</h2><p>Conceptos breves, fuentes trazables y ejemplos contextualizados.</p>
+          </article>
+          <article class="aula-principle-card">
+            <span>02</span><h2>Practicar</h2><p>Decisiones, simulaciones y reintentos sin castigar el error.</p>
+          </article>
+          <article class="aula-principle-card">
+            <span>03</span><h2>Transferir</h2><p>Un producto final aplicable al trabajo sin revelar información confidencial.</p>
+          </article>
+        </div>
+
+        <section id="member-view" class="member-view" hidden aria-labelledby="member-title">
+          <div class="member-heading">
+            <div>
+              <span class="section-label">Tu espacio de aprendizaje</span>
+              <h2 id="member-title">Buenas tardes, <span id="member-name">participante</span>.</h2>
+              <p id="member-message">Continuemos desde el punto exacto en que quedaste.</p>
             </div>
+            <button class="aula-text-button" id="signout-button" type="button">Cerrar sesión</button>
           </div>
-          <aside class="course-hero-card js-reveal" aria-label="Estado de Mi Aula">
-            <span>Acceso responsable</span>
-            <strong>No hay un formulario de registro público ni login simulado en esta versión.</strong>
-            <ul>
-              <li>Acceso por rutas o cohortes definidas</li>
-              <li>Materiales y seguimiento formativo</li>
-              <li>Contacto directo para activaciones</li>
-            </ul>
-          </aside>
-        </div>
-      </section>
 
-      <section class="page-intro">
-        <div class="section-shell intro-grid">
-          <div class="js-reveal">
-            <span class="section-label">Qué reúne</span>
-            <h2>Un espacio para ordenar el aprendizaje sin prometer una plataforma que todavía no está conectada.</h2>
+          <div class="dashboard-grid">
+            <article class="continue-card" aria-labelledby="continue-title">
+              <div>
+                <p class="card-kicker">Lo más significativo ahora</p>
+                <h3 id="continue-title">IA con criterio humano</h3>
+                <p id="continue-copy">Comienza por una decisión inicial y configura tu meta de aprendizaje.</p>
+              </div>
+              <div class="progress-block" aria-label="Progreso del curso">
+                <div class="progress-meta"><span>Progreso</span><strong id="progress-label">0%</strong></div>
+                <div class="progress-track"><span id="progress-bar" style="width:0%"></span></div>
+              </div>
+              <div class="card-actions">
+                <button id="enroll-button" class="button button-primary" type="button">Inscribirme</button>
+                <a id="continue-link" class="button button-primary" href="/sembrar/aula/curso/ia-con-criterio-humano/" data-local-href="curso/ia-con-criterio-humano/index.html" hidden>Continuar curso</a>
+                <a class="button button-quiet" href="/sembrar/cursos/ia-con-criterio-humano/" data-local-href="../cursos/ia-con-criterio-humano/index.html">Ver programa</a>
+              </div>
+            </article>
+
+            <aside class="weekly-card">
+              <p class="card-kicker">Tu semana</p>
+              <dl>
+                <div><dt>Experiencias completadas</dt><dd id="completed-count">0</dd></div>
+                <div><dt>Próxima acción</dt><dd id="next-action">Diagnóstico inicial</dd></div>
+                <div><dt>Tiempo estimado</dt><dd>12 minutos</dd></div>
+              </dl>
+              <button id="accessibility-button" class="aula-text-button" type="button">Preferencias de accesibilidad</button>
+            </aside>
           </div>
-          <div class="intro-copy js-reveal">
-            <p>
-              Mi Aula queda preparada como ruta pública para participantes de experiencias formativas.
-              Su función es concentrar el acceso a cursos, materiales, orientaciones y seguimiento cuando
-              Núcleo Vivo active una ruta con una organización, comunidad o grupo específico.
-            </p>
-            <p>
-              Esta página evita crear registros o evaluaciones falsas. Cuando exista una plataforma con
-              autenticación, progreso, actividades y resultados reales, el acceso quedará conectado desde aquí.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section class="course-route-section" aria-labelledby="aula-flow-title">
-        <div class="section-shell course-route-grid">
-          <div class="js-reveal">
-            <span class="section-label">Uso previsto</span>
-            <h2 id="aula-flow-title">Cómo se integrará a las rutas de Sembrar.</h2>
-            <p>El acceso formativo se activa cuando hay contenidos, acompañamiento y condiciones claras para participar.</p>
-          </div>
-          <ol class="course-route-list js-reveal">
-            <li><span>01</span><strong>Ruta o curso definido</strong><p>La persona conoce objetivos, duración, materiales y modalidad.</p></li>
-            <li><span>02</span><strong>Acceso habilitado</strong><p>La participación se activa por invitación o coordinación directa.</p></li>
-            <li><span>03</span><strong>Seguimiento formativo</strong><p>El avance se acompaña con recursos, actividades y orientaciones reales.</p></li>
-          </ol>
-        </div>
-      </section>
-
-      <section class="lineas-cta">
-        <div class="section-shell cta-grid js-reveal">
-          <div><h2>¿Quieres activar una ruta formativa?</h2><p>Podemos conversar sobre cursos, talleres o experiencias educativas para tu comunidad u organización.</p></div>
-          <a class="button button-primary" href="mailto:contacto@nucleovivo.net?subject=Activar%20ruta%20formativa%20Sembrar">Conversemos</a>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="section-shell footer-main">
-        <img src="../../assets/nucleo-vivo-logotipo-exacto-del-moodboard.png" alt="Núcleo Vivo" class="footer-logo" />
-        <div class="footer-statement"><p>Personas al centro. Organizaciones en evolución.</p><span>Creamos experiencias, herramientas y soluciones para aprendizaje, bienestar y desarrollo con foco humano.</span></div>
-        <nav aria-label="Navegaci&oacute;n del pie de p&aacute;gina"><a href="/" data-local-href="../../index.html">Inicio</a><a href="/lineas/" data-local-href="../../lineas/index.html">Ecosistema</a><a href="/consultoria/" data-local-href="../../consultoria/index.html">Consultor&iacute;a</a><a href="/sembrar/" data-local-href="../index.html">Sembrar</a><a href="/sembrar/cursos/" data-local-href="../cursos/index.html">Cursos gratuitos</a><a href="/sembrar/aula/" data-local-href="index.html">Mi Aula</a><a href="/lab/" data-local-href="../../lab/index.html">Lab</a><a href="/cuadernos/" data-local-href="../../cuadernos/index.html">Cuadernos</a><a href="/podcast/" data-local-href="../../podcast/index.html">Podcast</a><a href="/privacidad/" data-local-href="../../privacidad/index.html">Privacidad</a><a href="/terminos/" data-local-href="../../terminos/index.html">T&eacute;rminos</a><a href="/contacto/" data-local-href="../../contacto/index.html">Contacto</a></nav>
+        </section>
       </div>
-      <div class="section-shell footer-bottom"><p>© 2026 Núcleo Vivo.</p><p>contacto@nucleovivo.net</p></div>
-    </footer>
-    <script src="../../script.js" defer></script>
-  </body>
+    </section>
+
+    <dialog id="auth-dialog" class="aula-dialog" aria-labelledby="auth-title">
+      <form method="dialog" class="dialog-close-row"><button value="cancel" aria-label="Cerrar">×</button></form>
+      <div class="dialog-body">
+        <p class="aula-eyebrow">Aula Viva</p>
+        <h2 id="auth-title">Ingresa a tu aula</h2>
+        <p id="auth-description">Usa tu correo y contraseña. También puedes crear una cuenta nueva.</p>
+        <div class="auth-tabs" role="tablist" aria-label="Acceso al aula">
+          <button id="signin-tab" type="button" role="tab" aria-selected="true">Ingresar</button>
+          <button id="signup-tab" type="button" role="tab" aria-selected="false">Crear cuenta</button>
+        </div>
+        <form id="auth-form" novalidate>
+          <label>Nombre <input id="auth-name" name="name" autocomplete="name" /></label>
+          <label>Correo <input id="auth-email" name="email" type="email" autocomplete="email" required /></label>
+          <label>Contraseña <input id="auth-password" name="password" type="password" autocomplete="current-password" minlength="8" required /></label>
+          <label class="consent-row" id="consent-row">
+            <input id="auth-consent" type="checkbox" />
+            <span>He leído la <a href="/privacidad/" data-local-href="../../privacidad/index.html" target="_blank" rel="noopener">información de privacidad</a> y usaré datos ficticios en las actividades.</span>
+          </label>
+          <p id="auth-status" class="form-status" role="status"></p>
+          <button class="button button-primary button-full" type="submit">Continuar</button>
+          <button id="reset-password-button" class="aula-text-button reset-password-button" type="button">Olvidé mi contraseña</button>
+        </form>
+      </div>
+    </dialog>
+
+    <dialog id="accessibility-dialog" class="aula-dialog" aria-labelledby="accessibility-title">
+      <form method="dialog" class="dialog-close-row"><button value="cancel" aria-label="Cerrar">×</button></form>
+      <div class="dialog-body">
+        <p class="aula-eyebrow">Preferencias</p>
+        <h2 id="accessibility-title">Ajusta la experiencia</h2>
+        <label class="setting-row"><span>Texto más grande</span><input id="large-text-toggle" type="checkbox" /></label>
+        <label class="setting-row"><span>Reducir movimiento</span><input id="motion-toggle" type="checkbox" /></label>
+        <label class="setting-row"><span>Alto contraste</span><input id="contrast-toggle" type="checkbox" /></label>
+        <button id="save-accessibility" class="button button-primary button-full" type="button">Guardar preferencias</button>
+      </div>
+    </dialog>
+  </main>
+
+  <footer class="site-footer">
+    <div class="section-shell footer-main">
+      <img src="../../assets/nucleo-vivo-logotipo-exacto-del-moodboard.png" alt="Núcleo Vivo" class="footer-logo" />
+      <div class="footer-statement"><p>Personas al centro. Organizaciones en evolución.</p><span>La IA acompaña; el criterio y la responsabilidad permanecen en las personas.</span></div>
+      <nav aria-label="Navegación del pie de página"><a href="/sembrar/cursos/" data-local-href="../cursos/index.html">Cursos</a><a href="/privacidad/" data-local-href="../../privacidad/index.html">Privacidad</a><a href="/terminos/" data-local-href="../../terminos/index.html">Términos</a><a href="/contacto/" data-local-href="../../contacto/index.html">Contacto</a></nav>
+    </div>
+    <div class="section-shell footer-bottom"><p>© 2026 Núcleo Vivo.</p><p>contacto@nucleovivo.net</p></div>
+  </footer>
+
+  <script src="aula-config.js"></script>
+  <script>
+    if (window.AULA_VIVA_CONFIG?.supabaseUrl && window.AULA_VIVA_CONFIG?.supabaseAnonKey) {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.0"><\/script>');
+    }
+  </script>
+  <script src="aula-core.js"></script>
+  <script src="aula-dashboard.js"></script>
+  <script src="../../script.js" defer></script>
+</body>
 </html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Curso IA con criterio humano dentro de Aula Viva de Núcleo Vivo." />
+  <meta name="theme-color" content="#041d3f" />
+  <title>IA con criterio humano | Aula Viva</title>
+  <link rel="icon" href="../../../../assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" type="image/png" />
+  <link rel="stylesheet" href="../../../../styles.css" />
+  <link rel="stylesheet" href="../../aula.css" />
+</head>
+<body class="course-shell-page">
+  <a class="skip-link" href="#lesson-content">Saltar a la lección</a>
+  <header class="course-topbar">
+    <div class="course-topbar-inner">
+      <button id="course-menu-button" class="mobile-course-menu" type="button" aria-expanded="false" aria-controls="course-sidebar">☰</button>
+      <a class="course-brand" href="/sembrar/aula/" data-local-href="../../index.html">
+        <img src="../../../../assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" alt="" />
+        <span>Aula Viva</span>
+      </a>
+      <div class="course-title-mini">
+        <strong>IA con criterio humano</strong>
+        <span id="course-top-progress">0% completado</span>
+      </div>
+      <a class="course-exit" href="/sembrar/aula/" data-local-href="../../index.html">Salir al aula</a>
+    </div>
+  </header>
+
+  <div class="course-layout">
+    <aside id="course-sidebar" class="course-sidebar" aria-label="Ruta del curso">
+      <div class="course-progress-card">
+        <p>Tu recorrido</p>
+        <strong id="sidebar-progress-label">0%</strong>
+        <div class="progress-track"><span id="sidebar-progress-bar" style="width:0%"></span></div>
+      </div>
+      <nav id="module-nav" class="module-nav" aria-label="Módulos y lecciones"></nav>
+    </aside>
+
+    <main id="lesson-content" class="course-main" tabindex="-1">
+      <article id="lesson-frame" class="lesson-frame" aria-live="polite"></article>
+    </main>
+  </div>
+
+  <script src="../../aula-config.js"></script>
+  <script>
+    if (window.AULA_VIVA_CONFIG?.supabaseUrl && window.AULA_VIVA_CONFIG?.supabaseAnonKey) {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.0"><\/script>');
+    }
+  </script>
+  <script src="../../aula-core.js"></script>
+  <script src="course-data.js"></script>
+  <script src="course.js"></script>
+</body>
+</html>
