@@ -221,6 +221,7 @@
       location.href = "../../index.html";
       return;
     }
+    if (A.hasSupabase) await A.syncPreviewProgress();
     const enrollment = await A.getEnrollment();
     if (!enrollment && !A.config.previewMode) {
       location.href = "../../index.html";
@@ -243,7 +244,7 @@
     $("#lesson-frame").innerHTML = `
       <section class="lesson-card">
         <h1>No pudimos abrir el curso</h1>
-        <p>${escapeHtml(error.message)}</p>
+        <p>${escapeHtml(A.friendlyError ? A.friendlyError(error) : error.message)}</p>
         <a class="button button-primary" href="../../index.html">Volver a Mi Aula</a>
       </section>`;
   });

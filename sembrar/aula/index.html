@@ -137,16 +137,17 @@
           <button id="signin-tab" type="button" role="tab" aria-selected="true">Ingresar</button>
           <button id="signup-tab" type="button" role="tab" aria-selected="false">Crear cuenta</button>
         </div>
-        <form id="auth-form" novalidate>
+        <form id="auth-form" aria-describedby="auth-description auth-status" novalidate>
           <label>Nombre <input id="auth-name" name="name" autocomplete="name" /></label>
           <label>Correo <input id="auth-email" name="email" type="email" autocomplete="email" required /></label>
           <label>Contraseña <input id="auth-password" name="password" type="password" autocomplete="current-password" minlength="8" required /></label>
           <label class="consent-row" id="consent-row">
             <input id="auth-consent" type="checkbox" />
-            <span>He leído la <a href="/privacidad/" data-local-href="../../privacidad/index.html" target="_blank" rel="noopener">información de privacidad</a> y usaré datos ficticios en las actividades.</span>
+            <span>He leído la <a href="/privacidad/" data-local-href="../../privacidad/index.html" target="_blank" rel="noopener noreferrer">información de privacidad</a> y usaré datos ficticios en las actividades.</span>
           </label>
-          <p id="auth-status" class="form-status" role="status"></p>
-          <button class="button button-primary button-full" type="submit">Continuar</button>
+          <p id="auth-status" class="form-status" role="status" aria-live="polite"></p>
+          <button id="auth-submit-button" class="button button-primary button-full" type="submit">Continuar</button>
+          <button id="resend-confirmation-button" class="aula-text-button reset-password-button" type="button" hidden>Reenviar confirmación</button>
           <button id="reset-password-button" class="aula-text-button reset-password-button" type="button">Olvidé mi contraseña</button>
         </form>
       </div>
