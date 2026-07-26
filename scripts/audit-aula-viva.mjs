@@ -5,6 +5,7 @@ import vm from "node:vm";
 const repoRoot = path.resolve(process.argv[2] || ".");
 const reviewMigration = "supabase/migrations/20260726_aula_revision_interna.sql";
 const rollbackMigration = "supabase/migrations/20260726_aula_revision_interna_staging_rollback.sql";
+const initialStateMigration = "supabase/migrations/20260726_aula_revision_interna_estado_inicial.sql";
 
 const requiredFiles = [
   "_redirects",
