@@ -3,6 +3,9 @@ import path from "node:path";
 import vm from "node:vm";
 
 const repoRoot = path.resolve(process.argv[2] || ".");
+const reviewMigration = "supabase/migrations/20260726_aula_revision_interna.sql";
+const rollbackMigration = "supabase/migrations/20260726_aula_revision_interna_staging_rollback.sql";
+
 const requiredFiles = [
   "_redirects",
   "sembrar/aula/index.html",
@@ -15,7 +18,9 @@ const requiredFiles = [
   "sembrar/aula/curso/ia-con-criterio-humano/course.js",
   "sembrar/cursos/index.html",
   "sembrar/cursos/ia-con-criterio-humano/index.html",
-  "supabase/migrations/20260725_aula_viva.sql"
+  "supabase/migrations/20260725_aula_viva.sql",
+  reviewMigration,
+  rollbackMigration
 ];
 
 const failures = [];
@@ -74,6 +79,8 @@ if (failures.length === 0) {
   check(/rel="noopener noreferrer"/.test(aulaHtml), "Los enlaces externos del aula usan noopener noreferrer");
 
   const sql = read("supabase/migrations/20260725_aula_viva.sql");
+  const reviewSql = read(reviewMigration);
+  const rollbackSql = read(rollbackMigration);
   const tables = [
     "aula_profiles", "aula_courses", "aula_modules", "aula_lessons",
     "aula_enrollments", "aula_lesson_progress", "aula_consent_records",
@@ -120,14 +127,85 @@ if (failures.length === 0) {
   check(/on public\.aula_lessons for select[\s\S]*?to authenticated[\s\S]*?join public\.aula_enrollments e on e\.course_id = c\.id[\s\S]*?where c\.id = public\.aula_lessons\.course_id[\s\S]*?e\.user_id = auth\.uid\(\)[\s\S]*?e\.status in \('active', 'completed'\)/.test(sql), "aula_lessons exige inscripcion activa o completada del usuario en el curso");
   check(!/aula_(modules|lessons)[\s\S]{0,700}e\.status in \('active', 'completed', 'paused'\)/.test(sql), "paused no permite leer modulos ni lecciones");
 
+  check(/alter table public\.aula_courses\s+add column if not exists editorial_status text/i.test(reviewSql), "La migracion de revision interna agrega editorial_status");
+  check(/alter table public\.aula_courses\s+add column if not exists catalog_visibility text/i.test(reviewSql), "La migracion de revision interna agrega catalog_visibility");
+  check(/add constraint aula_courses_editorial_status_check/i.test(reviewSql), "La migracion de revision interna aplica constraint editorial_status");
+  check(/add constraint aula_courses_catalog_visibility_check/i.test(reviewSql), "La migracion de revision interna aplica constraint catalog_visibility");
+  check(/alter table public\.aula_courses\s+alter column editorial_status set default 'draft';/i.test(reviewSql), "Editorial_status default es draft");
+  check(/alter table public\.aula_courses\s+alter column catalog_visibility set default 'hidden';/i.test(reviewSql), "Catalog_visibility default es hidden");
+  check(/create table if not exists public\.aula_course_versions/i.test(reviewSql), "La migracion crea aula_course_versions");
+  check(/create table if not exists public\.aula_course_reviewers/i.test(reviewSql), "La migracion crea aula_course_reviewers");
+  check(/create table if not exists public\.aula_lesson_versions/i.test(reviewSql), "La migracion crea aula_lesson_versions");
+  check(/create table if not exists public\.aula_review_feedback/i.test(reviewSql), "La migracion crea aula_review_feedback");
+  check(/create table if not exists public\.aula_review_activity/i.test(reviewSql), "La migracion crea aula_review_activity");
+  check(/alter table public\.aula_course_versions enable row level security;/i.test(reviewSql), "RLS habilitado en aula_course_versions");
+  check(/alter table public\.aula_course_reviewers enable row level security;/i.test(reviewSql), "RLS habilitado en aula_course_reviewers");
+  check(/alter table public\.aula_lesson_versions enable row level security;/i.test(reviewSql), "RLS habilitado en aula_lesson_versions");
+  check(/alter table public\.aula_review_feedback enable row level security;/i.test(reviewSql), "RLS habilitado en aula_review_feedback");
+  check(/alter table public\.aula_review_activity enable row level security;/i.test(reviewSql), "RLS habilitado en aula_review_activity");
+  check(/alter table public\.aula_course_versions force row level security;/i.test(reviewSql), "RLS forzado en aula_course_versions");
+  check(/alter table public\.aula_course_reviewers force row level security;/i.test(reviewSql), "RLS forzado en aula_course_reviewers");
+  check(/alter table public\.aula_lesson_versions force row level security;/i.test(reviewSql), "RLS forzado en aula_lesson_versions");
+  check(/alter table public\.aula_review_feedback force row level security;/i.test(reviewSql), "RLS forzado en aula_review_feedback");
+  check(/alter table public\.aula_review_activity force row level security;/i.test(reviewSql), "RLS forzado en aula_review_activity");
+  check(/create or replace function private\.aula_is_admin\(\)/i.test(reviewSql), "La migracion define private.aula_is_admin");
+  check(/create or replace function private\.aula_is_course_reviewer\(/i.test(reviewSql), "La migracion define private.aula_is_course_reviewer");
+  check(/create or replace function private\.aula_can_review_version\(/i.test(reviewSql), "La migracion define private.aula_can_review_version");
+  check(/create or replace function private\.aula_can_access_lesson_version\(/i.test(reviewSql), "La migracion define private.aula_can_access_lesson_version");
+  check(/grant execute on function private\.aula_is_admin\(\) to authenticated;/i.test(reviewSql), "La migracion concede execute a authenticated en aula_is_admin");
+  check(/grant execute on function private\.aula_is_course_reviewer\(uuid\) to authenticated;/i.test(reviewSql), "La migracion concede execute a authenticated en aula_is_course_reviewer");
+  check(/grant execute on function private\.aula_can_review_version\(uuid\) to authenticated;/i.test(reviewSql), "La migracion concede execute a authenticated en aula_can_review_version");
+  check(/grant execute on function private\.aula_can_access_lesson_version\(uuid\) to authenticated;/i.test(reviewSql), "La migracion concede execute a authenticated en aula_can_access_lesson_version");
+  check(/create policy "aula-course-versions-admin-manage"/i.test(reviewSql), "La migracion crea politica de admin para aula_course_versions");
+  check(/create policy "aula-course-versions-reviewer-read"/i.test(reviewSql), "La migracion crea politica de reviewer read para aula_course_versions");
+  check(/create policy "aula-course-reviewers-admin-manage"/i.test(reviewSql), "La migracion crea politica de admin para aula_course_reviewers");
+  check(/create unique index if not exists aula_course_versions_current_idx/i.test(reviewSql), "La migracion crea indice unico para versiones actuales");
+  check(/create unique index if not exists aula_course_versions_current_idx/i.test(reviewSql), "La migracion crea indice unico para versiones actuales");
+  check(rollbackSql.includes("begin;"), "El rollback inicia con begin;");
+  check(rollbackSql.includes("commit;"), "El rollback termina con commit;");
+  check(/drop table if exists public\.aula_review_activity/i.test(rollbackSql), "El rollback elimina aula_review_activity");
+  check(/drop table if exists public\.aula_review_feedback/i.test(rollbackSql), "El rollback elimina aula_review_feedback");
+  check(/drop table if exists public\.aula_lesson_versions/i.test(rollbackSql), "El rollback elimina aula_lesson_versions");
+  check(/drop table if exists public\.aula_course_reviewers/i.test(rollbackSql), "El rollback elimina aula_course_reviewers");
+  check(/drop table if exists public\.aula_course_versions/i.test(rollbackSql), "El rollback elimina aula_course_versions");
+  check(/drop function if exists private\.aula_can_access_lesson_version\(uuid\)/i.test(rollbackSql), "El rollback elimina la funcion private.aula_can_access_lesson_version");
+  check(/drop function if exists private\.aula_can_review_version\(uuid\)/i.test(rollbackSql), "El rollback elimina la funcion private.aula_can_review_version");
+  check(/drop function if exists private\.aula_is_course_reviewer\(uuid\)/i.test(rollbackSql), "El rollback elimina la funcion private.aula_is_course_reviewer");
+  check(/drop function if exists private\.aula_is_admin\(\)/i.test(rollbackSql), "El rollback elimina la funcion private.aula_is_admin");
+  check(/delete from public\.aula_courses/i.test(rollbackSql), "El rollback borra solo los cursos de revision interna definidos");
+  check(/'datos-con-criterio'/.test(rollbackSql) && /'conversaciones-que-cuidan-y-movilizan'/.test(rollbackSql), "El rollback referencia los slugs internos esperados");
+  check(!/drop table if exists public\.aula_courses/i.test(rollbackSql), "El rollback no elimina la tabla public.aula_courses");
+  check(!/drop table if exists public\.aula_profiles/i.test(rollbackSql), "El rollback no elimina la tabla public.aula_profiles");
+  check(!/drop schema if exists private/i.test(rollbackSql), "El rollback no elimina el esquema private");
+
   const redirects = read("_redirects");
   check(redirects.includes("/sembrar/aula /sembrar/aula/index.html 200"), "La ruta de Mi Aula esta configurada");
   check(redirects.includes("/sembrar/cursos/ia-con-personas-al-centro /sembrar/cursos/ia-con-criterio-humano 301"), "La URL anterior redirige al nombre definitivo");
 
   const config = read("sembrar/aula/aula-config.js");
-  check(/previewMode:\s*true/.test(config), "El paquete se entrega en vista previa, sin credenciales");
-  check(/enableRemoteSync:\s*true/.test(config), "La configuracion deja preparada la sincronizacion remota");
-  check(/supabaseUrl:\s*""/.test(config) && /supabaseAnonKey:\s*""/.test(config), "La configuracion real no incluye credenciales");
+  const previewMode = /previewMode\s*:\s*true/.test(config);
+  const enableRemoteSync = /enableRemoteSync\s*:\s*true/.test(config);
+  const urlMatch = config.match(/supabaseUrl\s*:\s*(['"])(.*?)\1/);
+  const anonKeyMatch = config.match(/supabaseAnonKey\s*:\s*(['"])(.*?)\1/);
+  const supabaseUrl = urlMatch ? urlMatch[2].trim() : "";
+  const supabaseAnonKey = anonKeyMatch ? anonKeyMatch[2].trim() : "";
+
+  check(!/service[_-]?role/i.test(config), "No aparece service_role en la configuracion");
+  check(!/sb_secret_/i.test(config), "No aparece sb_secret_ en la configuracion");
+  check(!/service[_-]?role/i.test(supabaseAnonKey), "La clave anon no contiene service_role");
+  check(!/sb_secret_/i.test(supabaseAnonKey), "La clave anon no contiene sb_secret_");
+
+  if (previewMode) {
+    check(supabaseUrl === "", "El paquete preview no incluye URL de Supabase");
+    check(supabaseAnonKey === "", "El paquete preview no incluye anon key de Supabase");
+    check(!enableRemoteSync, "La sincronizacion remota no se activa en preview");
+  } else {
+    check(supabaseUrl.length > 0, "La configuracion staging/prod incluye una URL de Supabase");
+    check(supabaseUrl.startsWith("https://"), "La URL de Supabase usa HTTPS");
+    check(supabaseAnonKey.length > 0, "La configuracion staging/prod incluye una anon key de Supabase");
+    check(/^(sb_publishable_[A-Za-z0-9_-]+|[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+)$/.test(supabaseAnonKey), "La anon key de Supabase tiene formato valido");
+    check(enableRemoteSync, "La configuracion staging/prod habilita sincronizacion remota");
+  }
 
   const publicShell = [
     read("index.html"),
