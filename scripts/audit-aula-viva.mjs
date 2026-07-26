@@ -81,6 +81,8 @@ if (failures.length === 0) {
   const sql = read("supabase/migrations/20260725_aula_viva.sql");
   const reviewSql = read(reviewMigration);
   const rollbackSql = read(rollbackMigration);
+  const reviewSqlWithoutTriggerFunctions = reviewSql.replace(/create\s+(?:or\s+replace\s+)?function[\s\S]*?returns\s+trigger[\s\S]*?language\s+plpgsql[\s\S]*?\$\$;/ig, "");
+  check(!/\b(?:new|old)\./i.test(reviewSqlWithoutTriggerFunctions), "No hay referencias a NEW. u OLD. fuera de funciones trigger LANGUAGE plpgsql en la migracion de revision interna");
   const tables = [
     "aula_profiles", "aula_courses", "aula_modules", "aula_lessons",
     "aula_enrollments", "aula_lesson_progress", "aula_consent_records",

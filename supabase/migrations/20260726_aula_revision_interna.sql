@@ -302,7 +302,7 @@ with check (
   and exists (
     select 1
     from public.aula_course_reviewers r
-    where r.course_id = new.course_id
+    where r.course_id = course_id
       and r.user_id = auth.uid()
       and r.is_active = true
   )
