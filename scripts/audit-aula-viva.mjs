@@ -83,6 +83,16 @@ if (failures.length === 0) {
   const rollbackSql = read(rollbackMigration);
   const reviewSqlWithoutTriggerFunctions = reviewSql.replace(/create\s+(?:or\s+replace\s+)?function[\s\S]*?returns\s+trigger[\s\S]*?language\s+plpgsql[\s\S]*?\$\$;/ig, "");
   check(!/\b(?:new|old)\./i.test(reviewSqlWithoutTriggerFunctions), "No hay referencias a NEW. u OLD. fuera de funciones trigger LANGUAGE plpgsql en la migracion de revision interna");
+  const policyBlocks = [...reviewSql.matchAll(/create policy[\s\S]*?(?=create policy|$)/gi)];
+  const ambiguousPolicyCorrelations = [];
+  for (const match of policyBlocks) {
+    const block = match[0];
+    const policyName = block.match(/create policy\s+"([^"]+)"/i)?.[1] || "sin nombre";
+    for (const correlation of block.matchAll(/\b([a-zA-Z_][a-zA-Z0-9_]*)\.(course_id|id)\s*=\s*(course_id|course_version_id|lesson_version_id)\b/g)) {
+      ambiguousPolicyCorrelations.push(`${policyName}: ${correlation[1]}.${correlation[2]} = ${correlation[3]}`);
+    }
+  }
+  check(ambiguousPolicyCorrelations.length === 0, `No hay correlaciones ambiguas en CREATE POLICY${ambiguousPolicyCorrelations.length ? `: ${ambiguousPolicyCorrelations.join(", ")}` : ""}`);
   const tables = [
     "aula_profiles", "aula_courses", "aula_modules", "aula_lessons",
     "aula_enrollments", "aula_lesson_progress", "aula_consent_records",
