@@ -5,8 +5,59 @@
   const $ = selector => document.querySelector(selector);
   const authDialog = $("#auth-dialog");
   const accessibilityDialog = $("#accessibility-dialog");
+  const loadingView = $("#aula-loading-state");
+  const publicHero = $("#public-hero");
+  const dashboardSection = $("#aula-dashboard-section");
+  const guestView = $("#guest-view");
+  const memberView = $("#member-view");
+  const liveStatus = $("#aula-live-status");
   let authMode = "signin";
   let recoveryPromptShown = false;
+  let initialStateResolved = false;
+  let pendingDashboardFocus = false;
+  let refreshSequence = 0;
+  let lastDashboardFocusAt = 0;
+
+  function setLiveStatus(message) {
+    if (liveStatus) liveStatus.textContent = message || "";
+  }
+
+  function setRegion(element, visible) {
+    if (!element) return;
+    element.hidden = !visible;
+    element.toggleAttribute("inert", !visible);
+    element.setAttribute("aria-hidden", visible ? "false" : "true");
+  }
+
+  function setViewState(state) {
+    document.body.dataset.aulaState = state;
+    setRegion(loadingView, state === "loading");
+    setRegion(publicHero, state === "guest");
+    setRegion(dashboardSection, state !== "loading");
+    setRegion(guestView, state === "guest");
+    setRegion(memberView, state === "member");
+  }
+
+  function focusDashboardStart() {
+    if (!memberView || memberView.hidden) return;
+    const now = Date.now();
+    if (now - lastDashboardFocusAt < 900) return;
+    lastDashboardFocusAt = now;
+    const title = $("#member-title");
+    const reducedMotion = document.documentElement.classList.contains("aula-reduced-motion")
+      || window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+    window.requestAnimationFrame(() => {
+      memberView.scrollIntoView({ block: "start", behavior: reducedMotion ? "auto" : "smooth" });
+      window.requestAnimationFrame(() => {
+        title?.focus({ preventScroll: true });
+      });
+    });
+  }
+
+  function requestDashboardFocus() {
+    pendingDashboardFocus = true;
+  }
 
   function displayName(user) {
     const raw = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "participante";
@@ -71,17 +122,26 @@
   }
 
   async function refresh() {
+    const sequence = ++refreshSequence;
+    if (!initialStateResolved) {
+      setViewState("loading");
+      setLiveStatus("Cargando tu aula.");
+    }
     A.applyAccessibility();
     setBanner(connectionMessage(), "info");
 
     try {
       const { user } = await A.getSession();
-      $("#guest-view").hidden = Boolean(user);
-      $("#member-view").hidden = !user;
+      if (sequence !== refreshSequence) return;
+      setViewState(user ? "member" : "guest");
       document.querySelectorAll("[data-open-auth]").forEach(button => {
         button.hidden = Boolean(user);
       });
-      if (!user) return;
+      if (!user) {
+        initialStateResolved = true;
+        setLiveStatus("Vista publica de Aula Viva disponible.");
+        return;
+      }
 
       if (A.isRecoverySession() && !recoveryPromptShown) {
         recoveryPromptShown = true;
@@ -90,27 +150,59 @@
       }
 
       const syncResult = A.hasSupabase ? await A.syncPreviewProgress() : null;
+      if (sequence !== refreshSequence) return;
       if (syncResult?.message) setBanner(syncResult.message, syncResult.synced ? "success" : "info");
 
       $("#member-name").textContent = displayName(user);
       const hour = new Date().getHours();
       const greeting = hour < 12 ? "Buenos dias" : hour < 20 ? "Buenas tardes" : "Buenas noches";
       $("#member-title").firstChild.textContent = `${greeting}, `;
-      const [enrollment, progress] = await Promise.all([A.getEnrollment(), A.getProgress()]);
+      const enrollment = await A.getEnrollment();
+      const enrollmentStatus = enrollment?.status || null;
+      const canContinue = enrollmentStatus === "active" || enrollmentStatus === "completed";
+      const isPaused = enrollmentStatus === "paused";
+      const progress = canContinue ? await A.getProgress() : {};
+      if (sequence !== refreshSequence) return;
       const completed = Object.values(progress).filter(item => item.status === "completed").length;
       const total = window.IA_COURSE?.lessons?.length || 19;
       const percent = total ? Math.round((completed / total) * 100) : 0;
+      const enrollmentMessage = $("#enrollment-status");
       $("#completed-count").textContent = String(completed);
       $("#progress-label").textContent = `${percent}%`;
       $("#progress-bar").style.width = `${percent}%`;
-      $("#next-action").textContent = completed ? "Continuar ruta recomendada" : "Diagnostico inicial";
-      $("#continue-copy").textContent = completed
-        ? "Tu avance esta guardado. Retoma la proxima experiencia sin repetir lo ya realizado."
-        : "Comienza por una decision inicial y configura tu meta de aprendizaje.";
+      $("#next-action").textContent = canContinue
+        ? completed
+          ? "Continuar ruta recomendada"
+          : "Diagnostico inicial"
+        : isPaused
+          ? "Acceso pausado"
+          : "Inscribirte en el curso";
+      $("#continue-copy").textContent = canContinue
+        ? completed
+          ? "Tu avance esta guardado. Retoma la proxima experiencia sin repetir lo ya realizado."
+          : "Comienza por una decision inicial y configura tu meta de aprendizaje."
+        : isPaused
+          ? "Tu acceso a este curso se encuentra pausado. El contenido queda protegido hasta que se reactive la inscripcion."
+          : "Inscribete para agregar este curso a tu aula y comenzar tu ruta de aprendizaje.";
       $("#enroll-button").hidden = Boolean(enrollment);
-      $("#continue-link").hidden = !enrollment;
+      $("#continue-link").hidden = !canContinue;
+      enrollmentMessage.hidden = !isPaused;
+      enrollmentMessage.textContent = isPaused
+        ? "Acceso pausado: no es posible continuar el contenido por ahora. Si necesitas ayuda, contacta a Nucleo Vivo."
+        : "";
+
+      const shouldFocusDashboard = pendingDashboardFocus || !initialStateResolved;
+      initialStateResolved = true;
+      setLiveStatus(`Aula cargada. ${greeting}, ${displayName(user)}.`);
+      if (shouldFocusDashboard) {
+        pendingDashboardFocus = false;
+        focusDashboardStart();
+      }
     } catch (error) {
+      initialStateResolved = true;
+      setViewState("guest");
       setBanner(`No pudimos cargar el aula: ${A.friendlyError(error)}`, "error");
+      setLiveStatus("No pudimos cargar el aula.");
     }
   }
 
@@ -161,6 +253,7 @@
       }
       setTimeout(() => {
         authDialog.close();
+        requestDashboardFocus();
         refresh();
       }, 700);
     } catch (error) {
@@ -202,6 +295,7 @@
     button.textContent = "Inscribiendo...";
     try {
       await A.enroll();
+      requestDashboardFocus();
       await refresh();
     } catch (error) {
       alert(A.friendlyError(error));
@@ -214,6 +308,8 @@
   $("#signout-button").addEventListener("click", async () => {
     await A.signOut();
     await refresh();
+    window.scrollTo({ top: 0, behavior: "auto" });
+    setLiveStatus("Sesion cerrada. Volviste a la portada publica de Aula Viva.");
   });
 
   $("#accessibility-button").addEventListener("click", () => {
@@ -233,6 +329,9 @@
     accessibilityDialog.close();
   });
 
-  A.onAuthStateChange(refresh);
+  A.onAuthStateChange(user => {
+    if (user) requestDashboardFocus();
+    refresh();
+  });
   refresh();
 })();

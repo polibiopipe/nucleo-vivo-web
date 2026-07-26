@@ -377,13 +377,25 @@
     writeLocal(store);
 
     const course = await resolveCourse();
-    let merged = 0;
     const remoteEnrollment = await fetchRemoteEnrollment(user, course);
-    if (localEnrollment && !remoteEnrollment) {
-      await upsertRemoteEnrollment(user, course);
-      merged += 1;
+    const enrollmentStatus = remoteEnrollment?.status || null;
+    const canSyncProgress = enrollmentStatus === "active" || enrollmentStatus === "completed";
+
+    if (!canSyncProgress) {
+      const latest = readLocal();
+      latest.sync.previewClaimedBy = user.id;
+      latest.sync.lastRemoteUserId = user.id;
+      latest.sync.lastSyncedAt = new Date().toISOString();
+      latest.sync.lastSyncMessage = remoteEnrollment?.status === "paused"
+        ? "Tu inscripcion esta pausada. El avance local no se sincronizo con el aula remota."
+        : localEnrollment
+          ? "Encontramos una inscripcion local de vista previa, pero la matricula remota debe realizarse desde el boton Inscribirme."
+          : "Tu aula remota esta lista. Inscribete para comenzar a guardar progreso.";
+      writeLocal(latest);
+      return { mode: "supabase", merged: 0, skipped: true, message: latest.sync.lastSyncMessage };
     }
 
+    let merged = 0;
     const remoteProgress = await fetchRemoteProgress(user, course);
     for (const [lessonSlug, localItem] of localItems) {
       if (!isLocalAhead(localItem, remoteProgress[lessonSlug])) continue;

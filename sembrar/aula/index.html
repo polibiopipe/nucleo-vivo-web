@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="../../pages.css" />
   <link rel="stylesheet" href="aula.css" />
 </head>
-<body class="subpage aula-page">
+<body class="subpage aula-page" data-aula-state="loading">
   <a class="skip-link" href="#aula-main">Saltar al contenido</a>
   <header class="site-header">
     <div class="section-shell header-inner">
@@ -44,7 +44,17 @@
   </header>
 
   <main id="aula-main">
-    <section class="aula-hero" aria-labelledby="aula-title">
+    <p id="aula-live-status" class="aula-sr-only" role="status" aria-live="polite"></p>
+
+    <section id="aula-loading-state" class="aula-loading-state" aria-labelledby="aula-loading-title">
+      <div class="aula-loading-card">
+        <p class="aula-eyebrow">Aula Viva</p>
+        <h1 id="aula-loading-title">Cargando tu aula...</h1>
+        <p>Estamos recuperando tu sesion de forma segura.</p>
+      </div>
+    </section>
+
+    <section id="public-hero" class="aula-hero" aria-labelledby="aula-title">
       <div class="section-shell aula-hero-grid">
         <div>
           <p class="aula-eyebrow">Sembrar · Aula Viva</p>
@@ -69,7 +79,7 @@
       </div>
     </section>
 
-    <section class="aula-dashboard-section" aria-live="polite">
+    <section id="aula-dashboard-section" class="aula-dashboard-section" aria-live="polite">
       <div class="section-shell">
         <div id="system-banner" class="aula-system-banner" hidden></div>
 
@@ -89,7 +99,7 @@
           <div class="member-heading">
             <div>
               <span class="section-label">Tu espacio de aprendizaje</span>
-              <h2 id="member-title">Buenas tardes, <span id="member-name">participante</span>.</h2>
+              <h2 id="member-title" tabindex="-1">Buenas tardes, <span id="member-name">participante</span>.</h2>
               <p id="member-message">Continuemos desde el punto exacto en que quedaste.</p>
             </div>
             <button class="aula-text-button" id="signout-button" type="button">Cerrar sesión</button>
@@ -111,6 +121,7 @@
                 <a id="continue-link" class="button button-primary" href="/sembrar/aula/curso/ia-con-criterio-humano/" data-local-href="curso/ia-con-criterio-humano/index.html" hidden>Continuar curso</a>
                 <a class="button button-quiet" href="/sembrar/cursos/ia-con-criterio-humano/" data-local-href="../cursos/ia-con-criterio-humano/index.html">Ver programa</a>
               </div>
+              <p id="enrollment-status" class="enrollment-status" role="status" aria-live="polite" hidden></p>
             </article>
 
             <aside class="weekly-card">
