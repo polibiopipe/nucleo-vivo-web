@@ -17,6 +17,10 @@ const requiredFiles = [
   "sembrar/aula/curso/ia-con-criterio-humano/index.html",
   "sembrar/aula/curso/ia-con-criterio-humano/course-data.js",
   "sembrar/aula/curso/ia-con-criterio-humano/course.js",
+  "assets/images/aula/ia-con-criterio-humano/modulo-00-reglas-minimas.png",
+  "assets/images/aula/ia-con-criterio-humano/modulo-00-reglas-minimas.webp",
+  "assets/images/aula/ia-con-criterio-humano/modulo-02-marco-valor.png",
+  "assets/images/aula/ia-con-criterio-humano/modulo-02-marco-valor.webp",
   "sembrar/cursos/index.html",
   "sembrar/cursos/ia-con-criterio-humano/index.html",
   "supabase/migrations/20260725_aula_viva.sql",
@@ -34,6 +38,25 @@ function check(condition, message) {
 
 function read(relativePath) {
   return fs.readFileSync(path.join(repoRoot, relativePath), "utf8");
+}
+
+function referenceText(reference) {
+  return typeof reference === "string" ? reference : reference?.apa || "";
+}
+
+function wordCount(value = "") {
+  const normalized = String(value).trim();
+  return normalized ? normalized.split(/\s+/u).length : 0;
+}
+
+function isCompleteApaReference(reference) {
+  const apa = referenceText(reference);
+  const url = typeof reference === "object" ? reference?.url : apa.match(/https?:\/\/\S+/)?.[0];
+  return apa.length > 80
+    && /\((?:19|20)\d{2}\)/.test(apa)
+    && /\.\s/.test(apa)
+    && /^https?:\/\//.test(url || "")
+    && apa.includes(url || "__missing_url__");
 }
 
 for (const file of requiredFiles) {
@@ -54,9 +77,192 @@ if (failures.length === 0) {
   check(course.lessons.every(lesson => lesson.objective && lesson.scenario), "Cada experiencia tiene objetivo y situacion");
   check(course.lessons.every(lesson => lesson.activity?.prompt), "Cada experiencia contiene practica");
   check(course.lessons.every(lesson => Array.isArray(lesson.references) && lesson.references.length >= 2), "Cada experiencia muestra al menos dos referencias");
-  check(course.lessons.every(lesson => lesson.references.every(reference => reference.length > 40)), "Las referencias APA fueron resueltas a texto completo");
+  check(course.lessons.every(lesson => lesson.references.every(reference => referenceText(reference).length > 40)), "Las referencias APA fueron resueltas a texto completo");
   check(course.lessons.some(lesson => Array.isArray(lesson.content) && lesson.content.length > 0), "Riesgo registrado: course-data.js publica contenido interno de lecciones");
   check(course.lessons.some(lesson => lesson.activity?.options?.some(option => "feedback" in option || "correct" in option)), "Riesgo registrado: course-data.js publica actividades, feedback o criterios");
+
+  const pedagogicalIds = ["m0-l1", "m2-l1"];
+  const pedagogicalLessons = pedagogicalIds.map(id => course.lessons.find(lesson => lesson.id === id));
+  const internalReferenceIds = new Set(["nist", "oecd", "unesco", "zhang"]);
+  const requiredProgressFields = [
+    "selectedIndex", "correct", "attempts", "feedbackReviewed", "response",
+    "wordCount", "criteriaReviewed", "modelAnswerViewed", "confidence", "status"
+  ];
+
+  check(course.pedagogicalModel?.id === "aula-viva-pedagogy-v1", "El curso declara el modelo pedagogico reusable Aula Viva v1");
+  check(
+    requiredProgressFields.every(field => course.pedagogicalModel?.progressSchema?.includes(field)),
+    "El modelo declara todos los campos de progreso pedagogico compatibles"
+  );
+  check(pedagogicalLessons.every(Boolean), "Existen las experiencias modelo m0-l1 y m2-l1");
+
+  for (const lesson of pedagogicalLessons.filter(Boolean)) {
+    const referenceValues = lesson.references.map(reference => referenceText(reference).trim().toLowerCase());
+    const imageRatio = lesson.image?.width / lesson.image?.height;
+    check(lesson.pedagogyVersion === "1.1", `${lesson.id} usa la version pedagogica 1.1`);
+    check(lesson.duration && lesson.objective && lesson.scenario, `${lesson.id} conserva duracion, objetivo y situacion`);
+    check(
+      Array.isArray(lesson.studySections)
+        && lesson.studySections.length >= 3
+        && lesson.studySections.every(section => section.title && section.paragraphs?.length),
+      `${lesson.id} contiene material de estudio segmentado y sustantivo`
+    );
+    check(
+      lesson.studySections.reduce((total, section) => total + section.paragraphs.length, 0) >= 6,
+      `${lesson.id} no reduce el manual a dos parrafos`
+    );
+    check(Array.isArray(lesson.workedExample) && lesson.workedExample.length >= 2, `${lesson.id} incluye ejemplo desarrollado`);
+    check(Array.isArray(lesson.keypoints) && lesson.keypoints.length >= 4, `${lesson.id} incluye lo que la persona debe poder explicar`);
+    check(Array.isArray(lesson.summary) && lesson.summary.length >= 2, `${lesson.id} incluye sintesis final`);
+    check(
+      lesson.image?.src?.endsWith(".png")
+        && lesson.image?.webp?.endsWith(".webp")
+        && lesson.image?.alt?.length >= 80
+        && Number.isFinite(lesson.image?.width)
+        && Number.isFinite(lesson.image?.height)
+        && Math.abs(imageRatio - (16 / 9)) < 0.01,
+      `${lesson.id} declara imagen 16:9, respaldo PNG, WebP, dimensiones y texto alternativo`
+    );
+    check(
+      lesson.references.length >= 4 && lesson.references.every(isCompleteApaReference),
+      `${lesson.id} contiene referencias APA 7 completas con URL`
+    );
+    check(
+      referenceValues.every(reference => !internalReferenceIds.has(reference)),
+      `${lesson.id} no muestra identificadores internos como referencias`
+    );
+    check(
+      Array.isArray(lesson.activity?.instructions) && lesson.activity.instructions.length >= 3,
+      `${lesson.id} presenta instrucciones visibles antes de la actividad`
+    );
+    check(lesson.activity?.allowRetry === true, `${lesson.id} permite reintentos o mejoras`);
+    check(lesson.completion?.requiresFeedbackReview === true, `${lesson.id} exige revisar retroalimentacion antes de completar`);
+  }
+
+  const orientation = pedagogicalLessons[0];
+  check(orientation.studySections.length === 3, "m0-l1 desarrolla adopcion, acuerdos minimos e innovacion con limites");
+  check(
+    orientation.activity.type === "decision"
+      && orientation.activity.options.length === 4
+      && orientation.activity.options.filter(option => option.correct).length === 1
+      && orientation.activity.options.every(option => option.feedback?.length >= 70),
+    "m0-l1 define una decision con alternativa correcta y retroalimentacion especifica"
+  );
+  check(
+    orientation.activity.expectedCriterion?.length >= 120 && orientation.activity.reviewSection,
+    "m0-l1 explica el criterio esperado y la seccion que conviene releer"
+  );
+  check(
+    orientation.completion.requiresAnswer
+      && orientation.completion.requiresCorrectAnswer
+      && orientation.completion.requiresFeedbackReview
+      && orientation.completion.allowRetry
+      && orientation.completion.attemptsAreNotPenalized,
+    "m0-l1 bloquea la finalizacion incorrecta, exige feedback y registra reintentos sin penalizacion"
+  );
+
+  const valor = pedagogicalLessons[1];
+  const valorSectionTitles = valor.studySections.map(section => section.title);
+  const valorCriteriaIds = valor.activity.requiredCriteria.map(criterion => criterion.id);
+  const modelAnswerWords = wordCount(valor.activity.modelAnswer.join(" "));
+  check(
+    ["V — Valor esperado", "A — Afectación a personas", "L — Límites de datos", "O — Observabilidad del resultado", "R — Responsable final"]
+      .every(title => valorSectionTitles.includes(title)),
+    "m2-l1 desarrolla las cinco dimensiones de VALOR"
+  );
+  check(
+    valor.studySections.filter(section => /^[VALOR]\s—/u.test(section.title))
+      .every(section => section.questions?.length >= 2 && section.contrast?.insufficient && section.contrast?.adequate),
+    "m2-l1 incluye preguntas orientadoras y respuestas insuficientes y adecuadas para cada dimension"
+  );
+  check(
+    valor.comparison?.rows?.length === 3
+      && valor.comparison.rows.some(row => /correo/i.test(row.task))
+      && valor.comparison.rows.some(row => /reclamo/i.test(row.task))
+      && valor.comparison.rows.some(row => /desempeño/i.test(row.task)),
+    "m2-l1 compara correos, reclamos y evaluacion de desempeño"
+  );
+  check(
+    valor.activity.type === "reflection"
+      && valor.activity.minimumWords === 180
+      && valor.activity.maximumWords === 280,
+    "m2-l1 define practica abierta de 180 a 280 palabras"
+  );
+  check(
+    valor.activity.requiredCriteria.length === 5
+      && new Set(valorCriteriaIds).size === 5
+      && valor.activity.requiredCriteria.every(criterion => criterion.label && criterion.description),
+    "m2-l1 incluye una rubrica de autoevaluacion con cinco criterios VALOR"
+  );
+  check(
+    Array.isArray(valor.activity.modelAnswer)
+      && modelAnswerWords >= valor.activity.minimumWords
+      && modelAnswerWords <= valor.activity.maximumWords,
+    "m2-l1 incluye una respuesta modelo dentro del rango solicitado"
+  );
+  check(
+    valor.completion.requiresSavedResponse
+      && valor.completion.minimumWords === 180
+      && valor.completion.maximumWords === 280
+      && valor.completion.requiresAllCriteria
+      && valor.completion.requiresModelAnswerView
+      && valor.completion.requiresFeedbackReview
+      && valor.completion.allowEditing,
+    "m2-l1 exige borrador guardado, rango, cinco criterios, modelo y mejora"
+  );
+
+  const courseJs = read("sembrar/aula/curso/ia-con-criterio-humano/course.js");
+  const courseHtml = read("sembrar/aula/curso/ia-con-criterio-humano/index.html");
+  const courseCss = read("sembrar/aula/aula.css");
+  check(
+    /schemaVersion:\s*PEDAGOGY_SCHEMA/.test(courseJs)
+      && requiredProgressFields.slice(0, 8).every(field => courseJs.includes(field)),
+    "El motor serializa el progreso pedagogico dentro de la respuesta compatible"
+  );
+  check(
+    /state\.correct\s*&&\s*state\.feedbackReviewed/.test(courseJs)
+      && /control\.disabled\s*=\s*!completion\.ready/.test(courseJs),
+    "El motor deshabilita completar hasta cumplir la decision y la retroalimentacion"
+  );
+  check(
+    /wordCount\(response\.value\)/.test(courseJs)
+      && /minimumWords/.test(courseJs)
+      && /maximumWords/.test(courseJs),
+    "El motor cuenta palabras en tiempo real y aplica ambos limites"
+  );
+  check(
+    /state\.savedDraft[\s\S]*allCriteria[\s\S]*state\.modelAnswerViewed[\s\S]*state\.feedbackReviewed/.test(courseJs),
+    "El motor exige borrador, criterios y respuesta modelo para la practica abierta"
+  );
+  check(
+    /state\.savedDraft\s*\?[\s\S]*view-model-answer/.test(courseJs)
+      && /modelAnswerViewed:\s*true/.test(courseJs),
+    "La respuesta modelo se habilita solo despues de guardar un intento"
+  );
+  check(
+    /role="status"/.test(courseJs)
+      && /setAttribute\("role",\s*"alert"\)/.test(courseJs)
+      && /aria-pressed/.test(courseJs)
+      && /<label/.test(courseJs)
+      && /<button/.test(courseJs),
+    "Los componentes interactivos usan botones, labels y mensajes accesibles"
+  );
+  check(
+    /target="_blank"\s+rel="noopener noreferrer"/.test(courseJs),
+    "Las referencias externas abren con noopener y noreferrer"
+  );
+  check(
+    /<main[^>]+id="lesson-content"/.test(courseHtml)
+      && /<article[^>]+id="lesson-frame"/.test(courseHtml)
+      && /aria-label="Abrir menú del curso"/.test(courseHtml),
+    "La pagina del curso usa regiones semanticas y nombre accesible en el menu movil"
+  );
+  check(
+    /:focus-visible/.test(courseCss)
+      && /prefers-reduced-motion:reduce/.test(courseCss)
+      && /object-fit:cover/.test(courseCss),
+    "La capa visual contempla foco, movimiento reducido e imagenes sin deformacion"
+  );
 
   const core = read("sembrar/aula/aula-core.js");
   check(!/service[_-]?role/i.test(core), "El cliente no contiene una service role key");
