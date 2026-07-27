@@ -220,6 +220,7 @@ html.aula-reduced-motion *,html.aula-reduced-motion *::before,html.aula-reduced-
 @media (max-width:960px) {
   .aula-hero-grid,.dashboard-grid,.aula-featured-course { grid-template-columns:1fr; }
   .aula-guest-grid { grid-template-columns:1fr; }
+  .course-topbar-inner { grid-template-columns:auto auto minmax(0,1fr) auto; gap:12px; }
   .course-layout { grid-template-columns:1fr; }
   .course-sidebar { position:fixed; top:72px; bottom:0; left:0; z-index:70; width:min(340px,88vw); height:auto; transform:translateX(-105%); transition:transform .25s ease; box-shadow:20px 0 60px rgba(0,0,0,.18); }
   .course-sidebar.is-open { transform:translateX(0); }

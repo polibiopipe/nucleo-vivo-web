@@ -4,6 +4,14 @@ window.IA_COURSE = {
   "subtitle": "Productividad, seguridad y decisiones responsables en el trabajo",
   "version": "1.1 · Julio 2026",
   "estimatedHours": 7,
+  "learningOutcomes": [
+    "Explicar, en lenguaje comprensible, qué puede y qué no puede hacer una IA generativa, distinguiendo fluidez, evidencia, búsqueda, análisis y automatización.",
+    "Evaluar si una tarea es adecuada para un piloto mediante el marco VALOR, considerando beneficio, afectación, datos, observabilidad y responsabilidad.",
+    "Formular instrucciones revisables con CLARO, evitando ambigüedad, exposición innecesaria de información y compromisos no autorizados.",
+    "Aplicar VERIFICA para comprobar hechos, fuentes, propósito, formato, impacto, correcciones y aprobación humana.",
+    "Proteger datos personales, información confidencial y autoría, y responder ante fraude o suplantación mediante DETENER.",
+    "Diseñar un flujo de IA de bajo riesgo y un plan de transferencia a 30 días, con indicadores, revisión y condiciones de detención."
+  ],
   "pedagogicalModel": {
     "id": "aula-viva-pedagogy-v1",
     "description": "Estructura reusable para estudiar, practicar, revisar, mejorar y completar una experiencia con evidencia.",
@@ -1201,6 +1209,10 @@ window.IA_COURSE = {
         ],
         "minimumWords": 180,
         "maximumWords": 280,
+        "responseLabel": "Tu análisis con los subtítulos V, A, L, O y R",
+        "responsePlaceholder": "V — Valor esperado…",
+        "rubricTitle": "Autoevaluación VALOR",
+        "criteriaRequirement": "Revisa los cinco criterios de VALOR.",
         "requiredCriteria": [
           {
             "id": "value",

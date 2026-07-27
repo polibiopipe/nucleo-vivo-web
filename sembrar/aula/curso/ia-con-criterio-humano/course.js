@@ -122,7 +122,7 @@
     if (!state.savedDraft) reasons.push("Guarda al menos un borrador.");
     if (state.wordCount < minimum) reasons.push(`Alcanza al menos ${minimum} palabras.`);
     if (state.wordCount > maximum) reasons.push(`Reduce la respuesta a un máximo de ${maximum} palabras.`);
-    if (!allCriteria) reasons.push("Revisa los cinco criterios de VALOR.");
+    if (!allCriteria) reasons.push(activity.criteriaRequirement || "Revisa todos los criterios de la actividad.");
     if (!state.modelAnswerViewed || !state.feedbackReviewed) reasons.push("Compara tu trabajo con la respuesta modelo.");
     return {
       ready: state.savedDraft
@@ -260,8 +260,8 @@
         <p class="privacy-warning"><span aria-hidden="true">◇</span> <strong>Protege la información:</strong> utiliza solo datos ficticios o anonimizados. No incluyas nombres ni información real de personas u organizaciones.</p>
         <button class="button button-primary activity-start" id="start-activity" type="button"${state.activityStarted ? " hidden" : ""}>Comenzar actividad</button>
         <div id="reflection-workspace"${state.activityStarted ? "" : " hidden"}>
-          <label class="reflection-label" for="activity-response">Tu análisis con los subtítulos V, A, L, O y R</label>
-          <textarea class="reflection-input" id="activity-response" aria-describedby="word-guidance word-counter" placeholder="V — Valor esperado…">${escapeHtml(state.response)}</textarea>
+          <label class="reflection-label" for="activity-response">${escapeHtml(activity.responseLabel || "Tu respuesta")}</label>
+          <textarea class="reflection-input" id="activity-response" aria-describedby="word-guidance word-counter" placeholder="${escapeHtml(activity.responsePlaceholder || "Escribe aquí tu borrador con datos ficticios o anonimizados.")}">${escapeHtml(state.response)}</textarea>
           <div class="word-meta">
             <span id="word-guidance">Extensión esperada: ${activity.minimumWords} a ${activity.maximumWords} palabras.</span>
             <strong class="word-counter ${countClass}" id="word-counter" role="status">${state.wordCount} palabras</strong>
@@ -280,8 +280,8 @@
             <div class="self-review">
               <button class="button button-quiet" id="open-criteria" type="button" aria-expanded="${state.criteriaReviewed.length ? "true" : "false"}" aria-controls="criteria-panel">Revisar criterios</button>
               <fieldset id="criteria-panel"${state.criteriaReviewed.length ? "" : " hidden"}>
-                <legend>Autoevaluación VALOR</legend>
-                <p>Marca cada criterio después de comprobarlo en tu borrador. Esta revisión es tuya; la plataforma no evalúa semánticamente el texto.</p>
+                <legend>${escapeHtml(activity.rubricTitle || "Autoevaluación")}</legend>
+                <p>${escapeHtml(activity.rubricLead || "Marca cada criterio después de comprobarlo en tu borrador. Esta revisión es tuya; la plataforma no evalúa semánticamente el texto.")}</p>
                 ${criteria.map(criterion => `
                   <label class="criterion-row">
                     <input type="checkbox" value="${escapeHtml(criterion.id)}"${state.criteriaReviewed.includes(criterion.id) ? " checked" : ""} />

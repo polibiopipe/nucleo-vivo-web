@@ -16,11 +16,24 @@ const requiredFiles = [
   "sembrar/aula/aula-dashboard.js",
   "sembrar/aula/curso/ia-con-criterio-humano/index.html",
   "sembrar/aula/curso/ia-con-criterio-humano/course-data.js",
+  "sembrar/aula/curso/ia-con-criterio-humano/course-content-foundations.js",
+  "sembrar/aula/curso/ia-con-criterio-humano/course-content-safety.js",
+  "sembrar/aula/curso/ia-con-criterio-humano/course-content-integration.js",
   "sembrar/aula/curso/ia-con-criterio-humano/course.js",
   "assets/images/aula/ia-con-criterio-humano/modulo-00-reglas-minimas.png",
   "assets/images/aula/ia-con-criterio-humano/modulo-00-reglas-minimas.webp",
   "assets/images/aula/ia-con-criterio-humano/modulo-02-marco-valor.png",
   "assets/images/aula/ia-con-criterio-humano/modulo-02-marco-valor.webp",
+  "assets/images/aula/ia-con-criterio-humano/modulo-04-fuentes-trazabilidad.png",
+  "assets/images/aula/ia-con-criterio-humano/modulo-04-fuentes-trazabilidad.webp",
+  "assets/images/aula/ia-con-criterio-humano/modulo-05-privacidad-datos.png",
+  "assets/images/aula/ia-con-criterio-humano/modulo-05-privacidad-datos.webp",
+  "assets/images/aula/ia-con-criterio-humano/modulo-07-supervision-humana.png",
+  "assets/images/aula/ia-con-criterio-humano/modulo-07-supervision-humana.webp",
+  "assets/images/aula/ia-con-criterio-humano/modulo-08-plan-piloto.png",
+  "assets/images/aula/ia-con-criterio-humano/modulo-08-plan-piloto.webp",
+  "assets/images/aula/ia-con-criterio-humano/modulo-08-practica-individual.png",
+  "assets/images/aula/ia-con-criterio-humano/modulo-08-practica-individual.webp",
   "sembrar/cursos/index.html",
   "sembrar/cursos/ia-con-criterio-humano/index.html",
   "supabase/migrations/20260725_aula_viva.sql",
@@ -66,13 +79,25 @@ for (const file of requiredFiles) {
 if (failures.length === 0) {
   const sandbox = { window: {} };
   vm.createContext(sandbox);
-  vm.runInContext(read("sembrar/aula/curso/ia-con-criterio-humano/course-data.js"), sandbox);
+  const courseDataFiles = [
+    "sembrar/aula/curso/ia-con-criterio-humano/course-data.js",
+    "sembrar/aula/curso/ia-con-criterio-humano/course-content-foundations.js",
+    "sembrar/aula/curso/ia-con-criterio-humano/course-content-safety.js",
+    "sembrar/aula/curso/ia-con-criterio-humano/course-content-integration.js"
+  ];
+  for (const file of courseDataFiles) vm.runInContext(read(file), sandbox);
   const course = sandbox.window.IA_COURSE;
   const ids = course.lessons.map(lesson => lesson.id);
 
   check(course.slug === "ia-con-criterio-humano", "El slug del curso es estable");
   check(course.modules.length === 9, "El curso contiene 9 modulos");
   check(course.lessons.length === 19, "El curso contiene 19 experiencias");
+  check(course.estimatedHours >= 6 && course.estimatedHours <= 7, "La dedicacion declarada del curso es de 6 a 7 horas");
+  check(
+    course.learningOutcomes?.length === 6
+      && course.learningOutcomes.every(outcome => outcome.length >= 100),
+    "El curso declara los seis resultados de aprendizaje completos del manual"
+  );
   check(new Set(ids).size === ids.length, "No existen IDs de leccion duplicados");
   check(course.lessons.every(lesson => lesson.objective && lesson.scenario), "Cada experiencia tiene objetivo y situacion");
   check(course.lessons.every(lesson => lesson.activity?.prompt), "Cada experiencia contiene practica");
@@ -81,7 +106,17 @@ if (failures.length === 0) {
   check(course.lessons.some(lesson => Array.isArray(lesson.content) && lesson.content.length > 0), "Riesgo registrado: course-data.js publica contenido interno de lecciones");
   check(course.lessons.some(lesson => lesson.activity?.options?.some(option => "feedback" in option || "correct" in option)), "Riesgo registrado: course-data.js publica actividades, feedback o criterios");
 
-  const pedagogicalIds = ["m0-l1", "m2-l1"];
+  const pedagogicalIds = [
+    "m0-l1", "m0-l2",
+    "m1-l1", "m1-l2",
+    "m2-l1", "m2-l2",
+    "m3-l1", "m3-l2",
+    "m4-l1", "m4-l2",
+    "m5-l1", "m5-l2",
+    "m6-l1", "m6-l2",
+    "m7-l1", "m7-l2",
+    "m8-l1", "m8-l2", "m8-l3"
+  ];
   const pedagogicalLessons = pedagogicalIds.map(id => course.lessons.find(lesson => lesson.id === id));
   const internalReferenceIds = new Set(["nist", "oecd", "unesco", "zhang"]);
   const requiredProgressFields = [
@@ -94,11 +129,39 @@ if (failures.length === 0) {
     requiredProgressFields.every(field => course.pedagogicalModel?.progressSchema?.includes(field)),
     "El modelo declara todos los campos de progreso pedagogico compatibles"
   );
-  check(pedagogicalLessons.every(Boolean), "Existen las experiencias modelo m0-l1 y m2-l1");
+  check(pedagogicalLessons.every(Boolean), "Existen las 19 experiencias pedagogicas esperadas");
+  check(
+    course.lessons.every(lesson => lesson.pedagogyVersion === "1.1"),
+    "Las 19 experiencias usan el modelo pedagogico 1.1"
+  );
+  const expectedTitles = [
+    "Una decisión antes de comenzar",
+    "Cómo aprenderemos",
+    "Qué hace realmente una IA generativa",
+    "La responsabilidad sigue siendo humana",
+    "VALOR: antes de usar la herramienta",
+    "Cuándo no conviene usar IA",
+    "CLARO: instrucciones revisables",
+    "Reducir ambigüedad sin sobrecargar",
+    "VERIFICA: controlar antes de usar",
+    "Fuentes, actualidad y trazabilidad",
+    "Datos personales, privacidad y minimización",
+    "Autoría, licencias y uso responsable de contenidos",
+    "DETENER una solicitud sospechosa",
+    "Aprender del incidente sin culpabilizar",
+    "Cuando una recomendación afecta a personas",
+    "Conversar el cambio sin instalar miedo",
+    "Diseña tu flujo responsable",
+    "Plan de transferencia a 30 días",
+    "Cierre y compromiso de criterio"
+  ];
+  check(
+    pedagogicalLessons.every((lesson, index) => lesson?.title === expectedTitles[index]),
+    "Los 19 titulos siguen el manual y conservan las dos experiencias aprobadas"
+  );
 
   for (const lesson of pedagogicalLessons.filter(Boolean)) {
     const referenceValues = lesson.references.map(reference => referenceText(reference).trim().toLowerCase());
-    const imageRatio = lesson.image?.width / lesson.image?.height;
     check(lesson.pedagogyVersion === "1.1", `${lesson.id} usa la version pedagogica 1.1`);
     check(lesson.duration && lesson.objective && lesson.scenario, `${lesson.id} conserva duracion, objetivo y situacion`);
     check(
@@ -115,16 +178,7 @@ if (failures.length === 0) {
     check(Array.isArray(lesson.keypoints) && lesson.keypoints.length >= 4, `${lesson.id} incluye lo que la persona debe poder explicar`);
     check(Array.isArray(lesson.summary) && lesson.summary.length >= 2, `${lesson.id} incluye sintesis final`);
     check(
-      lesson.image?.src?.endsWith(".png")
-        && lesson.image?.webp?.endsWith(".webp")
-        && lesson.image?.alt?.length >= 80
-        && Number.isFinite(lesson.image?.width)
-        && Number.isFinite(lesson.image?.height)
-        && Math.abs(imageRatio - (16 / 9)) < 0.01,
-      `${lesson.id} declara imagen 16:9, respaldo PNG, WebP, dimensiones y texto alternativo`
-    );
-    check(
-      lesson.references.length >= 4 && lesson.references.every(isCompleteApaReference),
+      lesson.references.length >= 2 && lesson.references.every(isCompleteApaReference),
       `${lesson.id} contiene referencias APA 7 completas con URL`
     );
     check(
@@ -137,9 +191,111 @@ if (failures.length === 0) {
     );
     check(lesson.activity?.allowRetry === true, `${lesson.id} permite reintentos o mejoras`);
     check(lesson.completion?.requiresFeedbackReview === true, `${lesson.id} exige revisar retroalimentacion antes de completar`);
+
+    if (lesson.image) {
+      const imageRatio = lesson.image.width / lesson.image.height;
+      const pngPath = lesson.image.src.replace(/^(?:\.\.\/){4}/, "");
+      const webpPath = lesson.image.webp.replace(/^(?:\.\.\/){4}/, "");
+      const pngSize = fs.existsSync(path.join(repoRoot, pngPath))
+        ? fs.statSync(path.join(repoRoot, pngPath)).size
+        : 0;
+      const webpSize = fs.existsSync(path.join(repoRoot, webpPath))
+        ? fs.statSync(path.join(repoRoot, webpPath)).size
+        : 0;
+      check(
+        lesson.image.src.endsWith(".png")
+          && lesson.image.webp.endsWith(".webp")
+          && lesson.image.alt.length >= 80
+          && lesson.image.caption?.length >= 40
+          && Number.isFinite(lesson.image.width)
+          && Number.isFinite(lesson.image.height)
+          && Math.abs(imageRatio - (16 / 9)) < 0.01
+          && pngSize > 0
+          && webpSize > 0
+          && webpSize < pngSize,
+        `${lesson.id} declara imagen 16:9 accesible, respaldo PNG y WebP optimizado`
+      );
+    }
+
+    if (lesson.activity.type === "decision") {
+      check(
+        lesson.activity.options.length >= 3
+          && lesson.activity.options.filter(option => option.correct).length === 1
+          && lesson.activity.options.every(option => option.feedback?.length >= 70),
+        `${lesson.id} define una decision cerrada con feedback especifico por alternativa`
+      );
+      check(
+        lesson.activity.expectedCriterion?.length >= 120 && lesson.activity.reviewSection,
+        `${lesson.id} explica el criterio esperado y la seccion que conviene releer`
+      );
+      check(
+        lesson.completion.requiresAnswer
+          && lesson.completion.requiresCorrectAnswer
+          && lesson.completion.requiresFeedbackReview
+          && lesson.completion.allowRetry
+          && lesson.completion.attemptsAreNotPenalized,
+        `${lesson.id} exige acierto y feedback, y permite reintentar sin penalizacion`
+      );
+    } else {
+      const requiredCriteria = lesson.activity.requiredCriteria || [];
+      const modelAnswerWords = wordCount((lesson.activity.modelAnswer || []).join(" "));
+      const minimumWords = lesson.activity.minimumWords;
+      const maximumWords = lesson.activity.maximumWords;
+      check(
+        lesson.activity.type === "reflection"
+          && Number.isInteger(minimumWords)
+          && Number.isInteger(maximumWords)
+          && minimumWords >= 80
+          && maximumWords > minimumWords,
+        `${lesson.id} define una practica abierta con limites coherentes`
+      );
+      check(
+        requiredCriteria.length >= 4
+          && new Set(requiredCriteria.map(criterion => criterion.id)).size === requiredCriteria.length
+          && requiredCriteria.every(criterion => criterion.label && criterion.description),
+        `${lesson.id} incluye una rubrica explicita y no duplicada`
+      );
+      check(
+        Array.isArray(lesson.activity.modelAnswer)
+          && lesson.activity.modelAnswer.length >= 2
+          && modelAnswerWords >= minimumWords
+          && modelAnswerWords <= maximumWords,
+        `${lesson.id} ofrece una respuesta modelo posterior dentro del rango`
+      );
+      check(
+        lesson.activity.responseLabel
+          && lesson.activity.rubricTitle
+          && lesson.activity.criteriaRequirement
+          && lesson.activity.allowRetry,
+        `${lesson.id} presenta rotulo, rubrica, reintento y criterio de revision`
+      );
+      check(
+        lesson.completion.requiresSavedResponse
+          && lesson.completion.minimumWords === minimumWords
+          && lesson.completion.maximumWords === maximumWords
+          && lesson.completion.requiresAllCriteria
+          && lesson.completion.requiresModelAnswerView
+          && lesson.completion.requiresFeedbackReview
+          && lesson.completion.allowEditing,
+        `${lesson.id} exige borrador, rango, rubrica, modelo y mejora`
+      );
+    }
   }
 
-  const orientation = pedagogicalLessons[0];
+  const imageLessonIds = pedagogicalLessons.filter(lesson => lesson?.image).map(lesson => lesson.id);
+  check(
+    ["m0-l1", "m2-l1", "m4-l2", "m5-l1", "m7-l1", "m8-l1", "m8-l2"]
+      .every(id => imageLessonIds.includes(id))
+      && imageLessonIds.length === 7,
+    "Las siete imagenes se asignan una vez y por funcion pedagogica"
+  );
+  check(
+    pedagogicalLessons.filter(lesson => lesson?.activity?.type === "decision").length === 7
+      && pedagogicalLessons.filter(lesson => lesson?.activity?.type === "reflection").length === 12,
+    "El curso combina siete decisiones cerradas y doce practicas abiertas"
+  );
+
+  const orientation = course.lessons.find(lesson => lesson.id === "m0-l1");
   check(orientation.studySections.length === 3, "m0-l1 desarrolla adopcion, acuerdos minimos e innovacion con limites");
   check(
     orientation.activity.type === "decision"
@@ -161,7 +317,7 @@ if (failures.length === 0) {
     "m0-l1 bloquea la finalizacion incorrecta, exige feedback y registra reintentos sin penalizacion"
   );
 
-  const valor = pedagogicalLessons[1];
+  const valor = course.lessons.find(lesson => lesson.id === "m2-l1");
   const valorSectionTitles = valor.studySections.map(section => section.title);
   const valorCriteriaIds = valor.activity.requiredCriteria.map(criterion => criterion.id);
   const modelAnswerWords = wordCount(valor.activity.modelAnswer.join(" "));
@@ -218,6 +374,12 @@ if (failures.length === 0) {
     /schemaVersion:\s*PEDAGOGY_SCHEMA/.test(courseJs)
       && requiredProgressFields.slice(0, 8).every(field => courseJs.includes(field)),
     "El motor serializa el progreso pedagogico dentro de la respuesta compatible"
+  );
+  check(
+    /if\s*\(typeof raw === "string"\)/.test(courseJs)
+      && /wordCount\(raw\)/.test(courseJs)
+      && /savedDraft:\s*Boolean\(raw\.trim\(\)\)/.test(courseJs),
+    "El motor migra respuestas de progreso antiguas en formato texto"
   );
   check(
     /state\.correct\s*&&\s*state\.feedbackReviewed/.test(courseJs)
