@@ -123,12 +123,18 @@ check("Dato TALIS corregido", m1l1.infographic?.stat === "27 %" && /19 %/u.test(
 check("Infografía original completa después de la microlección", Boolean(m1l1.postStudyImage?.fit === "contain" && /infografia-agotamiento/iu.test(m1l1.postStudyImage.src)));
 
 const downloads = [
+  "apunte-academico-cuando-ensenar-agota.pdf",
   "bitacora-cuando-ensenar-agota.pdf",
+  "material-aprendizaje-modulos.pdf",
   "plantilla-plan-vivo.pdf",
   "resumen-conceptos-esenciales.pdf",
   "referencias-y-lecturas.pdf",
 ].map(file => path.join(courseDir, "recursos", file));
-check("Cuatro recursos PDF generados", downloads.every(existsWithBytes));
+check("Seis recursos PDF generados", downloads.every(existsWithBytes));
+check("Apunte principal y material por módulos enlazados en M0", [
+  "recursos/apunte-academico-cuando-ensenar-agota.pdf",
+  "recursos/material-aprendizaje-modulos.pdf",
+].every(href => allText.includes(href)));
 check("Práctica espaciada 2-7-14-30", [2, 7, 14, 30].every(day => new RegExp(`D[ií]a ${day}`, "iu").test(allText)));
 check("Imágenes optimizadas disponibles", [
   "video-poster.webp",

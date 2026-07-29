@@ -158,6 +158,8 @@ window.IA_COURSE = (() => {
             "Andrea abrió un espacio breve entre la jornada y sus pendientes. En la siguiente experiencia podrá mirar con más detalle cómo llegó hoy."
           ],
           resources: [
+            { label: "Apunte académico principal", href: "recursos/apunte-academico-cuando-ensenar-agota.pdf" },
+            { label: "Material de aprendizaje M0-M8", href: "recursos/material-aprendizaje-modulos.pdf" },
             { label: "Bitácora completa en PDF", href: "recursos/bitacora-cuando-ensenar-agota.pdf" }
           ],
           references: [refs.who2022, refs.cast, refs.w3c]
