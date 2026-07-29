@@ -11,6 +11,8 @@ const corePath = path.join(root, "sembrar", "aula", "aula-core.js");
 const dashboardPath = path.join(root, "sembrar", "aula", "index.html");
 const catalogPath = path.join(root, "sembrar", "cursos", "index.html");
 const programPath = path.join(root, "sembrar", "cursos", "cuando-ensenar-agota", "index.html");
+const stylesPath = path.join(root, "sembrar", "aula", "aula.css");
+const editorialAuditPath = path.join(courseDir, "REVISION_EDITORIAL_INTERNA.md");
 
 const read = file => fs.readFileSync(file, "utf8");
 const existsWithBytes = file => fs.existsSync(file) && fs.statSync(file).size > 0;
@@ -25,6 +27,7 @@ const core = read(corePath);
 const dashboard = read(dashboardPath);
 const catalog = read(catalogPath);
 const program = read(programPath);
+const styles = read(stylesPath);
 const allText = normalizeText(course);
 
 let passed = 0;
@@ -84,13 +87,14 @@ check("Caso continuo de Andrea en todos los módulos", course.modules.every(modu
   module.lessons.some(lesson => /Andrea/u.test(`${lesson.scenario} ${lesson.summary?.join(" ") || ""}`))
 ));
 check("Mensaje de privacidad explícito", /solo en este navegador|solamente en este navegador/iu.test(allText));
-check("Alcance no clínico explícito", /no (entrega|constituye|permite).*diagn[oó]stic/iu.test(allText));
-check("Cinco mensajes de cuidado visibles", [
-  "Esta experiencia no entrega diagnósticos",
-  "Puedes trabajar con Andrea o con una situación ficticia",
-  "No necesitas revelar experiencias personales",
-  "La bitácora es privada por defecto",
-  "Una señal orienta preguntas; no confirma una condición",
+check("Alcance no clínico concentrado en momentos clave", ["m1-l1", "m5-l1", "m8-l2", "m8-l3"].every(id => {
+  const lesson = course.lessons.find(item => item.id === id);
+  return /diagn[oó]stic|atenci[oó]n profesional/iu.test(normalizeText(lesson));
+}));
+check("Bienvenida centrada en agencia y cuidado", [
+  "Detenerse a mirar es un acto de cuidado.",
+  "Una señal abre preguntas.",
+  "La persona decide qué registra, conserva y comparte.",
 ].every(message => allText.includes(message)));
 check("Expresiones prohibidas ausentes", [
   "autodiagnóstico",
@@ -107,13 +111,16 @@ check("Video obligatorio asociado a M1-L1", Boolean(m1l1?.video?.mandatory && m1
 check("Orden decisión → video → preguntas → microlección", initialRender >= 0 && initialRender < videoRender && videoRender < observationRender && observationRender < studyRender);
 check("Video local disponible", existsWithBytes(videoPath));
 check("Reproductor con controles y sin autoplay", /<video[\s\S]*?\bcontrols\b/iu.test(engine) && !/<video[\s\S]*?\bautoplay\b/iu.test(engine));
-check("Carga diferida y reanudación del video", /IntersectionObserver/u.test(engine) && /loadedmetadata/u.test(engine) && /mediaKey/u.test(engine));
+check("Fuente real, metadatos y reanudación del video", /\bsrc="\$\{escapeHtml\(video\.src\)\}"/u.test(engine) && /preload="metadata"/u.test(engine) && /loadedmetadata/u.test(engine) && /mediaKey/u.test(engine));
+check("Póster visible antes de la decisión", /video-poster-preview/u.test(engine) && /Después de elegir una primera explicación, verás el caso de Andrea · 8:29 min/u.test(engine));
+check("Error de carga accesible", /video-load-error/u.test(engine) && /transcripción accesible/iu.test(engine));
 check("Video o alternativa textual requeridos para completar", /videoCompleted/iu.test(engine) && /transcripción accesible/iu.test(engine));
 check("Subtítulos VTT disponibles", existsWithBytes(captionsPath) && read(captionsPath).startsWith("WEBVTT"));
 check("Transcripción accesible disponible", existsWithBytes(transcriptPath) && /Descripción visual equivalente/iu.test(read(transcriptPath)));
 check("Aclaración conceptual visible después del video", /Estrés, agotamiento emocional y burnout no son equivalentes/iu.test(m1l1.video.clarification));
 check("Tres preguntas posteriores al video", m1l1.postVideoQuestions?.length === 3);
 check("Dato TALIS corregido", m1l1.infographic?.stat === "27 %" && /19 %/u.test(m1l1.infographic.comparison));
+check("Infografía original completa después de la microlección", Boolean(m1l1.postStudyImage?.fit === "contain" && /infografia-agotamiento/iu.test(m1l1.postStudyImage.src)));
 
 const downloads = [
   "bitacora-cuando-ensenar-agota.pdf",
@@ -129,6 +136,37 @@ check("Imágenes optimizadas disponibles", [
   "bitacora-mochila.webp",
   "bitacora-recuperar.webp",
 ].every(file => existsWithBytes(path.join(root, "assets", "images", "aula", "cuando-ensenar-agota", file))));
+check("Render reconoce orientación vertical", /lesson-figure--portrait/u.test(engine) && /image\.height\).*image\.width/su.test(engine));
+check("CSS conserva imágenes verticales completas", /\.lesson-figure--portrait picture[\s\S]*aspect-ratio:auto/iu.test(styles) && /\.lesson-figure--portrait img[\s\S]*object-fit:contain/iu.test(styles));
+
+check("Etiquetas humanas configuradas por curso", [
+  "Lo que nos ayuda a mirar",
+  "Andrea en contexto",
+  "Ideas para quedarte",
+  "Lo que abre esta experiencia",
+  "Materiales para acompañar tu recorrido",
+].every(label => Object.values(course.uiLabels || {}).includes(label)));
+check("Etiquetas actuales conservadas como respaldo", [
+  'studyKicker: "Estudiar"',
+  'studyTitle: "Material para estudiar"',
+  'exampleKicker: "Ver el criterio en acción"',
+  'retrievalKicker: "Recuperar"',
+  'synthesisKicker: "Cerrar y transferir"',
+].every(label => engine.includes(label)));
+check("M0 reconstruido con títulos y objetivo aprobados", course.lessons[0]?.title === "Antes de abrir la mochila"
+  && course.lessons[1]?.title === "¿Cómo llegué hoy?"
+  && course.lessons[0]?.objective === "Reconocer cómo llegas al curso y elegir qué deseas comprender, cuidar o transformar.");
+check("Acuerdo de participación único en M0", Boolean(course.lessons[0]?.participationAgreement)
+  && course.lessons.filter(lesson => lesson.participationAgreement).length === 1);
+check("Auditoría editorial interna cubre las 19 experiencias", existsWithBytes(editorialAuditPath)
+  && course.lessons.every(lesson => read(editorialAuditPath).includes(lesson.id)));
+check("Tipografía Aula usa las nuevas escalas", [
+  "clamp(2.4rem,4.4vw,4.2rem)",
+  "clamp(1.9rem,3vw,2.8rem)",
+  "clamp(1.65rem,2.6vw,2.5rem)",
+  "clamp(2rem,3.4vw,3.2rem)",
+  "clamp(2rem,3.6vw,3.4rem)",
+].every(size => styles.includes(size)));
 
 check("Configuración local aislada antes del núcleo", courseIndex.indexOf("localCourse: true") < courseIndex.indexOf('src="../../aula-core.js"'));
 check("Sin sincronización remota del segundo curso", /localCourse:\s*true/iu.test(courseIndex) && /enableRemoteSync:\s*false/iu.test(courseIndex));
@@ -136,6 +174,9 @@ check("Núcleo soporta almacenamiento por curso", /localCourseOwners/iu.test(cor
 check("Catálogo enlaza el programa", /sembrar\/cursos\/cuando-ensenar-agota/iu.test(catalog));
 check("Mi Aula enlaza el curso", /aula\/curso\/cuando-ensenar-agota/iu.test(dashboard));
 check("Programa público disponible", /Cuando enseñar agota/iu.test(program) && /19 experiencias/iu.test(program));
+check("Copias de catálogo y Mi Aula actualizadas", catalog.includes("Una experiencia para reconocer señales, comprender la carga docente y construir acciones personales, colectivas y organizacionales.")
+  && dashboard.includes("Reconocer la carga, recuperar recursos y construir respuestas personales y colectivas.")
+  && dashboard.includes("Tu bitácora y tu avance permanecen en este navegador."));
 
 console.log(`\nResultado: ${passed} controles aprobados; ${failed} errores.`);
 if (failed) process.exitCode = 1;

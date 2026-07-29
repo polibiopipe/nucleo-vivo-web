@@ -84,7 +84,7 @@ window.IA_COURSE = (() => {
     expectedCriterion,
     reviewSection,
     instructions: [
-      "Responde con la información del caso, sin intentar diagnosticar a Andrea.",
+      "Responde con la información disponible y el criterio de esta experiencia.",
       "Revisa la retroalimentación y realiza un segundo intento cuando corresponda."
     ]
   });
@@ -93,12 +93,12 @@ window.IA_COURSE = (() => {
     type: "reflection",
     prompt,
     responseLabel: "Borrador de trabajo",
-    responsePlaceholder: "Puedes responder con Andrea o con otra situación ficticia. No incluyas nombres ni datos sensibles.",
+    responsePlaceholder: "Puedes responder con Andrea, con tu experiencia o con otra situación ficticia.",
     instructions: [
       `Escribe entre ${minimumWords} y ${maximumWords} palabras.`,
       "Usa hechos observables, una acción concreta y un indicador sencillo.",
-      "Puedes trabajar siempre con Andrea o con una situación ficticia.",
-      "El texto queda solamente en este navegador y no se sincroniza con la analítica del sitio."
+      "Elige la forma de participación que te permita pensar con mayor libertad.",
+      "El texto queda solamente en este navegador."
     ],
     minimumWords,
     maximumWords,
@@ -120,49 +120,42 @@ window.IA_COURSE = (() => {
       lessons: [
         {
           id: "m0-l1",
-          title: "Una pausa antes de comenzar",
+          title: "Antes de abrir la mochila",
           duration: "12 min",
-          objective: "Distinguir una experiencia formativa de una evaluación clínica y elegir una forma segura de participar.",
-          scenarioLabel: "Andrea llega a la escuela",
-          scenario: "Andrea llega con café, mensajes pendientes y la jornada ya activa en su cabeza. La experiencia le propone detenerse sin evaluarla ni pedirle que explique su vida personal.",
+          objective: "Reconocer cómo llegas al curso y elegir qué deseas comprender, cuidar o transformar.",
+          participationAgreement: "Puedes responder desde tu experiencia, con Andrea o con una situación ficticia. Tú decides qué escribir, qué conservar y qué compartir.",
+          scenarioLabel: "Antes de comenzar",
+          scenario: "Andrea llega a la escuela con el café en la mano y la lista de pendientes ya activa. Antes de entrar a clases, se detiene un momento. No para buscar una respuesta correcta, sino para reconocer cómo llega hoy.",
           studySections: [
             {
-              title: "Observar no es diagnosticar",
+              title: "Una pausa para volver a ti",
               paragraphs: [
-                "Esta experiencia no entrega diagnósticos. Observar energía, concentración, irritabilidad o dificultad para desconectarse orienta preguntas de cuidado, pero no confirma una condición clínica ni permite clasificar el desempeño de una persona (WHO, 2022).",
-                "Puedes trabajar con Andrea o con una situación ficticia. No necesitas revelar experiencias personales. La bitácora es privada por defecto y no se comparte con jefaturas."
-              ]
-            },
-            {
-              title: "Control sobre la participación",
-              paragraphs: [
-                "Puedes pausar, omitir una respuesta personal y utilizar una alternativa conceptual. El aula registra avance y desempeño académico; no debe registrar diagnósticos, notas privadas, relatos personales ni inferencias sobre bienestar psicológico.",
-                "La navegación ofrece foco visible, texto redimensionable, reducción de movimiento y alternativas textuales, en coherencia con WCAG 2.2 y UDL (CAST, 2024; W3C, 2023)."
+                "Durante unos minutos, deja en pausa los informes, las reuniones y las respuestas pendientes. Este espacio comienza contigo.",
+                "Detenerse a mirar es un primer acto de cuidado. Una señal abre preguntas y permite elegir con más claridad qué quieres comprender durante el recorrido. Esta experiencia no entrega diagnósticos."
               ]
             }
           ],
           workedExample: [
-            "Pregunta invasiva: “Describe una situación que demuestre que estás agotada”. Exige revelar y presupone una conclusión.",
-            "Alternativa segura: “Con el caso de Andrea, identifica una señal observable y una pregunta que todavía falta responder”. Permite demostrar comprensión sin exposición."
+            "Andrea nota que llega pensando en tres pendientes y que le cuesta dejar el teléfono. No necesita explicarlo todavía: reconoce la señal y se pregunta qué desea cuidar.",
+            "Su intención para el curso podría ser: “Quiero comprender qué hace que una jornada siga conmigo incluso cuando ya terminó”."
           ],
           keypoints: [
-            "Esta experiencia no entrega diagnósticos.",
-            "Puedes trabajar con Andrea o con una situación ficticia.",
-            "No necesitas revelar experiencias personales.",
-            "La bitácora es privada por defecto."
+            "Detenerse a mirar es un acto de cuidado.",
+            "Una señal abre preguntas.",
+            "La persona decide qué registra, conserva y comparte."
           ],
           activity: decision(
-            "¿Qué opción protege mejor la participación?",
+            "¿Qué gesto abre mejor este recorrido?",
             [
-              { text: "Pedir que cada persona relate públicamente su peor semana.", feedback: "La revelación personal no es necesaria para aprender." },
-              { text: "Permitir responder con Andrea, omitir datos sensibles y pausar sin perder avance.", correct: true, feedback: "Protege agencia, privacidad y continuidad del aprendizaje." },
-              { text: "Interpretar una señal aislada como una condición confirmada.", feedback: "Una señal orienta preguntas; no confirma una condición." }
+              { text: "Buscar de inmediato una respuesta definitiva.", feedback: "Todavía estamos abriendo preguntas y reconociendo el punto de partida." },
+              { text: "Hacer una pausa, observar una señal y elegir qué quieres comprender.", correct: true, feedback: "La pausa convierte la observación en una intención de aprendizaje." },
+              { text: "Seguir adelante sin detenerse porque siempre hay pendientes.", feedback: "La pausa breve ayuda a mirar la carga antes de continuar." }
             ],
-            "La participación segura combina alternativas equivalentes, control sobre lo compartido y límites no clínicos.",
-            "Control sobre la participación"
+            "El inicio propone una pausa, una observación y una intención elegida por la persona.",
+            "Una pausa para volver a ti"
           ),
           summary: [
-            "Andrea no necesita explicarse para empezar. Primero observa con cuidado. En la siguiente experiencia registrará un punto de partida descriptivo."
+            "Andrea abrió un espacio breve entre la jornada y sus pendientes. En la siguiente experiencia podrá mirar con más detalle cómo llegó hoy."
           ],
           resources: [
             { label: "Bitácora completa en PDF", href: "recursos/bitacora-cuando-ensenar-agota.pdf" }
@@ -173,40 +166,40 @@ window.IA_COURSE = (() => {
           id: "m0-l2",
           title: "¿Cómo llegué hoy?",
           duration: "13 min",
-          objective: "Registrar un punto de partida descriptivo y una meta segura de aprendizaje.",
-          scenarioLabel: "Andrea se detiene",
-          scenario: "Antes de entrar a clases, Andrea distingue hechos simples: durmió menos, tiene tres pendientes urgentes y le cuesta concentrarse. No convierte esas observaciones en una etiqueta.",
+          objective: "Observar tu punto de partida y elegir una meta de aprendizaje para este recorrido.",
+          scenarioLabel: "La primera página de la bitácora",
+          scenario: "Andrea mira la hoja y reconoce que llegó con sueño, pensando en lo pendiente y con poco espacio para concentrarse. También recuerda un momento de la jornada que sí le hizo bien.",
           image: {
             src: "../../../../assets/images/aula/cuando-ensenar-agota/bitacora-como-llegue-original.png",
             webp: "../../../../assets/images/aula/cuando-ensenar-agota/bitacora-como-llegue.webp",
             alt: "Bitácora ilustrada con Andrea antes y durante la jornada. Propone observar energía, tranquilidad, sueño, ansiedad, concentración y funcionamiento automático, sin calificar ni diagnosticar.",
             width: 1024,
             height: 1536,
-            caption: "Recurso visual original. En este curso se utiliza como punto de partida de M0 y siempre como autoobservación formativa, no como diagnóstico."
+            caption: "Observa la hoja completa. Puedes recorrerla con Andrea o desde tu propia experiencia y elegir qué deseas registrar."
           },
           studySections: [
             {
-              title: "Describir antes de explicar",
+              title: "Reconocer el punto de partida",
               paragraphs: [
-                "Una observación útil nombra momento, conducta o señal y contexto: “hoy releí tres veces el mismo correo”. Una conclusión apresurada atribuye identidad o causa: “ya no sirvo para enseñar”.",
-                "La meta del curso no es sentirse de una manera determinada. Es aprender a distinguir conceptos, analizar condiciones y diseñar acciones revisables."
+                "Puedes comenzar por algo sencillo: cómo llegaste, qué ocurrió durante la jornada y qué necesitas esta semana. Una observación concreta —“hoy releí tres veces el mismo correo”— abre más posibilidades que un juicio sobre ti.",
+                "Esta actividad no tiene nota. Su propósito es ayudarte a escoger una meta: algo que quieras comprender, cuidar o transformar mientras acompañas a Andrea."
               ]
             }
           ],
           workedExample: [
-            "Punto de partida: “Andrea durmió cinco horas y durante la primera reunión olvidó una instrucción”.",
-            "Meta segura: “Al finalizar, quiero poder distinguir una señal de una conclusión y proponer una conversación sin etiquetar”."
+            "Punto de partida de Andrea: “Llegué pensando en todo lo pendiente y me costó concentrarme en la primera reunión”.",
+            "Meta de aprendizaje: “Quiero reconocer qué cargas puedo hacer visibles y qué apoyos necesito activar”."
           ],
           keypoints: [
-            "Registrar hechos reduce juicios apresurados.",
-            "La meta debe describir una capacidad de aprendizaje.",
-            "El contenido personal puede mantenerse fuera del aula."
+            "Mirar el punto de partida ayuda a elegir con intención.",
+            "La bitácora acompaña; no califica.",
+            "La meta puede nacer de Andrea o de tu propia experiencia."
           ],
           activity: reflection(
-            "Formula una meta segura para el curso usando el caso de Andrea.",
+            "Escribe un punto de partida breve y elige una meta para el curso.",
             [
-              "Quiero aprender a distinguir cansancio, estrés, agotamiento emocional y burnout sin diagnosticar a Andrea.",
-              "Aplicaré el modelo demandas–recursos para proponer una acción personal y otra organizacional. Revisaré mi propuesta al terminar M8."
+              "Andrea llega con sueño y con tres pendientes activos en su cabeza. Quiere comprender por qué la jornada sigue ocupando espacio cuando ya terminó.",
+              "Su meta será reconocer demandas y recursos, y proponer una acción personal y otra colectiva. Volverá a esta meta al terminar M8."
             ],
             [
               { id: "capacidad", label: "Capacidad observable", description: "La meta dice qué podrás explicar, analizar o diseñar." },
@@ -217,7 +210,7 @@ window.IA_COURSE = (() => {
             80
           ),
           summary: [
-            "Andrea ya tiene un punto de partida, no un diagnóstico. En M1 observará por qué descansar un fin de semana no basta para explicar lo que ocurre."
+            "Andrea ya eligió qué quiere comprender. En M1 observará por qué un fin de semana de descanso no siempre alcanza para recuperar energía."
           ],
           references: [refs.who2022, refs.cast]
         }
@@ -236,7 +229,7 @@ window.IA_COURSE = (() => {
           duration: "30 min",
           objective: "Separar hechos, hipótesis y conceptos antes de concluir.",
           scenarioLabel: "El lunes de Andrea",
-          scenario: "Andrea descansó durante el fin de semana, pero el lunes continúa sin energía. ¿Qué crees que podría estar ocurriendo?",
+          scenario: "Andrea descansó durante el fin de semana. El lunes, sin embargo, vuelve a sentirse sin energía y la jornada parece empezar antes de que suene el timbre. ¿Qué podría estar ocurriendo?",
           preStudyDecision: {
             prompt: "Registra tu decisión inicial. No se calificará.",
             options: [
@@ -254,9 +247,9 @@ window.IA_COURSE = (() => {
             captions: "recursos/cuando-ensenar-agota-subtitulos.vtt",
             transcript: "recursos/transcripcion-video-cuando-ensenar-agota.html",
             title: "Cuando enseñar agota: el caso de Andrea",
-            notice: "Este video presenta una situación ficticia con fines formativos. Permite reconocer señales y condiciones relacionadas con el desgaste docente, pero no entrega diagnósticos.",
+            notice: "Este relato presenta una situación ficticia para observar cómo se acumula el desgaste docente.",
             description: "El video alterna escenas y láminas sobre la llegada de Andrea a la escuela, las demandas visibles e invisibles de su jornada, la metáfora de la mochila y la necesidad de observar sin culpabilizar. Las afirmaciones conceptuales se aclaran y distinguen en la microlección que sigue.",
-            clarification: "Aclaración académica: el video utiliza algunas expresiones simplificadas. Estrés, agotamiento emocional y burnout no son equivalentes. Que el descanso no alcance es una señal orientadora, no una confirmación diagnóstica."
+            clarification: "Estrés, agotamiento emocional y burnout no son equivalentes. La microlección siguiente permite distinguirlos."
           },
           postVideoQuestions: [
             "¿Qué hechos concretos observaste en Andrea?",
@@ -278,19 +271,28 @@ window.IA_COURSE = (() => {
               ]
             },
             {
-              title: "El contexto no diagnostica a una persona",
+              title: "El contexto amplía la mirada",
               paragraphs: [
                 "En TALIS 2024, 27 % del profesorado chileno informó sentir estrés “mucho”, frente al 19 % del promedio OCDE (OECD, 2025). Es un dato poblacional sobre estrés informado, no un diagnóstico individual ni una cifra de burnout.",
                 "Persistencia, frecuencia, intensidad e impacto ayudan a ordenar la observación. También importa preguntar por carga, apoyo, autonomía, claridad y posibilidades de recuperación."
               ]
             }
           ],
+          postStudyImage: {
+            src: "../../../../assets/images/aula/cuando-ensenar-agota/infografia-agotamiento-original.png",
+            webp: "../../../../assets/images/aula/cuando-ensenar-agota/infografia-agotamiento.webp",
+            alt: "Infografía ilustrada sobre desgaste docente: muestra cansancio persistente, acumulación de demandas en una mochila, funcionamiento automático y la observación como primer acto de cuidado.",
+            width: 2752,
+            height: 1536,
+            fit: "contain",
+            caption: "Material visual original. Para la comparación exacta del dato poblacional, utiliza la cifra que aparece a continuación: Chile 27 % y promedio OCDE 19 % en TALIS 2024 (OECD, 2025)."
+          },
           infographic: {
             title: "Cuatro distinciones para observar con cuidado",
             stat: "27 %",
             statLabel: "del profesorado chileno informó sentir estrés “mucho” en TALIS 2024.",
             comparison: "Promedio OCDE: 19 %.",
-            disclaimer: "Dato poblacional de estrés informado. No diagnostica a ninguna persona.",
+            disclaimer: "Dato poblacional sobre estrés informado; sirve para comprender el contexto y no describe por sí solo la experiencia de una persona.",
             items: [
               { term: "Cansancio", description: "Respuesta posible al esfuerzo; puede disminuir al recuperar recursos." },
               { term: "Estrés", description: "Respuesta ante demandas; puede ser transitoria o sostenerse." },
@@ -331,17 +333,17 @@ window.IA_COURSE = (() => {
         },
         {
           id: "m1-l2",
-          title: "Pulso: observar sin diagnosticar",
+          title: "Cuatro preguntas para mirar el patrón",
           duration: "15 min",
           objective: "Aplicar persistencia, frecuencia, intensidad e impacto a una situación ficticia.",
           scenarioLabel: "Una nueva semana",
-          scenario: "Durante tres semanas, Andrea relee correos, posterga conversaciones difíciles y termina la jornada con tensión. No sabemos todavía qué causa el patrón.",
+          scenario: "Durante tres semanas, Andrea relee correos, posterga conversaciones difíciles y termina la jornada con tensión. Mirar cuánto dura, cuántas veces ocurre y qué cambia puede ayudarle a comprender el patrón.",
           studySections: [
             {
-              title: "Cuatro lentes, no una escala clínica",
+              title: "Cuatro lentes para observar",
               paragraphs: [
                 "Persistencia pregunta cuánto tiempo se mantiene una señal. Frecuencia pregunta cuántas veces aparece. Intensidad describe su fuerza. Impacto observa qué cambia en el funcionamiento o las relaciones.",
-                "Estos lentes ayudan a formular preguntas y decidir si buscar apoyo. No forman una escala clínica ni sustituyen una evaluación profesional."
+                "Estos lentes ayudan a formular preguntas y decidir qué apoyo conviene activar. Si el patrón se intensifica o afecta la vida cotidiana, una orientación profesional puede ampliar la comprensión."
               ]
             }
           ],
@@ -350,9 +352,9 @@ window.IA_COURSE = (() => {
             "Pregunta: “¿Qué tareas o situaciones coinciden con ese patrón y qué apoyo está disponible?”."
           ],
           keypoints: [
-            "Se observa un patrón, no una identidad.",
+            "Un patrón se comprende mejor cuando se describe con precisión.",
             "La precisión descriptiva mejora las decisiones.",
-            "Si las señales son intensas, persistentes o afectan la vida cotidiana, corresponde buscar orientación profesional."
+            "Las señales intensas o persistentes orientan a buscar apoyo profesional."
           ],
           activity: decision(
             "¿Cuál formulación es más cuidadosa?",
@@ -380,18 +382,18 @@ window.IA_COURSE = (() => {
       lessons: [
         {
           id: "m2-l1",
-          title: "La mochila también contiene recursos",
+          title: "Mi mochila invisible",
           duration: "25 min",
-          objective: "Clasificar demandas, recursos laborales y recursos personales.",
+          objective: "Hacer visibles las demandas y reconocer los recursos que pueden cambiar su peso.",
           scenarioLabel: "Andrea hace visible la carga",
-          scenario: "Andrea nombra correcciones, cambios de última hora, conflictos, planificación y tareas del hogar. También identifica apoyo entre pares, autonomía, claridad y tiempo protegido.",
+          scenario: "Andrea vacía su mochila sobre la mesa: correcciones, cambios de última hora, conflictos, planificación y tareas del hogar. Entre las piedras también aparecen apoyo entre pares, autonomía, claridad y tiempo protegido.",
           image: {
             src: "../../../../assets/images/aula/cuando-ensenar-agota/bitacora-mochila-original.png",
             webp: "../../../../assets/images/aula/cuando-ensenar-agota/bitacora-mochila.webp",
             alt: "Bitácora ilustrada de la mochila invisible de Andrea con espacios para reconocer cargas, fuentes, control, apoyo y acciones posibles.",
             width: 1024,
             height: 1536,
-            caption: "La mochila incluye demandas y recursos. El análisis no termina en “qué pesa”, sino en quién puede actuar y qué apoyo falta."
+            caption: "La mochila también contiene recursos. Haz visible lo que pesa y aquello que puede ayudarte a sostener o transformar la carga."
           },
           studySections: [
             {
@@ -417,8 +419,8 @@ window.IA_COURSE = (() => {
             ]
           },
           keypoints: [
-            "No toda demanda puede resolverse con una estrategia personal.",
-            "Preguntar por recursos evita individualizar el bienestar.",
+            "Cada demanda necesita una respuesta acorde con su nivel de control.",
+            "Preguntar por recursos distribuye mejor la responsabilidad.",
             "La misma carga cambia según apoyo, control, claridad y recuperación."
           ],
           activity: decision(
@@ -432,7 +434,7 @@ window.IA_COURSE = (() => {
             "Demandas y recursos laborales"
           ),
           summary: [
-            "Andrea puede nombrar la mochila. Ahora necesita priorizar una piedra sin asumir que debe cargarla o resolverla sola."
+            "Andrea ya ve la mochila completa: piedras y recursos. Ahora elegirá una carga prioritaria y buscará quién puede ayudar a moverla."
           ],
           references: [refs.dem, refs.hakanen, refs.skaalvik]
         },
@@ -442,7 +444,7 @@ window.IA_COURSE = (() => {
           duration: "25 min",
           objective: "Priorizar una demanda modificable y una acción sobre un recurso.",
           scenarioLabel: "Una piedra prioritaria",
-          scenario: "Andrea detecta que los cambios de horario con menos de 24 horas desordenan planificación, cuidado familiar y recuperación. Parte de la decisión está fuera de su control individual.",
+          scenario: "Andrea elige una piedra que se repite: los cambios de horario con menos de 24 horas. Alteran su planificación, el cuidado familiar y la posibilidad de cerrar la jornada.",
           studySections: [
             {
               title: "Priorizar con control y equidad",
@@ -457,7 +459,7 @@ window.IA_COURSE = (() => {
             "Acción personal: usar un registro breve de cambios. Acción organizacional: acordar un plazo mínimo y un canal de excepción. Responsable: coordinación académica."
           ],
           keypoints: [
-            "Priorizar no significa aceptar el resto para siempre.",
+            "Priorizar permite empezar por una carga concreta.",
             "Una acción debe corresponder al nivel de control.",
             "La equidad importa: una misma regla puede afectar distinto a quienes cuidan a otras personas."
           ],
@@ -468,7 +470,7 @@ window.IA_COURSE = (() => {
               "Andrea puede registrar el patrón y proponer a coordinación un plazo mínimo de 48 horas, con un canal de excepción. Indicador: número de cambios tardíos durante cuatro semanas."
             ],
             [
-              { id: "evidencia", label: "Evidencia observable", description: "Describe frecuencia o impacto sin datos sensibles." },
+              { id: "evidencia", label: "Evidencia observable", description: "Describe frecuencia o impacto con información operacional." },
               { id: "niveles", label: "Dos niveles", description: "Incluye una acción personal y otra colectiva u organizacional." },
               { id: "responsable", label: "Responsable", description: "Nombra quién puede decidir o sostener el cambio." },
               { id: "indicador", label: "Indicador", description: "Permite revisar si la acción ayuda." }
@@ -496,7 +498,7 @@ window.IA_COURSE = (() => {
           duration: "25 min",
           objective: "Diferenciar regulación profesional de supresión emocional crónica.",
           scenarioLabel: "Andrea sigue funcionando",
-          scenario: "Andrea responde correos, regula un conflicto y sostiene a un estudiante. Completa todo, pero casi no recuerda cómo pasó el día.",
+          scenario: "Andrea responde correos, regula un conflicto y acompaña a un estudiante. Al final del día, todo está hecho, pero casi no recuerda cómo transitó de una tarea a la siguiente.",
           studySections: [
             {
               title: "Regular no es negar",
@@ -511,12 +513,12 @@ window.IA_COURSE = (() => {
             "Reformulación: separar hecho e interpretación permite elegir una pausa y solicitar que otra persona acompañe la conversación."
           ],
           keypoints: [
-            "Funcionar no siempre significa estar bien.",
+            "Cumplir las tareas no muestra por sí solo los recursos que costó sostenerlas.",
             "La regulación profesional necesita recuperación y apoyo.",
-            "Las señales se observan como patrones, no como identidades."
+            "Mirar el patrón ayuda a recuperar capacidad de elección."
           ],
           activity: decision(
-            "¿Qué lectura evita culpabilizar?",
+            "¿Qué lectura comprende mejor lo que vive Andrea?",
             [
               { text: "Andrea no sabe controlar sus emociones.", feedback: "Atribuye una falla personal sin mirar condiciones." },
               { text: "Andrea regula demandas emocionales repetidas y necesita tiempo, apoyo y límites para procesarlas.", correct: true, feedback: "Reconoce el trabajo emocional y los recursos necesarios." },
@@ -526,7 +528,7 @@ window.IA_COURSE = (() => {
             "Regular no es negar"
           ),
           summary: [
-            "Andrea reconoce el automático. El siguiente paso es reconstruir una situación sin juzgar la emoción ni diagnosticar."
+            "Andrea reconoce el automático y recupera una pausa para elegir. En la siguiente experiencia reconstruirá una escena paso a paso."
           ],
           references: [refs.chang, refs.maslach]
         },
@@ -536,13 +538,13 @@ window.IA_COURSE = (() => {
           duration: "25 min",
           objective: "Reconstruir una situación exigente y formular una necesidad observable.",
           scenarioLabel: "Después de una reunión tensa",
-          scenario: "Andrea tarda el doble en corregir, olvida una instrucción y evita conversar. Puede describir lo ocurrido sin atribuirse una identidad.",
+          scenario: "Andrea tarda el doble en corregir, olvida una instrucción y posterga una conversación. Al ordenar la escena, distingue lo que ocurrió de lo que pensó sobre sí misma.",
           studySections: [
             {
               title: "Un mapa para decidir",
               paragraphs: [
                 "Separar hecho, interpretación, emoción/señal, respuesta y necesidad reduce inferencias apresuradas. El objetivo no es negar la interpretación, sino reconocer que todavía puede revisarse.",
-                "Si las señales son intensas, persistentes o afectan el funcionamiento cotidiano, corresponde buscar orientación profesional y activar canales de apoyo, sin improvisar una intervención clínica (WHO, 2022)."
+                "Cuando las señales se vuelven intensas, persistentes o afectan la vida cotidiana, buscar orientación profesional y activar canales de apoyo amplía las opciones de cuidado (WHO, 2022)."
               ]
             }
           ],
@@ -551,7 +553,7 @@ window.IA_COURSE = (() => {
             "Necesidad: cerrar la jornada con prioridades claras. Acción segura: pedir a coordinación confirmar por escrito los cambios y revisar carga."
           ],
           keypoints: [
-            "Un hecho puede describirse sin atribuir intención.",
+            "Un hecho puede describirse antes de atribuir una intención.",
             "Una necesidad se expresa de forma observable.",
             "Pedir ayuda es una conducta profesional de cuidado."
           ],
@@ -565,7 +567,7 @@ window.IA_COURSE = (() => {
               { id: "hechos", label: "Hechos separados", description: "No atribuye intención ni identidad." },
               { id: "necesidad", label: "Necesidad observable", description: "Se conecta con la escena." },
               { id: "accion", label: "Acción segura", description: "Incluye apoyo, responsable o canal." },
-              { id: "no-diagnostico", label: "Sin diagnóstico", description: "No concluye una condición clínica." }
+              { id: "cuidado-conclusion", label: "Cuidado de la conclusión", description: "Conserva la incertidumbre y formula un apoyo posible." }
             ],
             55,
             110
@@ -586,11 +588,11 @@ window.IA_COURSE = (() => {
       lessons: [
         {
           id: "m4-l1",
-          title: "Descanso y recuperación no son lo mismo",
+          title: "Descansar y recuperar",
           duration: "22 min",
           objective: "Distinguir descanso pasivo, recuperación psicológica y condiciones que la impiden.",
           scenarioLabel: "La jornada continúa mentalmente",
-          scenario: "Andrea intenta descansar, pero sigue repasando conversaciones y pendientes. No le falta voluntad: la demanda continúa consumiendo atención.",
+          scenario: "Andrea se sienta a descansar, pero las conversaciones y los pendientes continúan ocupando su atención. El cuerpo se detiene; la jornada todavía sigue dentro de ella.",
           studySections: [
             {
               title: "Cuatro experiencias de recuperación",
@@ -614,9 +616,9 @@ window.IA_COURSE = (() => {
             ]
           },
           keypoints: [
-            "Descansar y recuperarse no son exactamente lo mismo.",
-            "La desconexión no equivale a indiferencia.",
-            "El autocuidado no sustituye una gestión saludable del trabajo."
+            "Descanso y recuperación son experiencias relacionadas, pero distintas.",
+            "Desconectarse por un momento protege la atención.",
+            "La recuperación necesita prácticas personales y condiciones de trabajo que las hagan posibles."
           ],
           activity: decision(
             "¿Cuál límite es más operacionalizable?",
@@ -629,7 +631,7 @@ window.IA_COURSE = (() => {
             "Cuatro experiencias de recuperación"
           ),
           summary: [
-            "Andrea distingue descanso de recuperación. Ahora probará un límite y observará qué depende de ella y qué necesita negociación."
+            "Andrea distingue descanso de recuperación. Ahora probará un límite pequeño y observará qué necesita negociar para sostenerlo."
           ],
           references: [refs.sonnentag, refs.who2022]
         },
@@ -639,13 +641,13 @@ window.IA_COURSE = (() => {
           duration: "23 min",
           objective: "Diseñar un límite pequeño con barrera, apoyo e indicador.",
           scenarioLabel: "Probar sin autoexigencia",
-          scenario: "Andrea elige cerrar una tarea antes de irse. Anticipa que los cambios tardíos pueden romper el límite y pide un acuerdo al equipo.",
+          scenario: "Andrea elige cerrar una tarea antes de irse. Sabe que los cambios tardíos pueden interrumpir el plan, así que conversa con el equipo sobre un acuerdo posible.",
           studySections: [
             {
-              title: "El experimento no es otra obligación",
+              title: "Un experimento para aprender",
               paragraphs: [
-                "Una prueba breve sirve para aprender, no para demostrar disciplina. Debe incluir cuándo y dónde ocurrirá, una barrera prevista, un apoyo o acuerdo y una señal para revisar.",
-                "Si la práctica falla por una condición del trabajo, la respuesta no es culpar a Andrea. Se ajusta el plan o se escala la barrera."
+                "Una prueba breve sirve para aprender. Debe incluir cuándo y dónde ocurrirá, una barrera prevista, un apoyo o acuerdo y una señal para revisar.",
+                "Si una condición del trabajo interrumpe la práctica, esa barrera aporta información: permite ajustar el plan o llevar la conversación al nivel donde puede resolverse."
               ]
             }
           ],
@@ -674,7 +676,7 @@ window.IA_COURSE = (() => {
             105
           ),
           summary: [
-            "Andrea descubre que un límite necesita apoyo. En M5 practicará cómo pedirlo sin invadir, diagnosticar ni obligar a compartir."
+            "Andrea descubre que un límite se vuelve posible cuando encuentra apoyo. En M5 practicará una conversación de cuidado que respeta la decisión de la otra persona."
           ],
           references: [refs.sonnentag, refs.who2022, refs.roediger]
         }
@@ -689,16 +691,16 @@ window.IA_COURSE = (() => {
       lessons: [
         {
           id: "m5-l1",
-          title: "Conversar sin invadir",
+          title: "Una conversación que cuida",
           duration: "22 min",
           objective: "Practicar una conversación de cuidado con permiso, privacidad y límites.",
           scenarioLabel: "Andrea pide apoyo",
-          scenario: "Andrea deja de decir “estoy bien” por inercia. Una colega no intenta arreglarla: pregunta con permiso, escucha y acepta que Andrea decida cuánto compartir.",
+          scenario: "Andrea deja de responder “estoy bien” por inercia. Una colega se acerca con calma, pregunta si le sirve conversar y escucha sin apresurarse a ofrecer soluciones.",
           studySections: [
             {
               title: "Cuatro movimientos de cuidado",
               paragraphs: [
-                "Una conversación segura puede pedir permiso, escuchar sin diagnosticar, aclarar qué apoyo se solicita y acordar seguimiento. Compartir es voluntario y siempre debe existir una alternativa.",
+                "Una conversación segura pide permiso, escucha sin diagnosticar, aclara qué apoyo se solicita y acuerda seguimiento. Compartir es voluntario y siempre debe existir una alternativa.",
                 "El apoyo organizacional incluye justicia, reconocimiento, ayuda disponible y señales de que la organización valora la contribución y el bienestar (Kurtessis et al., 2017)."
               ]
             }
@@ -724,7 +726,7 @@ window.IA_COURSE = (() => {
             "Cuatro movimientos de cuidado"
           ),
           summary: [
-            "Andrea puede pedir apoyo sin tener que exponer su experiencia completa. Ahora el equipo necesita convertir el cuidado en un acuerdo observable."
+            "Andrea descubre que pedir apoyo puede ser concreto y respetuoso. Ahora el equipo convertirá ese cuidado en un acuerdo observable."
           ],
           references: [refs.kurtessis, refs.who2022]
         },
@@ -734,13 +736,13 @@ window.IA_COURSE = (() => {
           duration: "23 min",
           objective: "Diseñar un acuerdo con conducta, responsable, frecuencia e indicador.",
           scenarioLabel: "Una carga compartida",
-          scenario: "El equipo detecta que las reuniones sin propósito consumen tiempo de planificación. Decide probar un acuerdo sin pedir relatos personales.",
+          scenario: "El equipo detecta que las reuniones sin propósito consumen tiempo de planificación. En lugar de sumar otra conversación general, decide probar un acuerdo concreto.",
           studySections: [
             {
               title: "Un acuerdo no es una intención",
               paragraphs: [
                 "“Comunicarnos mejor” no define qué cambiará. Un acuerdo verificable nombra conducta, responsable, frecuencia, canal, fecha de revisión e indicador.",
-                "La participación debe permitir alternativas. Nadie necesita justificar un límite con información de salud ni entregar su bitácora."
+                "La participación debe permitir alternativas. Cada persona conserva el control sobre su bitácora y puede utilizar el acuerdo sin justificarlo con información personal."
               ]
             }
           ],
@@ -749,10 +751,11 @@ window.IA_COURSE = (() => {
             "Indicador: porcentaje de reuniones con agenda y tareas cerradas durante cuatro semanas."
           ],
           keypoints: [
-            "Un acuerdo sin responsable ni fecha es una intención.",
-            "La evidencia puede ser operacional, no emocional.",
-            "La privacidad no impide diseñar mejores condiciones."
+            "Un acuerdo se vuelve practicable cuando tiene responsable y fecha.",
+            "La evidencia operacional permite revisar el cambio.",
+            "La privacidad y las mejores condiciones pueden avanzar juntas."
           ],
+          privacyReminder: "La bitácora y los relatos personales permanecen bajo control de cada persona. Para el acuerdo basta con información operacional.",
           activity: reflection(
             "Diseña un acuerdo de equipo para el caso de Andrea.",
             [
@@ -784,17 +787,17 @@ window.IA_COURSE = (() => {
       lessons: [
         {
           id: "m6-l1",
-          title: "Del consejo a la condición",
+          title: "Cuidar también es rediseñar el trabajo",
           duration: "25 min",
           objective: "Distinguir una acción cosmética de una intervención organizacional.",
           scenarioLabel: "El patrón del equipo",
-          scenario: "El equipo de Andrea detecta cambios de última hora, reuniones sin cierre y ausencia de tiempo protegido. La respuesta deja de ser “organícense mejor”.",
+          scenario: "El equipo de Andrea pone sobre la mesa tres patrones: cambios de última hora, reuniones sin cierre y poco tiempo protegido. La pregunta cambia: ¿qué condición del trabajo podemos rediseñar?",
           studySections: [
             {
               title: "Priorizar el diseño del trabajo",
               paragraphs: [
                 "La OMS recomienda priorizar intervenciones organizacionales que modifiquen condiciones de trabajo, además de fortalecer capacidades individuales y apoyo. Carga, horarios, claridad de rol, participación, violencia y apoyo de jefaturas son áreas posibles (WHO, 2022).",
-                "En Chile, CEAL-SM/SUSESO es el instrumento oficial para evaluar riesgos psicosociales laborales. Este curso no reproduce sus ítems ni reemplaza su aplicación; prepara para comprender demandas y convertir hallazgos en acciones (Superintendencia de Seguridad Social, s. f.)."
+                "En Chile, CEAL-SM/SUSESO ofrece el marco oficial para evaluar riesgos psicosociales laborales. Aquí el foco es comprender las demandas y convertir los hallazgos en acciones observables (Superintendencia de Seguridad Social, s. f.)."
               ]
             }
           ],
@@ -804,8 +807,8 @@ window.IA_COURSE = (() => {
           ],
           keypoints: [
             "La prevención empieza por el diseño del trabajo.",
-            "Medir riesgos no sirve si no se acuerdan acciones y seguimiento.",
-            "El curso complementa, pero no reemplaza, los procesos oficiales."
+            "Medir riesgos cobra sentido cuando conduce a acciones y seguimiento.",
+            "Los procesos oficiales y los acuerdos cotidianos se complementan."
           ],
           activity: decision(
             "¿Cuál acción modifica una condición del trabajo?",
@@ -818,17 +821,17 @@ window.IA_COURSE = (() => {
             "Priorizar el diseño del trabajo"
           ),
           summary: [
-            "El equipo reconoce qué no cambia con consejos individuales. Ahora priorizará una propuesta factible y medible."
+            "El equipo identifica una condición concreta que puede cambiar. Ahora la convertirá en una propuesta factible y medible."
           ],
           references: [refs.who2022, refs.suseso, refs.mineduc]
         },
         {
           id: "m6-l2",
-          title: "Una propuesta organizacional de 90 segundos",
+          title: "Una propuesta organizacional en 90 segundos",
           duration: "25 min",
           objective: "Formular un cambio con evidencia, responsable, plazo e indicador.",
           scenarioLabel: "De la observación a la propuesta",
-          scenario: "En tres semanas hubo seis cambios de horario con menos de 24 horas. El equipo prepara una propuesta breve para coordinación.",
+          scenario: "En tres semanas hubo seis cambios de horario con menos de 24 horas. El equipo reúne la evidencia y prepara una propuesta breve para coordinación.",
           studySections: [
             {
               title: "Priorizar sin prometer demasiado",
@@ -843,7 +846,7 @@ window.IA_COURSE = (() => {
             "Propuesta: establecer 48 horas como plazo mínimo, salvo contingencia definida. Responsable: coordinación. Revisión: cuatro semanas. Indicador: cambios tardíos y horas de planificación afectadas."
           ],
           keypoints: [
-            "La evidencia puede ser sencilla y no sensible.",
+            "La evidencia puede ser sencilla y operacional.",
             "Responsable significa capacidad real de actuar.",
             "El indicador permite ajustar, escalar o cerrar."
           ],
@@ -854,7 +857,7 @@ window.IA_COURSE = (() => {
               "Coordinación implementará la prueba durante cuatro semanas. Revisaremos número de cambios tardíos, excepciones y horas de planificación afectadas para decidir si mantener o ajustar."
             ],
             [
-              { id: "problema", label: "Problema y evidencia", description: "Usa hechos no sensibles." },
+              { id: "problema", label: "Problema y evidencia", description: "Usa hechos operacionales." },
               { id: "cambio", label: "Cambio específico", description: "Actúa sobre el proceso." },
               { id: "responsable", label: "Responsable y plazo", description: "La capacidad de decisión está clara." },
               { id: "indicador", label: "Indicador y equidad", description: "Permite evaluar efecto y diferencias relevantes." }
@@ -878,11 +881,11 @@ window.IA_COURSE = (() => {
       lessons: [
         {
           id: "m7-l1",
-          title: "El sentido no justifica la sobrecarga",
+          title: "El sentido necesita condiciones",
           duration: "25 min",
           objective: "Reconocer aspectos valiosos de enseñar sin convertirlos en obligación de sacrificio.",
           scenarioLabel: "Andrea recuerda lo que quiere recuperar",
-          scenario: "Andrea extraña la conexión con estudiantes, la creatividad y la calma. No intenta volver al pasado ni compensar una estructura deficiente con más entrega.",
+          scenario: "Andrea extraña la conexión con estudiantes, la creatividad y la calma. Quiere acercarse otra vez a lo que la mueve, con recursos y límites que permitan sostenerlo.",
           studySections: [
             {
               title: "Valores con recursos y límites",
@@ -897,8 +900,8 @@ window.IA_COURSE = (() => {
             "Agencia sostenible: “Andrea quiere recuperar creatividad; necesita tiempo protegido y dejar de rehacer materiales que ya cumplen el propósito”."
           ],
           keypoints: [
-            "La vocación no obliga a soportar condiciones dañinas.",
-            "Recuperar sentido puede incluir decir no, pedir apoyo o simplificar.",
+            "La vocación se sostiene con límites, apoyo y condiciones saludables.",
+            "Recuperar sentido puede incluir simplificar, pedir apoyo o dejar una tarea.",
             "Una acción sostenible protege a la persona y a su propósito."
           ],
           activity: decision(
@@ -912,7 +915,7 @@ window.IA_COURSE = (() => {
             "Valores con recursos y límites"
           ),
           summary: [
-            "Andrea distingue valor de sacrificio. Ahora convertirá aquello que quiere recuperar en acciones pequeñas, elegidas y revisables."
+            "Andrea separa el valor del sacrificio. Ahora convertirá aquello que quiere recuperar en acciones pequeñas, elegidas y revisables."
           ],
           references: [refs.hakanen, refs.skaalvik]
         },
@@ -922,14 +925,14 @@ window.IA_COURSE = (() => {
           duration: "30 min",
           objective: "Convertir un valor docente en acciones con tamaño, apoyo y revisión.",
           scenarioLabel: "Elegir sin añadir otra carga",
-          scenario: "Andrea elige proteger una conversación pedagógica significativa, simplificar una tarea y pedir tiempo de planificación. Cada acción tiene distinto nivel de control.",
+          scenario: "Andrea elige proteger una conversación pedagógica significativa, simplificar una tarea y pedir tiempo de planificación. Cada paso tiene un tamaño y necesita apoyos diferentes.",
           image: {
             src: "../../../../assets/images/aula/cuando-ensenar-agota/bitacora-recuperar-original.png",
             webp: "../../../../assets/images/aula/cuando-ensenar-agota/bitacora-recuperar.webp",
             alt: "Bitácora ilustrada para identificar qué parte valiosa de la enseñanza se quiere recuperar y convertirla en acciones pequeñas con apoyo y límites.",
             width: 1024,
             height: 1536,
-            caption: "Recuperar no significa volver a ser como antes ni añadir más tareas. Significa acercarse a un valor con recursos y límites."
+            caption: "Recuperar significa acercarse a un valor importante con pasos pequeños, recursos y límites."
           },
           studySections: [
             {
@@ -980,11 +983,11 @@ window.IA_COURSE = (() => {
       lessons: [
         {
           id: "m8-l1",
-          title: "Construir un plan de dos niveles",
+          title: "Un Plan Vivo de dos niveles",
           duration: "30 min",
           objective: "Integrar una acción personal sostenible y una propuesta colectiva u organizacional.",
           scenarioLabel: "Andrea deja de vaciar sola la mochila",
-          scenario: "Andrea construye un plan con una acción bajo su control y otra que requiere acuerdo institucional. Define cómo sabrá si ayuda y cuándo pedirá apoyo adicional.",
+          scenario: "Andrea reúne lo aprendido y construye un plan con dos movimientos: uno bajo su control y otro que necesita un acuerdo institucional. También decide cómo sabrá si el plan ayuda.",
           studySections: [
             {
               title: "Integrar sin prometer una técnica universal",
@@ -999,10 +1002,11 @@ window.IA_COURSE = (() => {
             "Indicador: cambios tardíos y horas de planificación afectadas. Revisión: 30 días. Cuidado: sin nombres, diagnósticos ni notas privadas."
           ],
           keypoints: [
-            "Un buen plan combina agencia personal y responsabilidad organizacional.",
+            "Un Plan Vivo combina agencia personal y responsabilidad organizacional.",
             "La evidencia puede ser simple, pero debe permitir decidir.",
             "El plan protege privacidad y conserva incertidumbre."
           ],
+          privacyReminder: "El Plan Vivo se evalúa por la calidad de sus decisiones. Mantén fuera del texto nombres, diagnósticos y notas de la bitácora.",
           activity: reflection(
             "Redacta el Plan Vivo de Andrea con dos niveles de acción.",
             [
@@ -1030,11 +1034,11 @@ window.IA_COURSE = (() => {
         },
         {
           id: "m8-l2",
-          title: "Verificar, mejorar y entregar evidencia",
+          title: "Revisar, mejorar y decidir",
           duration: "20 min",
           objective: "Aplicar la rúbrica y decidir qué necesita un segundo intento.",
           scenarioLabel: "La revisión de Andrea",
-          scenario: "El primer plan de Andrea propone “cuidarse más” y “mejorar la comunicación”. La intención es valiosa, pero todavía no permite actuar ni medir.",
+          scenario: "El primer plan de Andrea propone “cuidarse más” y “mejorar la comunicación”. La intención importa; ahora necesita convertirse en conductas, responsables, fechas e indicadores.",
           studySections: [
             {
               title: "Criterios de competencia",
@@ -1077,11 +1081,11 @@ window.IA_COURSE = (() => {
         },
         {
           id: "m8-l3",
-          title: "Cierre y seguimiento a 30 días",
+          title: "Lo que sigue vivo a 30 días",
           duration: "10 min",
           objective: "Programar recuperaciones espaciadas y una decisión de seguimiento.",
           scenarioLabel: "Un plan que sigue vivo",
-          scenario: "Andrea no da el curso por terminado al cerrar la pantalla. Agenda cuatro recuperaciones breves y una revisión del plan con evidencia no sensible.",
+          scenario: "Andrea cierra la pantalla y deja cuatro fechas agendadas. Volverá a recordar, decidir y revisar el plan con evidencia sencilla durante los próximos 30 días.",
           studySections: [
             {
               title: "Recuperar para consolidar",
@@ -1101,9 +1105,9 @@ window.IA_COURSE = (() => {
             "Si aumentan las señales o el impacto, busca orientación profesional y activa apoyos institucionales; el curso no reemplaza esa atención."
           ],
           keypoints: [
-            "El seguimiento usa evidencia no sensible.",
+            "El seguimiento usa evidencia operacional y breve.",
             "Mantener, ajustar, escalar o cerrar son decisiones válidas.",
-            "La certificación acredita una propuesta razonada, no ausencia de malestar."
+            "La certificación reconoce una propuesta razonada y un proceso de aprendizaje."
           ],
           activity: decision(
             "A 30 días, el indicador no mejora. ¿Qué corresponde?",
@@ -1146,6 +1150,18 @@ window.IA_COURSE = (() => {
     estimatedMinutes: 425,
     estimatedHours: 7.08,
     localOnly: true,
+    uiLabels: {
+      studyKicker: "Comprender",
+      studyTitle: "Lo que nos ayuda a mirar",
+      exampleKicker: "Miremos el caso",
+      exampleTitle: "Andrea en contexto",
+      retrievalKicker: "Para recordar",
+      retrievalTitle: "Ideas para quedarte",
+      activityKicker: "Pruébalo",
+      synthesisKicker: "Para continuar",
+      synthesisTitle: "Lo que abre esta experiencia",
+      resourcesTitle: "Materiales para acompañar tu recorrido"
+    },
     privacy: {
       analytics: ["avance", "módulos completados", "intentos", "resultados académicos", "entrega del proyecto"],
       excluded: ["diagnósticos", "notas privadas", "relatos personales", "nombres de terceros", "datos de salud", "inferencias psicológicas"]

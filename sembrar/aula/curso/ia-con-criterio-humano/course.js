@@ -7,6 +7,19 @@
   const lessons = COURSE.lessons;
   const PEDAGOGY_SCHEMA = "aula-viva-pedagogy-v1";
   const COURSE_UI_KEY = `nv-aula-ui:${COURSE.slug}`;
+  const UI_LABELS = {
+    studyKicker: "Estudiar",
+    studyTitle: "Material para estudiar",
+    exampleKicker: "Ver el criterio en acción",
+    exampleTitle: "Ejemplo desarrollado",
+    retrievalKicker: "Recuperar",
+    retrievalTitle: "Lo que debes poder explicar",
+    activityKicker: null,
+    synthesisKicker: "Cerrar y transferir",
+    synthesisTitle: "Síntesis final",
+    resourcesTitle: "Descargas de esta experiencia",
+    ...(COURSE.uiLabels || {})
+  };
   let progress = {};
   let currentIndex = 0;
 
@@ -271,7 +284,10 @@
         <section class="lesson-card video-locked-card" aria-labelledby="video-locked-title">
           <p class="card-kicker">Caso narrativo</p>
           <h2 id="video-locked-title">${escapeHtml(video.title)}</h2>
-          <p>Registra primero tu decisión inicial. El video aparecerá aquí sin recargar la página.</p>
+          <figure class="video-poster-preview">
+            <img src="${escapeHtml(video.poster)}" alt="Fotograma de apertura del caso de Andrea" width="1920" height="1080" />
+          </figure>
+          <p class="video-preview-copy">Después de elegir una primera explicación, verás el caso de Andrea · 8:29 min</p>
         </section>`;
     }
     return `
@@ -285,12 +301,15 @@
           playsinline
           preload="metadata"
           poster="${escapeHtml(video.poster)}"
-          data-video-src="${escapeHtml(video.src)}"
-          aria-describedby="video-notice video-description"
+          src="${escapeHtml(video.src)}"
+          aria-describedby="video-notice video-description video-load-error"
         >
           <track kind="captions" srclang="es" label="Español" src="${escapeHtml(video.captions)}" default />
           Tu navegador no puede reproducir este video. Usa la transcripción accesible disponible debajo.
         </video>
+        <p class="video-load-error" id="video-load-error" role="alert" hidden>
+          No pudimos cargar el video. Puedes <a href="${escapeHtml(video.transcript)}">abrir la transcripción accesible</a> y continuar con el caso.
+        </p>
         <div class="video-controls-extra">
           <label for="video-speed">Velocidad</label>
           <select id="video-speed">
@@ -306,7 +325,7 @@
           <summary>Descripción de la información visual</summary>
           <p>${escapeHtml(video.description)}</p>
         </details>
-        <p class="video-clarification"><strong>Distinción necesaria:</strong> ${escapeHtml(video.clarification)}</p>
+        <p class="video-clarification">${escapeHtml(video.clarification)}</p>
         <div class="video-access-actions">
           <a class="button button-quiet resource-link" href="${escapeHtml(video.transcript)}" download>Descargar transcripción accesible</a>
           ${video.mandatory ? `
@@ -324,7 +343,7 @@
         <p class="card-kicker">Observar antes de interpretar</p>
         <h2 id="observation-title">Tres preguntas para revisar el caso</h2>
         <ol>${lesson.postVideoQuestions.map(question => `<li>${escapeHtml(question)}</li>`).join("")}</ol>
-        <p>No necesitas escribir una experiencia personal. Puedes responder mentalmente o en tu bitácora privada usando solo el caso de Andrea.</p>
+        <p>Puedes anotar tus observaciones en la bitácora privada o mantenerlas presentes para la microlección.</p>
       </section>`;
   }
 
@@ -347,7 +366,7 @@
 
     return `
       <section class="lesson-card activity-card" aria-labelledby="activity-title">
-        <p class="card-kicker">Actividad de decisión</p>
+        <p class="card-kicker">${escapeHtml(UI_LABELS.activityKicker || "Actividad de decisión")}</p>
         <h2 id="activity-title">${escapeHtml(activity.prompt)}</h2>
         ${renderInstructions(activity.instructions)}
         <button class="button button-primary activity-start" id="start-activity" type="button"${state.activityStarted ? " hidden" : ""}>Comenzar actividad</button>
@@ -376,6 +395,10 @@
   function renderReflectionActivity(lesson, state) {
     const activity = lesson.activity;
     const criteria = activity.requiredCriteria || [];
+    const privacyReminder = lesson.privacyReminder
+      ?? (COURSE.uiLabels
+        ? ""
+        : "Utiliza solo datos ficticios o anonimizados. No incluyas nombres ni información real de personas u organizaciones.");
     const countClass = state.wordCount > activity.maximumWords
       ? "is-over"
       : state.wordCount >= activity.minimumWords
@@ -384,10 +407,10 @@
 
     return `
       <section class="lesson-card activity-card open-practice" aria-labelledby="activity-title">
-        <p class="card-kicker">Práctica abierta</p>
+        <p class="card-kicker">${escapeHtml(UI_LABELS.activityKicker || "Práctica abierta")}</p>
         <h2 id="activity-title">${escapeHtml(activity.prompt)}</h2>
         ${renderInstructions(activity.instructions)}
-        <p class="privacy-warning"><span aria-hidden="true">◇</span> <strong>Protege la información:</strong> utiliza solo datos ficticios o anonimizados. No incluyas nombres ni información real de personas u organizaciones.</p>
+        ${privacyReminder ? `<p class="privacy-warning"><span aria-hidden="true">◇</span> <strong>Protege la información:</strong> ${escapeHtml(privacyReminder)}</p>` : ""}
         <button class="button button-primary activity-start" id="start-activity" type="button"${state.activityStarted ? " hidden" : ""}>Comenzar actividad</button>
         <div id="reflection-workspace"${state.activityStarted ? "" : " hidden"}>
           <label class="reflection-label" for="activity-response">${escapeHtml(activity.responseLabel || "Tu respuesta")}</label>
@@ -487,8 +510,8 @@
 
     return `
       <section class="lesson-card study-card" aria-labelledby="study-title">
-        <p class="card-kicker">Estudiar</p>
-        <h2 id="study-title">Material para estudiar</h2>
+        <p class="card-kicker">${escapeHtml(UI_LABELS.studyKicker)}</p>
+        <h2 id="study-title">${escapeHtml(UI_LABELS.studyTitle)}</h2>
         ${lesson.studySections.map((section, index) => `
           <section class="study-section" aria-labelledby="study-${index}">
             <h3 id="study-${index}">${escapeHtml(section.title)}</h3>
@@ -513,23 +536,28 @@
       </section>`;
   }
 
-  function renderImage(lesson) {
-    if (!lesson.image) return "";
-    const loading = lesson.image.loading === "eager" ? "eager" : "lazy";
+  function renderImage(lesson, key = "image") {
+    const image = lesson[key];
+    if (!image) return "";
+    const loading = image.loading === "eager" ? "eager" : "lazy";
+    const portraitClass = Number(image.height) > Number(image.width)
+      ? " lesson-figure--portrait"
+      : "";
+    const containClass = image.fit === "contain" ? " lesson-figure--contain" : "";
     return `
-      <figure class="lesson-figure">
+      <figure class="lesson-figure${portraitClass}${containClass}">
         <picture>
-          ${lesson.image.webp ? `<source srcset="${escapeHtml(lesson.image.webp)}" type="image/webp" />` : ""}
+          ${image.webp ? `<source srcset="${escapeHtml(image.webp)}" type="image/webp" />` : ""}
           <img
-            src="${escapeHtml(lesson.image.src)}"
-            alt="${escapeHtml(lesson.image.alt)}"
-            width="${Number(lesson.image.width)}"
-            height="${Number(lesson.image.height)}"
+            src="${escapeHtml(image.src)}"
+            alt="${escapeHtml(image.alt)}"
+            width="${Number(image.width)}"
+            height="${Number(image.height)}"
             loading="${loading}"
             decoding="async"
           />
         </picture>
-        ${lesson.image.caption ? `<figcaption>${escapeHtml(lesson.image.caption)}</figcaption>` : ""}
+        ${image.caption ? `<figcaption>${escapeHtml(image.caption)}</figcaption>` : ""}
       </figure>`;
   }
 
@@ -582,7 +610,7 @@
     return `
       <section class="lesson-card lesson-resources" aria-labelledby="resources-title">
         <p class="card-kicker">Recursos</p>
-        <h2 id="resources-title">Descargas de esta experiencia</h2>
+        <h2 id="resources-title">${escapeHtml(UI_LABELS.resourcesTitle)}</h2>
         <div class="resource-grid">
           ${lesson.resources.map(resource => `
             <a class="resource-download" href="${escapeHtml(resource.href)}" download>
@@ -597,8 +625,8 @@
     if (!lesson.workedExample?.length) return "";
     return `
       <section class="lesson-card worked-example" aria-labelledby="worked-example-title">
-        <p class="card-kicker">Ver el criterio en acción</p>
-        <h2 id="worked-example-title">Ejemplo desarrollado</h2>
+        <p class="card-kicker">${escapeHtml(UI_LABELS.exampleKicker)}</p>
+        <h2 id="worked-example-title">${escapeHtml(UI_LABELS.exampleTitle)}</h2>
         ${lesson.workedExample.map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join("")}
       </section>`;
   }
@@ -656,6 +684,7 @@
       </div>
       <h1>${escapeHtml(lesson.title)}</h1>
       <p class="lesson-objective"><strong>Al finalizar:</strong> ${escapeHtml(lesson.objective)}</p>
+      ${lesson.participationAgreement ? `<p class="participation-agreement">${escapeHtml(lesson.participationAgreement)}</p>` : ""}
       <section class="lesson-card scenario-card">
         <p class="card-kicker">${escapeHtml(lesson.scenarioLabel || "Proyecto Aurora")}</p>
         <h2>Situación inicial</h2>
@@ -664,28 +693,25 @@
       ${renderPreStudyDecision(lesson)}
       ${renderVideo(lesson)}
       ${videoReady ? "" : `
-        <section class="lesson-card video-followup-locked" aria-labelledby="video-followup-title">
-          <p class="card-kicker">Secuencia protegida</p>
-          <h2 id="video-followup-title">Primero revisa el caso narrativo</h2>
-          <p>Las preguntas, la microlección y la actividad se habilitarán al terminar el video o confirmar que revisaste la transcripción accesible completa.</p>
-        </section>`}
+        <p class="video-followup-note">Al terminar el video —o revisar la transcripción completa— se abrirán las preguntas y la microlección.</p>`}
       <div id="post-video-learning"${videoReady ? "" : " hidden"}>
       ${renderPostVideoQuestions(lesson)}
       ${renderImage(lesson)}
       ${renderStudySections(lesson)}
+      ${renderImage(lesson, "postStudyImage")}
       ${renderInfographic(lesson)}
       ${renderWorkedExample(lesson)}
       ${renderComparison(lesson)}
-      <section class="lesson-card">
-        <p class="card-kicker">Recuperar</p>
-        <h2>Lo que debes poder explicar</h2>
+      <section class="lesson-card retrieval-card">
+        <p class="card-kicker">${escapeHtml(UI_LABELS.retrievalKicker)}</p>
+        <h2>${escapeHtml(UI_LABELS.retrievalTitle)}</h2>
         <ul class="key-list">${keypoints.map(point => `<li>${escapeHtml(point)}</li>`).join("")}</ul>
       </section>
       ${renderActivity(lesson)}
       ${summary.length ? `
         <section class="lesson-card synthesis-card" aria-labelledby="synthesis-title">
-          <p class="card-kicker">Cerrar y transferir</p>
-          <h2 id="synthesis-title">Síntesis final</h2>
+          <p class="card-kicker">${escapeHtml(UI_LABELS.synthesisKicker)}</p>
+          <h2 id="synthesis-title">${escapeHtml(UI_LABELS.synthesisTitle)}</h2>
           ${summary.map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join("")}
         </section>` : ""}
       ${renderSpacedPractice(lesson)}
@@ -753,43 +779,49 @@
     const status = $("#video-resume-status");
     let lastSavedSecond = -1;
 
-    const loadSource = () => {
-      if (!video.src) {
-        video.src = video.dataset.videoSrc;
-        video.load();
-      }
-    };
-
-    if ("IntersectionObserver" in window) {
-      const observer = new IntersectionObserver(entries => {
-        if (!entries.some(entry => entry.isIntersecting)) return;
-        loadSource();
-        observer.disconnect();
-      }, { rootMargin: "240px" });
-      observer.observe(video);
-    } else {
-      loadSource();
-    }
-
-    video.addEventListener("loadedmetadata", () => {
+    const restorePlaybackPoint = () => {
       const savedSecond = Number(localStorage.getItem(mediaKey) || 0);
       if (savedSecond > 2 && savedSecond < video.duration - 2) {
         video.currentTime = savedSecond;
         status.textContent = `Reanudado cerca de ${Math.floor(savedSecond / 60)}:${String(Math.floor(savedSecond % 60)).padStart(2, "0")}.`;
+        return true;
       }
-    });
+      return false;
+    };
+
+    if (video.readyState >= 1) {
+      restorePlaybackPoint();
+    } else {
+      video.addEventListener("loadedmetadata", restorePlaybackPoint, { once: true });
+    }
+    video.addEventListener("canplay", () => {
+      const savedSecond = Number(localStorage.getItem(mediaKey) || 0);
+      if (savedSecond > 2 && Math.abs(video.currentTime - savedSecond) > 1) restorePlaybackPoint();
+    }, { once: true });
+    let resumeAttempts = 0;
+    const resumeTimer = window.setInterval(() => {
+      resumeAttempts += 1;
+      restorePlaybackPoint();
+      if (resumeAttempts >= 10) window.clearInterval(resumeTimer);
+    }, 100);
 
     const savePlaybackPoint = () => {
       const second = Math.floor(video.currentTime || 0);
-      if (second === lastSavedSecond || !Number.isFinite(second)) return;
+      if (second <= 2 || second === lastSavedSecond || !Number.isFinite(second)) return;
       lastSavedSecond = second;
       localStorage.setItem(mediaKey, String(second));
+      status.textContent = `Punto de reproducción guardado en ${Math.floor(second / 60)}:${String(second % 60).padStart(2, "0")}.`;
     };
 
     video.addEventListener("timeupdate", () => {
       if (Math.floor(video.currentTime || 0) % 5 === 0) savePlaybackPoint();
     });
     video.addEventListener("pause", savePlaybackPoint);
+    video.addEventListener("error", () => {
+      const errorMessage = $("#video-load-error");
+      if (errorMessage) errorMessage.hidden = false;
+      status.textContent = "El video no pudo cargarse. La transcripción accesible sigue disponible.";
+    });
     video.addEventListener("ended", async () => {
       localStorage.removeItem(mediaKey);
       await savePedagogicalState(lesson, { videoCompleted: true }, 60);

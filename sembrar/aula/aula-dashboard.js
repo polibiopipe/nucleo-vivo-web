@@ -181,7 +181,7 @@
       $("#next-action").textContent = canContinue
         ? completed
           ? "Continuar ruta recomendada"
-          : "Diagnostico inicial"
+          : "Punto de partida"
         : isPaused
           ? "Acceso pausado"
           : "Inscribirte en el curso";
