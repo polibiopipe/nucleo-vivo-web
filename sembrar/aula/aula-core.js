@@ -6,6 +6,7 @@
     supabaseAnonKey: "",
     previewMode: true,
     enableRemoteSync: true,
+    localCourse: false,
     courseSlug: "ia-con-criterio-humano",
     privacyVersion: "2026-07-25",
     organizationName: "Nucleo Vivo"
@@ -27,6 +28,7 @@
       user: null,
       enrollments: {},
       progress: {},
+      localCourseOwners: {},
       accessibility: {},
       sync: {
         previewClaimedBy: null,
@@ -45,6 +47,7 @@
       ...value,
       enrollments: value.enrollments || {},
       progress: value.progress || {},
+      localCourseOwners: value.localCourseOwners || {},
       accessibility: value.accessibility || {},
       sync: { ...base.sync, ...(value.sync || {}) },
       remoteCache: value.remoteCache || {}
@@ -79,6 +82,35 @@
 
   function getLocalUser() {
     return readLocal().user || null;
+  }
+
+  function ensureLocalCourseOwner(user) {
+    const store = readLocal();
+    const identity = user?.id || user?.email || "preview-user";
+    const previousIdentity = store.localCourseOwners[COURSE_SLUG] || null;
+    if (previousIdentity && previousIdentity !== identity) {
+      delete store.enrollments[COURSE_SLUG];
+      delete store.progress[COURSE_SLUG];
+    }
+    store.localCourseOwners[COURSE_SLUG] = identity;
+    writeLocal(store);
+    return store;
+  }
+
+  function getLocalCourseProgress(courseSlug, user = null) {
+    const store = readLocal();
+    const owner = store.localCourseOwners[courseSlug] || null;
+    const identity = user?.id || user?.email || null;
+    if (owner && identity && owner !== identity) return {};
+    return store.progress[courseSlug] || {};
+  }
+
+  function getLocalCourseEnrollment(courseSlug, user = null) {
+    const store = readLocal();
+    const owner = store.localCourseOwners[courseSlug] || null;
+    const identity = user?.id || user?.email || null;
+    if (owner && identity && owner !== identity) return null;
+    return store.enrollments[courseSlug] || null;
   }
 
   function getConnectionState() {
@@ -244,8 +276,8 @@
   async function enroll() {
     const { user } = await getSession();
     if (!user) throw new Error("Debes iniciar sesion antes de inscribirte.");
-    if (!client) {
-      const store = readLocal();
+    if (!client || CONFIG.localCourse) {
+      const store = CONFIG.localCourse ? ensureLocalCourseOwner(user) : readLocal();
       store.enrollments[COURSE_SLUG] = store.enrollments[COURSE_SLUG] || {
         enrolled_at: new Date().toISOString(),
         status: "active"
@@ -260,7 +292,10 @@
   async function getEnrollment() {
     const { user } = await getSession();
     if (!user) return null;
-    if (!client) return readLocal().enrollments[COURSE_SLUG] || null;
+    if (!client || CONFIG.localCourse) {
+      const store = CONFIG.localCourse ? ensureLocalCourseOwner(user) : readLocal();
+      return store.enrollments[COURSE_SLUG] || null;
+    }
     const course = await resolveCourse();
     return fetchRemoteEnrollment(user, course);
   }
@@ -352,6 +387,7 @@
   }
 
   async function syncPreviewProgress() {
+    if (CONFIG.localCourse) return { mode: "local-course", merged: 0, skipped: true };
     if (!client || CONFIG.enableRemoteSync === false) return { mode: "preview", merged: 0, skipped: true };
     const { user } = await getSession();
     if (!user) return { mode: "supabase", merged: 0, skipped: true };
@@ -417,7 +453,10 @@
   async function getProgress() {
     const { user } = await getSession();
     if (!user) return {};
-    if (!client) return readLocal().progress[COURSE_SLUG] || {};
+    if (!client || CONFIG.localCourse) {
+      const store = CONFIG.localCourse ? ensureLocalCourseOwner(user) : readLocal();
+      return store.progress[COURSE_SLUG] || {};
+    }
 
     const course = await resolveCourse();
     const progress = await fetchRemoteProgress(user, course);
@@ -435,8 +474,8 @@
     const { user } = await getSession();
     if (!user) throw new Error("Debes iniciar sesion para guardar el avance.");
     const payload = buildProgressPayload(values);
-    if (!client) {
-      const store = readLocal();
+    if (!client || CONFIG.localCourse) {
+      const store = CONFIG.localCourse ? ensureLocalCourseOwner(user) : readLocal();
       store.progress[COURSE_SLUG] ||= {};
       store.progress[COURSE_SLUG][lessonSlug] = {
         ...(store.progress[COURSE_SLUG][lessonSlug] || {}),
@@ -501,6 +540,8 @@
     getEnrollment,
     getProgress,
     saveProgress,
+    getLocalCourseProgress,
+    getLocalCourseEnrollment,
     syncPreviewProgress,
     getAccessibility,
     saveAccessibility,

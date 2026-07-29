@@ -3,8 +3,10 @@
 
   const A = window.AulaViva;
   const COURSE = window.IA_COURSE;
+  if (!A || !COURSE?.lessons?.length) return;
   const lessons = COURSE.lessons;
   const PEDAGOGY_SCHEMA = "aula-viva-pedagogy-v1";
+  const COURSE_UI_KEY = `nv-aula-ui:${COURSE.slug}`;
   let progress = {};
   let currentIndex = 0;
 
@@ -20,6 +22,33 @@
     const normalized = String(value).trim();
     return normalized ? normalized.split(/\s+/u).length : 0;
   };
+
+  function readCourseUiState() {
+    try {
+      return JSON.parse(localStorage.getItem(COURSE_UI_KEY) || "{}");
+    } catch {
+      return {};
+    }
+  }
+
+  function saveCourseUiState(patch = {}) {
+    const current = readCourseUiState();
+    localStorage.setItem(COURSE_UI_KEY, JSON.stringify({ ...current, ...patch }));
+  }
+
+  function initialDecisionState(lesson) {
+    return readCourseUiState().initialDecisions?.[lesson.id] ?? null;
+  }
+
+  function saveInitialDecision(lesson, selectedIndex) {
+    const current = readCourseUiState();
+    saveCourseUiState({
+      initialDecisions: {
+        ...(current.initialDecisions || {}),
+        [lesson.id]: selectedIndex
+      }
+    });
+  }
 
   function lessonFromUrl() {
     const slug = new URLSearchParams(location.search).get("lesson");
@@ -62,7 +91,8 @@
       criteriaReviewed: [],
       modelAnswerViewed: false,
       savedDraft: false,
-      activityStarted: false
+      activityStarted: false,
+      videoCompleted: false
     };
 
     if (raw && typeof raw === "object" && !Array.isArray(raw)) {
@@ -81,7 +111,8 @@
         criteriaReviewed: Array.isArray(raw.criteriaReviewed) ? raw.criteriaReviewed : [],
         modelAnswerViewed: Boolean(raw.modelAnswerViewed),
         savedDraft: Boolean(raw.savedDraft || (lesson.activity?.type === "reflection" && raw.response)),
-        activityStarted: Boolean(raw.activityStarted || raw.response || Number.isInteger(raw.selectedIndex))
+        activityStarted: Boolean(raw.activityStarted || raw.response || Number.isInteger(raw.selectedIndex)),
+        videoCompleted: Boolean(raw.videoCompleted)
       };
       migrated.wordCount = Number.isFinite(raw.wordCount)
         ? Number(raw.wordCount)
@@ -108,10 +139,14 @@
 
     if (activity.type === "decision") {
       const reasons = [];
+      if (lesson.video?.mandatory && !state.videoCompleted) reasons.push("Reproduce el video completo o revisa su transcripción accesible.");
       if (!Number.isInteger(state.selectedIndex)) reasons.push("Selecciona una respuesta.");
       if (Number.isInteger(state.selectedIndex) && !state.correct) reasons.push("Vuelve a intentar hasta identificar la respuesta correcta.");
       if (!state.feedbackReviewed) reasons.push("Revisa el criterio esperado.");
-      return { ready: state.correct && state.feedbackReviewed, reasons };
+      return {
+        ready: state.correct && state.feedbackReviewed && (!lesson.video?.mandatory || state.videoCompleted),
+        reasons
+      };
     }
 
     const minimum = Number(activity.minimumWords || 0);
@@ -196,6 +231,101 @@
         <h3>Instrucciones</h3>
         <ol>${instructions.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ol>
       </div>`;
+  }
+
+  function renderPreStudyDecision(lesson) {
+    const activity = lesson.preStudyDecision;
+    if (!activity?.options?.length) return "";
+    const selectedIndex = initialDecisionState(lesson);
+    return `
+      <section class="lesson-card initial-decision-card" aria-labelledby="initial-decision-title">
+        <p class="card-kicker">Decisión inicial · sin calificación</p>
+        <h2 id="initial-decision-title">${escapeHtml(activity.prompt)}</h2>
+        <p>${escapeHtml(activity.note || "Registra una primera hipótesis antes de estudiar el contenido.")}</p>
+        <div class="activity-options" role="group" aria-label="${escapeHtml(activity.prompt)}">
+          ${activity.options.map((option, index) => `
+            <button
+              id="initial-decision-${index}"
+              class="activity-option initial-decision-option${selectedIndex === index ? " is-selected" : ""}"
+              type="button"
+              data-initial-option="${index}"
+              aria-pressed="${selectedIndex === index ? "true" : "false"}"
+            >
+              <span class="option-letter" aria-hidden="true">${String.fromCharCode(65 + index)}</span>
+              <span>${escapeHtml(option)}</span>
+            </button>`).join("")}
+        </div>
+        <p id="initial-decision-status" class="activity-save-status" role="status">
+          ${Number.isInteger(selectedIndex)
+            ? "Decisión inicial registrada. Puedes cambiarla; todavía no se ha calificado."
+            : "El video se habilitará después de registrar una hipótesis provisional."}
+        </p>
+      </section>`;
+  }
+
+  function renderVideo(lesson) {
+    const video = lesson.video;
+    if (!video) return "";
+    if (lesson.preStudyDecision && !Number.isInteger(initialDecisionState(lesson))) {
+      return `
+        <section class="lesson-card video-locked-card" aria-labelledby="video-locked-title">
+          <p class="card-kicker">Caso narrativo</p>
+          <h2 id="video-locked-title">${escapeHtml(video.title)}</h2>
+          <p>Registra primero tu decisión inicial. El video aparecerá aquí sin recargar la página.</p>
+        </section>`;
+    }
+    return `
+      <section class="lesson-card video-lesson-card" aria-labelledby="video-title">
+        <p class="card-kicker">Caso narrativo</p>
+        <h2 id="video-title">${escapeHtml(video.title)}</h2>
+        <p class="video-notice" id="video-notice">${escapeHtml(video.notice)}</p>
+        <video
+          id="course-video"
+          controls
+          playsinline
+          preload="metadata"
+          poster="${escapeHtml(video.poster)}"
+          data-video-src="${escapeHtml(video.src)}"
+          aria-describedby="video-notice video-description"
+        >
+          <track kind="captions" srclang="es" label="Español" src="${escapeHtml(video.captions)}" default />
+          Tu navegador no puede reproducir este video. Usa la transcripción accesible disponible debajo.
+        </video>
+        <div class="video-controls-extra">
+          <label for="video-speed">Velocidad</label>
+          <select id="video-speed">
+            <option value="0.75">0,75×</option>
+            <option value="1" selected>1×</option>
+            <option value="1.25">1,25×</option>
+            <option value="1.5">1,5×</option>
+            <option value="2">2×</option>
+          </select>
+          <span id="video-resume-status" role="status"></span>
+        </div>
+        <details class="video-description" id="video-description">
+          <summary>Descripción de la información visual</summary>
+          <p>${escapeHtml(video.description)}</p>
+        </details>
+        <p class="video-clarification"><strong>Distinción necesaria:</strong> ${escapeHtml(video.clarification)}</p>
+        <div class="video-access-actions">
+          <a class="button button-quiet resource-link" href="${escapeHtml(video.transcript)}" download>Descargar transcripción accesible</a>
+          ${video.mandatory ? `
+            <button class="button button-quiet resource-link" id="video-transcript-complete" type="button"${normalizePedagogicalState(lesson).videoCompleted ? " disabled" : ""}>
+              ${normalizePedagogicalState(lesson).videoCompleted ? "Caso narrativo revisado ✓" : "He revisado la transcripción completa"}
+            </button>` : ""}
+        </div>
+      </section>`;
+  }
+
+  function renderPostVideoQuestions(lesson) {
+    if (!lesson.postVideoQuestions?.length) return "";
+    return `
+      <section class="lesson-card observation-card" aria-labelledby="observation-title">
+        <p class="card-kicker">Observar antes de interpretar</p>
+        <h2 id="observation-title">Tres preguntas para revisar el caso</h2>
+        <ol>${lesson.postVideoQuestions.map(question => `<li>${escapeHtml(question)}</li>`).join("")}</ol>
+        <p>No necesitas escribir una experiencia personal. Puedes responder mentalmente o en tu bitácora privada usando solo el caso de Andrea.</p>
+      </section>`;
   }
 
   function renderDecisionActivity(lesson, state) {
@@ -403,6 +533,66 @@
       </figure>`;
   }
 
+  function renderInfographic(lesson) {
+    const item = lesson.infographic;
+    if (!item?.items?.length) return "";
+    return `
+      <figure class="lesson-card corrected-infographic" aria-labelledby="infographic-title">
+        <figcaption>
+          <p class="card-kicker">Infografía revisada</p>
+          <h2 id="infographic-title">${escapeHtml(item.title)}</h2>
+        </figcaption>
+        <div class="infographic-stat">
+          <strong>${escapeHtml(item.stat)}</strong>
+          <div>
+            <p>${escapeHtml(item.statLabel)}</p>
+            <span>${escapeHtml(item.comparison)}</span>
+          </div>
+        </div>
+        <p class="infographic-disclaimer">${escapeHtml(item.disclaimer)}</p>
+        <div class="infographic-concepts">
+          ${item.items.map(concept => `
+            <section>
+              <h3>${escapeHtml(concept.term)}</h3>
+              <p>${escapeHtml(concept.description)}</p>
+            </section>`).join("")}
+        </div>
+      </figure>`;
+  }
+
+  function renderSpacedPractice(lesson) {
+    if (!lesson.spacedPractice?.length) return "";
+    return `
+      <section class="lesson-card spaced-practice-card" aria-labelledby="spaced-title">
+        <p class="card-kicker">Recuperaciones espaciadas</p>
+        <h2 id="spaced-title">Volver para recordar y decidir</h2>
+        <div class="spaced-practice-grid">
+          ${lesson.spacedPractice.map(item => `
+            <article>
+              <strong>${escapeHtml(item.day)}</strong>
+              <h3>${escapeHtml(item.focus)}</h3>
+              <p>${escapeHtml(item.product)}</p>
+            </article>`).join("")}
+        </div>
+      </section>`;
+  }
+
+  function renderResources(lesson) {
+    if (!lesson.resources?.length) return "";
+    return `
+      <section class="lesson-card lesson-resources" aria-labelledby="resources-title">
+        <p class="card-kicker">Recursos</p>
+        <h2 id="resources-title">Descargas de esta experiencia</h2>
+        <div class="resource-grid">
+          ${lesson.resources.map(resource => `
+            <a class="resource-download" href="${escapeHtml(resource.href)}" download>
+              <span aria-hidden="true">↓</span>
+              <strong>${escapeHtml(resource.label)}</strong>
+            </a>`).join("")}
+        </div>
+      </section>`;
+  }
+
   function renderWorkedExample(lesson) {
     if (!lesson.workedExample?.length) return "";
     return `
@@ -457,6 +647,7 @@
     const completed = progress[lesson.id]?.status === "completed";
     const keypoints = lesson.keypoints || [];
     const summary = lesson.summary || [];
+    const videoReady = !lesson.video?.mandatory || state.videoCompleted;
 
     frame.innerHTML = `
       <div class="lesson-context">
@@ -466,12 +657,23 @@
       <h1>${escapeHtml(lesson.title)}</h1>
       <p class="lesson-objective"><strong>Al finalizar:</strong> ${escapeHtml(lesson.objective)}</p>
       <section class="lesson-card scenario-card">
-        <p class="card-kicker">Proyecto Aurora</p>
+        <p class="card-kicker">${escapeHtml(lesson.scenarioLabel || "Proyecto Aurora")}</p>
         <h2>Situación inicial</h2>
         <p>${escapeHtml(lesson.scenario)}</p>
       </section>
+      ${renderPreStudyDecision(lesson)}
+      ${renderVideo(lesson)}
+      ${videoReady ? "" : `
+        <section class="lesson-card video-followup-locked" aria-labelledby="video-followup-title">
+          <p class="card-kicker">Secuencia protegida</p>
+          <h2 id="video-followup-title">Primero revisa el caso narrativo</h2>
+          <p>Las preguntas, la microlección y la actividad se habilitarán al terminar el video o confirmar que revisaste la transcripción accesible completa.</p>
+        </section>`}
+      <div id="post-video-learning"${videoReady ? "" : " hidden"}>
+      ${renderPostVideoQuestions(lesson)}
       ${renderImage(lesson)}
       ${renderStudySections(lesson)}
+      ${renderInfographic(lesson)}
       ${renderWorkedExample(lesson)}
       ${renderComparison(lesson)}
       <section class="lesson-card">
@@ -486,7 +688,10 @@
           <h2 id="synthesis-title">Síntesis final</h2>
           ${summary.map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join("")}
         </section>` : ""}
+      ${renderSpacedPractice(lesson)}
+      ${renderResources(lesson)}
       ${renderReferences(lesson)}
+      </div>
       <div class="completion-requirements" id="completion-requirements" role="status">
         ${isModelExperience(lesson) && !completed
           ? completion.ready
@@ -501,6 +706,8 @@
       </div>`;
 
     wireActivity(lesson);
+    wirePreStudyDecision(lesson);
+    wireVideo(lesson);
     $("#previous-lesson").addEventListener("click", () => showLesson(currentIndex - 1));
     $("#next-lesson").addEventListener("click", () => showLesson(currentIndex + 1));
     $("#complete-lesson").addEventListener("click", async () => {
@@ -529,6 +736,76 @@
     }
   }
 
+  function wirePreStudyDecision(lesson) {
+    document.querySelectorAll("[data-initial-option]").forEach(button => {
+      button.addEventListener("click", () => {
+        const index = Number(button.dataset.initialOption);
+        saveInitialDecision(lesson, index);
+        renderLesson(`initial-decision-${index}`);
+      });
+    });
+  }
+
+  function wireVideo(lesson) {
+    const video = $("#course-video");
+    if (!video || !lesson.video) return;
+    const mediaKey = `${COURSE_UI_KEY}:media:${lesson.id}`;
+    const status = $("#video-resume-status");
+    let lastSavedSecond = -1;
+
+    const loadSource = () => {
+      if (!video.src) {
+        video.src = video.dataset.videoSrc;
+        video.load();
+      }
+    };
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(entries => {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        loadSource();
+        observer.disconnect();
+      }, { rootMargin: "240px" });
+      observer.observe(video);
+    } else {
+      loadSource();
+    }
+
+    video.addEventListener("loadedmetadata", () => {
+      const savedSecond = Number(localStorage.getItem(mediaKey) || 0);
+      if (savedSecond > 2 && savedSecond < video.duration - 2) {
+        video.currentTime = savedSecond;
+        status.textContent = `Reanudado cerca de ${Math.floor(savedSecond / 60)}:${String(Math.floor(savedSecond % 60)).padStart(2, "0")}.`;
+      }
+    });
+
+    const savePlaybackPoint = () => {
+      const second = Math.floor(video.currentTime || 0);
+      if (second === lastSavedSecond || !Number.isFinite(second)) return;
+      lastSavedSecond = second;
+      localStorage.setItem(mediaKey, String(second));
+    };
+
+    video.addEventListener("timeupdate", () => {
+      if (Math.floor(video.currentTime || 0) % 5 === 0) savePlaybackPoint();
+    });
+    video.addEventListener("pause", savePlaybackPoint);
+    video.addEventListener("ended", async () => {
+      localStorage.removeItem(mediaKey);
+      await savePedagogicalState(lesson, { videoCompleted: true }, 60);
+      renderLesson("observation-title");
+    });
+    $("#video-speed")?.addEventListener("change", event => {
+      video.playbackRate = Number(event.target.value);
+      status.textContent = `Velocidad ${event.target.options[event.target.selectedIndex].text}.`;
+    });
+    $("#video-transcript-complete")?.addEventListener("click", async event => {
+      event.currentTarget.disabled = true;
+      await savePedagogicalState(lesson, { videoCompleted: true }, 60);
+      renderLesson("observation-title");
+    });
+  }
+
   function updateCompletionControl(lesson, state) {
     const control = $("#complete-lesson");
     const requirements = $("#completion-requirements");
@@ -550,10 +827,10 @@
     start?.addEventListener("click", () => {
       start.hidden = true;
       $("#decision-workspace").hidden = false;
-      document.querySelector(".activity-option")?.focus({ preventScroll: true });
+      document.querySelector("#decision-workspace [data-option]")?.focus({ preventScroll: true });
     });
 
-    document.querySelectorAll(".activity-option").forEach(button => {
+    document.querySelectorAll("#decision-workspace [data-option]").forEach(button => {
       button.addEventListener("click", async () => {
         const index = Number(button.dataset.option);
         const option = lesson.activity.options[index];
@@ -747,18 +1024,27 @@
 
   async function init() {
     A.applyAccessibility();
-    const { user } = await A.getSession();
+    let { user } = await A.getSession();
+    if (!user && A.config.localCourse && A.config.previewMode) {
+      await A.signUp({
+        email: "vista-previa@nucleovivo.cl",
+        password: "vista-previa-local",
+        name: "Participante de prueba",
+        consent: true
+      });
+      ({ user } = await A.getSession());
+    }
     if (!user) {
       location.href = "../../index.html";
       return;
     }
-    if (A.hasSupabase) await A.syncPreviewProgress();
+    if (A.hasSupabase && !A.config.localCourse) await A.syncPreviewProgress();
     const enrollment = await A.getEnrollment();
-    if (!enrollment && !A.config.previewMode) {
+    if (!enrollment && !A.config.previewMode && !A.config.localCourse) {
       location.href = "../../index.html";
       return;
     }
-    if (!enrollment && A.config.previewMode) await A.enroll();
+    if (!enrollment && (A.config.previewMode || A.config.localCourse)) await A.enroll();
     progress = await A.getProgress();
     currentIndex = lessonFromUrl();
     updateProgressUi();
