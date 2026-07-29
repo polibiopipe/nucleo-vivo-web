@@ -51,6 +51,7 @@ const ids = course.lessons.map(lesson => lesson.id);
 const m1l1 = course.lessons.find(lesson => lesson.id === "m1-l1");
 const decisions = course.lessons.filter(lesson => lesson.activity?.type === "decision");
 const reflections = course.lessons.filter(lesson => lesson.activity?.type === "reflection");
+const personalChoices = course.lessons.filter(lesson => lesson.activity?.type === "personal-choice");
 const initialRender = engine.indexOf("${renderPreStudyDecision(lesson)}");
 const videoRender = engine.indexOf("${renderVideo(lesson)}");
 const observationRender = engine.indexOf("${renderPostVideoQuestions(lesson)}");
@@ -83,6 +84,17 @@ check("Actividades de decisión configuradas", decisions.length > 0 && decisions
 check("Prácticas abiertas con rúbrica", reflections.length > 0 && reflections.every(lesson =>
   lesson.activity.minimumWords > 0 && lesson.activity.requiredCriteria?.length >= 3
 ));
+check("Dos elecciones personales de M0 sin respuesta correcta", personalChoices.length === 2
+  && personalChoices.every(lesson => lesson.moduleId === "m0"
+    && lesson.activity.options?.length >= 6
+    && lesson.activity.options.every(option => typeof option === "string")));
+check("Orientación completa en las 19 experiencias", course.lessons.every(lesson => {
+  const guide = lesson.studentGuide;
+  return guide?.action && guide?.time && guide?.materials && guide?.response && guide?.keep && guide?.beforeContinue;
+}));
+check("Clasificación pedagógica visible y acotada", course.lessons.every(lesson =>
+  ["private", "practice", "evaluated"].includes(lesson.studentGuide?.category)
+) && personalChoices.every(lesson => lesson.studentGuide.category === "private"));
 check("Caso continuo de Andrea en todos los módulos", course.modules.every(module =>
   module.lessons.some(lesson => /Andrea/u.test(`${lesson.scenario} ${lesson.summary?.join(" ") || ""}`))
 ));
@@ -91,11 +103,13 @@ check("Alcance no clínico concentrado en momentos clave", ["m1-l1", "m5-l1", "m
   const lesson = course.lessons.find(item => item.id === id);
   return /diagn[oó]stic|atenci[oó]n profesional/iu.test(normalizeText(lesson));
 }));
-check("Bienvenida centrada en agencia y cuidado", [
-  "Detenerse a mirar es un acto de cuidado.",
-  "Una señal abre preguntas.",
-  "La persona decide qué registra, conserva y comparte.",
-].every(message => allText.includes(message)));
+check("Bienvenida centrada en la persona antes que en Andrea", [
+  "Antes de comenzar, deja por un momento en pausa a tus estudiantes",
+  "No necesitas resolver nada todavía.",
+  "Este espacio comienza contigo.",
+  "¿Cómo llegaste hoy?",
+].every(message => allText.includes(message))
+  && !course.lessons[0].scenario.includes("Andrea"));
 check("Expresiones prohibidas ausentes", [
   "autodiagnóstico",
   "test de burnout",
@@ -111,9 +125,23 @@ check("Video obligatorio asociado a M1-L1", Boolean(m1l1?.video?.mandatory && m1
 check("Orden decisión → video → preguntas → microlección", initialRender >= 0 && initialRender < videoRender && videoRender < observationRender && observationRender < studyRender);
 check("Video local disponible", existsWithBytes(videoPath));
 check("Reproductor con controles y sin autoplay", /<video[\s\S]*?\bcontrols\b/iu.test(engine) && !/<video[\s\S]*?\bautoplay\b/iu.test(engine));
-check("Fuente real, metadatos y reanudación del video", /\bsrc="\$\{escapeHtml\(video\.src\)\}"/u.test(engine) && /preload="metadata"/u.test(engine) && /loadedmetadata/u.test(engine) && /mediaKey/u.test(engine));
-check("Póster visible antes de la decisión", /video-poster-preview/u.test(engine) && /Después de elegir una primera explicación, verás el caso de Andrea · 8:29 min/u.test(engine));
-check("Error de carga accesible", /video-load-error/u.test(engine) && /transcripción accesible/iu.test(engine));
+check("Fuente real, metadatos y reanudación del video", /<source[^>]*src="\$\{escapeHtml\(video\.src\)\}"[^>]*type="video\/mp4"/u.test(engine) && /preload="metadata"/u.test(engine) && /loadedmetadata/u.test(engine) && /mediaKey/u.test(engine));
+check("Póster visible antes de la decisión", /video-poster-preview/u.test(engine) && /Registra primero tu explicación inicial para habilitar el video/u.test(engine));
+check("Duración real declarada y guía previa", m1l1.video.duration === "8:29"
+  && m1l1.video.durationLabel === "8 MIN 29 S"
+  && m1l1.video.reviewSteps?.length === 4
+  && /subtítulos/iu.test(m1l1.video.accessibilityNote));
+check("Reproducción explícita y accesible", /video-play-overlay/u.test(engine) && /Reproducir video/u.test(engine) && /video\.play\(\)/u.test(engine));
+check("Error de carga con rutas alternativas", [
+  "video-retry",
+  "course-video-source",
+  "Abrir video en otra pestaña",
+  "Abrir transcripción",
+  "Descargar subtítulos",
+].every(fragment => engine.includes(fragment)));
+check("Reproductor 16:9 con límites responsivos", /video-player-frame[\s\S]*max-width:900px/iu.test(styles)
+  && /aspect-ratio:16\/9/iu.test(styles)
+  && /max-height:min\(65vh,506px\)/iu.test(styles));
 check("Video o alternativa textual requeridos para completar", /videoCompleted/iu.test(engine) && /transcripción accesible/iu.test(engine));
 check("Subtítulos VTT disponibles", existsWithBytes(captionsPath) && read(captionsPath).startsWith("WEBVTT"));
 check("Transcripción accesible disponible", existsWithBytes(transcriptPath) && /Descripción visual equivalente/iu.test(read(transcriptPath)));
@@ -159,9 +187,17 @@ check("Etiquetas actuales conservadas como respaldo", [
   'retrievalKicker: "Recuperar"',
   'synthesisKicker: "Cerrar y transferir"',
 ].every(label => engine.includes(label)));
-check("M0 reconstruido con títulos y objetivo aprobados", course.lessons[0]?.title === "Antes de abrir la mochila"
+check("M0 reconstruido con secuencia centrada en la persona", course.lessons[0]?.title === "Antes de comenzar: este espacio comienza contigo"
   && course.lessons[1]?.title === "¿Cómo llegué hoy?"
-  && course.lessons[0]?.objective === "Reconocer cómo llegas al curso y elegir qué deseas comprender, cuidar o transformar.");
+  && /bitacora-como-llegue-original/u.test(course.lessons[1]?.image?.src || "")
+  && course.lessons[1]?.workedExample?.some(paragraph => paragraph.includes("Andrea")));
+check("Actividad prescriptiva anterior retirada de M0", !allText.includes("¿Qué gesto abre mejor este recorrido?")
+  && personalChoices.some(lesson => lesson.activity.options.includes("Todavía no lo sé; quiero descubrirlo durante el curso.")));
+check("Sistema de orientación renderizado al inicio, antes de la actividad y al cierre", [
+  "renderStudentGuide(lesson)",
+  "renderActivityOrientation(lesson)",
+  "completionMarkup(lesson, completion, completed)",
+].every(fragment => engine.includes(fragment)));
 check("Acuerdo de participación único en M0", Boolean(course.lessons[0]?.participationAgreement)
   && course.lessons.filter(lesson => lesson.participationAgreement).length === 1);
 check("Auditoría editorial interna cubre las 19 experiencias", existsWithBytes(editorialAuditPath)

@@ -110,6 +110,18 @@ window.IA_COURSE = (() => {
     storageNotice: "Bitácora privada en este dispositivo"
   });
 
+  const personalChoice = (prompt, options, note) => ({
+    type: "personal-choice",
+    prompt,
+    options,
+    note,
+    instructions: [
+      "Elige la opción que mejor te represente hoy.",
+      "No hay respuestas correctas o incorrectas y puedes cambiar tu elección.",
+      "La elección queda solamente en este navegador."
+    ]
+  });
+
   const modules = [
     {
       id: "m0",
@@ -120,42 +132,51 @@ window.IA_COURSE = (() => {
       lessons: [
         {
           id: "m0-l1",
-          title: "Antes de abrir la mochila",
+          title: "Antes de comenzar: este espacio comienza contigo",
           duration: "12 min",
-          objective: "Reconocer cómo llegas al curso y elegir qué deseas comprender, cuidar o transformar.",
+          objective: "Hacer una pausa personal y reconocer cómo llegas hoy, sin evaluarte ni diagnosticarte.",
           participationAgreement: "Puedes responder desde tu experiencia, con Andrea o con una situación ficticia. Tú decides qué escribir, qué conservar y qué compartir.",
+          studentFirstOpening: true,
           scenarioLabel: "Antes de comenzar",
-          scenario: "Andrea llega a la escuela con el café en la mano y la lista de pendientes ya activa. Antes de entrar a clases, se detiene un momento. No para buscar una respuesta correcta, sino para reconocer cómo llega hoy.",
+          scenario: "Antes de comenzar, deja por un momento en pausa a tus estudiantes, los informes, las reuniones y las respuestas pendientes. No necesitas resolver nada todavía. Este espacio comienza contigo.",
           studySections: [
             {
-              title: "Una pausa para volver a ti",
+              title: "¿Cómo llegaste hoy a la escuela?",
               paragraphs: [
-                "Durante unos minutos, deja en pausa los informes, las reuniones y las respuestas pendientes. Este espacio comienza contigo.",
-                "Detenerse a mirar es un primer acto de cuidado. Una señal abre preguntas y permite elegir con más claridad qué quieres comprender durante el recorrido. Esta experiencia no entrega diagnósticos."
+                "¿Cómo llegaste hoy?",
+                "Piensa solamente en ti: ¿cómo llegaste emocionalmente?, ¿qué energía traes?, ¿qué ocupa tu atención?",
+                "Puedes responder mentalmente o registrar una palabra para ti. Esta pausa es privada, no tiene nota y no busca medir tu bienestar."
+              ]
+            },
+            {
+              title: "Qué encontrarás en este recorrido",
+              paragraphs: [
+                "Acompañarás el caso de Andrea para comprender cómo se acumulan demandas visibles e invisibles. Volverás a tu bitácora para observar señales, reconocer recursos y diseñar acciones personales, colectivas y organizacionales.",
+                "El curso no entrega diagnósticos ni reemplaza apoyo profesional. Te ofrece conceptos, preguntas y herramientas para mirar con más claridad y decidir con cuidado."
               ]
             }
           ],
-          workedExample: [
-            "Andrea nota que llega pensando en tres pendientes y que le cuesta dejar el teléfono. No necesita explicarlo todavía: reconoce la señal y se pregunta qué desea cuidar.",
-            "Su intención para el curso podría ser: “Quiero comprender qué hace que una jornada siga conmigo incluso cuando ya terminó”."
-          ],
           keypoints: [
-            "Detenerse a mirar es un acto de cuidado.",
-            "Una señal abre preguntas.",
-            "La persona decide qué registra, conserva y comparte."
+            "Este espacio comienza contigo.",
+            "Reconocer cómo llegas no es evaluarte ni diagnosticarte.",
+            "Tú decides qué pensar, escribir, conservar y compartir."
           ],
-          activity: decision(
-            "¿Qué gesto abre mejor este recorrido?",
+          activity: personalChoice(
+            "¿Cómo llegaste hoy?",
             [
-              { text: "Buscar de inmediato una respuesta definitiva.", feedback: "Todavía estamos abriendo preguntas y reconociendo el punto de partida." },
-              { text: "Hacer una pausa, observar una señal y elegir qué quieres comprender.", correct: true, feedback: "La pausa convierte la observación en una intención de aprendizaje." },
-              { text: "Seguir adelante sin detenerse porque siempre hay pendientes.", feedback: "La pausa breve ayuda a mirar la carga antes de continuar." }
+              "Con energía.",
+              "Con tranquilidad.",
+              "Con entusiasmo.",
+              "Con sueño.",
+              "Con ansiedad.",
+              "Pensando en todo lo pendiente.",
+              "Sintiéndome cansado antes de comenzar.",
+              "Prefiero solo pensarlo."
             ],
-            "El inicio propone una pausa, una observación y una intención elegida por la persona.",
-            "Una pausa para volver a ti"
+            "Esta selección es personal y no se califica. Puedes elegir “Prefiero solo pensarlo” y continuar."
           ),
           summary: [
-            "Andrea abrió un espacio breve entre la jornada y sus pendientes. En la siguiente experiencia podrá mirar con más detalle cómo llegó hoy."
+            "Hiciste una pausa antes de abrir la mochila. En la siguiente experiencia encontrarás la primera página original de la bitácora y elegirás una intención para acompañar el recorrido."
           ],
           resources: [
             { label: "Apunte académico principal", href: "recursos/apunte-academico-cuando-ensenar-agota.pdf" },
@@ -169,8 +190,8 @@ window.IA_COURSE = (() => {
           title: "¿Cómo llegué hoy?",
           duration: "13 min",
           objective: "Observar tu punto de partida y elegir una meta de aprendizaje para este recorrido.",
-          scenarioLabel: "La primera página de la bitácora",
-          scenario: "Andrea mira la hoja y reconoce que llegó con sueño, pensando en lo pendiente y con poco espacio para concentrarse. También recuerda un momento de la jornada que sí le hizo bien.",
+          scenarioLabel: "Tu primera página de bitácora",
+          scenario: "Mira la página completa antes de responder. Puedes marcarla en una copia impresa, escribir en tu propia bitácora o simplemente recorrer las preguntas en silencio. No necesitas compartir tu respuesta.",
           image: {
             src: "../../../../assets/images/aula/cuando-ensenar-agota/bitacora-como-llegue-original.png",
             webp: "../../../../assets/images/aula/cuando-ensenar-agota/bitacora-como-llegue.webp",
@@ -181,38 +202,41 @@ window.IA_COURSE = (() => {
           },
           studySections: [
             {
-              title: "Reconocer el punto de partida",
+              title: "Cómo usar esta página",
               paragraphs: [
-                "Puedes comenzar por algo sencillo: cómo llegaste, qué ocurrió durante la jornada y qué necesitas esta semana. Una observación concreta —“hoy releí tres veces el mismo correo”— abre más posibilidades que un juicio sobre ti.",
-                "Esta actividad no tiene nota. Su propósito es ayudarte a escoger una meta: algo que quieras comprender, cuidar o transformar mientras acompañas a Andrea."
+                "Evita nombres de estudiantes, colegas u otras personas. La plataforma no solicita que entregues esta página."
+              ],
+              steps: [
+                "Detente en las preguntas que te resulten útiles.",
+                "Puedes escribir, marcar o solamente pensar.",
+                "No hay una forma correcta de llegar.",
+                "Conserva esta página para revisarla al finalizar el curso."
               ]
             }
           ],
           workedExample: [
-            "Punto de partida de Andrea: “Llegué pensando en todo lo pendiente y me costó concentrarme en la primera reunión”.",
-            "Meta de aprendizaje: “Quiero reconocer qué cargas puedo hacer visibles y qué apoyos necesito activar”."
+            "Andrea también llega con el café en la mano y la jornada ya activa en su cabeza. Su historia acompañará este recorrido, no para decirte cómo deberías sentirte, sino para ayudarnos a mirar situaciones que muchas veces se vuelven cotidianas.",
+            "Puedes trabajar con Andrea, con una situación ficticia o con aquello que quieras observar de tu propia experiencia."
           ],
           keypoints: [
             "Mirar el punto de partida ayuda a elegir con intención.",
             "La bitácora acompaña; no califica.",
             "La meta puede nacer de Andrea o de tu propia experiencia."
           ],
-          activity: reflection(
-            "Escribe un punto de partida breve y elige una meta para el curso.",
+          activity: personalChoice(
+            "¿Qué te gustaría comprender, cuidar o transformar durante este recorrido?",
             [
-              "Andrea llega con sueño y con tres pendientes activos en su cabeza. Quiere comprender por qué la jornada sigue ocupando espacio cuando ya terminó.",
-              "Su meta será reconocer demandas y recursos, y proponer una acción personal y otra colectiva. Volverá a esta meta al terminar M8."
+              "Comprender por qué algunas jornadas continúan después de terminar.",
+              "Reconocer cargas que se han vuelto habituales.",
+              "Identificar recursos y apoyos.",
+              "Preparar una conversación pendiente.",
+              "Construir una acción personal y otra colectiva.",
+              "Todavía no lo sé; quiero descubrirlo durante el curso."
             ],
-            [
-              { id: "capacidad", label: "Capacidad observable", description: "La meta dice qué podrás explicar, analizar o diseñar." },
-              { id: "caso", label: "Caso seguro", description: "Usa Andrea o una situación ficticia." },
-              { id: "revision", label: "Revisión futura", description: "Incluye cuándo comprobarás el aprendizaje." }
-            ],
-            45,
-            80
+            "Esta elección es personal y puede cambiar durante el recorrido."
           ),
           summary: [
-            "Andrea ya eligió qué quiere comprender. En M1 observará por qué un fin de semana de descanso no siempre alcanza para recuperar energía."
+            "Conserva una frase sobre cómo llegaste y la intención que elegiste. En M1 conocerás el día de Andrea y observarás por qué un fin de semana de descanso no siempre alcanza para recuperar energía."
           ],
           references: [refs.who2022, refs.cast]
         }
@@ -249,6 +273,15 @@ window.IA_COURSE = (() => {
             captions: "recursos/cuando-ensenar-agota-subtitulos.vtt",
             transcript: "recursos/transcripcion-video-cuando-ensenar-agota.html",
             title: "Cuando enseñar agota: el caso de Andrea",
+            duration: "8:29",
+            durationLabel: "8 MIN 29 S",
+            reviewSteps: [
+              "Reproduce el caso completo.",
+              "Observa qué ocurre con Andrea durante la jornada.",
+              "Anota una señal, una demanda y un recurso.",
+              "Después del video revisarás tu decisión inicial."
+            ],
+            accessibilityNote: "Puedes activar subtítulos, cambiar la velocidad o utilizar la transcripción.",
             notice: "Este relato presenta una situación ficticia para observar cómo se acumula el desgaste docente.",
             description: "El video alterna escenas y láminas sobre la llegada de Andrea a la escuela, las demandas visibles e invisibles de su jornada, la metáfora de la mochila y la necesidad de observar sin culpabilizar. Las afirmaciones conceptuales se aclaran y distinguen en la microlección que sigue.",
             clarification: "Estrés, agotamiento emocional y burnout no son equivalentes. La microlección siguiente permite distinguirlos."
@@ -1133,6 +1166,189 @@ window.IA_COURSE = (() => {
       ]
     }
   ];
+
+  const studentGuides = {
+    "m0-l1": {
+      category: "private",
+      label: "Reflexión privada",
+      action: "Lee la pausa de apertura, piensa cómo llegaste hoy y realiza una selección personal.",
+      materials: "No necesitas materiales. Si quieres, ten tu bitácora a mano.",
+      response: "Selecciona una opción en esta página o elige “Prefiero solo pensarlo”.",
+      keep: "Conserva, solo si te sirve, una palabra sobre tu estado de hoy.",
+      beforeContinue: "Realiza una selección personal; no se evalúa y puedes cambiarla."
+    },
+    "m0-l2": {
+      category: "private",
+      label: "Reflexión privada",
+      action: "Observa la página original completa, recorre sus preguntas y elige una intención para el curso.",
+      materials: "Bitácora impresa o cuaderno opcional; la página completa aparece en pantalla.",
+      response: "Escribe para ti en la bitácora y registra en esta página solo una intención general.",
+      keep: "Guarda una frase sobre cómo llegaste y la intención elegida; no debes entregarlas.",
+      beforeContinue: "Recorre la bitácora y registra una intención personal, incluso si es “Todavía no lo sé”."
+    },
+    "m1-l1": {
+      category: "practice",
+      label: "Práctica guiada",
+      action: "Elige una hipótesis inicial, mira el video de 8:29, responde tres preguntas y revisa tu decisión con la microlección.",
+      materials: "Audífonos opcionales; transcripción y subtítulos disponibles.",
+      response: "La hipótesis y la decisión final se registran en esta página. Las preguntas pueden quedar en tu bitácora.",
+      keep: "Conserva una distinción entre hecho, hipótesis y diagnóstico.",
+      beforeContinue: "Completa el video o su transcripción, responde la decisión final, revisa la retroalimentación y reintenta si corresponde."
+    },
+    "m1-l2": {
+      category: "practice",
+      label: "Práctica guiada",
+      action: "Aplica persistencia, frecuencia, intensidad e impacto a una formulación sobre Andrea.",
+      materials: "No necesitas materiales adicionales.",
+      response: "Selecciona y revisa una formulación en la actividad interactiva.",
+      keep: "Guarda las cuatro preguntas como lente para observar patrones sin etiquetar.",
+      beforeContinue: "Selecciona una formulación, revisa el criterio y reintenta si es necesario."
+    },
+    "m2-l1": {
+      category: "practice",
+      label: "Práctica guiada",
+      action: "Observa la mochila original, distingue demandas y recursos y elige el análisis más completo.",
+      materials: "Página “Mi mochila invisible” visible en pantalla; copia impresa opcional.",
+      response: "Puedes anotar piedras y recursos en tu bitácora; la decisión se responde en esta página.",
+      keep: "Conserva una piedra, un recurso y el nivel de control asociado.",
+      beforeContinue: "Responde la decisión, revisa el criterio esperado y realiza un segundo intento si corresponde."
+    },
+    "m2-l2": {
+      category: "practice",
+      label: "Práctica guiada",
+      action: "Diseña una respuesta para soltar, compartir, renegociar o escalar una carga de Andrea.",
+      materials: "Tu mapa de la mochila o el caso mostrado en pantalla.",
+      response: "Escribe y guarda un borrador en el campo privado de esta página.",
+      keep: "Conserva la acción elegida y quién tiene capacidad real para sostenerla.",
+      beforeContinue: "Guarda el borrador dentro del rango indicado, revisa todos los criterios y compáralo con el modelo."
+    },
+    "m3-l1": {
+      category: "practice",
+      label: "Práctica guiada",
+      action: "Distingue regulación profesional de supresión emocional crónica en el caso de Andrea.",
+      materials: "No necesitas materiales adicionales.",
+      response: "Selecciona una alternativa y revisa la retroalimentación en esta página.",
+      keep: "Guarda una señal que ayude a detectar funcionamiento automático.",
+      beforeContinue: "Selecciona una respuesta, revisa el criterio y vuelve a intentar si hace falta."
+    },
+    "m3-l2": {
+      category: "evaluated",
+      label: "Evidencia evaluada",
+      action: "Construye una respuesta con hecho, interpretación, emoción, necesidad y siguiente acción.",
+      materials: "Caso de Andrea y el mapa conceptual de la experiencia.",
+      response: "Redacta y guarda la simulación en el campo de esta página, usando datos ficticios.",
+      keep: "Conserva la versión final como evidencia de la simulación M3.",
+      beforeContinue: "Cumple la extensión, guarda, comprueba todos los criterios y revisa la respuesta modelo."
+    },
+    "m4-l1": {
+      category: "practice",
+      label: "Práctica guiada",
+      action: "Compara descanso y recuperación y elige un límite practicable para Andrea.",
+      materials: "No necesitas materiales adicionales.",
+      response: "Responde la decisión interactiva en esta página.",
+      keep: "Guarda una forma concreta de recuperación que no dependa solo de esfuerzo personal.",
+      beforeContinue: "Selecciona, revisa la retroalimentación y reintenta si corresponde."
+    },
+    "m4-l2": {
+      category: "practice",
+      label: "Práctica guiada",
+      action: "Diseña un experimento de recuperación de siete días con indicador y fecha de revisión.",
+      materials: "Agenda o calendario opcional.",
+      response: "Escribe y guarda el experimento en el campo privado de esta página.",
+      keep: "Conserva acción, duración, apoyo e indicador para probarlos durante una semana.",
+      beforeContinue: "Guarda el borrador dentro del rango indicado, revisa criterios y compáralo con el modelo."
+    },
+    "m5-l1": {
+      category: "practice",
+      label: "Práctica guiada",
+      action: "Elige una respuesta de escucha que cuide sin diagnosticar ni minimizar.",
+      materials: "No necesitas materiales adicionales.",
+      response: "Selecciona la respuesta en esta página y revisa su efecto.",
+      keep: "Conserva la secuencia escuchar, validar, preguntar y acordar.",
+      beforeContinue: "Responde la escena, revisa el criterio y vuelve a intentar si es necesario."
+    },
+    "m5-l2": {
+      category: "evaluated",
+      label: "Evidencia evaluada",
+      action: "Convierte el apoyo general en un acuerdo de equipo observable y revisable.",
+      materials: "Caso de Andrea; cuaderno opcional para bosquejar.",
+      response: "Escribe y guarda la simulación en el campo de esta página.",
+      keep: "Conserva conducta, responsable, frecuencia, canal, fecha e indicador.",
+      beforeContinue: "Cumple la extensión, guarda, revisa todos los criterios y compara con la respuesta modelo."
+    },
+    "m6-l1": {
+      category: "practice",
+      label: "Práctica guiada",
+      action: "Distingue una acción cosmética de una intervención que modifica condiciones de trabajo.",
+      materials: "No necesitas materiales adicionales.",
+      response: "Selecciona una alternativa en esta página.",
+      keep: "Guarda un criterio para reconocer cambios organizacionales reales.",
+      beforeContinue: "Selecciona, revisa el criterio esperado y reintenta si corresponde."
+    },
+    "m6-l2": {
+      category: "evaluated",
+      label: "Evidencia evaluada",
+      action: "Formula una propuesta organizacional breve con evidencia, responsable, plazo e indicador.",
+      materials: "Caso y evidencia operacional ofrecidos en la experiencia.",
+      response: "Redacta y guarda la propuesta de 90 segundos en esta página.",
+      keep: "Conserva la versión final como evidencia de la simulación M6.",
+      beforeContinue: "Guarda dentro del rango indicado, comprueba todos los criterios y revisa el modelo."
+    },
+    "m7-l1": {
+      category: "practice",
+      label: "Práctica guiada",
+      action: "Identifica una formulación que recupere sentido sin convertir la vocación en sacrificio.",
+      materials: "No necesitas materiales adicionales.",
+      response: "Selecciona y revisa una formulación en esta página.",
+      keep: "Conserva una frase que una valor, límite, apoyo y condiciones.",
+      beforeContinue: "Selecciona una respuesta, revisa la retroalimentación y reintenta si hace falta."
+    },
+    "m7-l2": {
+      category: "practice",
+      label: "Práctica guiada",
+      action: "Observa la bitácora original y diseña tres acciones graduadas: personal, compartida y organizacional.",
+      materials: "Página “¿Qué quiero recuperar?” visible en pantalla; agenda opcional.",
+      response: "Puedes completar la bitácora para ti y guardar una versión de trabajo en esta página.",
+      keep: "Conserva las tres acciones con fecha, apoyo y señal de revisión.",
+      beforeContinue: "Guarda el borrador, revisa todos los criterios y compáralo con el modelo."
+    },
+    "m8-l1": {
+      category: "evaluated",
+      label: "Evidencia evaluada",
+      action: "Integra el aprendizaje en un Plan Vivo con una acción personal y una propuesta colectiva u organizacional.",
+      materials: "Plantilla Plan Vivo, bitácora y materiales del curso.",
+      response: "Redacta y guarda el plan en esta página; puedes conservar además la plantilla descargable.",
+      keep: "Guarda la versión final del Plan Vivo y sus fuentes.",
+      beforeContinue: "Cumple la extensión, guarda, comprueba cada criterio crítico y revisa la respuesta modelo."
+    },
+    "m8-l2": {
+      category: "evaluated",
+      label: "Evidencia evaluada",
+      action: "Aplica la rúbrica al Plan Vivo y elige la mejora que vuelve sus acciones verificables.",
+      materials: "Tu Plan Vivo y la rúbrica de la experiencia.",
+      response: "Responde la decisión de revisión en esta página.",
+      keep: "Conserva los ajustes de conducta, responsable, fecha, indicador y privacidad.",
+      beforeContinue: "Selecciona la mejora, revisa el criterio esperado y realiza un segundo intento si corresponde."
+    },
+    "m8-l3": {
+      category: "evaluated",
+      label: "Evidencia evaluada",
+      action: "Programa revisiones a 2, 7, 14 y 30 días y decide cómo ajustar el plan según la evidencia.",
+      materials: "Agenda o calendario y tu Plan Vivo.",
+      response: "Agenda las fechas para ti y responde la decisión de transferencia en esta página.",
+      keep: "Conserva las cuatro fechas y el criterio para mantener, ajustar, escalar o cerrar.",
+      beforeContinue: "Registra las fechas, selecciona una decisión, revisa el criterio y reintenta si corresponde."
+    }
+  };
+
+  modules.forEach(module => {
+    module.lessons.forEach(lesson => {
+      lesson.studentGuide = {
+        time: lesson.duration,
+        ...studentGuides[lesson.id]
+      };
+    });
+  });
 
   const lessons = modules.flatMap(module => module.lessons.map(lesson => ({
     pedagogyVersion: "1.1",

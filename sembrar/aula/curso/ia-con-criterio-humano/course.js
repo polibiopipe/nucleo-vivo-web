@@ -150,6 +150,14 @@
     if (!isModelExperience(lesson)) return { ready: true, reasons: [] };
     const activity = lesson.activity || {};
 
+    if (activity.type === "personal-choice") {
+      const ready = Number.isInteger(state.selectedIndex);
+      return {
+        ready,
+        reasons: ready ? [] : ["Realiza una selección personal. No se califica y puedes cambiarla."]
+      };
+    }
+
     if (activity.type === "decision") {
       const reasons = [];
       if (lesson.video?.mandatory && !state.videoCompleted) reasons.push("Reproduce el video completo o revisa su transcripción accesible.");
@@ -246,6 +254,69 @@
       </div>`;
   }
 
+  function renderStudentGuide(lesson) {
+    const guide = lesson.studentGuide;
+    if (!guide) return "";
+    return `
+      <section class="student-guide student-guide--${escapeHtml(guide.category || "practice")}" aria-labelledby="student-guide-title">
+        <div class="student-guide-heading">
+          <div>
+            <p class="student-guide-eyebrow">En esta experiencia</p>
+            <h2 id="student-guide-title">Qué harás y dónde responder</h2>
+          </div>
+          <span class="experience-type">${escapeHtml(guide.label || "Práctica guiada")}</span>
+        </div>
+        <dl class="student-guide-grid">
+          <div><dt>Qué harás</dt><dd>${escapeHtml(guide.action)}</dd></div>
+          <div><dt>Tiempo estimado</dt><dd>${escapeHtml(guide.time || lesson.duration)}</dd></div>
+          <div><dt>Qué necesitas</dt><dd>${escapeHtml(guide.materials)}</dd></div>
+          <div><dt>Dónde respondes</dt><dd>${escapeHtml(guide.response)}</dd></div>
+          <div class="student-guide-keep"><dt>Qué conservar</dt><dd>${escapeHtml(guide.keep)}</dd></div>
+        </dl>
+      </section>`;
+  }
+
+  function renderActivityOrientation(lesson) {
+    const guide = lesson.studentGuide;
+    if (!guide) return "";
+    const title = guide.category === "private"
+      ? "Para tu bitácora"
+      : guide.category === "evaluated"
+        ? "Evidencia evaluada"
+        : "Cómo hacerlo";
+    const standardNote = guide.category === "private"
+      ? "Esta reflexión es privada. No se califica ni debe enviarse."
+      : guide.category === "evaluated"
+        ? "Esta actividad forma parte de la evaluación del curso. Antes de finalizarla, revisa los criterios indicados."
+        : "Esta actividad te permitirá probar una idea y volver a intentarlo. El error forma parte del aprendizaje.";
+    return `
+      <aside class="activity-orientation activity-orientation--${escapeHtml(guide.category || "practice")}" aria-labelledby="activity-orientation-title">
+        <p class="student-guide-eyebrow">${escapeHtml(guide.label || "Práctica guiada")}</p>
+        <h2 id="activity-orientation-title">${title}</h2>
+        <p>${standardNote}</p>
+        <p><strong>Responde aquí:</strong> ${escapeHtml(guide.response)}</p>
+        <p><strong>Conserva:</strong> ${escapeHtml(guide.keep)}</p>
+      </aside>`;
+  }
+
+  function completionMarkup(lesson, completion, completed) {
+    if (!isModelExperience(lesson) || completed) return "";
+    const guide = lesson.studentGuide;
+    const staticRequirement = guide?.beforeContinue
+      ? `<p>${escapeHtml(guide.beforeContinue)}</p>`
+      : "";
+    if (completion.ready) {
+      return `
+        <strong>Antes de continuar</strong>
+        ${staticRequirement}
+        <p class="completion-ready">Todo listo. Ya puedes marcar esta experiencia como completada.</p>`;
+    }
+    return `
+      <strong>Antes de continuar</strong>
+      ${staticRequirement}
+      <ul>${completion.reasons.map(reason => `<li>${escapeHtml(reason)}</li>`).join("")}</ul>`;
+  }
+
   function renderPreStudyDecision(lesson) {
     const activity = lesson.preStudyDecision;
     if (!activity?.options?.length) return "";
@@ -287,29 +358,50 @@
           <figure class="video-poster-preview">
             <img src="${escapeHtml(video.poster)}" alt="Fotograma de apertura del caso de Andrea" width="1920" height="1080" />
           </figure>
-          <p class="video-preview-copy">Después de elegir una primera explicación, verás el caso de Andrea · 8:29 min</p>
+          <p class="video-preview-copy">Registra primero tu explicación inicial para habilitar el video · ${escapeHtml(video.duration || "8:29")} min</p>
         </section>`;
     }
     return `
       <section class="lesson-card video-lesson-card" aria-labelledby="video-title">
         <p class="card-kicker">Caso narrativo</p>
         <h2 id="video-title">${escapeHtml(video.title)}</h2>
+        <div class="video-before-block" aria-labelledby="video-before-title">
+          <p class="student-guide-eyebrow">Video · ${escapeHtml(video.durationLabel || video.duration || "8 MIN 29 S")}</p>
+          <h3 id="video-before-title">Cómo revisar este video</h3>
+          <ol>${(video.reviewSteps || []).map(step => `<li>${escapeHtml(step)}</li>`).join("")}</ol>
+          <p class="video-accessibility-note">${escapeHtml(video.accessibilityNote || "Puedes activar subtítulos, cambiar la velocidad o utilizar la transcripción.")}</p>
+        </div>
         <p class="video-notice" id="video-notice">${escapeHtml(video.notice)}</p>
-        <video
-          id="course-video"
-          controls
-          playsinline
-          preload="metadata"
-          poster="${escapeHtml(video.poster)}"
-          src="${escapeHtml(video.src)}"
-          aria-describedby="video-notice video-description video-load-error"
-        >
-          <track kind="captions" srclang="es" label="Español" src="${escapeHtml(video.captions)}" default />
-          Tu navegador no puede reproducir este video. Usa la transcripción accesible disponible debajo.
-        </video>
-        <p class="video-load-error" id="video-load-error" role="alert" hidden>
-          No pudimos cargar el video. Puedes <a href="${escapeHtml(video.transcript)}">abrir la transcripción accesible</a> y continuar con el caso.
-        </p>
+        <div class="video-player-frame" id="video-player-frame">
+          <video
+            id="course-video"
+            controls
+            playsinline
+            tabindex="0"
+            preload="metadata"
+            poster="${escapeHtml(video.poster)}"
+            aria-label="${escapeHtml(video.title)}"
+            aria-describedby="video-notice video-description video-load-error"
+          >
+            <source id="course-video-source" src="${escapeHtml(video.src)}" type="video/mp4" />
+            <track kind="captions" srclang="es" label="Español" src="${escapeHtml(video.captions)}" default />
+            Tu navegador no puede reproducir este video. Usa la transcripción accesible disponible debajo.
+          </video>
+          <button class="video-play-overlay" id="video-play-overlay" type="button" aria-label="Reproducir ${escapeHtml(video.title)}">
+            <span class="video-play-icon" aria-hidden="true">▶</span>
+            <span><strong>Reproducir video</strong><small>${escapeHtml(video.duration || "8:29")} min · con subtítulos</small></span>
+          </button>
+        </div>
+        <div class="video-load-error" id="video-load-error" role="alert" hidden>
+          <strong>No pudimos cargar el video en este momento.</strong>
+          <p>Comprueba la conexión e inténtalo de nuevo. Si el problema continúa, abre el archivo o utiliza la transcripción accesible.</p>
+          <div class="video-error-actions">
+            <button class="button button-primary" id="video-retry" type="button">Reintentar</button>
+            <a class="button button-quiet" href="${escapeHtml(video.src)}" target="_blank" rel="noopener noreferrer">Abrir video en otra pestaña</a>
+            <a class="button button-quiet" href="${escapeHtml(video.transcript)}" target="_blank" rel="noopener noreferrer">Abrir transcripción</a>
+            <a class="button button-quiet" href="${escapeHtml(video.captions)}" download>Descargar subtítulos</a>
+          </div>
+        </div>
         <div class="video-controls-extra">
           <label for="video-speed">Velocidad</label>
           <select id="video-speed">
@@ -328,6 +420,7 @@
         <p class="video-clarification">${escapeHtml(video.clarification)}</p>
         <div class="video-access-actions">
           <a class="button button-quiet resource-link" href="${escapeHtml(video.transcript)}" download>Descargar transcripción accesible</a>
+          <a class="button button-quiet resource-link" href="${escapeHtml(video.captions)}" download>Descargar subtítulos</a>
           ${video.mandatory ? `
             <button class="button button-quiet resource-link" id="video-transcript-complete" type="button"${normalizePedagogicalState(lesson).videoCompleted ? " disabled" : ""}>
               ${normalizePedagogicalState(lesson).videoCompleted ? "Caso narrativo revisado ✓" : "He revisado la transcripción completa"}
@@ -344,6 +437,36 @@
         <h2 id="observation-title">Tres preguntas para revisar el caso</h2>
         <ol>${lesson.postVideoQuestions.map(question => `<li>${escapeHtml(question)}</li>`).join("")}</ol>
         <p>Puedes anotar tus observaciones en la bitácora privada o mantenerlas presentes para la microlección.</p>
+      </section>`;
+  }
+
+  function renderPersonalChoiceActivity(lesson, state) {
+    const activity = lesson.activity;
+    const hasSelection = Number.isInteger(state.selectedIndex);
+    return `
+      <section class="lesson-card activity-card personal-choice-card" aria-labelledby="activity-title">
+        <p class="card-kicker">Elección personal · sin calificación</p>
+        <h2 id="activity-title">${escapeHtml(activity.prompt)}</h2>
+        ${activity.note ? `<p>${escapeHtml(activity.note)}</p>` : ""}
+        ${renderInstructions(activity.instructions)}
+        <div class="activity-options personal-choice-options" role="group" aria-label="${escapeHtml(activity.prompt)}">
+          ${activity.options.map((option, index) => `
+            <button
+              id="personal-choice-${index}"
+              class="activity-option${state.selectedIndex === index ? " is-selected" : ""}"
+              type="button"
+              data-personal-option="${index}"
+              aria-pressed="${state.selectedIndex === index ? "true" : "false"}"
+            >
+              <span class="option-letter" aria-hidden="true">${String.fromCharCode(65 + index)}</span>
+              <span>${escapeHtml(option)}</span>
+            </button>`).join("")}
+        </div>
+        <p class="activity-save-status" id="personal-choice-status" role="status">
+          ${hasSelection
+            ? "Elección guardada en este navegador. Puedes cambiarla cuando quieras."
+            : "Elige una opción para continuar. Ninguna respuesta se considera correcta o incorrecta."}
+        </p>
       </section>`;
   }
 
@@ -493,9 +616,9 @@
   function renderActivity(lesson) {
     if (!isModelExperience(lesson)) return renderLegacyActivity(lesson);
     const state = normalizePedagogicalState(lesson);
-    return lesson.activity?.type === "decision"
-      ? renderDecisionActivity(lesson, state)
-      : renderReflectionActivity(lesson, state);
+    if (lesson.activity?.type === "personal-choice") return renderPersonalChoiceActivity(lesson, state);
+    if (lesson.activity?.type === "decision") return renderDecisionActivity(lesson, state);
+    return renderReflectionActivity(lesson, state);
   }
 
   function renderStudySections(lesson) {
@@ -516,6 +639,7 @@
           <section class="study-section" aria-labelledby="study-${index}">
             <h3 id="study-${index}">${escapeHtml(section.title)}</h3>
             ${(section.paragraphs || []).map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join("")}
+            ${section.steps?.length ? `<ul class="study-steps">${section.steps.map(step => `<li>${escapeHtml(step)}</li>`).join("")}</ul>` : ""}
             ${section.questions?.length ? `
               <div class="guiding-questions">
                 <h4>Preguntas orientadoras</h4>
@@ -684,12 +808,14 @@
       </div>
       <h1>${escapeHtml(lesson.title)}</h1>
       <p class="lesson-objective"><strong>Al finalizar:</strong> ${escapeHtml(lesson.objective)}</p>
-      ${lesson.participationAgreement ? `<p class="participation-agreement">${escapeHtml(lesson.participationAgreement)}</p>` : ""}
+      ${renderStudentGuide(lesson)}
+      ${lesson.participationAgreement && !lesson.studentFirstOpening ? `<p class="participation-agreement">${escapeHtml(lesson.participationAgreement)}</p>` : ""}
       <section class="lesson-card scenario-card">
         <p class="card-kicker">${escapeHtml(lesson.scenarioLabel || "Proyecto Aurora")}</p>
         <h2>Situación inicial</h2>
         <p>${escapeHtml(lesson.scenario)}</p>
       </section>
+      ${lesson.participationAgreement && lesson.studentFirstOpening ? `<p class="participation-agreement participation-agreement--after-opening">${escapeHtml(lesson.participationAgreement)}</p>` : ""}
       ${renderPreStudyDecision(lesson)}
       ${renderVideo(lesson)}
       ${videoReady ? "" : `
@@ -707,6 +833,7 @@
         <h2>${escapeHtml(UI_LABELS.retrievalTitle)}</h2>
         <ul class="key-list">${keypoints.map(point => `<li>${escapeHtml(point)}</li>`).join("")}</ul>
       </section>
+      ${renderActivityOrientation(lesson)}
       ${renderActivity(lesson)}
       ${summary.length ? `
         <section class="lesson-card synthesis-card" aria-labelledby="synthesis-title">
@@ -719,11 +846,7 @@
       ${renderReferences(lesson)}
       </div>
       <div class="completion-requirements" id="completion-requirements" role="status">
-        ${isModelExperience(lesson) && !completed
-          ? completion.ready
-            ? "<strong>Actividad lista.</strong> Ya puedes completar la experiencia."
-            : `<strong>Antes de completar:</strong><ul>${completion.reasons.map(reason => `<li>${escapeHtml(reason)}</li>`).join("")}</ul>`
-          : ""}
+        ${completionMarkup(lesson, completion, completed)}
       </div>
       <div class="lesson-actions">
         <button id="previous-lesson" class="button button-quiet" type="button" ${currentIndex === 0 ? "disabled" : ""}>Anterior</button>
@@ -777,7 +900,22 @@
     if (!video || !lesson.video) return;
     const mediaKey = `${COURSE_UI_KEY}:media:${lesson.id}`;
     const status = $("#video-resume-status");
+    const frame = $("#video-player-frame");
+    const overlay = $("#video-play-overlay");
+    const errorMessage = $("#video-load-error");
     let lastSavedSecond = -1;
+
+    const showVideoError = message => {
+      if (errorMessage) errorMessage.hidden = false;
+      frame?.classList.add("has-error");
+      if (overlay) overlay.hidden = true;
+      status.textContent = message || "El video no pudo cargarse. La transcripción accesible sigue disponible.";
+    };
+
+    const clearVideoError = () => {
+      if (errorMessage) errorMessage.hidden = true;
+      frame?.classList.remove("has-error");
+    };
 
     const restorePlaybackPoint = () => {
       const savedSecond = Number(localStorage.getItem(mediaKey) || 0);
@@ -795,6 +933,7 @@
       video.addEventListener("loadedmetadata", restorePlaybackPoint, { once: true });
     }
     video.addEventListener("canplay", () => {
+      clearVideoError();
       const savedSecond = Number(localStorage.getItem(mediaKey) || 0);
       if (savedSecond > 2 && Math.abs(video.currentTime - savedSecond) > 1) restorePlaybackPoint();
     }, { once: true });
@@ -817,15 +956,39 @@
       if (Math.floor(video.currentTime || 0) % 5 === 0) savePlaybackPoint();
     });
     video.addEventListener("pause", savePlaybackPoint);
-    video.addEventListener("error", () => {
-      const errorMessage = $("#video-load-error");
-      if (errorMessage) errorMessage.hidden = false;
-      status.textContent = "El video no pudo cargarse. La transcripción accesible sigue disponible.";
+    video.addEventListener("play", () => {
+      clearVideoError();
+      if (overlay) {
+        overlay.hidden = true;
+        requestAnimationFrame(() => video.focus({ preventScroll: true }));
+      }
     });
+    video.addEventListener("error", () => showVideoError());
+    $("#course-video-source")?.addEventListener("error", () => showVideoError());
     video.addEventListener("ended", async () => {
       localStorage.removeItem(mediaKey);
       await savePedagogicalState(lesson, { videoCompleted: true }, 60);
       renderLesson("observation-title");
+    });
+    overlay?.addEventListener("click", async () => {
+      clearVideoError();
+      overlay.disabled = true;
+      try {
+        await video.play();
+      } catch (error) {
+        overlay.disabled = false;
+        showVideoError("No fue posible iniciar la reproducción. Reintenta o utiliza una alternativa accesible.");
+      }
+    });
+    $("#video-retry")?.addEventListener("click", () => {
+      clearVideoError();
+      if (overlay) {
+        overlay.hidden = false;
+        overlay.disabled = false;
+      }
+      status.textContent = "Volviendo a cargar el video…";
+      video.load();
+      overlay?.focus({ preventScroll: true });
     });
     $("#video-speed")?.addEventListener("change", event => {
       video.playbackRate = Number(event.target.value);
@@ -844,14 +1007,31 @@
     if (!control || !requirements || progress[lesson.id]?.status === "completed") return;
     if ($("#activity-response")?.dataset.dirty === "true") {
       control.disabled = true;
-      requirements.innerHTML = "<strong>Cambios sin guardar.</strong> Guarda nuevamente el borrador antes de completar.";
+      requirements.innerHTML = "<strong>Antes de continuar</strong><p>Cambios sin guardar. Guarda nuevamente el borrador antes de completar.</p>";
       return;
     }
     const completion = completionState(lesson, state);
     control.disabled = !completion.ready;
-    requirements.innerHTML = completion.ready
-      ? "<strong>Actividad lista.</strong> Ya puedes completar la experiencia."
-      : `<strong>Antes de completar:</strong><ul>${completion.reasons.map(reason => `<li>${escapeHtml(reason)}</li>`).join("")}</ul>`;
+    requirements.innerHTML = completionMarkup(lesson, completion, false);
+  }
+
+  function wirePersonalChoiceActivity(lesson) {
+    document.querySelectorAll("[data-personal-option]").forEach(button => {
+      button.addEventListener("click", async () => {
+        const index = Number(button.dataset.personalOption);
+        const state = normalizePedagogicalState(lesson);
+        await savePedagogicalState(lesson, {
+          activityStarted: true,
+          selectedIndex: index,
+          correct: true,
+          attempts: state.attempts + 1,
+          feedbackReviewed: true,
+          response: lesson.activity.options[index]
+        }, 75);
+        renderNav();
+        renderLesson(`personal-choice-${index}`);
+      });
+    });
   }
 
   function wireDecisionActivity(lesson) {
@@ -920,7 +1100,7 @@
       const complete = $("#complete-lesson");
       if (complete && progress[lesson.id]?.status !== "completed") complete.disabled = true;
       const requirements = $("#completion-requirements");
-      if (requirements) requirements.innerHTML = "<strong>Cambios sin guardar.</strong> Guarda nuevamente el borrador antes de completar.";
+      if (requirements) requirements.innerHTML = "<strong>Antes de continuar</strong><p>Cambios sin guardar. Guarda nuevamente el borrador antes de completar.</p>";
     });
 
     $("#save-activity")?.addEventListener("click", async () => {
@@ -1036,7 +1216,8 @@
       wireLegacyActivity(lesson);
       return;
     }
-    if (lesson.activity?.type === "decision") wireDecisionActivity(lesson);
+    if (lesson.activity?.type === "personal-choice") wirePersonalChoiceActivity(lesson);
+    else if (lesson.activity?.type === "decision") wireDecisionActivity(lesson);
     else wireReflectionActivity(lesson);
   }
 
