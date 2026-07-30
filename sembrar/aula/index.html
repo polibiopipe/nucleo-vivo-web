@@ -67,13 +67,13 @@
           <p class="aula-trust">No solicitamos datos reales de su empresa para realizar las actividades.</p>
         </div>
         <aside class="aula-hero-panel" aria-label="Resumen de la experiencia">
-          <span>Primera experiencia disponible</span>
-          <h2>IA con criterio humano</h2>
-          <p>Productividad, seguridad y decisiones responsables en el trabajo.</p>
+          <span>Dos experiencias disponibles</span>
+          <h2>Aprender para decidir y cuidar.</h2>
+          <p>IA responsable y bienestar docente en rutas aplicadas, accesibles y basadas en evidencia.</p>
           <ul>
-            <li>7 horas de núcleo aplicado</li>
-            <li>9 módulos y refuerzos espaciados</li>
-            <li>Evaluación basada en evidencia</li>
+            <li>Dos cursos completos</li>
+            <li>9 módulos y 19 experiencias por ruta</li>
+            <li>Evaluación y transferencia basadas en evidencia</li>
           </ul>
         </aside>
       </div>
@@ -106,6 +106,7 @@
           </div>
 
           <div class="dashboard-grid">
+            <div class="dashboard-courses">
             <article class="continue-card" aria-labelledby="continue-title">
               <div>
                 <p class="card-kicker">Lo más significativo ahora</p>
@@ -124,11 +125,30 @@
               <p id="enrollment-status" class="enrollment-status" role="status" aria-live="polite" hidden></p>
             </article>
 
+            <article class="continue-card wellbeing-dashboard-card" aria-labelledby="wellbeing-title">
+              <div>
+                <p class="card-kicker">Bienestar docente · nueva ruta</p>
+                <h3 id="wellbeing-title">Cuando enseñar agota</h3>
+                <p>Reconocer la carga, recuperar recursos y construir respuestas personales y colectivas.</p>
+              </div>
+              <div class="progress-block" aria-label="Progreso del curso Cuando enseñar agota">
+                <div class="progress-meta"><span>Progreso en este navegador</span><strong id="wellbeing-progress-label">0%</strong></div>
+                <div class="progress-track"><span id="wellbeing-progress-bar" style="width:0%"></span></div>
+              </div>
+              <div class="card-actions">
+                <a id="wellbeing-continue-link" class="button button-primary" href="/sembrar/aula/curso/cuando-ensenar-agota/" data-local-href="curso/cuando-ensenar-agota/index.html">Comenzar curso</a>
+                <a class="button button-quiet" href="/sembrar/cursos/cuando-ensenar-agota/" data-local-href="../cursos/cuando-ensenar-agota/index.html">Ver programa</a>
+              </div>
+              <p class="local-course-note">Tu bitácora y tu avance permanecen en este navegador.</p>
+            </article>
+            </div>
+
             <aside class="weekly-card">
               <p class="card-kicker">Tu semana</p>
               <dl>
                 <div><dt>Experiencias completadas</dt><dd id="completed-count">0</dd></div>
-                <div><dt>Próxima acción</dt><dd id="next-action">Diagnóstico inicial</dd></div>
+                <div><dt>Bienestar docente</dt><dd id="wellbeing-completed-count">0 de 19</dd></div>
+                <div><dt>Próxima acción</dt><dd id="next-action">Punto de partida</dd></div>
                 <div><dt>Tiempo estimado</dt><dd>12 minutos</dd></div>
               </dl>
               <button id="accessibility-button" class="aula-text-button" type="button">Preferencias de accesibilidad</button>

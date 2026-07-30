@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Curso Cuando enseñar agota dentro de Aula Sembrar de Núcleo Vivo." />
+  <meta name="theme-color" content="#123d51" />
+  <title>Cuando enseñar agota | Aula Sembrar</title>
+  <link rel="icon" href="../../../../assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" type="image/png" />
+  <link rel="stylesheet" href="../../../../styles.css" />
+  <link rel="stylesheet" href="../../aula.css" />
+</head>
+<body class="course-shell-page course-wellbeing">
+  <a class="skip-link" href="#lesson-content">Saltar a la lección</a>
+  <header class="course-topbar">
+    <div class="course-topbar-inner">
+      <button id="course-menu-button" class="mobile-course-menu" type="button" aria-label="Abrir menú del curso" aria-expanded="false" aria-controls="course-sidebar">☰</button>
+      <a class="course-brand" href="/sembrar/aula/" data-local-href="../../index.html">
+        <img src="../../../../assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" alt="" />
+        <span>Aula Sembrar</span>
+      </a>
+      <div class="course-title-mini">
+        <strong>Cuando enseñar agota</strong>
+        <span id="course-top-progress">0% completado</span>
+      </div>
+      <a class="course-exit" href="/sembrar/aula/" data-local-href="../../index.html">Salir al aula</a>
+    </div>
+  </header>
+
+  <div class="course-layout">
+    <aside id="course-sidebar" class="course-sidebar" aria-label="Ruta del curso">
+      <div class="course-progress-card">
+        <p>Tu recorrido</p>
+        <strong id="sidebar-progress-label">0%</strong>
+        <div class="progress-track"><span id="sidebar-progress-bar" style="width:0%"></span></div>
+        <small>El progreso de este curso se guarda solo en este navegador.</small>
+      </div>
+      <nav id="module-nav" class="module-nav" aria-label="Módulos y lecciones"></nav>
+    </aside>
+
+    <main id="lesson-content" class="course-main" tabindex="-1">
+      <article id="lesson-frame" class="lesson-frame" aria-live="polite"></article>
+    </main>
+  </div>
+
+  <script src="../../aula-config.js"></script>
+  <script>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      const host = window.location.hostname;
+      const localPreview = (host === "localhost" || host === "127.0.0.1") && params.get("preview") === "1";
+      window.AULA_VIVA_CONFIG = Object.freeze({
+        ...(window.AULA_VIVA_CONFIG || {}),
+        courseSlug: "cuando-ensenar-agota",
+        localCourse: true,
+        enableRemoteSync: false,
+        ...(localPreview ? { supabaseUrl: "", supabaseAnonKey: "", previewMode: true } : {})
+      });
+    })();
+    if (window.AULA_VIVA_CONFIG?.supabaseUrl && window.AULA_VIVA_CONFIG?.supabaseAnonKey) {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.0"><\/script>');
+    }
+  </script>
+  <script src="../../aula-core.js"></script>
+  <script src="course-data.js"></script>
+  <script src="../ia-con-criterio-humano/course.js?v=curso2-fidelidad-leyla-5"></script>
+</body>
+</html>

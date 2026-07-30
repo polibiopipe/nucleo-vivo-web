@@ -166,14 +166,22 @@
       const completed = Object.values(progress).filter(item => item.status === "completed").length;
       const total = window.IA_COURSE?.lessons?.length || 19;
       const percent = total ? Math.round((completed / total) * 100) : 0;
+      const wellbeingProgress = A.getLocalCourseProgress?.("cuando-ensenar-agota", user) || {};
+      const wellbeingCompleted = Object.values(wellbeingProgress).filter(item => item?.status === "completed").length;
+      const wellbeingTotal = 19;
+      const wellbeingPercent = Math.round((wellbeingCompleted / wellbeingTotal) * 100);
       const enrollmentMessage = $("#enrollment-status");
       $("#completed-count").textContent = String(completed);
       $("#progress-label").textContent = `${percent}%`;
       $("#progress-bar").style.width = `${percent}%`;
+      $("#wellbeing-completed-count").textContent = `${wellbeingCompleted} de ${wellbeingTotal}`;
+      $("#wellbeing-progress-label").textContent = `${wellbeingPercent}%`;
+      $("#wellbeing-progress-bar").style.width = `${wellbeingPercent}%`;
+      $("#wellbeing-continue-link").textContent = wellbeingCompleted ? "Continuar curso" : "Comenzar curso";
       $("#next-action").textContent = canContinue
         ? completed
           ? "Continuar ruta recomendada"
-          : "Diagnostico inicial"
+          : "Punto de partida"
         : isPaused
           ? "Acceso pausado"
           : "Inscribirte en el curso";

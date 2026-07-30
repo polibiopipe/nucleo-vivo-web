@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 260" role="img" aria-labelledby="title desc">
+  <title id="title">Lockup editorial de Aula Sembrar</title>
+  <desc id="desc">Tres nodos conectados acompañan el nombre Aula Sembrar y la leyenda Una iniciativa de Núcleo Vivo.</desc>
+  <g fill="none" stroke="#D7DEE0" stroke-width="5">
+    <path d="M80 112H250"/>
+  </g>
+  <circle cx="80" cy="112" r="17" fill="#173F4D"/>
+  <circle cx="165" cy="112" r="17" fill="#2F9CA3"/>
+  <circle cx="250" cy="112" r="17" fill="#A98A3A"/>
+  <text x="305" y="87" fill="#1D6870" font-family="Calibri, Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="5">AULA</text>
+  <text x="305" y="151" fill="#102F3A" font-family="Georgia, 'Times New Roman', serif" font-size="68" font-weight="700">Sembrar</text>
+  <text x="309" y="194" fill="#5B676C" font-family="Calibri, Arial, sans-serif" font-size="22" letter-spacing="2.5">UNA INICIATIVA DE NÚCLEO VIVO</text>
+</svg>

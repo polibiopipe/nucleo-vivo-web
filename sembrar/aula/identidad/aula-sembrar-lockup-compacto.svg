@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 130" role="img" aria-labelledby="title desc">
+  <title id="title">Lockup compacto de Aula Sembrar</title>
+  <desc id="desc">Tres nodos conectados acompañan el nombre Aula Sembrar y la identificación Núcleo Vivo.</desc>
+  <g fill="none" stroke="#D7DEE0" stroke-width="4">
+    <path d="M50 55H170"/>
+  </g>
+  <circle cx="50" cy="55" r="12" fill="#173F4D"/>
+  <circle cx="110" cy="55" r="12" fill="#2F9CA3"/>
+  <circle cx="170" cy="55" r="12" fill="#A98A3A"/>
+  <text x="215" y="57" fill="#1D6870" font-family="Calibri, Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="2.5">AULA SEMBRAR</text>
+  <text x="218" y="91" fill="#5B676C" font-family="Calibri, Arial, sans-serif" font-size="20" letter-spacing="2">NÚCLEO VIVO</text>
+</svg>
