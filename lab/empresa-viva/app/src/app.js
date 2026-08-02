@@ -82,7 +82,7 @@
     bind();
   }
 
-  function brandCompact(){ return `<a class="brand-compact" href="../../" aria-label="Volver a Núcleo Vivo Lab"><img src="../../../assets/nucleo-vivo-isotipo-oficial.svg" alt="Isotipo oficial de Núcleo Vivo"><span><strong>Empresa Viva</strong><small>Núcleo Vivo Lab</small></span></a>`; }
+  function brandCompact(){ return `<a class="brand-compact" href="../../" aria-label="Volver a Núcleo Vivo Lab"><img src="../../assets/nucleo-vivo-logo-oficial-horizontal.png" alt="Núcleo Vivo · Cultura, liderazgo y bienestar"><span class="brand-product"><strong>EMPRESA VIVA</strong><small>Laboratorio de decisiones empresariales</small></span></a>`; }
 
   function landingView(){
     return `<div class="landing-shell">
@@ -102,7 +102,7 @@
             <div class="panel-foot"><span>${icon('brain')} Personas al centro</span><span>${icon('chart')} Evidencia y consecuencias</span></div>
           </div>
         </section>
-        <section class="brand-divider"><div><img src="../../../assets/nucleo-vivo-logotipo-exacto-del-moodboard.png" alt="Logotipo oficial de Núcleo Vivo"><p>Empresa Viva pertenece a Núcleo Vivo Lab, pero utiliza una atmósfera ejecutiva propia para diferenciar la experiencia empresarial.</p></div></section>
+        <section class="brand-divider"><div><img src="../../assets/nucleo-vivo-logo-oficial-horizontal.png" alt="Núcleo Vivo · Cultura, liderazgo y bienestar"><p>Empresa Viva pertenece a Núcleo Vivo Lab, pero utiliza una atmósfera ejecutiva propia para diferenciar la experiencia empresarial.</p></div></section>
         <section class="method-section">
           <div class="section-heading"><p class="eyebrow"><span></span> Cómo funciona</p><h2>No eliges una respuesta.<br><em>Construyes una decisión.</em></h2></div>
           <div class="method-grid">${[
@@ -123,13 +123,29 @@
     const completed = CASES.filter(c=>getCaseState(c.id).completed).length;
     const avg = started ? Math.round(CASES.reduce((s,c)=>s+(getCaseState(c.id).started?progressFor(getCaseState(c.id)):0),0)/started) : 0;
     const filtered = CASES.filter(c=>state.filter==='todos'||c.category===state.filter||(state.filter==='ia'&&c.ai));
-    return `<div class="app-shell dashboard-shell">
-      <header class="app-header">${brandCompact()}<div class="header-right"><button class="demo-chip button-chip" data-action="progress">Mi progreso</button><span class="demo-chip">Versión 6</span><button class="icon-btn" data-action="landing" title="Volver al inicio">${icon('home')}</button></div></header>
-      <main class="dashboard-main">
-        <section class="welcome-row"><div><p class="eyebrow"><span></span> Portal del estudiante</p><h1>Buenos días, <em>analista.</em></h1><p>Selecciona un desafío y entra en una empresa donde los datos, las personas y las decisiones están conectados.</p></div><div class="identity-card"><div>PS</div><span><strong>Estudiante invitado</strong><small>Progreso guardado en este navegador</small></span></div></section>
-        <section class="personal-tools"><button class="btn btn-outline" data-action="export-backup">${icon('file')} Respaldar progreso</button><label class="btn btn-outline import-label">${icon('reset')} Restaurar respaldo<input id="backup-file" type="file" accept="application/json" hidden></label><button class="btn btn-outline" data-action="export-csv">${icon('chart')} Exportar resumen</button><button class="btn btn-quiet danger" data-action="reset-all">Borrar progreso</button></section><section class="summary-cards"><article>${icon('briefcase')}<div><strong>${started}</strong><span>casos iniciados</span></div></article><article>${icon('check')}<div><strong>${completed}</strong><span>casos completados</span></div></article><article>${icon('chart')}<div><strong>${avg}%</strong><span>avance promedio</span></div></article><article>${icon('brain')}<div><strong>3</strong><span>casos con IA</span></div></article></section>
-        <section class="catalog-section"><div class="catalog-heading"><div><span>CATÁLOGO DE SIMULACIONES</span><h2>Elige tu próximo desafío</h2></div><div class="filters">${[['todos','Todos'],['ia','IA'],['finanzas','Finanzas'],['estrategia','Estrategia'],['personas','Personas']].map(([v,l])=>`<button class="${state.filter===v?'active':''}" data-filter="${v}">${l}</button>`).join('')}</div></div>
-          <div class="catalog-grid">${filtered.map(c=>catalogCard(c)).join('')}</div>
+    const recent = CASES.filter(c=>getCaseState(c.id).started).sort((a,b)=>String(getCaseState(b.id).updatedAt||'').localeCompare(String(getCaseState(a.id).updatedAt||'')))[0] || null;
+    const recentState = recent ? getCaseState(recent.id) : null;
+    return `<div class="ev-dashboard-shell">
+      <aside class="ev-dashboard-sidebar">
+        <div class="ev-sidebar-brand">${brandCompact()}</div>
+        <div class="ev-sidebar-intro"><span>EMPRESA VIVA</span><strong>Laboratorio de decisiones empresariales</strong><p>Investiga, prioriza y decide con evidencia.</p></div>
+        <nav class="ev-side-nav" aria-label="Navegación de Empresa Viva">
+          <button class="active" data-action="dashboard">${icon('home',18)} <span>Inicio y casos</span></button>
+          <button data-action="progress">${icon('chart',18)} <span>Mi progreso</span></button>
+          <button data-action="landing">${icon('target',18)} <span>Cómo funciona</span></button>
+          <a href="../../">${icon('arrow',18)} <span>Núcleo Vivo Lab</span></a>
+        </nav>
+        <div class="ev-sidebar-status"><span></span><div><strong>Versión piloto · Producción V6</strong><small>Guardado local en este navegador</small></div></div>
+      </aside>
+      <main class="ev-dashboard-main">
+        <header class="ev-dashboard-topbar"><div><span>PORTAFOLIO FORMATIVO</span><strong>Panel del analista</strong></div><div class="ev-topbar-actions"><span class="demo-chip">8 casos</span><button class="btn btn-outline" data-action="progress">Ver mi progreso</button></div></header>
+        <section class="ev-dashboard-hero">
+          <div class="ev-hero-copy"><p class="eyebrow"><span></span> Laboratorio de decisiones empresariales</p><h1>Decisiones complejas.<br><em>Criterio visible.</em></h1><p>Entra en organizaciones ficticias, conecta datos con personas y observa las consecuencias de cada decisión.</p><div class="ev-hero-actions">${recent?`<button class="btn btn-primary btn-large" data-open-case="${recent.id}">Continuar último caso ${icon('arrow')}</button><span>Caso ${recent.number} · ${progressFor(recentState)}% avanzado</span>`:`<button class="btn btn-primary btn-large" data-action="start-featured">Abrir primer caso ${icon('arrow')}</button><span>Tu progreso comenzará en este navegador</span>`}</div></div>
+          <div class="ev-hero-metrics"><article><span>${started}</span><small>casos iniciados</small></article><article><span>${completed}</span><small>casos completados</small></article><article><span>${avg}%</span><small>avance promedio</small></article><article><span>3</span><small>casos con IA</small></article></div>
+        </section>
+        <section class="ev-dashboard-tools" aria-label="Herramientas de progreso"><div><strong>Tu espacio local</strong><span>Administra una copia de tu avance sin crear una cuenta.</span></div><div class="personal-tools"><button class="btn btn-outline" data-action="export-backup">${icon('file')} Respaldar progreso</button><label class="btn btn-outline import-label">${icon('reset')} Restaurar respaldo<input id="backup-file" type="file" accept="application/json" hidden></label><button class="btn btn-outline" data-action="export-csv">${icon('chart')} Exportar resumen</button><button class="btn btn-quiet danger" data-action="reset-all">Borrar progreso</button></div></section>
+        <section class="ev-catalog-section"><div class="ev-catalog-heading"><div><span>CATÁLOGO DE SIMULACIONES</span><h2>Elige tu próximo desafío</h2><p>Ocho casos para leer tensiones, contrastar voces y responder por una decisión.</p></div><div class="filters">${[['todos','Todos'],['ia','IA'],['finanzas','Finanzas'],['estrategia','Estrategia'],['personas','Personas']].map(([v,l])=>`<button class="${state.filter===v?'active':''}" data-filter="${v}">${l}</button>`).join('')}</div></div>
+          <div class="ev-catalog-grid">${filtered.map(c=>catalogCard(c)).join('')}</div>
         </section>
       </main>
       ${toastView()}
@@ -137,12 +153,11 @@
   }
   function catalogCard(c){
     const cs=getCaseState(c.id),p=progressFor(cs);
-    return `<article class="catalog-card ${c.ai?'is-ai':''}">
-      <div class="card-band"><span>CASO ${c.number}</span>${c.ai?'<em>'+icon('brain',15)+' IA Y DECISIÓN</em>':'<em>'+esc(c.focus)+'</em>'}</div>
-      <div class="card-body"><div class="case-company">${esc(c.company)}</div><h3>${esc(c.title)}</h3><p>${esc(c.short)}</p>
-        <div class="case-meta"><span>${esc(c.level)}</span><span>${esc(c.duration)}</span></div>
-        ${cs.started?`<div class="progress-line"><i style="width:${p}%"></i></div><div class="progress-copy"><span>${cs.completed?'Completado':'En progreso'}</span><b>${p}%</b></div>`:'<div class="new-case-note">Nuevo desafío disponible</div>'}
-        <button class="btn ${cs.started?'btn-dark':'btn-primary'} full" data-open-case="${c.id}">${cs.completed?'Revisar resultado':cs.started?'Continuar caso':'Asumir el desafío'} ${icon('arrow')}</button>
+    return `<article class="ev-case-card ${c.ai?'is-ai':''}">
+      <div class="ev-case-visual"><img src="./assets/cases/case-${c.number}.jpg" alt="Escenario ficticio de ${esc(c.company)}" loading="lazy"><div class="ev-case-overlay"><span>CASO ${c.number}</span>${c.ai?'<em>'+icon('brain',15)+' IA Y DECISIÓN</em>':'<em>'+esc(c.category)+'</em>'}</div></div>
+      <div class="ev-case-body"><div class="case-company">${esc(c.company)}</div><h3>${esc(c.title)}</h3><p>${esc(c.short)}</p>
+        <div class="case-meta"><span>${esc(c.level)}</span><span>${esc(c.duration)}</span><span>${esc(c.focus)}</span></div>
+        <div class="ev-case-footer"><div class="ev-progress-block">${cs.started?`<div class="progress-copy"><span>${cs.completed?'Completado':'En progreso'}</span><b>${p}%</b></div><div class="progress-line"><i style="width:${p}%"></i></div>`:'<div class="new-case-note">Nuevo desafío disponible</div>'}</div><button class="btn ${cs.started?'btn-dark':'btn-primary'}" data-open-case="${c.id}">${cs.completed?'Revisar':cs.started?'Continuar':'Abrir caso'} ${icon('arrow')}</button></div>
       </div>
     </article>`;
   }
@@ -262,6 +277,9 @@
       if(a==='catalog'||a==='dashboard'){state.screen='dashboard';save();render();window.scrollTo(0,0);}
       if(a==='landing'){state.screen='landing';save();render();window.scrollTo(0,0);}
       if(a==='progress'){state.screen='progress';save();render();window.scrollTo(0,0);}
+      if(a==='export-backup'){exportBackup();announce('Respaldo local descargado.');}
+      if(a==='export-csv'){exportProgressCsv();announce('Resumen descargado.');}
+      if(a==='reset-all'){resetAll();}
       if(a==='export-progress'){exportProgress();announce('Progreso descargado.');}
       if(a==='start-featured')startCase(CASES[0].id);
       if(a==='toggle-nav'){ui.mobileNav=!ui.mobileNav;render();}
@@ -279,6 +297,7 @@
       if(a==='print')window.print();
     }));
     root.querySelectorAll('[data-filter]').forEach(el=>el.addEventListener('click',()=>{state.filter=el.dataset.filter;save();render();}));
+    const backupFile=root.querySelector('#backup-file');if(backupFile)backupFile.addEventListener('change',()=>{if(backupFile.files?.[0])importBackup(backupFile.files[0]);});
     root.querySelectorAll('[data-open-case]').forEach(el=>el.addEventListener('click',()=>startCase(el.dataset.openCase)));
     root.querySelectorAll('[data-stage]').forEach(el=>el.addEventListener('click',()=>{const id=state.activeCaseId,cs=getCaseState(id);updateCase(id,{...cs,currentStage:Number(el.dataset.stage)});ui.mobileNav=false;render();window.scrollTo(0,0);}));
     root.querySelectorAll('[data-next-stage]').forEach(el=>el.addEventListener('click',()=>{const id=state.activeCaseId,cs=getCaseState(id);updateCase(id,{...cs,currentStage:Number(el.dataset.nextStage)});render();window.scrollTo(0,0);}));
