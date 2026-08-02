@@ -223,6 +223,14 @@
   transform: scale(1.035);
 }
 
+.lab-pilot-card--umbral .lab-pilot-visual img {
+  object-position: 50% 50%;
+}
+
+.lab-pilot-card--umbral:hover .lab-pilot-visual img {
+  transform: none;
+}
+
 .lab-pilot-body {
   display: flex;
   flex: 1;
@@ -449,6 +457,20 @@
   aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: 17px;
+}
+
+.lab-product-frame--umbral {
+  width: 100%;
+  margin: 0;
+  transform: none;
+}
+
+.lab-product-frame--umbral img {
+  display: block;
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+  object-position: 50% 50%;
 }
 
 .lab-hub-page .brand,
