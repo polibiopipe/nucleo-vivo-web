@@ -1,0 +1,293 @@
+(function () {
+  const makeStakeholder = (id, name, role, initials, intro, themes, responses, suggested) => ({
+    id, name, role, initials, intro, themes, responses, suggested,
+  });
+
+  const cases = [
+    {
+      id: 'vender-mas-ganar-menos', number: '01', title: 'Vender más, ganar menos', company: 'Abastece Sur SpA',
+      sector: 'Distribución de consumo masivo', focus: 'Finanzas y gestión integral', category: 'finanzas', ai: false,
+      level: 'Intermedio', duration: '70–90 min', role: 'Analista de gestión y estrategia',
+      short: 'Las ventas crecieron, pero la caja, el margen y el servicio empeoraron.',
+      mission: 'Determina por qué el crecimiento está consumiendo caja y presenta un plan de estabilización para los próximos seis meses.',
+      companyFacts: [['Fundación','2013, San Fernando'],['Personas','68 trabajadores'],['Cobertura','O’Higgins, Maule y Ñuble'],['Clientes','412 comercios y cadenas regionales'],['Modelo','Compra, almacena y distribuye productos de terceros'],['Promesa','Disponibilidad cercana y despacho rápido']],
+      kpis: [
+        {label:'Ventas anuales',before:'$1.200 MM',now:'$1.580 MM',change:'+31,7%',tone:'up'},
+        {label:'Caja disponible',before:'$126 MM',now:'$42 MM',change:'−66,7%',tone:'down'},
+        {label:'Margen bruto',before:'27,5%',now:'20,8%',change:'−6,7 pp',tone:'down'},
+        {label:'Entregas a tiempo',before:'92%',now:'76%',change:'−16 pp',tone:'down'},
+      ],
+      documents: [
+        {id:'resultados',category:'Finanzas',title:'Estado de resultados comparativo',summary:'Las ventas aumentaron 31,7%, pero el resultado operacional cayó 19%.',insight:'Los descuentos y costos logísticos absorbieron el crecimiento.',rows:[['Ventas netas','$1.200 MM','$1.580 MM'],['Margen bruto','$330 MM','$329 MM'],['Gastos logísticos','$96 MM','$151 MM'],['Resultado operacional','$88 MM','$71 MM']]},
+        {id:'cartera',category:'Finanzas',title:'Antigüedad de cuentas por cobrar',summary:'Los días de cobro pasaron de 48 a 74.',insight:'Tres clientes concentran el 46% de la deuda vencida.',rows:[['Al día','$224 MM','48%'],['1–30 días','$111 MM','24%'],['31–60 días','$57 MM','12%'],['Más de 60 días','$75 MM','16%']]},
+        {id:'inventario',category:'Operaciones',title:'Rotación y quiebres de inventario',summary:'Hay sobrestock en 87 SKU y quiebres en los productos de mayor salida.',insight:'Compras no incorpora promociones ni estacionalidad.',rows:[['Inventario total','$356 MM','+41%'],['SKU sin movimiento','87','+52%'],['Quiebres mensuales','143','+88%']]},
+        {id:'personas',category:'Personas',title:'Horas extraordinarias y coordinación',summary:'Las horas extra se duplicaron y aumentaron las licencias breves.',insight:'Comercial compromete pedidos sin validar capacidad.',rows:[['Horas extra mensuales','860','+105%'],['Rotación anual','22%','+9 pp'],['Coordinación interna','41/100','Crítico']]},
+        {id:'credito',category:'Bancos',title:'Oferta de línea de crédito',summary:'El banco ofrece $180 MM con tasa variable y garantías.',insight:'Entrega aire, pero deja a la empresa cerca del covenant.',rows:[['Monto','$180 MM','24 meses'],['Tasa anual','13,8%','Variable'],['Deuda/EBITDA','3,7x','Máx. 4,0x']]},
+      ],
+      stakeholders: [
+        makeStakeholder('carolina','Carolina Méndez','Gerenta de Finanzas','CM','Mira la caja, no solo el resultado. Estamos financiando ventas que todavía no cobramos.',['liquidez','cobranza','deuda','margen'],{
+          liquidez:'La caja cayó de $126 a $42 millones. Casi $150 millones adicionales quedaron atrapados entre cuentas por cobrar e inventario.',
+          cobranza:'Los días de cobro pasaron de 48 a 74. No existe un responsable único de cobranza preventiva.',
+          deuda:'La nueva línea da aire, pero nos deja cerca del covenant. Sin corregir capital de trabajo, solo posterga el problema.',
+          margen:'Vendimos $380 millones más y generamos prácticamente el mismo margen bruto en pesos.',
+          default:'Puedo ayudarte con liquidez, cobranza, deuda o margen. Necesitamos conectar las cuatro variables.'
+        },['¿Qué explica la caída de caja?','¿El crédito resuelve el problema?']),
+        makeStakeholder('sebastian','Sebastián Araya','Jefe comercial','SA','Si no damos condiciones, otro proveedor toma la venta.',['descuentos','clientes','metas','plazos'],{
+          descuentos:'El descuento promedio subió de 4,8% a 9,6%. La prioridad era ganar participación, no medir rentabilidad completa.',
+          clientes:'Un cliente concentra 14% de las ventas y exige descuentos, plazos largos y entregas urgentes.',
+          metas:'El equipo recibe incentivos por venta neta, no por margen ni cobranza. Respondió al sistema que diseñamos.',
+          plazos:'Autorizamos 60 y hasta 90 días sin una regla conjunta con Finanzas.',
+          default:'Pregunta por descuentos, clientes, metas o plazos. El crecimiento comercial tuvo costos que no se vieron a tiempo.'
+        },['¿Cómo se autorizan los descuentos?','¿Qué incentivos tiene el equipo?']),
+        makeStakeholder('paula','Paula Contreras','Jefa de Operaciones','PC','Estamos reaccionando a urgencias todo el día.',['inventario','rutas','capacidad','coordinacion'],{
+          inventario:'Tenemos sobrestock en productos lentos y quiebres en los más vendidos.',
+          rutas:'Las rutas adicionales para salvar pedidos aumentaron el costo por despacho 27%.',
+          capacidad:'La bodega soportaría el volumen con una demanda más estable. El problema son los cambios tardíos.',
+          coordinacion:'Comercial confirma fechas sin validar inventario ni capacidad.',
+          default:'Puedo explicarte inventario, rutas, capacidad o coordinación. La operación está pagando la improvisación.'
+        },['¿Falta capacidad o planificación?','¿Por qué aumentaron los atrasos?']),
+      ],
+      evidence: ['Días de cobro: 48 → 74.','Margen bruto: 27,5% → 20,8%.','Inventario total: +41%.','Entregas a tiempo: 92% → 76%.','Horas extra mensuales: 860.','Deuda/EBITDA actual: 3,7x.'],
+      budget: 100,
+      decisions: [
+        {id:'cobranza',title:'Programa de cobranza preventiva',cost:20,description:'Segmentar cartera, alertas y negociación de plazos.',tags:['cash','governance'],impact:{value:10,people:1,trust:2,risk:7,execution:4}},
+        {id:'sop',title:'Planificación integrada S&OP',cost:25,description:'Pronóstico semanal, reglas de stock y coordinación comercial-operacional.',tags:['data','operations','governance'],impact:{value:12,people:7,trust:8,risk:8,execution:8}},
+        {id:'pricing',title:'Gobierno de precios y descuentos',cost:15,description:'Rentabilidad por cliente y autorizaciones escalonadas.',tags:['governance','margin'],impact:{value:11,people:-1,trust:1,risk:5,execution:5}},
+        {id:'bodega',title:'Estabilizar la operación de bodega',cost:20,description:'Apoyos, capacitación y reglas de corte.',tags:['people','operations'],impact:{value:4,people:13,trust:7,risk:5,execution:7}},
+        {id:'credito',title:'Aceptar la línea de crédito',cost:15,description:'Liquidez inmediata bajo garantías y covenants.',tags:['finance'],impact:{value:5,people:0,trust:0,risk:-8,execution:3}},
+        {id:'postergar',title:'Postergar la expansión',cost:0,description:'Revisar la nueva sucursal tras seis meses de estabilización.',tags:['strategy','risk'],impact:{value:7,people:4,trust:2,risk:12,execution:4}},
+      ],
+      requiredTags:['governance','operations','people'], conflicts:[], synergies:[['cobranza','sop'],['pricing','postergar']],
+      outcomeLabels:{value:'Resultado económico',people:'Sostenibilidad del equipo',trust:'Confianza de clientes',risk:'Control de riesgo',execution:'Capacidad de ejecución'},
+    },
+    {
+      id:'automatizar-o-no',number:'02',title:'¿Automatizar o no automatizar?',company:'Mesa Clara Servicios SpA',
+      sector:'Servicios administrativos y atención al cliente',focus:'Estrategia de IA y productividad',category:'ia',ai:true,
+      level:'Intermedio',duration:'70–90 min',role:'Consultor de transformación y operaciones',
+      short:'La empresa debe decidir si automatiza procesos con IA, dónde hacerlo y bajo qué resguardos.',
+      mission:'Diseña una estrategia de incorporación de IA que genere valor medible sin exponer datos, deteriorar el servicio ni desplazar personas sin preparación.',
+      companyFacts:[['Actividad','Back office, facturación y atención para pymes'],['Personas','124 trabajadores'],['Clientes','38 empresas'],['Procesos','61% manuales'],['Datos','Dispersos en 7 sistemas'],['Presión','Reducir costos 15% en 12 meses']],
+      kpis:[
+        {label:'Costo por trámite',before:'$4.850',now:'$5.620',change:'+15,9%',tone:'down'},
+        {label:'Errores de digitación',before:'2,8%',now:'4,9%',change:'+2,1 pp',tone:'down'},
+        {label:'Tiempo de respuesta',before:'18 h',now:'31 h',change:'+72%',tone:'down'},
+        {label:'Satisfacción cliente',before:'84/100',now:'71/100',change:'−13',tone:'down'},
+      ],
+      documents:[
+        {id:'mapa-procesos',category:'Operaciones',title:'Mapa de procesos y volumen',summary:'Facturación y clasificación de solicitudes concentran 47% de las horas manuales.',insight:'No todos los pasos requieren IA; varios pueden simplificarse antes.',rows:[['Facturación','9.400 casos/mes','18% reproceso'],['Clasificación','15.200 solicitudes','Manual'],['Reportes','320/mes','6 fuentes']]},
+        {id:'propuesta-proveedor',category:'Tecnología',title:'Propuesta del proveedor de IA',summary:'Promete reducir costos 28% en seis meses.',insight:'La estimación no considera limpieza de datos, integración ni supervisión humana.',rows:[['Licencia anual','$96 MM','−'],['Integración','$42 MM','Estimado'],['Precisión declarada','94%','Demo controlada'],['Ahorro prometido','28%','Sin piloto local']]},
+        {id:'auditoria-datos',category:'Datos',title:'Auditoría de calidad y privacidad de datos',summary:'32% de los registros presenta campos incompletos o formatos inconsistentes.',insight:'Existen datos personales en correos y archivos compartidos sin clasificación.',rows:[['Duplicados','11%','Alto'],['Campos incompletos','32%','Crítico'],['Datos sin clasificación','47%','Crítico']]},
+        {id:'personas-ia',category:'Personas',title:'Brecha de capacidades y percepción interna',summary:'Solo 14% declara comprender cómo verificar resultados de IA.',insight:'La mitad teme pérdida de empleo y existe baja confianza en la dirección.',rows:[['Alfabetización IA','14%','Baja'],['Temor a reemplazo','52%','Alto'],['Disposición a capacitarse','76%','Alta']]},
+        {id:'piloto',category:'Riesgo',title:'Resultados de una prueba no autorizada',summary:'Un equipo usó una herramienta pública para resumir correos de clientes.',insight:'Se compartieron datos que no debieron salir del entorno corporativo.',rows:[['Correos procesados','183','−'],['Incidentes de datos','1','Confirmado'],['Ahorro de tiempo','31%','No auditado']]},
+      ],
+      stakeholders:[
+        makeStakeholder('gabriela','Gabriela Fuenzalida','Gerenta general','GF','El directorio espera un ahorro visible este año.',['ahorro','directorio','plazo','competencia'],{
+          ahorro:'El directorio pidió 15% de reducción de costos, pero no definió qué calidad de servicio está dispuesto a sacrificar.',
+          directorio:'Algunos directores creen que comprar una licencia equivale a transformarse. Necesito una propuesta que resista preguntas difíciles.',
+          plazo:'Quieren resultados en seis meses. Una implementación total en ese plazo me parece arriesgada, pero un piloto pequeño puede parecer insuficiente.',
+          competencia:'Dos competidores anunciaron IA, aunque no sabemos si obtuvieron resultados reales.',
+          default:'Pregunta por ahorro, presión del directorio, plazo o competencia. No quiero IA como eslogan.'
+        },['¿Qué resultado espera el directorio?','¿Existe presión competitiva real?']),
+        makeStakeholder('diego','Diego Mardones','Jefe de Operaciones','DM','Hay tareas repetitivas, pero los procesos están desordenados.',['procesos','errores','piloto','integracion'],{
+          procesos:'Podemos automatizar clasificación y borradores, pero antes debemos estandarizar entradas y excepciones.',
+          errores:'El 4,9% de error parece poco hasta que se multiplica por miles de trámites. Una IA sin revisión puede amplificarlo.',
+          piloto:'Propondría dos procesos, métricas de base y un grupo de control. Sin eso, no sabremos si la mejora viene de la IA.',
+          integracion:'Los datos viven en siete sistemas. La integración probablemente costará más de lo que dice el proveedor.',
+          default:'Pregunta por procesos, errores, piloto o integración. Automatizar un proceso malo solo acelera el problema.'
+        },['¿Qué proceso conviene pilotear?','¿Qué riesgo tiene automatizar ahora?']),
+        makeStakeholder('valentina','Valentina Pino','Representante de trabajadores','VP','La gente escucha “IA” y entiende “despidos”.',['empleo','capacitacion','confianza','supervision'],{
+          empleo:'No existe un compromiso sobre reasignación. Sin claridad, las personas ocultarán errores y resistirán la implementación.',
+          capacitacion:'Hay alta disposición a aprender. Necesitamos tiempo protegido, formación práctica y reconocimiento de nuevas responsabilidades.',
+          confianza:'Después de la prueba no autorizada, el equipo siente que la dirección no tiene reglas claras.',
+          supervision:'Las personas pueden revisar casos de riesgo y excepciones; no deberían limitarse a corregir silenciosamente errores del sistema.',
+          default:'Pregunta por empleo, capacitación, confianza o supervisión humana. La adopción depende de cómo se trate a las personas.'
+        },['¿Cómo reducir el temor al reemplazo?','¿Qué rol debe mantener una persona?']),
+        makeStakeholder('andres','Andrés Valdés','Encargado de seguridad y datos','AV','Antes de conectar una IA, debemos saber qué datos entran y quién responde.',['datos','privacidad','proveedor','gobernanza'],{
+          datos:'No tenemos clasificación consistente. Con 32% de campos incompletos, la calidad de salida será inestable.',
+          privacidad:'El incidente ocurrió porque se pegaron correos de clientes en una herramienta pública. Necesitamos entornos aprobados y minimización de datos.',
+          proveedor:'El contrato no explica con suficiente detalle retención, entrenamiento con datos ni subprocesadores.',
+          gobernanza:'Propongo inventario de casos de uso, responsables, registro de incidentes y revisión periódica.',
+          default:'Pregunta por datos, privacidad, proveedor o gobernanza. La velocidad sin control puede salir cara.'
+        },['¿Qué debemos exigir al proveedor?','¿Qué gobernanza mínima necesitamos?']),
+      ],
+      evidence:['32% de registros tiene campos incompletos.','Solo 14% sabe verificar resultados de IA.','La propuesta omite limpieza e integración.','Ocurrió un incidente con datos en una herramienta pública.','76% está dispuesto a capacitarse.','El proveedor promete 94% de precisión en una demo controlada.'],
+      budget:100,
+      decisions:[
+        {id:'piloto-controlado',title:'Piloto controlado en dos procesos',cost:20,description:'Métricas de base, grupo de control, revisión humana y criterios de detención.',tags:['pilot','human','governance'],impact:{value:9,people:6,trust:8,risk:12,execution:9}},
+        {id:'calidad-datos',title:'Programa de calidad y clasificación de datos',cost:25,description:'Depuración, catálogo de datos y reglas de acceso.',tags:['data','governance'],impact:{value:7,people:2,trust:8,risk:14,execution:8}},
+        {id:'capacitacion',title:'Formación y reconversión de roles',cost:20,description:'Alfabetización, verificación de salidas y rutas de movilidad interna.',tags:['people','human'],impact:{value:6,people:15,trust:9,risk:6,execution:10}},
+        {id:'contrato',title:'Renegociar contrato y evaluación del proveedor',cost:10,description:'Retención de datos, auditoría, niveles de servicio y salida.',tags:['vendor','governance'],impact:{value:3,people:1,trust:7,risk:12,execution:4}},
+        {id:'automatizacion-total',title:'Automatización total en seis meses',cost:75,description:'Desplegar IA en facturación, atención y reportes para capturar ahorros rápidos.',tags:['automation'],impact:{value:14,people:-18,trust:-13,risk:-20,execution:-10}},
+        {id:'solo-reglas',title:'Simplificar procesos sin IA',cost:30,description:'Estandarizar formularios, flujos y automatización tradicional.',tags:['process','risk'],impact:{value:8,people:5,trust:4,risk:8,execution:8}},
+      ],
+      requiredTags:['pilot','data','human','governance'],conflicts:[['automatizacion-total','piloto-controlado']],synergies:[['piloto-controlado','calidad-datos'],['capacitacion','contrato']],
+      outcomeLabels:{value:'Valor y productividad',people:'Transición de personas',trust:'Confianza de clientes',risk:'Gobernanza y seguridad',execution:'Preparación para implementar'},
+    },
+    {
+      id:'personas-al-limite',number:'03',title:'Personas al límite',company:'RedSur Logística SpA',sector:'Logística y última milla',focus:'Personas, liderazgo y operaciones',category:'personas',ai:false,level:'Intermedio',duration:'60–80 min',role:'Consultor de organización y personas',
+      short:'El crecimiento se sostiene con sobrecarga, rotación y jefaturas agotadas.',mission:'Diseña una respuesta que recupere capacidad operativa sin normalizar la sobrecarga ni destruir el servicio.',
+      companyFacts:[['Personas','286'],['Centros','4'],['Turnos','24/7'],['Rotación','34% anual'],['Licencias','+41%'],['Servicio','89% → 73%']],
+      kpis:[{label:'Rotación anual',before:'18%',now:'34%',change:'+16 pp',tone:'down'},{label:'Horas extra',before:'2.100',now:'4.980',change:'+137%',tone:'down'},{label:'Clima liderazgo',before:'68/100',now:'42/100',change:'−26',tone:'down'},{label:'Entregas a tiempo',before:'89%',now:'73%',change:'−16 pp',tone:'down'}],
+      documents:[
+        {id:'turnos',category:'Operaciones',title:'Cobertura de turnos',summary:'El 22% de los turnos se completa con extensiones o reemplazos tardíos.',insight:'La planificación no considera ausentismo real.',rows:[['Turnos planificados','8.640','mes'],['Extensiones','1.210','14%'],['Vacantes críticas','37','−']]},
+        {id:'clima',category:'Personas',title:'Encuesta de clima',summary:'La principal causa declarada de salida es la jefatura inmediata.',insight:'Las metas se comunican sin recursos ni espacios de escucha.',rows:[['Confianza en jefatura','39/100','Crítico'],['Carga sostenible','31/100','Crítico'],['Sentido de propósito','72/100','Fortaleza']]},
+        {id:'costos',category:'Finanzas',title:'Costo de rotación y horas extra',summary:'La empresa gasta más en reemplazos y sobretiempo que en estabilización.',insight:'El costo oculto anual supera $410 MM.',rows:[['Horas extra','$196 MM','anual'],['Reclutamiento','$84 MM','anual'],['Errores/reprocesos','$132 MM','anual']]},
+        {id:'incidentes',category:'Riesgo',title:'Registro de incidentes',summary:'Los incidentes menores aumentaron 58% en turnos extendidos.',insight:'La fatiga está afectando seguridad y calidad.',rows:[['Incidentes menores','76','+58%'],['Casi accidentes','24','+71%'],['Turnos >12 horas','312','mes']]},
+      ],
+      stakeholders:[
+        makeStakeholder('maria','María José Leiva','Gerenta de Personas','ML','No podemos seguir contratando para reemplazar a quienes se van.',['rotacion','liderazgo','seleccion','clima'],{rotacion:'La mitad de las renuncias ocurre antes de seis meses.',liderazgo:'Muchos supervisores fueron promovidos por desempeño técnico sin formación para liderar.',seleccion:'Estamos cubriendo vacantes rápido y bajando requisitos sin reforzar inducción.',clima:'El propósito sigue alto; la gente quiere que el trabajo funcione, pero no confía en las decisiones.',default:'Pregunta por rotación, liderazgo, selección o clima.'},['¿Por qué renuncia la gente?','¿Qué pasa con las jefaturas?']),
+        makeStakeholder('ricardo','Ricardo Silva','Gerente de Operaciones','RS','Si reducimos horas ahora, no cumplimos los contratos.',['servicio','dotacion','turnos','metas'],{servicio:'Tres contratos tienen multas por nivel de servicio. No podemos caer más.',dotacion:'Tenemos vacantes, pero también distribución desigual entre centros.',turnos:'Los turnos se diseñaron para una demanda anterior; hoy parcheamos semana a semana.',metas:'Las metas no distinguen complejidad de ruta ni experiencia del equipo.',default:'Pregunta por servicio, dotación, turnos o metas.'},['¿Qué impide reducir horas extra?','¿La dotación está bien distribuida?']),
+        makeStakeholder('javier','Javier Orellana','Supervisor de turno','JO','Me piden resultados y contención, pero no tengo atribuciones.',['presion','equipo','errores','apoyo'],{presion:'Recibo cambios de prioridad tres veces por turno.',equipo:'Tengo 31 personas y siete son nuevas. No existe un segundo supervisor.',errores:'La mayoría ocurre al final del turno o con personal reasignado.',apoyo:'Necesito reglas claras, apoyo de planificación y entrenamiento para conversaciones difíciles.',default:'Pregunta por presión, equipo, errores o apoyo.'},['¿Qué necesitas para liderar mejor?','¿Cuándo ocurren más errores?']),
+      ],
+      evidence:['Rotación anual: 34%.','Costo oculto estimado: $410 MM.','Confianza en jefatura: 39/100.','312 turnos superiores a 12 horas al mes.','Sentido de propósito: 72/100.','Incidentes menores: +58%.'],
+      budget:100,
+      decisions:[
+        {id:'redisenar-turnos',title:'Rediseñar turnos y capacidad',cost:25,description:'Planificación por demanda, límites de extensión y cobertura de ausentismo.',tags:['operations','risk'],impact:{value:9,people:12,trust:6,risk:12,execution:8}},
+        {id:'jefaturas',title:'Programa intensivo para jefaturas',cost:20,description:'Liderazgo, coordinación, feedback y manejo de carga.',tags:['people','leadership'],impact:{value:5,people:14,trust:9,risk:5,execution:9}},
+        {id:'dos-supervisores',title:'Refuerzo en turnos críticos',cost:25,description:'Segundo supervisor y mentores para personal nuevo.',tags:['people','operations'],impact:{value:4,people:11,trust:7,risk:8,execution:8}},
+        {id:'bono',title:'Bono extraordinario por continuidad',cost:30,description:'Pago temporal para retener dotación durante tres meses.',tags:['compensation'],impact:{value:1,people:6,trust:2,risk:1,execution:4}},
+        {id:'metas',title:'Reformular metas y contratos internos',cost:10,description:'Indicadores por complejidad, seguridad y calidad, no solo volumen.',tags:['governance','people'],impact:{value:8,people:10,trust:8,risk:8,execution:7}},
+      ],
+      requiredTags:['people','operations','leadership'],conflicts:[],synergies:[['redisenar-turnos','jefaturas'],['metas','dos-supervisores']],outcomeLabels:{value:'Desempeño sostenible',people:'Bienestar y retención',trust:'Confianza interna',risk:'Seguridad operacional',execution:'Capacidad de implementación'},
+    },
+    {
+      id:'directorio-exige-ia',number:'04',title:'El directorio exige IA',company:'Maderas del Pacífico SpA',sector:'Manufactura y exportación',focus:'Gobernanza y transformación con IA',category:'ia',ai:true,level:'Avanzado',duration:'75–95 min',role:'Gerente de estrategia digital',
+      short:'El directorio quiere “IA en toda la empresa” antes de que la organización esté preparada.',mission:'Transforma una presión difusa por IA en una cartera priorizada, gobernable y conectada con la estrategia.',
+      companyFacts:[['Plantas','3'],['Personas','740'],['Exportaciones','62% de ventas'],['Sistemas','ERP antiguo + planillas'],['Datos maestros','Inconsistentes'],['Objetivo del directorio','10 iniciativas IA en un año']],
+      kpis:[{label:'Madurez digital',before:'—',now:'2,1/5',change:'Baja',tone:'down'},{label:'Proyectos TI atrasados',before:'18%',now:'47%',change:'+29 pp',tone:'down'},{label:'Datos confiables',before:'—',now:'58%',change:'Insuficiente',tone:'down'},{label:'Presupuesto solicitado',before:'$0',now:'$1.100 MM',change:'Sin priorizar',tone:'down'}],
+      documents:[
+        {id:'cartera',category:'Estrategia',title:'Lista de 27 ideas de IA',summary:'Cada gerencia propuso iniciativas sin criterios comunes.',insight:'La mayoría no tiene dueño, dato disponible ni métrica de valor.',rows:[['Ideas totales','27','−'],['Con caso de negocio','5','19%'],['Con datos disponibles','7','26%'],['Con responsable','9','33%']]},
+        {id:'madurez',category:'Tecnología',title:'Evaluación de madurez digital',summary:'Arquitectura, datos y gestión del cambio están bajo el nivel requerido.',insight:'Hay oportunidades de alto valor, pero no para despliegue masivo inmediato.',rows:[['Datos','1,9/5','Bajo'],['Arquitectura','2,0/5','Bajo'],['Personas','2,4/5','Medio-bajo'],['Gobernanza','1,2/5','Crítico']]},
+        {id:'casos',category:'Operaciones',title:'Tres oportunidades con evidencia',summary:'Mantenimiento predictivo, control visual y pronóstico de demanda muestran potencial.',insight:'Solo mantenimiento tiene datos históricos suficientes.',rows:[['Mantenimiento','$320 MM potencial','Datos: alto'],['Control visual','$180 MM','Datos: medio'],['Demanda','$260 MM','Datos: bajo']]},
+        {id:'riesgos',category:'Riesgo',title:'Mapa preliminar de riesgos de IA',summary:'No existe política, comité ni responsable de incidentes.',insight:'La organización confunde aprobación técnica con autorización de negocio.',rows:[['Política IA','No existe','Crítico'],['Inventario de modelos','No existe','Crítico'],['Revisión humana','No definida','Alto']]},
+      ],
+      stakeholders:[
+        makeStakeholder('presidente','Eduardo Baeza','Presidente del directorio','EB','La competencia ya habla de IA. No podemos quedarnos atrás.',['competencia','resultado','plazo','riesgo'],{competencia:'Tenemos anuncios, no evidencia comparable. Me preocupa más la percepción de atraso.',resultado:'Quiero productividad, menor merma y mejor planificación, no demostraciones bonitas.',plazo:'Espero avances visibles en el próximo directorio trimestral.',riesgo:'Acepto que haya riesgos, pero necesito saber quién los asume y cómo se detiene una iniciativa.',default:'Pregunta por competencia, resultado, plazo o riesgo.'},['¿Qué resultado sería suficiente?','¿Qué riesgo acepta el directorio?']),
+        makeStakeholder('sofia','Sofía Navarrete','CIO','SN','Tenemos deuda técnica y demasiados proyectos abiertos.',['arquitectura','datos','capacidad','proveedores'],{arquitectura:'El ERP no entrega datos oportunos y las integraciones son frágiles.',datos:'Mantenimiento es el único caso con historial limpio y suficiente.',capacidad:'Mi equipo está al 120% con proyectos regulatorios y continuidad.',proveedores:'Tres proveedores ofrecen plataformas distintas; ninguno cubre gobernanza completa.',default:'Pregunta por arquitectura, datos, capacidad o proveedores.'},['¿Qué caso está realmente listo?','¿Cuánta capacidad tiene TI?']),
+        makeStakeholder('alonso','Alonso Guerra','Gerente de Planta','AG','Necesito menos detenciones, no otra plataforma que nadie use.',['mantenimiento','adopcion','operadores','metricas'],{mantenimiento:'Tenemos seis años de sensores y fallas registradas. Ahí sí veo una oportunidad concreta.',adopcion:'Los operadores deben participar desde el diseño; conocen las excepciones reales.',operadores:'No quiero que un modelo detenga la línea sin una persona responsable.',metricas:'Mediría horas de detención evitadas, falsas alertas y tiempo de respuesta.',default:'Pregunta por mantenimiento, adopción, operadores o métricas.'},['¿Qué caso aporta valor inmediato?','¿Qué supervisión necesita?']),
+      ],
+      evidence:['Solo 5 de 27 ideas tiene caso de negocio.','Gobernanza de IA: 1,2/5.','Mantenimiento posee seis años de datos utilizables.','TI opera sobre capacidad.','No existe inventario de modelos.','El directorio espera evidencia trimestral.'],
+      budget:100,
+      decisions:[
+        {id:'portafolio',title:'Marco de priorización de casos de uso',cost:15,description:'Valor, factibilidad, datos, riesgo y dueño de negocio.',tags:['strategy','governance'],impact:{value:10,people:3,trust:8,risk:10,execution:10}},
+        {id:'mantenimiento',title:'Piloto de mantenimiento predictivo',cost:30,description:'Una planta, línea crítica, supervisión humana y métricas explícitas.',tags:['pilot','human','data'],impact:{value:13,people:5,trust:7,risk:7,execution:10}},
+        {id:'gobernanza',title:'Política y comité de IA',cost:15,description:'Inventario, responsables, evaluación de riesgo e incidentes.',tags:['governance','risk'],impact:{value:3,people:4,trust:11,risk:15,execution:6}},
+        {id:'plataforma',title:'Comprar plataforma corporativa completa',cost:70,description:'Contrato transversal para acelerar todas las iniciativas.',tags:['technology'],impact:{value:8,people:-3,trust:-4,risk:-8,execution:-12}},
+        {id:'datos',title:'Fundación de datos industriales',cost:30,description:'Calidad, arquitectura e integración para los casos prioritarios.',tags:['data','execution'],impact:{value:8,people:2,trust:7,risk:9,execution:13}},
+      ],
+      requiredTags:['strategy','pilot','governance','human'],conflicts:[],synergies:[['portafolio','gobernanza'],['mantenimiento','datos']],outcomeLabels:{value:'Valor estratégico',people:'Adopción organizacional',trust:'Confianza del directorio',risk:'Gobernanza de IA',execution:'Capacidad de entrega'},
+    },
+    {
+      id:'expandirse-o-consolidar',number:'05',title:'¿Expandirse o consolidar?',company:'Café Cordillera SpA',sector:'Cafeterías y alimentos',focus:'Estrategia e inversión',category:'estrategia',ai:false,level:'Intermedio',duration:'60–80 min',role:'Analista de inversiones',
+      short:'Una cadena rentable quiere duplicar locales justo cuando su operación comienza a tensionarse.',mission:'Recomienda si abrir seis nuevos locales, ajustar el ritmo o consolidar la base actual.',
+      companyFacts:[['Locales','14'],['Ciudades','5'],['Personas','186'],['Ventas','$4.900 MM'],['Crecimiento','24% anual'],['Proyecto','6 locales en 12 meses']],
+      kpis:[{label:'EBITDA',before:'15,2%',now:'12,1%',change:'−3,1 pp',tone:'down'},{label:'Ventas mismas tiendas',before:'+11%',now:'+3%',change:'−8 pp',tone:'down'},{label:'Rotación jefaturas',before:'12%',now:'29%',change:'+17 pp',tone:'down'},{label:'Inversión propuesta',before:'—',now:'$1.420 MM',change:'Alta',tone:'down'}],
+      documents:[
+        {id:'van',category:'Finanzas',title:'Evaluación económica del proyecto',summary:'El VAN es positivo en el escenario base.',insight:'El modelo asume aperturas sin retrasos y margen histórico.',rows:[['VAN base','$286 MM','Positivo'],['TIR','18,4%','−'],['VAN adverso','−$174 MM','Negativo']]},
+        {id:'locales',category:'Operaciones',title:'Desempeño por local',summary:'Cuatro locales nuevos aún no alcanzan equilibrio.',insight:'La gerencia está usando promedios que ocultan dispersión.',rows:[['Locales maduros','18,1% EBITDA','−'],['Locales <18 meses','−2,4%','−'],['Tiempo equilibrio','22 meses','Plan: 14']]},
+        {id:'talento',category:'Personas',title:'Cantera de jefaturas',summary:'Solo dos candidatos están listos para liderar nuevos locales.',insight:'El plan requiere seis jefaturas y doce sub-jefaturas.',rows:[['Listos ahora','2','−'],['En desarrollo','5','9–12 meses'],['Vacantes actuales','3','−']]},
+        {id:'mercado',category:'Mercado',title:'Demanda y competencia',summary:'Hay dos ciudades atractivas y cuatro con señales mixtas.',insight:'Una expansión selectiva puede capturar valor sin duplicar la complejidad.',rows:[['Ciudad A','Alta demanda','Competencia media'],['Ciudad B','Alta demanda','Competencia baja'],['Otras 4','Media','Competencia alta']]},
+      ],
+      stakeholders:[
+        makeStakeholder('fundadora','Francisca Molina','Fundadora y CEO','FM','Esta ventana de mercado no estará abierta para siempre.',['velocidad','marca','capital','riesgo'],{velocidad:'Dos ubicaciones podrían ser tomadas por competidores en seis meses.',marca:'La marca está fuerte, pero una mala apertura puede dañarla más que esperar.',capital:'Tenemos deuda disponible, aunque restringiría inversiones operativas.',riesgo:'Acepto abrir menos locales si existe un criterio claro.',default:'Pregunta por velocidad, marca, capital o riesgo.'},['¿Qué oportunidad se pierde al esperar?','¿Aceptarías abrir menos locales?']),
+        makeStakeholder('operaciones','Tomás Vergara','Gerente de Operaciones','TV','Aún no estabilizamos los últimos cuatro locales.',['estandar','proveedores','calidad','capacidad'],{estandar:'Los manuales existen, pero cada jefe resuelve de forma distinta.',proveedores:'La central de producción está en 91% de capacidad.',calidad:'Los reclamos en locales nuevos duplican a los maduros.',capacidad:'Puedo abrir dos locales bien o seis con alto riesgo.',default:'Pregunta por estándar, proveedores, calidad o capacidad.'},['¿Cuántos locales puedes abrir bien?','¿Dónde está el cuello de botella?']),
+        makeStakeholder('inversionista','Paolo Reyes','Representante de inversionistas','PR','Necesitamos crecimiento, pero no a cualquier costo.',['retorno','escenarios','deuda','gobierno'],{retorno:'El escenario adverso destruye valor. Necesito gatillos de avance y detención.',escenarios:'El modelo base es demasiado optimista con plazos y margen.',deuda:'La deuda es posible, pero limita resiliencia ante una caída de consumo.',gobierno:'Aprobaría fases con revisión por hitos.',default:'Pregunta por retorno, escenarios, deuda o gobierno.'},['¿Qué condición pondrías para aprobar?','¿Qué escenario te preocupa?']),
+      ],
+      evidence:['VAN adverso: −$174 MM.','Solo dos jefaturas están listas.','Central de producción al 91%.','Locales nuevos demoran 22 meses en equilibrio.','Dos ubicaciones tienen demanda alta.','Reclamos en locales nuevos duplican a los maduros.'],
+      budget:100,
+      decisions:[
+        {id:'seis-locales',title:'Abrir los seis locales',cost:85,description:'Capturar rápidamente la ventana de mercado.',tags:['growth'],impact:{value:12,people:-14,trust:-10,risk:-18,execution:-15}},
+        {id:'dos-fases',title:'Abrir dos locales y revisar hitos',cost:45,description:'Priorizar ubicaciones fuertes y reevaluar en seis meses.',tags:['strategy','risk'],impact:{value:11,people:3,trust:8,risk:11,execution:10}},
+        {id:'talento',title:'Acelerar cantera de jefaturas',cost:20,description:'Mentoría, movilidad y formación previa a aperturas.',tags:['people','execution'],impact:{value:4,people:12,trust:5,risk:4,execution:12}},
+        {id:'produccion',title:'Ampliar capacidad central',cost:35,description:'Eliminar el cuello de botella antes de la expansión.',tags:['operations','execution'],impact:{value:7,people:4,trust:7,risk:8,execution:12}},
+        {id:'consolidar',title:'Consolidar durante doce meses',cost:15,description:'No abrir locales y recuperar margen y estándares.',tags:['risk','operations'],impact:{value:5,people:8,trust:6,risk:14,execution:9}},
+      ],
+      requiredTags:['strategy','people','execution'],conflicts:[['seis-locales','consolidar']],synergies:[['dos-fases','talento'],['dos-fases','produccion']],outcomeLabels:{value:'Creación de valor',people:'Capacidad de liderazgo',trust:'Calidad de marca',risk:'Riesgo financiero',execution:'Preparación operacional'},
+    },
+    {
+      id:'precio-destruyo-margen',number:'06',title:'El precio que destruyó el margen',company:'Nexo Hogar SpA',sector:'Retail digital',focus:'Marketing, pricing y analítica',category:'marketing',ai:false,level:'Intermedio',duration:'60–80 min',role:'Gerente de rentabilidad comercial',
+      short:'Una campaña récord incrementó pedidos y clientes, pero redujo la utilidad.',mission:'Rediseña precios, promociones y segmentación sin perder la base de clientes adquirida.',
+      companyFacts:[['Canal','E-commerce'],['Categorías','Hogar y organización'],['Pedidos','48.000/mes'],['Clientes activos','214.000'],['Campaña','Despacho gratis + 25% descuento'],['Resultado','Ventas +39%, utilidad −27%']],
+      kpis:[{label:'Ventas campaña',before:'$920 MM',now:'$1.279 MM',change:'+39%',tone:'up'},{label:'Margen contribución',before:'18,4%',now:'8,1%',change:'−10,3 pp',tone:'down'},{label:'Costo despacho',before:'$3.420',now:'$5.180',change:'+51%',tone:'down'},{label:'Recompra 60 días',before:'31%',now:'17%',change:'−14 pp',tone:'down'}],
+      documents:[
+        {id:'cohortes',category:'Analítica',title:'Cohortes de clientes',summary:'Los clientes captados con mayor descuento recompran menos.',insight:'El volumen no representa el mismo valor de vida.',rows:[['Sin descuento','LTV $86.000','Recompra 37%'],['10–15%','LTV $72.000','29%'],['25% + envío','$41.000','17%']]},
+        {id:'productos',category:'Pricing',title:'Rentabilidad por SKU',summary:'El 21% de los pedidos tuvo contribución negativa.',insight:'Productos voluminosos y zonas lejanas concentran pérdidas.',rows:[['SKU rentables','62%','−'],['Margen bajo','17%','−'],['Contribución negativa','21%','−']]},
+        {id:'canales',category:'Marketing',title:'Atribución de campaña',summary:'La plataforma atribuye ventas a anuncios que también habrían ocurrido orgánicamente.',insight:'El ROAS informado está sobreestimado.',rows:[['ROAS plataforma','6,2x','−'],['ROAS incremental','2,7x','−'],['Costo adquisición','$18.900','+44%']]},
+        {id:'clientes',category:'Clientes',title:'Investigación de experiencia',summary:'El descuento atrajo, pero los atrasos y devoluciones dañaron confianza.',insight:'La promesa de entrega fue más importante que el precio para la recompra.',rows:[['Atrasos','23%','−'],['Devoluciones','11%','+5 pp'],['NPS','24','−18']]},
+      ],
+      stakeholders:[
+        makeStakeholder('marketing','Daniela Correa','Gerenta de Marketing','DC','La campaña hizo crecer la base como nunca.',['adquisicion','roas','marca','segmentos'],{adquisicion:'Captamos 31.000 clientes, pero no todos tienen el mismo potencial.',roas:'La plataforma muestra 6,2x; el análisis incremental baja a 2,7x.',marca:'El descuento fue muy visible. Retirarlo de golpe puede generar rechazo.',segmentos:'Los hogares urbanos pequeños recompran más y cuestan menos de servir.',default:'Pregunta por adquisición, ROAS, marca o segmentos.'},['¿El ROAS es realmente 6,2x?','¿Qué segmento vale más?']),
+        makeStakeholder('finanzas','Ignacio López','CFO','IL','El volumen celebró una venta que destruyó contribución.',['margen','envio','ltv','presupuesto'],{margen:'Uno de cada cinco pedidos tuvo contribución negativa.',envio:'El envío gratis sin mínimo fue el mayor problema en productos voluminosos.',ltv:'El LTV de la cohorte promocional es menos de la mitad del orgánico.',presupuesto:'Podemos mantener inversión si cambia el diseño económico.',default:'Pregunta por margen, envío, LTV o presupuesto.'},['¿Dónde se pierde más dinero?','¿Conviene detener publicidad?']),
+        makeStakeholder('cliente','Fernanda Ruiz','Clienta frecuente','FR','No necesito el mayor descuento; necesito que cumplan.',['precio','entrega','lealtad','comunicacion'],{precio:'Un 10% claro me sirve más que 25% con condiciones confusas.',entrega:'Dos pedidos llegaron tarde y uno incompleto.',lealtad:'Volvería si me dan beneficios por frecuencia y fechas confiables.',comunicacion:'La campaña prometía disponibilidad que después cambió en el checkout.',default:'Pregunta por precio, entrega, lealtad o comunicación.'},['¿Qué te haría recomprar?','¿El descuento fue decisivo?']),
+      ],
+      evidence:['21% de pedidos tuvo contribución negativa.','ROAS incremental: 2,7x.','Recompra de cohorte promocional: 17%.','Costo de despacho: +51%.','NPS cayó 18 puntos.','Clientes sin descuento tienen LTV $86.000.'],
+      budget:100,
+      decisions:[
+        {id:'pricing',title:'Precio y envío por rentabilidad',cost:20,description:'Mínimos, zonas y categorías según costo de servir.',tags:['pricing','governance'],impact:{value:14,people:1,trust:5,risk:9,execution:8}},
+        {id:'segmentacion',title:'Campañas por valor de vida',cost:20,description:'Priorizar segmentos de mayor recompra y contribución.',tags:['data','marketing'],impact:{value:12,people:1,trust:7,risk:7,execution:8}},
+        {id:'lealtad',title:'Programa de lealtad y frecuencia',cost:25,description:'Beneficios progresivos en lugar de descuento masivo.',tags:['trust','customer'],impact:{value:8,people:2,trust:13,risk:5,execution:7}},
+        {id:'logistica',title:'Corregir promesa y capacidad logística',cost:30,description:'Disponibilidad real, ventanas y control de productos voluminosos.',tags:['operations','trust'],impact:{value:8,people:7,trust:14,risk:8,execution:10}},
+        {id:'repetir',title:'Repetir campaña masiva',cost:65,description:'Mantener 25% y envío gratis para acelerar volumen.',tags:['growth'],impact:{value:5,people:-4,trust:-8,risk:-15,execution:-6}},
+      ],
+      requiredTags:['pricing','data','trust'],conflicts:[],synergies:[['pricing','segmentacion'],['lealtad','logistica']],outcomeLabels:{value:'Rentabilidad',people:'Carga operacional',trust:'Lealtad de clientes',risk:'Control comercial',execution:'Capacidad de ejecución'},
+    },
+    {
+      id:'dolar-cambia-reglas',number:'07',title:'Cuando el dólar cambia las reglas',company:'TecnoSalud Importaciones SpA',sector:'Equipamiento médico',focus:'Economía aplicada y finanzas',category:'economia',ai:false,level:'Avanzado',duration:'70–90 min',role:'Analista económico-financiero',
+      short:'Una depreciación abrupta amenaza contratos, inventario y continuidad de insumos.',mission:'Construye una respuesta de precios, cobertura, abastecimiento y relación con clientes bajo incertidumbre cambiaria.',
+      companyFacts:[['Importaciones','82% de costos'],['Contratos','Precios fijos 6–12 meses'],['Clientes','Clínicas y distribuidores'],['Moneda compra','USD'],['Cobertura actual','18% de exposición'],['Inventario','3,7 meses']],
+      kpis:[{label:'Tipo de cambio',before:'$890',now:'$1.030',change:'+15,7%',tone:'down'},{label:'Margen bruto',before:'24%',now:'14%',change:'−10 pp',tone:'down'},{label:'Cobertura',before:'35%',now:'18%',change:'−17 pp',tone:'down'},{label:'Inventario crítico',before:'4,2 meses',now:'2,1 meses',change:'−50%',tone:'down'}],
+      documents:[
+        {id:'exposicion',category:'Finanzas',title:'Exposición por moneda y contrato',summary:'La empresa tiene USD 2,8 millones sin cobertura.',insight:'Los contratos fijos concentran la pérdida potencial.',rows:[['Exposición 90 días','USD 1,4 MM','−'],['Exposición 180 días','USD 2,8 MM','−'],['Cobertura','18%','Baja']]},
+        {id:'elasticidad',category:'Mercado',title:'Sensibilidad a precios',summary:'Los insumos críticos tienen baja sensibilidad; accesorios, alta.',insight:'Un ajuste uniforme destruye volumen innecesariamente.',rows:[['Críticos','Elasticidad −0,3','Baja'],['Equipos','−0,8','Media'],['Accesorios','−1,7','Alta']]},
+        {id:'proveedores',category:'Abastecimiento',title:'Opciones de proveedores',summary:'Dos proveedores regionales reducen exposición, con mayor costo base.',insight:'Diversificar mejora continuidad, no necesariamente margen inmediato.',rows:[['Actual Asia','Costo 100','Plazo 75 días'],['Regional A','Costo 108','Plazo 28 días'],['Regional B','Costo 111','Plazo 21 días']]},
+        {id:'contratos',category:'Legal/Comercial',title:'Cláusulas de reajuste',summary:'Solo 23% de contratos permite reajuste automático.',insight:'La renegociación debe priorizar cuentas con relación de largo plazo.',rows:[['Reajuste automático','23%','−'],['Renegociables','51%','−'],['Fijos estrictos','26%','−']]},
+      ],
+      stakeholders:[
+        makeStakeholder('cfo','Alejandra Vidal','CFO','AV','Cada diez pesos de dólar son cerca de $28 MM de impacto anual.',['cobertura','caja','margen','escenarios'],{cobertura:'Estamos subcubiertos. Comprar cobertura hoy es más caro, pero reduce incertidumbre.',caja:'Anticipar compras consume caja y aumenta inventario.',margen:'Con el dólar actual, varios contratos quedan bajo 8% de margen.',escenarios:'Necesito un plan para dólar a $980, $1.030 y $1.100.',default:'Pregunta por cobertura, caja, margen o escenarios.'},['¿Qué exposición tenemos?','¿Conviene cubrir ahora?']),
+        makeStakeholder('comercial','Cristóbal Soto','Gerente Comercial','CS','Subir precios de forma lineal puede romper relaciones.',['clientes','reajuste','elasticidad','competencia'],{clientes:'Las clínicas aceptan conversar si mostramos evidencia y continuidad.',reajuste:'Podemos renegociar 51% de los contratos.',elasticidad:'Los accesorios son sensibles; los insumos críticos, mucho menos.',competencia:'Los competidores están en la misma exposición, salvo uno con inventario antiguo.',default:'Pregunta por clientes, reajuste, elasticidad o competencia.'},['¿Qué clientes aceptarían reajuste?','¿Dónde subir precio primero?']),
+        makeStakeholder('supply','Rocío Mella','Jefa de Abastecimiento','RM','El riesgo no es solo precio; algunos insumos pueden faltar.',['proveedores','inventario','plazos','continuidad'],{proveedores:'Dos alternativas regionales son más caras pero mucho más rápidas.',inventario:'Tenemos 2,1 meses en productos críticos; no conviene esperar demasiado.',plazos:'Asia tarda 75 días y el flete es volátil.',continuidad:'Una combinación de proveedores puede proteger categorías críticas.',default:'Pregunta por proveedores, inventario, plazos o continuidad.'},['¿Qué producto puede faltar?','¿Conviene diversificar?']),
+      ],
+      evidence:['USD 2,8 MM sin cobertura suficiente.','Cada $10 de dólar impacta cerca de $28 MM anuales.','51% de contratos es renegociable.','Insumos críticos tienen elasticidad −0,3.','Inventario crítico: 2,1 meses.','Proveedores regionales reducen plazo a 21–28 días.'],
+      budget:100,
+      decisions:[
+        {id:'cobertura',title:'Cobertura cambiaria por tramos',cost:25,description:'Proteger exposición 90 y 180 días con límites definidos.',tags:['finance','risk'],impact:{value:9,people:1,trust:5,risk:14,execution:7}},
+        {id:'precios',title:'Reajustes segmentados',cost:15,description:'Ajustar según elasticidad, criticidad y relación contractual.',tags:['pricing','strategy'],impact:{value:13,people:1,trust:6,risk:8,execution:8}},
+        {id:'renegociar',title:'Renegociación con clientes prioritarios',cost:15,description:'Transparencia, continuidad y fórmulas de revisión.',tags:['trust','governance'],impact:{value:8,people:2,trust:13,risk:6,execution:7}},
+        {id:'diversificar',title:'Diversificar proveedores críticos',cost:30,description:'Incorporar fuentes regionales para categorías sensibles.',tags:['operations','risk'],impact:{value:6,people:3,trust:9,risk:13,execution:9}},
+        {id:'comprar-todo',title:'Anticipar todas las compras',cost:70,description:'Aumentar inventario antes de una nueva depreciación.',tags:['inventory'],impact:{value:8,people:-2,trust:4,risk:-10,execution:-8}},
+      ],
+      requiredTags:['finance','pricing','risk'],conflicts:[],synergies:[['cobertura','precios'],['renegociar','diversificar']],outcomeLabels:{value:'Resultado financiero',people:'Carga organizacional',trust:'Relación con clientes',risk:'Resiliencia cambiaria',execution:'Capacidad de respuesta'},
+    },
+    {
+      id:'ia-vender-sin-perder-personas',number:'08',title:'IA para vender más, sin perder a las personas',company:'Mercado Cercano SpA',sector:'Retail y canales digitales',focus:'IA comercial y experiencia de cliente',category:'ia',ai:true,level:'Avanzado',duration:'75–95 min',role:'Gerente de experiencia y analítica comercial',
+      short:'La empresa quiere personalizar ventas con IA sin volver invisible la relación humana.',mission:'Diseña una arquitectura comercial que combine recomendación, automatización y atención humana con métricas de valor y confianza.',
+      companyFacts:[['Clientes','620.000'],['Canales','Web, app, call center y tiendas'],['Contactos','190.000/mes'],['Datos','Compras, navegación y servicio'],['Objetivo','Ventas +12%'],['Riesgo','Fatiga y pérdida de confianza']],
+      kpis:[{label:'Conversión digital',before:'3,8%',now:'3,6%',change:'−0,2 pp',tone:'down'},{label:'Costo por contacto',before:'$2.140',now:'$2.760',change:'+29%',tone:'down'},{label:'NPS',before:'54',now:'41',change:'−13',tone:'down'},{label:'Abandono chatbot',before:'—',now:'46%',change:'Alto',tone:'down'}],
+      documents:[
+        {id:'modelo',category:'IA',title:'Prueba de recomendador',summary:'El modelo aumenta clics 18%, pero favorece productos de alto margen.',insight:'No se evaluó diversidad, pertinencia ni reclamos posteriores.',rows:[['CTR','+18%','−'],['Ticket','+6%','−'],['Diversidad catálogo','−24%','−'],['Reclamos','+9%','−']]},
+        {id:'chatbot',category:'Servicio',title:'Piloto de chatbot',summary:'Resuelve consultas simples, pero bloquea acceso rápido a una persona.',insight:'La contención forzada explica buena parte del abandono.',rows:[['Resolución automática','39%','−'],['Abandono','46%','−'],['Escalamiento correcto','61%','−']]},
+        {id:'segmentos',category:'Datos',title:'Segmentación y consentimiento',summary:'Las preferencias se infieren con datos de múltiples canales.',insight:'La empresa no comunica claramente cómo usa la información para personalizar.',rows:[['Clientes perfilados','82%','−'],['Preferencias explícitas','19%','−'],['Consentimiento granular','No','−']]},
+        {id:'equipos',category:'Personas',title:'Impacto en vendedores y servicio',summary:'Los equipos temen perder autonomía y comisiones.',insight:'La IA puede asistir, pero los incentivos actuales generan competencia con el sistema.',rows:[['Confianza en recomendaciones','38/100','Baja'],['Formación','12%','Baja'],['Temor a pérdida de ingresos','57%','Alto']]},
+      ],
+      stakeholders:[
+        makeStakeholder('ecommerce','Josefina Marín','Gerenta e-commerce','JM','Necesito personalización, no más mensajes masivos.',['recomendador','conversion','catalogo','metricas'],{recomendador:'El CTR subió, pero el modelo empuja margen y reduce diversidad.',conversion:'La conversión no mejoró porque la promesa y el servicio siguen fallando.',catalogo:'Marcas pequeñas perdieron visibilidad, aunque eran relevantes para algunos clientes.',metricas:'Mediría conversión incremental, recompra, reclamos y diversidad.',default:'Pregunta por recomendador, conversión, catálogo o métricas.'},['¿El modelo realmente vende más?','¿Qué métrica falta?']),
+        makeStakeholder('servicio','Nicolás Campos','Gerente de Servicio','NC','El chatbot resuelve, pero también encierra.',['chatbot','escalamiento','costos','casos'],{chatbot:'Funciona bien con estado de pedido y horarios, mal con devoluciones o clientes molestos.',escalamiento:'Debe detectar frustración y permitir acceso visible a una persona.',costos:'El costo baja solo si no generamos contactos repetidos.',casos:'Reclamos, vulnerabilidad y alto valor necesitan atención humana prioritaria.',default:'Pregunta por chatbot, escalamiento, costos o casos.'},['¿Qué debe resolver el chatbot?','¿Cuándo debe intervenir una persona?']),
+        makeStakeholder('vendedora','Patricia Rojas','Vendedora omnicanal','PR','La herramienta debería ayudarme, no competir conmigo.',['comisiones','autonomia','recomendaciones','clientes'],{comisiones:'No está claro quién recibe crédito cuando una recomendación digital termina en tienda.',autonomia:'Necesito poder explicar o descartar una sugerencia, no obedecerla.',recomendaciones:'A veces ofrece productos sin stock o que no calzan con lo conversado.',clientes:'Las personas cuentan cosas que no aparecen en el historial digital.',default:'Pregunta por comisiones, autonomía, recomendaciones o clientes.'},['¿Qué haría útil la IA para ti?','¿Dónde falla la recomendación?']),
+        makeStakeholder('datos','Macarena Soto','Oficial de datos','MS','Personalizar no significa usar todo lo que tenemos.',['consentimiento','sesgo','minimizacion','transparencia'],{consentimiento:'Solo 19% entregó preferencias explícitas. Necesitamos opciones claras y controlables.',sesgo:'El modelo favorece productos de alto margen; eso puede no coincidir con el interés del cliente.',minimizacion:'No todos los datos de servicio deben alimentar marketing.',transparencia:'Debemos explicar por qué se recomienda algo y permitir ajustar preferencias.',default:'Pregunta por consentimiento, sesgo, minimización o transparencia.'},['¿Qué datos no deberíamos usar?','¿Cómo damos control al cliente?']),
+      ],
+      evidence:['CTR del recomendador: +18%, reclamos: +9%.','Abandono del chatbot: 46%.','Solo 19% entregó preferencias explícitas.','Confianza de vendedores: 38/100.','El modelo reduce diversidad del catálogo 24%.','El escalamiento correcto del chatbot es 61%.'],
+      budget:100,
+      decisions:[
+        {id:'asistente-vendedor',title:'IA como asistente del vendedor',cost:25,description:'Sugerencias explicables, autonomía humana y nueva atribución comercial.',tags:['human','people','ai'],impact:{value:10,people:14,trust:9,risk:7,execution:9}},
+        {id:'chatbot-hibrido',title:'Chatbot híbrido con salida humana visible',cost:20,description:'Automatizar consultas simples y escalar según complejidad o frustración.',tags:['human','service','governance'],impact:{value:9,people:6,trust:13,risk:8,execution:9}},
+        {id:'preferencias',title:'Centro de preferencias y consentimiento',cost:20,description:'Control granular, transparencia y minimización de datos.',tags:['data','governance','trust'],impact:{value:5,people:3,trust:15,risk:14,execution:7}},
+        {id:'metricas',title:'Evaluación integral del recomendador',cost:15,description:'Conversión incremental, diversidad, recompra y reclamos.',tags:['data','governance'],impact:{value:10,people:2,trust:8,risk:10,execution:9}},
+        {id:'automatizar-contacto',title:'Automatizar 80% del contacto',cost:60,description:'Chatbot como canal principal con equipos humanos reducidos.',tags:['automation'],impact:{value:12,people:-18,trust:-20,risk:-16,execution:-8}},
+        {id:'solo-marketing',title:'Usar IA solo para campañas',cost:30,description:'Personalización de anuncios sin rediseñar servicio ni incentivos.',tags:['marketing'],impact:{value:7,people:-4,trust:-5,risk:-6,execution:3}},
+      ],
+      requiredTags:['human','data','governance','trust'],conflicts:[['automatizar-contacto','chatbot-hibrido']],synergies:[['asistente-vendedor','chatbot-hibrido'],['preferencias','metricas']],outcomeLabels:{value:'Valor comercial',people:'Integración con equipos',trust:'Confianza del cliente',risk:'Uso responsable de datos',execution:'Capacidad omnicanal'},
+    },
+  ];
+
+  window.EMPRESA_VIVA_CASES = cases;
+})();

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#202124" />
+    <meta name="description" content="Empresa Viva, piloto público de decisiones empresariales de Núcleo Vivo Lab." />
+    <title>Empresa Viva · Versión piloto · Núcleo Vivo Lab</title>
+    <link rel="icon" href="../../../assets/nucleo-vivo-isotipo-oficial.svg" type="image/svg+xml" />
+    <link href="./src/styles.css" rel="stylesheet" />
+    <style>
+      .nv-pilot-banner{position:relative;z-index:9999;display:flex;align-items:center;justify-content:center;gap:8px 18px;flex-wrap:wrap;padding:11px 18px;color:#573b00;background:#fff2cc;border-bottom:1px solid #e8ce79;font:700 12px/1.45 "Segoe UI",Arial,sans-serif;text-align:center}
+      .nv-pilot-banner strong{font-size:13px}.nv-pilot-banner a{color:#075d68;text-underline-offset:3px}.nv-pilot-message{font-weight:600}
+      @media(max-width:680px){.nv-pilot-banner{align-items:flex-start;flex-direction:column;text-align:left;padding:12px 15px}.nv-pilot-banner a{min-height:34px;display:inline-flex;align-items:center}}
+    </style>
+  </head>
+  <body>
+    <aside class="nv-pilot-banner" aria-label="Condiciones de uso del piloto">
+      <strong>Versión piloto</strong>
+      <span class="nv-pilot-message">El progreso se guarda únicamente en este navegador. No ingresar datos reales, sensibles, clínicos, académicos, personales ni empresariales. El piloto no constituye una evaluación académica oficial.</span>
+      <a href="../../">← Volver a Núcleo Vivo Lab</a>
+    </aside>
+    <div id="app"></div>
+    <script src="./src/cases.js"></script>
+    <script src="./src/case_extensions.js"></script>
+    <script src="./src/academic.js"></script>
+    <script src="./src/engine.js"></script>
+    <script src="./src/app.js"></script>
+  </body>
+</html>
