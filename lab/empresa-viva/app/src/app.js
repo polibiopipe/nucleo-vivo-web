@@ -8,6 +8,9 @@
     ['encargo','Encargo'],['empresa','Empresa'],['documentos','Documentos'],['entrevistas','Entrevistas'],
     ['analisis','Análisis'],['decisiones','Decisiones'],['directorio','Directorio'],['resultados','Resultados'],
   ];
+  const MILESTONES = [
+    ['Encargo',0,0],['Investigar',1,3],['Diagnóstico',4,4],['Decidir',5,5],['Presentar',6,6],['Evaluación',7,7],
+  ];
   const root = document.getElementById('app');
 
   const freshCaseState = () => ({
@@ -83,6 +86,13 @@
   }
 
   function brandCompact(){ return `<a class="brand-compact" href="../../" aria-label="Volver a Núcleo Vivo Lab"><img src="../../assets/nucleo-vivo-logo-oficial-horizontal.png" alt="Núcleo Vivo · Cultura, liderazgo y bienestar"><span class="brand-product"><strong>EMPRESA VIVA</strong><small>Laboratorio de decisiones empresariales</small></span></a>`; }
+  const FEMALE_NAMES = new Set(['carolina','paula','claudia','gabriela','valentina','maría','maria','sofía','sofia','francisca','daniela','fernanda','alejandra','rocío','rocio','josefina','patricia','macarena','marcela','ignacia']);
+  function portraitFor(c,st){
+    const first=String(st.name||'').trim().split(/\s+/)[0].toLowerCase();
+    const pool=FEMALE_NAMES.has(first)?['02','04','06','08']:['01','03','05','07'];
+    const caseIndex=Math.max(0,CASES.indexOf(c)),actorIndex=Math.max(0,c.stakeholders.indexOf(st));
+    return `./assets/people/person-${pool[(caseIndex+actorIndex)%pool.length]}.jpg`;
+  }
 
   function landingView(){
     return `<div class="landing-shell">
@@ -169,10 +179,10 @@
     if(!ui.selectedStakeholder) ui.selectedStakeholder=c.stakeholders[0].id;
     const stage=Math.max(0,Math.min(7,cs.currentStage||0));
     return `<div class="sim-shell">
-      <header class="sim-header"><button class="mobile-menu" data-action="toggle-nav">${icon('menu')}</button>${brandCompact()}<div class="sim-case-title"><span>Caso ${c.number}</span><strong>${esc(c.title)}</strong></div><div class="sim-header-actions"><span class="autosave">${icon('check',15)} Guardado automático</span><button class="icon-btn" data-action="dashboard" title="Salir al catálogo">${icon('home')}</button></div></header>
-      <div class="sim-layout">
-        <aside class="stage-sidebar ${ui.mobileNav?'open':''}"><div class="side-case"><span>${c.ai?icon('brain',19):icon('briefcase',19)}</span><div><small>${esc(c.company)}</small><strong>${esc(c.role)}</strong></div></div><nav>${STAGES.map((s,i)=>`<button class="${i===stage?'active':''} ${i<stage||cs.completed?'done':''}" data-stage="${i}"><span>${i<stage||cs.completed?icon('check',15):String(i+1).padStart(2,'0')}</span>${s[1]}</button>`).join('')}</nav><div class="side-progress"><div><span>Avance del caso</span><b>${progressFor(cs)}%</b></div><i><em style="width:${progressFor(cs)}%"></em></i><button data-action="reset-case">${icon('reset',15)} Reiniciar caso</button></div></aside>
-        <main class="workspace">${stageView(c,cs,stage)}</main>
+      <header class="sim-header"><button class="mobile-menu" data-action="toggle-nav" aria-label="Abrir navegación del caso">${icon('menu')}</button><div class="ev-sim-brand">${brandCompact()}</div><div class="sim-case-title"><span>EMPRESA VIVA · CASO ${c.number}</span><strong>${esc(c.title)}</strong><small>${esc(c.company)}</small></div><div class="sim-header-actions"><span class="ev-learning-mode">Modo aprendizaje</span><span class="autosave">${icon('check',15)} Guardado local</span><button class="icon-btn" data-action="dashboard" title="Salir al catálogo" aria-label="Salir al catálogo">${icon('home')}</button></div></header>
+      <div class="sim-layout stage-${STAGES[stage][0]}">
+        <aside class="stage-sidebar ${ui.mobileNav?'open':''}"><div class="side-active-label">CASO ACTIVO</div><div class="side-case"><span>${c.ai?icon('brain',19):icon('briefcase',19)}</span><div><small>${esc(c.company)}</small><strong>${esc(c.title)}</strong><em>${esc(c.role)}</em></div></div><nav>${STAGES.map((s,i)=>`<button class="${i===stage?'active':''} ${i<stage||cs.completed?'done':''}" data-stage="${i}"><span>${i<stage||cs.completed?icon('check',15):String(i+1).padStart(2,'0')}</span>${s[1]}</button>`).join('')}</nav><div class="side-progress"><div><span>Avance del caso</span><b>${progressFor(cs)}%</b></div><i><em style="width:${progressFor(cs)}%"></em></i><small>${stage+1} de 8 etapas</small><button data-action="reset-case">${icon('reset',15)} Reiniciar caso</button></div></aside>
+        <main class="workspace"><nav class="ev-stage-track" aria-label="Hitos del caso">${MILESTONES.map(([label,start,end],index)=>`<button class="${stage>=start&&stage<=end?'active':''} ${stage>end||cs.completed?'done':''}" data-stage="${start}"><span>${stage>end||cs.completed?icon('check',13):index+1}</span><small>${label}</small></button>`).join('')}<div class="ev-stage-budget"><small>Avance disponible</small><strong>${progressFor(cs)}%</strong></div></nav>${stageView(c,cs,stage)}</main>
         <aside class="case-notebook"><div class="notebook-head">${icon('note',18)} Cuaderno del analista</div><textarea data-field="quickNote" placeholder="Registra una observación, duda o relación entre datos...">${esc(cs.quickNote||'')}</textarea><div class="notebook-summary"><span>Documentos revisados <b>${cs.readDocuments.length}/${c.documents.length}</b></span><span>Actores consultados <b>${interviewedCount(cs)}/${c.stakeholders.length}</b></span><span>Evidencias seleccionadas <b>${cs.analysis.evidence.length}</b></span></div></aside>
       </div>${documentModal(c)}${toastView()}
     </div>`;
@@ -208,9 +218,20 @@
   function entrevistasView(c,cs){
     const st=c.stakeholders.find(x=>x.id===ui.selectedStakeholder)||c.stakeholders[0];
     const msgs=cs.interviews[st.id]||[{sender:'actor',text:st.intro}];
-    return `${stageHeader('Etapa 4 · Entrevistas','La empresa tiene <em>varias verdades</em>','Formula preguntas específicas. Cada actor conoce una parte del problema y también tiene intereses propios.')}
-      <div class="interview-shell"><div class="actor-tabs">${c.stakeholders.map(s=>`<button class="${s.id===st.id?'active':''}" data-stakeholder="${s.id}"><span>${s.initials}</span><div><strong>${esc(s.name)}</strong><small>${esc(s.role)}</small></div>${hasInterview(cs,s.id)?icon('check',15):''}</button>`).join('')}</div>
-      <section class="chat-panel"><header><div class="avatar">${st.initials}</div><div><strong>${esc(st.name)}</strong><span>${esc(st.role)}</span></div><em>Personaje ficticio</em></header><div class="messages">${msgs.map(m=>`<div class="message ${m.sender}"><span>${m.sender==='student'?'Tú':st.initials}</span><p>${esc(m.text)}</p></div>`).join('')}</div><div class="suggested">${st.suggested.map(q=>`<button data-suggested="${esc(q)}">${esc(q)}</button>`).join('')}</div><form class="chat-form" id="chat-form"><textarea id="chat-input" placeholder="Escribe una pregunta profesional y específica..." required></textarea><button class="btn btn-primary" type="submit">Preguntar ${icon('arrow')}</button></form></section></div>
+    return `${stageHeader('Etapa 4 · Investigar actores','Conversa con quienes <em>viven el problema</em>','Contrasta perspectivas antes de diagnosticar. Cada actor conoce una parte del sistema y también protege intereses legítimos.',`<div class="mini-progress"><span>${interviewedCount(cs)}/${c.stakeholders.length}</span><small>consultados</small></div>`) }
+      <div class="ev-actor-workbench">
+        <section class="ev-actor-directory"><div class="ev-actor-directory-head"><div><span>MAPA DE ACTORES</span><h2>Personas clave de ${esc(c.company)}</h2></div><p>Selecciona una persona y formula preguntas abiertas para ampliar la evidencia del caso.</p></div>
+          <div class="ev-actor-grid">${c.stakeholders.map(s=>`<button class="ev-actor-card ${s.id===st.id?'active':''}" data-stakeholder="${s.id}"><span class="ev-actor-photo"><img src="${portraitFor(c,s)}" alt="Retrato ficticio de ${esc(s.name)}">${hasInterview(cs,s.id)?`<b>${icon('check',13)}</b>`:''}</span><span class="ev-actor-card-copy"><strong>${esc(s.name)}</strong><small>${esc(s.role)}</small><em>${esc(s.themes.slice(0,2).join(' · '))}</em><i>${hasInterview(cs,s.id)?'Conversación registrada':'Conversar'} ${icon('chat',12)}</i></span></button>`).join('')}</div>
+          <div class="ev-interview-tip">${icon('spark',18)} <span><strong>Investiga antes de concluir.</strong> Nuevas preguntas pueden revelar relaciones que no aparecen en los documentos.</span></div>
+        </section>
+        <aside class="ev-actor-profile">
+          <header><img src="${portraitFor(c,st)}" alt="Retrato ficticio de ${esc(st.name)}"><div><span>ACTOR SELECCIONADO</span><h2>${esc(st.name)}</h2><strong>${esc(st.role)}</strong><div>${st.themes.map(theme=>`<em>${esc(theme)}</em>`).join('')}</div></div></header>
+          <section class="ev-context-note"><span>${icon('note',18)}</span><div><strong>Nota contextual</strong><p>${esc(st.intro)}</p></div></section>
+          <section class="ev-conversation"><div class="ev-profile-section-title"><strong>Conversación</strong><span>Personaje ficticio</span></div><div class="messages">${msgs.map(m=>`<div class="message ${m.sender}"><span>${m.sender==='student'?'Tú':st.initials}</span><p>${esc(m.text)}</p></div>`).join('')}</div></section>
+          <form class="chat-form" id="chat-form"><label for="chat-input">Escribe tu pregunta a ${esc(st.name.split(' ')[0])}</label><textarea id="chat-input" placeholder="Ej.: ¿Cuál es la tensión más urgente desde tu área?" required></textarea><button class="btn btn-primary" type="submit" aria-label="Enviar pregunta">${icon('arrow')}</button></form>
+          <section class="suggested"><strong>Preguntas sugeridas</strong>${st.suggested.map(q=>`<button type="button" data-suggested="${esc(q)}">${icon('arrow',12)} ${esc(q)}</button>`).join('')}</section>
+        </aside>
+      </div>
       ${stageFooter(cs,3,'Construir diagnóstico')}`;
   }
   function analisisView(c,cs){
