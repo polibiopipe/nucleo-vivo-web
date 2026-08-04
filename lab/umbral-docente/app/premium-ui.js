@@ -19,7 +19,7 @@
   let catalogFilter = state.profile?.cycle || 'all';
 
   app.insertAdjacentHTML('afterbegin', `
-    <aside class="ud-sidebar" aria-label="Navegación de Umbral Docente">
+    <aside class="ud-sidebar" id="udSidebar" aria-label="Navegación de Umbral Docente">
       <div class="ud-sidebar-brand">
         <img src="../../assets/nucleo-vivo-logo-oficial-horizontal.png" alt="Núcleo Vivo · Cultura, liderazgo y bienestar">
         <div><strong>Umbral Docente</strong><span>Simulador de prácticas pedagógicas</span></div>
@@ -42,7 +42,7 @@
   `);
 
   topbar.insertAdjacentHTML('afterbegin', `
-    <button class="ud-menu-button" type="button" aria-label="Abrir menú">${icons.menu}</button>
+    <button class="ud-menu-button" type="button" aria-label="Abrir menú" aria-controls="udSidebar" aria-expanded="false">${icons.menu}</button>
     <div class="ud-topbar-product">
       <span class="ud-product-mark">UD</span>
       <div><strong>Umbral Docente</strong><small>Laboratorio de prácticas pedagógicas</small></div>
@@ -62,9 +62,21 @@
 
   const sidebar = document.querySelector('.ud-sidebar');
   const scrim = document.querySelector('.ud-drawer-scrim');
-  const closeDrawer = () => document.body.classList.remove('ud-drawer-open');
-  document.querySelector('.ud-menu-button').addEventListener('click', () => document.body.classList.toggle('ud-drawer-open'));
+  const menuButton = document.querySelector('.ud-menu-button');
+  const setDrawerState = (open) => {
+    document.body.classList.toggle('ud-drawer-open', open);
+    menuButton.setAttribute('aria-expanded', String(open));
+    menuButton.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+  };
+  const closeDrawer = () => setDrawerState(false);
+  menuButton.addEventListener('click', () => setDrawerState(!document.body.classList.contains('ud-drawer-open')));
   scrim.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && document.body.classList.contains('ud-drawer-open')) {
+      closeDrawer();
+      menuButton.focus();
+    }
+  });
 
   document.querySelectorAll('[data-ud-screen]').forEach((button) => {
     button.addEventListener('click', () => {
@@ -94,22 +106,65 @@
     return Math.max(0, Math.min(100, (state.step || 0) * 20));
   }
 
+  function currentStageName() {
+    return ['Por comenzar', 'Observar', 'Planificar', 'Intervenir', 'Reflexionar', 'Integrar'][state.step || 0];
+  }
+
+  function hasAnnualPlan() {
+    const plan = state.annualPlan;
+    return Boolean(plan && typeof plan === 'object' && Object.values(plan).some((value) => {
+      if (Array.isArray(value)) return value.length > 0;
+      if (value && typeof value === 'object') return Object.keys(value).length > 0;
+      return String(value || '').trim().length > 0;
+    }));
+  }
+
+  function scenarioStatus(scenario) {
+    if (state.scenario?.id !== scenario.id) return 'No iniciado';
+    return (state.step || 0) >= 5 ? 'Síntesis disponible' : 'En progreso';
+  }
+
   function dashboardMarkup() {
     const profile = state.profile;
     const activeRoute = routeById(profile.route);
     const featured = careers.flatMap((career) => scenarios.filter((scenario) => scenario.career === career.id).slice(0, 2));
+    const activeScenario = state.scenario;
+    const annualPlanSaved = hasAnnualPlan();
+    const completedCurrent = activeScenario && (state.step || 0) >= 5;
     return `
       <section class="screen ud-dashboard" data-premium-screen="dashboard">
         <header class="ud-dashboard-heading">
-          <div><span class="eyebrow">Tu espacio formativo</span><h1>¡Bienvenida, ${esc(profile.name || 'Estudiante')}!</h1><p>Observa, planifica, interviene y reflexiona sobre situaciones auténticas de práctica docente.</p></div>
+          <div><span class="eyebrow">Tu espacio formativo</span><h1>Bienvenida, ${esc(profile.name || 'Estudiante')}</h1><p>Un entorno de práctica situada para observar, comprender, planificar, intervenir y reflexionar antes de llevar decisiones pedagógicas al aula.</p></div>
           <button class="btn btn-soft" id="udEditProfile">Editar perfil</button>
         </header>
 
+        <section class="ud-dashboard-hero" aria-labelledby="udDashboardHeroTitle">
+          <div class="ud-dashboard-hero-copy">
+            <span class="eyebrow">Simulador formativo</span>
+            <h2 id="udDashboardHeroTitle">Practica decisiones pedagógicas con contexto y retroalimentación.</h2>
+            <p>Recorre casos ficticios, fundamenta tus decisiones y construye criterios transferibles a tu práctica. El piloto funciona sin cuenta y conserva el avance sólo en este navegador.</p>
+            <div class="ud-dashboard-actions">
+              <button class="btn btn-primary" id="udResumePractice">${activeScenario ? 'Continuar práctica' : 'Explorar escenarios'}</button>
+              <button class="btn btn-secondary" id="udSourcesFundamentals">Fuentes y fundamentos</button>
+            </div>
+            <small class="ud-privacy-inline">Versión piloto · No ingreses datos reales, sensibles ni identificables.</small>
+          </div>
+          <aside class="ud-current-card" aria-label="Estado local de tu práctica">
+            <span>Actividad local</span>
+            <strong>${activeScenario ? esc(activeScenario.title) : 'Aún no has iniciado un escenario'}</strong>
+            <dl>
+              <div><dt>Ruta</dt><dd>${esc(activeRoute.title)}</dd></div>
+              <div><dt>Etapa</dt><dd>${activeScenario ? currentStageName() : 'Por comenzar'}</dd></div>
+              <div><dt>Plan anual</dt><dd>${annualPlanSaved ? 'Borrador disponible' : 'Sin borrador'}</dd></div>
+            </dl>
+          </aside>
+        </section>
+
         <section class="ud-stat-strip" aria-label="Resumen de actividad">
-          <article><span class="ud-stat-icon">◎</span><div><small>Ruta activa</small><strong>${esc(activeRoute.title)}</strong></div></article>
-          <article><span class="ud-stat-icon">18</span><div><small>Banco de práctica</small><strong>18 escenarios</strong></div></article>
-          <article><span class="ud-stat-icon">${state.step || 0}</span><div><small>Etapa actual</small><strong>${state.scenario ? ['Inicio', 'Observar', 'Planificar', 'Intervenir', 'Reflexionar', 'Integrar'][state.step] : 'Lista para comenzar'}</strong></div></article>
-          <article><span class="ud-stat-icon">✓</span><div><small>Privacidad</small><strong>Solo este navegador</strong></div></article>
+          <article><span class="ud-stat-icon">${activeScenario ? '1' : '0'}</span><div><small>Práctica activa</small><strong>${activeScenario ? '1 escenario iniciado' : 'Sin escenario iniciado'}</strong></div></article>
+          <article><span class="ud-stat-icon">${completedCurrent ? '1' : '0'}</span><div><small>Cierre actual</small><strong>${completedCurrent ? 'Síntesis disponible' : 'Pendiente'}</strong></div></article>
+          <article><span class="ud-stat-icon">${annualPlanSaved ? '✓' : '—'}</span><div><small>Planificación anual</small><strong>${annualPlanSaved ? 'Borrador local' : 'Sin borrador'}</strong></div></article>
+          <article><span class="ud-stat-icon">↗</span><div><small>Última actividad</small><strong>${activeScenario ? esc(currentStageName()) : 'Sin registro local'}</strong></div></article>
         </section>
 
         <div class="ud-section-title"><div><span class="eyebrow">Rutas de formación</span><h2>Elige tu ciclo formativo</h2></div><button class="ud-text-button" id="udAllScenarios">Ver los 18 escenarios →</button></div>
@@ -156,6 +211,11 @@
       scrollTop();
     };
     document.querySelector('#udEditProfile').onclick = () => { state.profileDraft = { ...state.profile }; go('onboarding'); };
+    document.querySelector('#udResumePractice').onclick = () => {
+      if (!state.scenario) openCatalog(state.profile?.cycle || 'all');
+      else go(['brief', 'brief', 'planner', 'simulation', 'reflection', 'results'][state.step || 0]);
+    };
+    document.querySelector('#udSourcesFundamentals').onclick = () => sourcesDialog.showModal();
     document.querySelector('#udAllScenarios').onclick = document.querySelector('#udAllScenariosSecondary').onclick = () => openCatalog('all');
     document.querySelectorAll('[data-ud-cycle-card]').forEach((button) => button.onclick = () => openCatalog(button.dataset.udCycleCard));
     document.querySelectorAll('[data-ud-scenario]').forEach((button) => button.onclick = () => selectScenario(button.dataset.udScenario));
@@ -177,10 +237,19 @@
           ${careers.map((career) => `<button class="${filter === career.id ? 'active' : ''}" data-ud-filter="${career.id}">${career.short} <span>${career.count}</span></button>`).join('')}
         </nav>
         <div class="ud-scenario-grid">
-          ${visible.map((scenario, index) => `<button class="ud-scenario-card ${cycleClass(scenario.career)}" data-ud-scenario="${scenario.id}">
-            <span class="ud-scenario-photo">${avatar(scenario)}<b>${String(index + 1).padStart(2, '0')}</b><i>${getCareer(scenario.career).name}</i></span>
-            <span class="ud-scenario-copy"><small>${scenario.grade}</small><strong>${scenario.title}</strong><p>${scenario.summary}</p><span><em>${scenario.duration}</em><em>${scenario.difficulty}</em><b>Practicar →</b></span></span>
-          </button>`).join('')}
+          ${visible.map((scenario, index) => `<article class="ud-scenario-card ${cycleClass(scenario.career)}">
+            <div class="ud-scenario-photo">${avatar(scenario)}<b>${String(index + 1).padStart(2, '0')}</b><i>${getCareer(scenario.career).name}</i></div>
+            <div class="ud-scenario-copy">
+              <div class="ud-scenario-heading"><small>${scenario.grade}</small><span class="ud-scenario-status">${scenarioStatus(scenario)}</span></div>
+              <strong>${scenario.title}</strong>
+              <dl class="ud-scenario-meta">
+                <div><dt>Edad</dt><dd>${scenario.age} años aprox.</dd></div>
+                <div><dt>Foco</dt><dd>${scenario.curriculum?.core || 'Práctica situada'}</dd></div>
+              </dl>
+              <details class="ud-scenario-details"><summary>Ver situación</summary><p>${scenario.summary}</p></details>
+              <div class="ud-scenario-footer"><span><em>${scenario.duration}</em><em>${scenario.difficulty}</em></span><button type="button" data-ud-scenario="${scenario.id}" aria-label="Practicar: ${esc(scenario.title)}">Practicar →</button></div>
+            </div>
+          </article>`).join('')}
         </div>
         <footer class="ud-catalog-footer"><button class="btn btn-secondary" id="udCatalogBack">← Mi plataforma</button><p><strong>Versión piloto.</strong> La actividad es formativa y no constituye una evaluación académica oficial.</p><button class="btn btn-soft" id="udCatalogSupport">Centro de apoyo</button></footer>
       </section>`;
@@ -210,17 +279,84 @@
 
   function syncStageLabels() {
     const labels = [
-      ['Observar', 'Comprende el contexto'],
+      ['Observar', 'Reconoce señales'],
+      ['Comprender', 'Interpreta el contexto'],
       ['Planificar', 'Diseña la experiencia'],
       ['Intervenir', 'Decide y adapta'],
       ['Reflexionar', 'Analiza evidencias'],
       ['Integrar', 'Transfiere el aprendizaje']
     ];
-    document.querySelectorAll('.side-rail .step').forEach((step, index) => {
-      const title = step.querySelector('strong');
-      const detail = step.querySelector('span:not(.step-num)');
-      if (title && labels[index] && title.textContent !== labels[index][0]) title.textContent = labels[index][0];
-      if (detail && labels[index] && detail.textContent !== labels[index][1]) detail.textContent = labels[index][1];
+    const activeByScreen = { brief: 0, planner: 2, simulation: 3, reflection: 4, results: 5 };
+    const activeIndex = activeByScreen[state.screen] ?? 0;
+    const steps = document.querySelector('.side-rail .steps');
+    if (!steps || steps.dataset.udStageScreen === state.screen) return;
+    steps.dataset.udStageScreen = state.screen;
+    steps.innerHTML = labels.map(([title, detail], index) => {
+      const status = index < activeIndex ? 'completed' : index === activeIndex ? 'active' : 'upcoming';
+      return `<div class="step ${status}" ${index === activeIndex ? 'aria-current="step"' : ''} ${index > activeIndex ? 'aria-disabled="true"' : ''}>
+        <span class="step-num" aria-hidden="true">${index < activeIndex ? '✓' : index + 1}</span>
+        <div><strong>${title}</strong><span>${detail}</span></div>
+      </div>`;
+    }).join('');
+  }
+
+  function syncAccessibleFields() {
+    rootNode.querySelectorAll('label').forEach((label, labelIndex) => {
+      if (label.htmlFor || label.querySelector('input, select, textarea')) return;
+      const container = label.closest('.field') || label.parentElement;
+      if (!container) return;
+      const controls = [...container.querySelectorAll('input, select, textarea')].filter((control) => control.type !== 'hidden');
+      if (controls.length !== 1) return;
+      const control = controls[0];
+      if (!control.id) control.id = `ud-field-${state.screen}-${labelIndex + 1}`;
+      label.htmlFor = control.id;
+      const helper = [...container.querySelectorAll('small')].find((item) => !item.closest('label'));
+      if (helper) {
+        if (!helper.id) helper.id = `${control.id}-help`;
+        const describedBy = new Set((control.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean));
+        describedBy.add(helper.id);
+        control.setAttribute('aria-describedby', [...describedBy].join(' '));
+      }
+    });
+  }
+
+  function syncContextNotices() {
+    const workspace = rootNode.querySelector('.annual-shell .workspace') || rootNode.querySelector('.workspace');
+    if (!workspace || workspace.querySelector('.ud-context-notices')) return;
+    const scenarioScreens = ['brief', 'planner', 'simulation', 'reflection', 'results'];
+    const localSaveScreens = ['planner', 'simulation', 'reflection'];
+    const notices = [];
+    if (scenarioScreens.includes(state.screen)) notices.push('<span class="ud-context-chip">Caso ficticio · Personajes sintéticos</span>');
+    if (localSaveScreens.includes(state.screen)) notices.push('<span class="ud-context-chip local">Guardado automático únicamente en este navegador</span>');
+    if (state.screen === 'annual') notices.push('<span class="ud-context-chip local">Usa “Guardar borrador” para conservar esta planificación en este navegador</span>');
+    if (notices.length) workspace.insertAdjacentHTML('afterbegin', `<div class="ud-context-notices" role="note">${notices.join('')}</div>`);
+  }
+
+  function syncResultSemantics() {
+    const scoreRing = rootNode.querySelector('.score-ring');
+    if (!scoreRing || scoreRing.querySelector('.ud-score-caption')) return;
+    const score = scoreRing.querySelector('strong')?.textContent?.trim() || '';
+    scoreRing.setAttribute('role', 'img');
+    scoreRing.setAttribute('aria-label', `Indicador orientador de la práctica: ${score} de 100`);
+    scoreRing.insertAdjacentHTML('beforeend', '<span class="ud-score-caption" aria-hidden="true">Indicador orientador de la práctica</span>');
+  }
+
+  function syncSourceTypes() {
+    document.querySelectorAll('.source-item').forEach((item) => {
+      if (item.querySelector('.ud-source-type')) return;
+      const content = item.textContent.toLowerCase();
+      let type = 'formative';
+      let label = 'Referencia formativa';
+      if (/ministerio|mineduc|bases curriculares|estándares pedagógicos/.test(content)) {
+        type = 'official';
+        label = 'Fuente oficial';
+      } else if (/et al\.|\(20\d{2}\)|doi/.test(content)) {
+        type = 'scientific';
+        label = 'Evidencia científica';
+      }
+      item.dataset.sourceType = type;
+      const contentBox = item.querySelector('div');
+      if (contentBox) contentBox.insertAdjacentHTML('afterbegin', `<span class="ud-source-type">${label}</span>`);
     });
   }
 
@@ -244,8 +380,14 @@
         || (key === 'progress' && state.screen === 'results')
         || (key === 'annual' && state.screen === 'annual');
       button.classList.toggle('active', active);
+      if (active) button.setAttribute('aria-current', 'page');
+      else button.removeAttribute('aria-current');
     });
     syncStageLabels();
+    syncAccessibleFields();
+    syncContextNotices();
+    syncResultSemantics();
+    syncSourceTypes();
   }
 
   function enhance() {

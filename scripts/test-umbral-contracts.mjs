@@ -18,7 +18,7 @@ const storageSource = fs.readFileSync(storagePath, 'utf8');
 
 const BASELINE_INDEX_SHA256 = 'c85dd337bfbc4c6b8889b48955901503e9dc36137a4b4de4a7bfffb06293cc86';
 const EXPECTED_INDEX_SHA256 = '69c738ab37d29f882ef915a85e1f94097da46e72e843b182633a431ed944311e';
-const EXPECTED_PREMIUM_SHA256 = '8d27a0eb6508a47fe74f8ec7eaa1e8a6fb662e06ac3ba72dab5b5711439f6fd6';
+const EXPECTED_PREMIUM_SHA256 = '75a0d31db02e6b4aca0449905fb130f1d6b0f629b769e118bc3ceab15eb92e2b';
 const EXPECTED_SCENARIO_IDS = [
   'antonia', 'leo', 'benjamin', 'sofia', 'martina', 'diego',
   'emilia', 'mateo', 'isidora', 'tomas', 'valentina', 'matias',
@@ -35,7 +35,7 @@ const EXPECTED_SCREENS = [
 const EXPECTED_PREMIUM_IDS = [
   '#root', '#udAllScenarios', '#udAllScenariosSecondary', '#udAnnualModule',
   '#udCatalogBack', '#udCatalogSupport', '#udEditProfile', '#udHowWorks',
-  '#udSupportModule'
+  '#udResumePractice', '#udSourcesFundamentals', '#udSupportModule'
 ];
 const EXPECTED_PREMIUM_DATA_ATTRIBUTES = [
   'data-premium-screen', 'data-ud-action', 'data-ud-cycle',
@@ -174,8 +174,8 @@ console.log('Contrato Umbral Docente: OK');
 console.log(`Escenarios: ${contract.scenarios.length} (6 parvularia, 6 básica, 6 media)`);
 console.log(`IDs preservados: ${EXPECTED_SCENARIO_IDS.join(', ')}`);
 console.log(`Pantallas preservadas: ${EXPECTED_SCREENS.join(', ')}`);
-console.log('index.html conserva el hash sombra aprobado y premium-ui.js su hash original.');
+console.log('index.html conserva el hash sombra aprobado y premium-ui.js su hash visual esperado.');
 console.log(`Baseline index.html: ${BASELINE_INDEX_SHA256}`);
 console.log(`Hash sombra index.html: ${EXPECTED_INDEX_SHA256}`);
-console.log(`Hash premium-ui.js intacto: ${EXPECTED_PREMIUM_SHA256}`);
+console.log(`Hash premium-ui.js esperado: ${EXPECTED_PREMIUM_SHA256}`);
 console.log('Contrato sombra: adaptador cargado, bandera activa, sin escrituras V2 y legacy byte a byte intacto.');
