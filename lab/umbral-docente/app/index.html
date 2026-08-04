@@ -734,6 +734,14 @@ function downloadReport(d){const s=state.scenario;const text=`UMBRAL DOCENTE · 
 
 render();
 </script>
+<script src="modules/storage.js"></script>
+<script>
+const UMBRAL_STORAGE_SHADOW_MODE=true;
+window.UMBRAL_STORAGE_SHADOW_MODE=UMBRAL_STORAGE_SHADOW_MODE;
+if(UMBRAL_STORAGE_SHADOW_MODE&&window.UmbralStorage){
+ window.UmbralStorage.compareLegacyWithShadow({trigger:'initial-load'});
+}
+</script>
 <script src="premium-ui.js"></script>
 <script>
 if(new URLSearchParams(location.search).get('embedded')==='1'){
