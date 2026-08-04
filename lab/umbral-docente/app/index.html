@@ -378,7 +378,9 @@
     @media(max-width:760px){.nv-official-logo{width:118px}.product-divider{display:none}.lab-back{display:none}}
     @media(max-width:560px){html,body,.app{width:100%;max-width:100%;overflow-x:hidden}.topbar{width:100%;min-width:0;gap:.5rem;padding:.65rem .75rem}.brand{min-width:0;gap:.4rem}.brand-logo,.brand-copy{display:none}.top-actions{min-width:0;margin-left:auto}.icon-btn{min-width:0;padding:.6rem;white-space:nowrap}.main{width:calc(100% - 1rem);max-width:100%}.workspace,.panel,.results-grid,.support-panel,.support-side,.actions,.actions-right{min-width:0;max-width:100%}.panel-head{align-items:flex-start;flex-direction:column}.badge{max-width:100%;white-space:normal}.footer{width:100%}}
 </style>
-<style>.nv-pilot-banner{position:relative;z-index:99999;display:flex;align-items:center;justify-content:center;gap:8px 18px;flex-wrap:wrap;background:#fff4d6;color:#513d00;border-bottom:1px solid #e9cf7b;padding:11px 18px;text-align:center;font:700 12px/1.45 Inter,system-ui,sans-serif}.nv-pilot-banner strong{font-size:13px}.nv-pilot-banner span{font-weight:600}.nv-pilot-banner a{color:#145e66;text-decoration:underline;text-underline-offset:3px}@media(max-width:760px){.nv-pilot-banner{align-items:flex-start;flex-direction:column;text-align:left;padding:12px 15px}.nv-pilot-banner a{min-height:34px;display:inline-flex;align-items:center}}</style></head>
+<style>.nv-pilot-banner{position:relative;z-index:99999;display:flex;align-items:center;justify-content:center;gap:8px 18px;flex-wrap:wrap;background:#fff4d6;color:#513d00;border-bottom:1px solid #e9cf7b;padding:11px 18px;text-align:center;font:700 12px/1.45 Inter,system-ui,sans-serif}.nv-pilot-banner strong{font-size:13px}.nv-pilot-banner span{font-weight:600}.nv-pilot-banner a{color:#145e66;text-decoration:underline;text-underline-offset:3px}@media(max-width:760px){.nv-pilot-banner{align-items:flex-start;flex-direction:column;text-align:left;padding:12px 15px}.nv-pilot-banner a{min-height:34px;display:inline-flex;align-items:center}}</style>
+<link rel="stylesheet" href="premium.css">
+</head>
 <body data-cycle="general"><aside class="nv-pilot-banner" aria-label="Condiciones de uso del piloto"><strong>Versión piloto</strong><span>El progreso se guarda únicamente en este navegador. No ingresar datos reales, sensibles, clínicos, académicos, personales ni empresariales. El piloto no constituye una evaluación académica oficial.</span><a class="nv-back-lab" href="../../">← Volver a Núcleo Vivo Lab</a></aside>
 <div class="app">
 <header class="topbar">
@@ -732,6 +734,15 @@ function downloadReport(d){const s=state.scenario;const text=`UMBRAL DOCENTE · 
 
 render();
 </script>
+<script src="modules/storage.js"></script>
+<script>
+const UMBRAL_STORAGE_SHADOW_MODE=true;
+window.UMBRAL_STORAGE_SHADOW_MODE=UMBRAL_STORAGE_SHADOW_MODE;
+if(UMBRAL_STORAGE_SHADOW_MODE&&window.UmbralStorage){
+ window.UmbralStorage.compareLegacyWithShadow({trigger:'initial-load'});
+}
+</script>
+<script src="premium-ui.js"></script>
 <script>
 if(new URLSearchParams(location.search).get('embedded')==='1'){
  document.documentElement.classList.add('embedded-mode');
