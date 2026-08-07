@@ -7,7 +7,10 @@ import { fileURLToPath } from 'node:url';
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(scriptDir, '..');
-const storagePath = path.join(rootDir, 'lab', 'umbral-docente', 'app', 'modules', 'storage.js');
+const packagedAppDir = path.join(scriptDir, 'app');
+const repositoryAppDir = path.join(rootDir, 'lab', 'umbral-docente', 'app');
+const appDir = fs.existsSync(packagedAppDir) ? packagedAppDir : repositoryAppDir;
+const storagePath = path.join(appDir, 'modules', 'storage.js');
 const storageSource = fs.readFileSync(storagePath, 'utf8');
 const NOW = '2026-08-04T12:00:00.000Z';
 

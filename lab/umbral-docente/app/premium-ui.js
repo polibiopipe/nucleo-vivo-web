@@ -7,6 +7,7 @@
   const icons = {
     menu: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
     home: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>',
+    model: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5a2.5 2.5 0 0 1 2.5 2.5z"/></svg>',
     route: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V7m0 0 3 3m-3-3L2 10m17 7V5m0 12 3-3m-3 3-3-3M8 19h8"/></svg>',
     cases: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h6M7 16h8"/></svg>',
     progress: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10m5 10V4m6 16v-7m5 7V7"/></svg>',
@@ -21,16 +22,14 @@
   app.insertAdjacentHTML('afterbegin', `
     <aside class="ud-sidebar" id="udSidebar" aria-label="Navegación de Umbral Docente">
       <div class="ud-sidebar-brand">
-        <img src="../../assets/nucleo-vivo-logo-oficial-horizontal.png" alt="Núcleo Vivo · Cultura, liderazgo y bienestar">
-        <div><strong>Umbral Docente</strong><span>Simulador de prácticas pedagógicas</span></div>
+        <img src="assets/umbral-docente-logo.png" alt="Umbral Docente, una iniciativa de Núcleo Vivo">
       </div>
       <nav class="ud-sidebar-nav">
         <button data-ud-screen="dashboard" data-ud-nav="home">${icons.home}<span>Inicio</span></button>
-        <button data-ud-screen="catalog" data-ud-nav="routes">${icons.route}<span>Rutas de formación</span></button>
-        <button data-ud-screen="catalog" data-ud-nav="cases">${icons.cases}<span>Escenarios</span></button>
-        <button data-ud-screen="dashboard" data-ud-nav="progress">${icons.progress}<span>Mi progreso</span></button>
+        <button data-ud-screen="catalog" data-ud-nav="situated">${icons.route}<span>Práctica situada</span></button>
+        <button type="button" data-ud-model="true" data-ud-nav="model">${icons.model}<span>Práctica audiovisual</span></button>
         <button data-ud-screen="annual" data-ud-nav="annual">${icons.calendar}<span>Planificación</span></button>
-        <button data-ud-action="support">${icons.help}<span>Centro de apoyo</span></button>
+        <button type="button" data-ud-action="resources" data-ud-nav="resources">${icons.cases}<span>Recursos</span></button>
       </nav>
       <div class="ud-sidebar-bottom">
         <button data-ud-action="profile">${icons.settings}<span>Editar perfil</span></button>
@@ -44,15 +43,13 @@
   topbar.insertAdjacentHTML('afterbegin', `
     <button class="ud-menu-button" type="button" aria-label="Abrir menú" aria-controls="udSidebar" aria-expanded="false">${icons.menu}</button>
     <div class="ud-topbar-product">
-      <span class="ud-product-mark">UD</span>
-      <div><strong>Umbral Docente</strong><small>Laboratorio de prácticas pedagógicas</small></div>
+      <span class="ud-product-mark"><img src="assets/umbral-docente-symbol.png" alt=""></span>
+      <div><strong>Umbral Docente</strong><small>Aprendizaje situado para futuras y futuros docentes</small></div>
     </div>
     <div class="ud-topbar-stats" aria-label="Resumen del piloto">
-      <div><small>Progreso de la práctica</small><strong data-ud-progress>Sin práctica activa</strong></div>
+      <div><small>Ruta activa</small><strong data-ud-progress>Sin práctica activa</strong></div>
       <span></span>
-      <div><small>Escenarios</small><strong>18 disponibles</strong></div>
-      <span></span>
-      <div><small>Persistencia</small><strong>Guardado local</strong></div>
+      <div><small>Guardado</small><strong>Solo en este navegador</strong></div>
     </div>
     <div class="ud-topbar-actions">
       <button type="button" data-ud-action="support" aria-label="Abrir centro de apoyo">${icons.help}<span>Ayuda</span></button>
@@ -91,6 +88,10 @@
     supportDialog.showModal();
     closeDrawer();
   }));
+  document.querySelectorAll('[data-ud-action="resources"]').forEach((button) => button.addEventListener('click', () => {
+    sourcesDialog.showModal();
+    closeDrawer();
+  }));
   document.querySelectorAll('[data-ud-action="profile"]').forEach((button) => button.addEventListener('click', () => {
     if (state.profile) state.profileDraft = { ...state.profile };
     go('onboarding');
@@ -126,79 +127,67 @@
 
   function dashboardMarkup() {
     const profile = state.profile;
-    const activeRoute = routeById(profile.route);
-    const featured = careers.flatMap((career) => scenarios.filter((scenario) => scenario.career === career.id).slice(0, 2));
+    const activeProfileRoute = routeById(profile.route);
     const activeScenario = state.scenario;
     const annualPlanSaved = hasAnnualPlan();
-    const completedCurrent = activeScenario && (state.step || 0) >= 5;
+    const routeScenarioCount = scenarios.filter((scenario) => scenario.career === profile.cycle).length;
+    const currentRoute = activeScenario ? 'Práctica situada' : 'Por elegir';
+    const currentStep = activeScenario ? currentStageName() : 'Por comenzar';
     return `
       <section class="screen ud-dashboard" data-premium-screen="dashboard">
-        <header class="ud-dashboard-heading">
-          <div><span class="eyebrow">Tu espacio formativo</span><h1>Bienvenida, ${esc(profile.name || 'Estudiante')}</h1><p>Un entorno de práctica situada para observar, comprender, planificar, intervenir y reflexionar antes de llevar decisiones pedagógicas al aula.</p></div>
-          <button class="btn btn-soft" id="udEditProfile">Editar perfil</button>
-        </header>
+        <button type="button" id="udEditProfile" hidden aria-hidden="true" tabindex="-1"></button>
 
-        <section class="ud-dashboard-hero" aria-labelledby="udDashboardHeroTitle">
-          <div class="ud-dashboard-hero-copy">
-            <span class="eyebrow">Simulador formativo</span>
-            <h2 id="udDashboardHeroTitle">Practica decisiones pedagógicas con contexto y retroalimentación.</h2>
-            <p>Recorre casos ficticios, fundamenta tus decisiones y construye criterios transferibles a tu práctica. El piloto funciona sin cuenta y conserva el avance sólo en este navegador.</p>
-            <div class="ud-dashboard-actions">
-              <button class="btn btn-primary" id="udResumePractice">${activeScenario ? 'Continuar práctica' : 'Explorar escenarios'}</button>
-              <button class="btn btn-secondary" id="udSourcesFundamentals">Fuentes y fundamentos</button>
-            </div>
-            <small class="ud-privacy-inline">Versión piloto · No ingreses datos reales, sensibles ni identificables.</small>
+        <section class="ud-continuity-bar" aria-label="Continuidad de práctica">
+          <div class="ud-continuity-copy">
+            <span class="ud-continuity-kicker">Continuidad</span>
+            <strong>${activeScenario ? esc(activeScenario.title) : 'Aún no has iniciado una práctica'}</strong>
+            <p>${currentRoute} · ${currentStep}${annualPlanSaved ? ' · planificación con borrador' : ' · sin borrador de planificación'}</p>
           </div>
-          <aside class="ud-current-card" aria-label="Estado local de tu práctica">
-            <span>Actividad local</span>
-            <strong>${activeScenario ? esc(activeScenario.title) : 'Aún no has iniciado un escenario'}</strong>
-            <dl>
-              <div><dt>Ruta</dt><dd>${esc(activeRoute.title)}</dd></div>
-              <div><dt>Etapa</dt><dd>${activeScenario ? currentStageName() : 'Por comenzar'}</dd></div>
-              <div><dt>Plan anual</dt><dd>${annualPlanSaved ? 'Borrador disponible' : 'Sin borrador'}</dd></div>
-            </dl>
-          </aside>
+          <div class="ud-continuity-actions">
+            <button class="ud-current-action" id="udCurrentAction" type="button">${activeScenario ? 'Retomar práctica' : 'Explorar escenarios'} →</button>
+            <button class="ud-current-help" id="udCurrentHelp" type="button">Ver ayudas</button>
+          </div>
         </section>
 
-        <section class="ud-stat-strip" aria-label="Resumen de actividad">
-          <article><span class="ud-stat-icon">${activeScenario ? '1' : '0'}</span><div><small>Práctica activa</small><strong>${activeScenario ? '1 escenario iniciado' : 'Sin escenario iniciado'}</strong></div></article>
-          <article><span class="ud-stat-icon">${completedCurrent ? '1' : '0'}</span><div><small>Cierre actual</small><strong>${completedCurrent ? 'Síntesis disponible' : 'Pendiente'}</strong></div></article>
-          <article><span class="ud-stat-icon">${annualPlanSaved ? '✓' : '—'}</span><div><small>Planificación anual</small><strong>${annualPlanSaved ? 'Borrador local' : 'Sin borrador'}</strong></div></article>
-          <article><span class="ud-stat-icon">↗</span><div><small>Última actividad</small><strong>${activeScenario ? esc(currentStageName()) : 'Sin registro local'}</strong></div></article>
+        <section class="ud-route-intro" aria-labelledby="udDashboardRoutesTitle">
+          <span class="eyebrow">Rutas de aprendizaje</span>
+          <h2 id="udDashboardRoutesTitle">Elige cómo quieres practicar hoy.</h2>
+          <p>Dos rutas complementarias para fortalecer observación, decisión y reflexión pedagógica sin sobrecargar la experiencia. Perfil actual: <strong>${esc(activeProfileRoute.title)}</strong>.</p>
         </section>
 
-        <div class="ud-section-title"><div><span class="eyebrow">Rutas de formación</span><h2>Elige tu ciclo formativo</h2></div><button class="ud-text-button" id="udAllScenarios">Ver los 18 escenarios →</button></div>
-        <section class="ud-cycle-grid">
-          ${careers.map((career) => {
-            const example = scenarios.find((scenario) => scenario.career === career.id);
-            const progress = cycleProgress(career.id);
-            return `<button class="ud-cycle-card ${cycleClass(career.id)}" data-ud-cycle-card="${career.id}">
-              <span class="ud-cycle-orb">${career.count}</span>
-              <div class="ud-cycle-copy"><small>Trayectoria pedagógica</small><h3>${career.name}</h3><p>${career.description}</p><span>${career.count} escenarios <b>Explorar →</b></span></div>
-              <span class="ud-cycle-photo">${avatar(example)}</span>
-              <span class="ud-cycle-progress"><i style="width:${progress}%"></i></span>
-            </button>`;
-          }).join('')}
+        <section class="ud-route-duo" aria-label="Rutas de aprendizaje">
+          <article class="ud-route-panel situated">
+            <span class="ud-route-kicker">Ruta 1 · práctica situada</span>
+            <h2>Ensaya decisiones pedagógicas con escenarios.</h2>
+            <p>Trabaja con casos ficticios del ciclo que seleccionaste y decide cómo actuar frente a situaciones pedagógicas concretas.</p>
+            <ul class="ud-route-list">
+              <li>Escenarios alineados a tu perfil formativo.</li>
+              <li>Secuencia guiada para observar, planificar e intervenir.</li>
+              <li>Retroalimentación descriptiva al cierre.</li>
+            </ul>
+            <div class="ud-route-meta"><span>${routeScenarioCount} casos sugeridos para tu ciclo</span><span>Decisiones guiadas</span></div>
+            <button class="btn btn-primary" id="udStartSituated">Explorar escenarios</button>
+          </article>
+
+          <article class="ud-route-panel audiovisual">
+            <span class="ud-route-kicker">Ruta 2 · práctica audiovisual</span>
+            <h2>Observa videos antes de interpretar.</h2>
+            <p>Analiza escenas audiovisuales y registra hechos antes de construir una lectura pedagógica con mayor precisión.</p>
+            <ul class="ud-route-list">
+              <li>Casos con video y fichas guiadas.</li>
+              <li>Flujo paso a paso para observar, interpretar y proyectar.</li>
+              <li>Integración con BCEP y revisión formativa.</li>
+            </ul>
+            <div class="ud-route-meta"><span>Observación guiada</span><span>Videos y fichas</span></div>
+            <button class="btn btn-secondary" id="udStartAudiovisual">Entrar a práctica audiovisual</button>
+          </article>
         </section>
 
-        <div class="ud-dashboard-lower">
-          <section class="ud-support-column">
-            <div class="ud-section-title compact"><div><span class="eyebrow">Herramientas</span><h2>Módulos de apoyo</h2></div></div>
-            <button class="ud-support-module" id="udSupportModule"><span>?</span><div><strong>Centro de apoyo</strong><p>Fichas para fortalecer tus decisiones antes y durante la práctica.</p></div><b>→</b></button>
-            <button class="ud-support-module" id="udAnnualModule"><span>▦</span><div><strong>Planificación anual</strong><p>Organiza propósitos, evidencias y ajustes por etapa formativa.</p></div><b>→</b></button>
-            <article class="ud-local-note"><strong>Privacidad del piloto</strong><p>Tu progreso permanece únicamente en este navegador. Evita ingresar datos reales o sensibles.</p></article>
-          </section>
-          <section class="ud-featured-column">
-            <div class="ud-section-title compact"><div><span class="eyebrow">Práctica situada</span><h2>Casos simulados destacados</h2></div><button class="ud-text-button" id="udAllScenariosSecondary">Ver todos →</button></div>
-            <div class="ud-featured-grid">
-              ${featured.map((scenario, index) => `<button class="ud-featured-card ${cycleClass(scenario.career)}" data-ud-scenario="${scenario.id}">
-                <span class="ud-featured-photo">${avatar(scenario)}<b>${index + 1}</b><i>${getCareer(scenario.career).short}</i></span>
-                <span class="ud-featured-copy"><small>${scenario.duration} · ${scenario.difficulty}</small><strong>${scenario.title}</strong><p>${scenario.summary}</p><em>Comenzar simulación →</em></span>
-              </button>`).join('')}
-            </div>
-          </section>
-        </div>
-        <footer class="ud-closing-banner"><span>✦</span><div><strong>Reflexiona, planifica, interviene y aprende.</strong><p>Cada práctica te acerca a una enseñanza más consciente, inclusiva y transformadora.</p></div><button class="btn btn-primary" id="udHowWorks">¿Cómo funciona Umbral Docente?</button></footer>
+        <section class="ud-dashboard-tools">
+          <button class="ud-support-module" id="udAnnualModule"><span>▦</span><div><strong>Planificación anual</strong><p>Organiza propósitos, evidencias y ajustes sin salir de tu perfil formativo.</p></div><b>→</b></button>
+          <button class="ud-support-module" id="udSupportModule"><span>?</span><div><strong>Centro de apoyo</strong><p>Accede a orientaciones breves, fundamentos y criterios para tomar mejores decisiones.</p></div><b>→</b></button>
+          <article class="ud-local-note"><strong>Privacidad del piloto</strong><p>El avance permanece sólo en este navegador. No ingreses datos reales, sensibles ni identificables.</p></article>
+        </section>
       </section>`;
   }
 
@@ -211,15 +200,16 @@
       scrollTop();
     };
     document.querySelector('#udEditProfile').onclick = () => { state.profileDraft = { ...state.profile }; go('onboarding'); };
-    document.querySelector('#udResumePractice').onclick = () => {
+    const openSituated = () => {
       if (!state.scenario) openCatalog(state.profile?.cycle || 'all');
       else go(['brief', 'brief', 'planner', 'simulation', 'reflection', 'results'][state.step || 0]);
     };
-    document.querySelector('#udSourcesFundamentals').onclick = () => sourcesDialog.showModal();
-    document.querySelector('#udAllScenarios').onclick = document.querySelector('#udAllScenariosSecondary').onclick = () => openCatalog('all');
-    document.querySelectorAll('[data-ud-cycle-card]').forEach((button) => button.onclick = () => openCatalog(button.dataset.udCycleCard));
-    document.querySelectorAll('[data-ud-scenario]').forEach((button) => button.onclick = () => selectScenario(button.dataset.udScenario));
-    document.querySelector('#udSupportModule').onclick = document.querySelector('#udHowWorks').onclick = () => supportDialog.showModal();
+    const openAudiovisual = () => document.querySelector('[data-ud-model]')?.click();
+    document.querySelector('#udStartSituated').onclick = openSituated;
+    document.querySelector('#udStartAudiovisual').onclick = openAudiovisual;
+    document.querySelector('#udCurrentAction').onclick = openSituated;
+    document.querySelector('#udCurrentHelp').onclick = () => sourcesDialog.showModal();
+    document.querySelector('#udSupportModule').onclick = () => supportDialog.showModal();
     document.querySelector('#udAnnualModule').onclick = () => go('annual');
   }
 
@@ -228,30 +218,28 @@
     const visible = filter === 'all' ? scenarios : scenarios.filter((scenario) => scenario.career === filter);
     return `
       <section class="screen ud-catalog" data-premium-screen="catalog">
-        <header class="ud-catalog-heading">
-          <div><span class="eyebrow">Banco de práctica</span><h1>Escenarios para tu práctica docente</h1><p>Explora los 18 casos, elige un contexto y ensaya decisiones con acompañamiento formativo.</p></div>
-          <span class="ud-catalog-count"><strong>${visible.length}</strong> casos visibles</span>
+        <header class="ud-catalog-heading ud-catalog-heading-minimal">
+          <div><span class="eyebrow">Ruta 1 · práctica situada</span><h1>Escenarios para ensayar con contexto.</h1><p>Esta ruta se complementa con la práctica audiovisual: primero puedes observar escenas en video y luego volver aquí para decidir, planificar y reflexionar con mayor claridad.</p></div>
+          <span class="ud-catalog-count"><strong>${visible.length}</strong> escenarios visibles</span>
         </header>
         <nav class="ud-catalog-tabs" aria-label="Filtrar escenarios">
           <button class="${filter === 'all' ? 'active' : ''}" data-ud-filter="all">Todos <span>18</span></button>
           ${careers.map((career) => `<button class="${filter === career.id ? 'active' : ''}" data-ud-filter="${career.id}">${career.short} <span>${career.count}</span></button>`).join('')}
         </nav>
+        <div class="ud-route-tip"><strong>Tip de uso:</strong> si necesitas afinar la observación antes de decidir, utiliza la práctica audiovisual y luego vuelve a este banco de escenarios.</div>
         <div class="ud-scenario-grid">
           ${visible.map((scenario, index) => `<article class="ud-scenario-card ${cycleClass(scenario.career)}">
             <div class="ud-scenario-photo">${avatar(scenario)}<b>${String(index + 1).padStart(2, '0')}</b><i>${getCareer(scenario.career).name}</i></div>
             <div class="ud-scenario-copy">
-              <div class="ud-scenario-heading"><small>${scenario.grade}</small><span class="ud-scenario-status">${scenarioStatus(scenario)}</span></div>
+              <small>${scenario.grade} · ${scenario.duration}</small>
               <strong>${scenario.title}</strong>
-              <dl class="ud-scenario-meta">
-                <div><dt>Edad</dt><dd>${scenario.age} años aprox.</dd></div>
-                <div><dt>Foco</dt><dd>${scenario.curriculum?.core || 'Práctica situada'}</dd></div>
-              </dl>
-              <details class="ud-scenario-details"><summary>Ver situación</summary><p>${scenario.summary}</p></details>
-              <div class="ud-scenario-footer"><span><em>${scenario.duration}</em><em>${scenario.difficulty}</em></span><button type="button" data-ud-scenario="${scenario.id}" aria-label="Practicar: ${esc(scenario.title)}">Practicar →</button></div>
+              <p>${scenario.summary}</p>
+              <span class="ud-scenario-status-line"><em>${scenario.curriculum?.core || 'Práctica situada'}</em><em>${scenarioStatus(scenario)}</em></span>
+              <button type="button" data-ud-scenario="${scenario.id}" aria-label="Practicar: ${esc(scenario.title)}">Comenzar práctica →</button>
             </div>
           </article>`).join('')}
         </div>
-        <footer class="ud-catalog-footer"><button class="btn btn-secondary" id="udCatalogBack">← Mi plataforma</button><p><strong>Versión piloto.</strong> La actividad es formativa y no constituye una evaluación académica oficial.</p><button class="btn btn-soft" id="udCatalogSupport">Centro de apoyo</button></footer>
+        <footer class="ud-catalog-footer"><button class="btn btn-secondary" id="udCatalogBack">← Volver al inicio</button><p><strong>Actividad formativa.</strong> Los casos son ficticios y sirven para ensayar decisiones, no para evaluar oficialmente.</p><button class="btn btn-soft" id="udCatalogSupport">Centro de apoyo</button></footer>
       </section>`;
   }
 
@@ -370,14 +358,13 @@
     document.querySelector('[data-ud-cycle]').textContent = personCycle;
     const initials = personName.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join('').toUpperCase() || 'UD';
     document.querySelector('.ud-person-avatar').textContent = initials;
-    const stageNames = ['Sin práctica activa', 'Observar · contexto', 'Planificar · intervención', 'Intervenir · simulación', 'Reflexionar · evidencia', 'Integrar · transferencia'];
+    const stageNames = ['Sin práctica activa', 'Práctica situada · observar', 'Práctica situada · planificar', 'Práctica situada · intervenir', 'Práctica situada · reflexionar', 'Práctica situada · integrar'];
     document.querySelector('[data-ud-progress]').textContent = state.scenario ? stageNames[state.step] : 'Sin práctica activa';
     document.querySelectorAll('[data-ud-screen]').forEach((button) => {
       const key = button.dataset.udNav;
       const active = (key === 'home' && state.screen === 'dashboard')
-        || (key === 'routes' && state.screen === 'catalog')
-        || (key === 'cases' && ['brief', 'planner', 'simulation', 'reflection', 'results'].includes(state.screen))
-        || (key === 'progress' && state.screen === 'results')
+        || (key === 'model' && false)
+        || (key === 'situated' && ['catalog', 'brief', 'planner', 'simulation', 'reflection', 'results'].includes(state.screen))
         || (key === 'annual' && state.screen === 'annual');
       button.classList.toggle('active', active);
       if (active) button.setAttribute('aria-current', 'page');
@@ -391,6 +378,10 @@
   }
 
   function enhance() {
+    if (document.body.dataset.udModelRoute === 'active') {
+      syncShell();
+      return;
+    }
     if (state.screen === 'dashboard' && state.profile && !rootNode.querySelector('[data-premium-screen="dashboard"]')) renderDashboardPremium();
     else if (state.screen === 'catalog' && !rootNode.querySelector('[data-premium-screen="catalog"]')) {
       catalogFilter = ['all', 'parvularia', 'basica', 'media'].includes(state.career) ? state.career : 'all';
