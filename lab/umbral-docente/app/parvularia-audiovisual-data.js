@@ -252,9 +252,9 @@ window.UMBRAL_PARVULARIA_AUDIOVISUAL_CASES = [
   {
     "id": "SCM-06",
     "title": "Algo está sonando",
-    "status": "Video planificado",
-    "video": "",
-    "poster": "",
+    "status": "Disponible",
+    "video": "assets/parvularia-audiovisual/scm-06.mp4",
+    "poster": "assets/parvularia-audiovisual/scm-06-poster.jpg",
     "level": "Sala Cuna Menor",
     "moment": "Exploración auditiva",
     "summary": "Un sonido fuera del campo visual interrumpe la actividad. El lactante orienta el cuerpo, busca la fuente y vocaliza.",

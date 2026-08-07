@@ -32,8 +32,8 @@ assert.equal(Array.isArray(cases), true, 'Los casos audiovisuales deben ser un a
 assert.equal(cases.length, 8, 'El banco inicial debe contener ocho escenarios');
 assert.deepEqual(Array.from(cases, item => item.id), ['SCM-01','SCM-02','SCM-03','SCM-04','SCM-05','SCM-06','SCM-07','SCM-08']);
 assert.equal(new Set(cases.map(item => item.id)).size, 8, 'Los IDs deben ser únicos');
-assert.equal(cases.filter(item => item.video).length, 7, 'Deben existir siete videos disponibles');
-assert.equal(cases.filter(item => !item.video).length, 1, 'Debe existir un espacio planificado pendiente');
+assert.equal(cases.filter(item => item.video).length, 8, 'Deben existir siete videos disponibles');
+assert.equal(cases.filter(item => !item.video).length, 0, 'Debe existir un espacio planificado pendiente');
 
 for (const item of cases) {
   for (const key of ['title','level','moment','summary','focus','tramo','tramoId','sublevelId','theme','caseVersion','whatVideoDoesNotSay','sourceVersion']) {
@@ -91,7 +91,7 @@ for (const selector of ['.ud-model-grid','.ud-model-flow','.ud-curriculum-list',
 assert.match(cssSource, /@media\(max-width:820px\)/);
 
 console.log('Contrato del modelo formativo Umbral Docente: OK');
-console.log('8 casos: 7 videos disponibles y 1 ficha planificada.');
+console.log('8 casos: 8 videos disponibles y 0 fichas planificadas.');
 console.log('Planilla BCEP: 206 objetivos (123 OA y 83 OAT).');
 console.log('Flujo: 14 pasos desde selección hasta reintento.');
 console.log('Retroalimentación: 13 dimensiones descriptivas, sin nota numérica.');
