@@ -7,7 +7,9 @@ import { fileURLToPath } from 'node:url';
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(scriptDir, '..');
-const appDir = path.join(rootDir, 'lab', 'umbral-docente', 'app');
+const packagedAppDir = path.join(scriptDir, 'app');
+const repositoryAppDir = path.join(rootDir, 'lab', 'umbral-docente', 'app');
+const appDir = fs.existsSync(packagedAppDir) ? packagedAppDir : repositoryAppDir;
 const indexPath = path.join(appDir, 'index.html');
 const premiumPath = path.join(appDir, 'premium-ui.js');
 const storagePath = path.join(appDir, 'modules', 'storage.js');
@@ -17,8 +19,8 @@ const premiumSource = fs.readFileSync(premiumPath, 'utf8');
 const storageSource = fs.readFileSync(storagePath, 'utf8');
 
 const BASELINE_INDEX_SHA256 = 'c85dd337bfbc4c6b8889b48955901503e9dc36137a4b4de4a7bfffb06293cc86';
-const EXPECTED_INDEX_SHA256 = '69c738ab37d29f882ef915a85e1f94097da46e72e843b182633a431ed944311e';
-const EXPECTED_PREMIUM_SHA256 = '75a0d31db02e6b4aca0449905fb130f1d6b0f629b769e118bc3ceab15eb92e2b';
+const EXPECTED_INDEX_SHA256 = '6c7d160573d5167737f5866771948a94c6a61c61c1a69d539e7c8b17b5d33a93';
+const EXPECTED_PREMIUM_SHA256 = '2789e341de897a6355b00019b03f1d3828bf1bc5275c29c72dd5382265a6bd9a';
 const EXPECTED_SCENARIO_IDS = [
   'antonia', 'leo', 'benjamin', 'sofia', 'martina', 'diego',
   'emilia', 'mateo', 'isidora', 'tomas', 'valentina', 'matias',
@@ -33,13 +35,12 @@ const EXPECTED_SCREENS = [
   'brief', 'planner', 'simulation', 'reflection', 'results'
 ];
 const EXPECTED_PREMIUM_IDS = [
-  '#root', '#udAllScenarios', '#udAllScenariosSecondary', '#udAnnualModule',
-  '#udCatalogBack', '#udCatalogSupport', '#udEditProfile', '#udHowWorks',
-  '#udResumePractice', '#udSourcesFundamentals', '#udSupportModule'
+  '#root', '#udAnnualModule', '#udCatalogBack', '#udCatalogSupport', '#udCurrentAction', '#udCurrentHelp',
+  '#udEditProfile', '#udStartAudiovisual', '#udStartSituated', '#udSupportModule'
 ];
 const EXPECTED_PREMIUM_DATA_ATTRIBUTES = [
   'data-premium-screen', 'data-ud-action', 'data-ud-cycle',
-  'data-ud-cycle-card', 'data-ud-filter', 'data-ud-name', 'data-ud-nav',
+'data-ud-filter', 'data-ud-model', 'data-ud-name', 'data-ud-nav',
   'data-ud-progress', 'data-ud-scenario', 'data-ud-screen'
 ];
 
