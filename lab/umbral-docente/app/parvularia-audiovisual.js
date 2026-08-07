@@ -533,7 +533,7 @@
     else if (activePanel === 'interpret') panel = textPanel('interpret', record, 'Construye una lectura provisional y defendible.', 'La escena admite más de una interpretación. Explicita evidencia, alternativas e incertidumbre.');
     else if (activePanel === 'curriculum') panel = curriculumPanel(item, record);
     else if (activePanel === 'focus') panel = textPanel('focus', record, 'Define el aprendizaje específico y la intención pedagógica.', 'Evita propósitos generales. La habilidad y el propósito deben conectar observación, currículum e intervención.');
-    else if (activePanel === 'intervention') panel = textPanel('intervention', record, 'Diseña una intervención situada, no una actividad desconectada.', 'Acogida, alimentación, higiene, juego, patio y transiciones pueden ser contextos pedagógicos intencionados.');
+    else if (activePanel === 'intervention') panel = textPanel('intervention', record, 'Diseña una intervención situada, no una actividad desconectada.', 'Acogida, alimentación, higiene, juego, actividad variable, patio y transiciones pueden ser contextos pedagógicos intencionados.');
     else if (activePanel === 'evaluation') panel = textPanel('evaluation', record, 'Diseña evaluación para aprender y ajustar.', 'Primero define evidencia, después indicadores y finalmente el instrumento pertinente.');
     else if (activePanel === 'collaboration') panel = collaborationPanel(record);
     else if (activePanel === 'reflection') panel = textPanel('reflection', record, 'Examina tus decisiones, supuestos e incertidumbres.', 'La reflexión no justifica retrospectivamente: permite revisar cómo observaste, decidiste y evaluarías.');
