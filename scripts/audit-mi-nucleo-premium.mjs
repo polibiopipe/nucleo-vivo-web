@@ -66,6 +66,8 @@ includes(
   "Docencia y educación",
   "Administración / Ingeniería Comercial",
   "Explorar todo",
+  "Un punto de entrada para experiencias y cursos",
+  "Tus preferencias están sincronizadas",
   "Hola, <span id=\"member-name\"",
   "id=\"mis-experiencias\"",
   "id=\"recomendado\"",
@@ -126,8 +128,31 @@ check("redes: nueva pestaña", socialSource.includes('target="_blank"'));
 check("redes: noopener noreferrer", socialSource.includes('rel="noopener noreferrer"'));
 check("redes: etiqueta accesible", socialSource.includes("aria-label"));
 
-includes("privacidad/index.html", "Mi Núcleo", "Supabase", "Escucha Viva", "actividad local");
-includes("terminos/index.html", "Mi Núcleo", "aplicaciones piloto", "enlaces externos", "pagos");
+includes(
+  "privacidad/index.html",
+  "Núcleo Vivo</strong> administra este sitio",
+  "datos personales tratados directamente",
+  "Supabase",
+  "jsDelivr",
+  "Netlify y Vercel",
+  "Actualmente no existe un plazo automático único",
+  "Ley N.º 19.628",
+  "se encuentra vigente actualmente",
+  "1 de diciembre de 2026",
+  "contacto@nucleovivo.net"
+);
+includes(
+  "terminos/index.html",
+  "Núcleo Vivo</strong> administra el sitio institucional",
+  "Supabase",
+  "jsDelivr",
+  "Netlify o Vercel",
+  "No existe hoy un plazo automático único",
+  "Ley N.º 19.628 se encuentra vigente actualmente",
+  "Ley N.º 21.719 entra en vigencia",
+  "contacto@nucleovivo.net",
+  "Google OAuth no están habilitados actualmente"
+);
 
 const migration = file("supabase/migrations/20260815_mi_nucleo_consent.sql");
 [

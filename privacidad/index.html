@@ -65,41 +65,84 @@
         </div>
       </section>
 
-      <section class="page-intro">
+      <section class="page-intro" aria-labelledby="privacy-controller-title">
         <div class="section-shell intro-grid">
           <div class="js-reveal">
-            <span class="section-label">Datos personales</span>
-            <h2>Usamos los datos necesarios para darte acceso y responderte.</h2>
+            <span class="section-label">Responsable y alcance</span>
+            <h2 id="privacy-controller-title">Quién administra estos datos.</h2>
           </div>
           <div class="intro-copy js-reveal">
-            <p>Mi Núcleo y Aula Viva permiten crear una cuenta mediante correo y contraseña. Para ese acceso se procesa el correo, el nombre que decidas usar, identificadores técnicos de cuenta y la información necesaria para mantener la sesión.</p>
-            <p>Mi Núcleo guarda tu área prioritaria para ordenar recomendaciones, la versión y fecha de consentimiento, y una actividad local básica en tu dispositivo para facilitar el regreso a experiencias abiertas. La prioridad no bloquea otras áreas.</p>
-            <p>Aula Viva puede guardar inscripción, progreso, respuestas formativas y preferencias de accesibilidad según el curso y su configuración. Cuando una ruta informa que su avance es local, esos datos permanecen en ese navegador.</p>
-            <p>Si escribes a Núcleo Vivo, podremos recibir tu nombre, correo, organización, asunto y el contenido que decidas compartir para responder tu consulta. Cuando haces clic en un correo, el mensaje se gestiona desde tu cliente de email.</p>
-            <p>El acceso a servicios externos, como Spotify o Escucha Viva, se rige también por las políticas de esas plataformas. Escucha Viva es una aplicación independiente enlazada desde este sitio.</p>
+            <p><strong>Núcleo Vivo</strong> administra este sitio y actúa como responsable respecto de los datos personales tratados directamente a través del sitio institucional, Mi Núcleo y Aula Viva. El canal para consultas y solicitudes es <a href="mailto:contacto@nucleovivo.net">contacto@nucleovivo.net</a>.</p>
+            <p>Esta política no convierte a Núcleo Vivo en responsable de servicios externos. Escucha Viva es una aplicación independiente; Spotify y cualquier otro destino externo aplican sus propias condiciones y políticas desde que sales de este dominio.</p>
+            <p>No solicitamos que ingreses datos sensibles, información clínica, antecedentes de terceros, documentos de identidad ni datos de pago en Mi Núcleo, Aula Viva o las experiencias piloto. Sigue las advertencias específicas de cada experiencia.</p>
           </div>
         </div>
       </section>
 
-      <section class="course-route-section" aria-labelledby="privacy-use-title">
+      <section class="course-route-section" aria-labelledby="privacy-data-title">
         <div class="section-shell course-route-grid">
           <div class="js-reveal">
-            <span class="section-label">Uso de información</span>
-            <h2 id="privacy-use-title">Uso responsable y acotado.</h2>
-            <p>La información se utiliza para autenticar cuentas, conservar preferencias y progreso cuando corresponda, registrar consentimientos, responder consultas y gestionar experiencias formativas.</p>
+            <span class="section-label">Datos y finalidades</span>
+            <h2 id="privacy-data-title">Qué tratamos y para qué.</h2>
+            <p>El tratamiento depende de la función que decidas utilizar. El código actual no integra publicidad comportamental ni píxeles publicitarios.</p>
           </div>
           <ol class="course-route-list js-reveal">
-            <li><span>01</span><strong>Cuenta y continuidad</strong><p>La autenticación de Mi Núcleo y Aula Viva utiliza la infraestructura Supabase configurada para este sitio. No publicamos contraseñas ni claves privadas en el navegador.</p></li>
-            <li><span>02</span><strong>Personalización acotada</strong><p>Tu prioridad ordena el contenido. Puedes cambiarla y descargar un resumen desde Mi Núcleo.</p></li>
-            <li><span>03</span><strong>Contacto directo</strong><p>Usamos tu mensaje para responder la solicitud que enviaste.</p></li>
-            <li><span>04</span><strong>Solicitudes sobre tus datos</strong><p>Puedes escribir a contacto@nucleovivo.net para solicitar acceso, corrección o eliminación. Algunas acciones pueden requerir verificar la titularidad de la cuenta.</p></li>
+            <li><span>01</span><strong>Cuenta y autenticación</strong><p>Correo, nombre o alias, identificador de usuario, estado de confirmación y datos técnicos de sesión para crear la cuenta, autenticarte, recuperar el acceso y mantener una sesión segura. Supabase gestiona la contraseña; Núcleo Vivo no recibe una copia legible de ella.</p></li>
+            <li><span>02</span><strong>Consentimiento y preferencias</strong><p>Versión, fecha, hora y contexto de aceptación; área prioritaria y nombre visible para registrar tu decisión, ordenar recomendaciones y permitir que cambies tus preferencias sin bloquear otras áreas.</p></li>
+            <li><span>03</span><strong>Aprendizaje y continuidad</strong><p>Cuando corresponde, Aula Viva trata inscripciones, progreso, respuestas formativas, intentos, resultados, preferencias de accesibilidad y estado de sincronización para mostrar avance y continuidad. Las experiencias que declaran guardado local conservan su información solo en ese navegador.</p></li>
+            <li><span>04</span><strong>Contacto y operación técnica</strong><p>Nombre, correo, organización y contenido que envíes para responder tu consulta. Los proveedores de infraestructura pueden generar IP, agente de usuario, fecha, hora y registros técnicos necesarios para entregar, proteger y diagnosticar el servicio.</p></li>
           </ol>
+        </div>
+      </section>
+
+      <section class="page-intro" aria-labelledby="privacy-providers-title">
+        <div class="section-shell intro-grid">
+          <div class="js-reveal">
+            <span class="section-label">Proveedores</span>
+            <h2 id="privacy-providers-title">Infraestructura que hace funcionar el servicio.</h2>
+          </div>
+          <div class="intro-copy js-reveal">
+            <p><strong>Supabase</strong> presta la autenticación y el almacenamiento remoto configurado para Mi Núcleo y Aula Viva. Procesa credenciales, sesiones y registros asociados a la cuenta conforme a la configuración del proyecto y sus propias condiciones.</p>
+            <p><strong>jsDelivr</strong> entrega al navegador la biblioteca pública de Supabase. <strong>Netlify y Vercel</strong> pueden intervenir en el alojamiento, entrega o previews del sitio según el entorno publicado y generar registros técnicos de acceso y seguridad.</p>
+            <p>Al enviar un correo intervienen tu proveedor de correo y el proveedor que reciba el mensaje de Núcleo Vivo. Al abrir Escucha Viva, Spotify u otro enlace externo, la navegación y los datos técnicos posteriores quedan sujetos al proveedor de destino.</p>
+            <p>No afirmamos una región de almacenamiento ni un plazo de logs que no estén verificados en la configuración del proveedor. Sus políticas pueden contemplar subencargados o tratamiento fuera de Chile; conviene revisar sus términos antes de usar funciones conectadas.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="course-route-section" aria-labelledby="privacy-retention-title">
+        <div class="section-shell course-route-grid">
+          <div class="js-reveal">
+            <span class="section-label">Conservación y control</span>
+            <h2 id="privacy-retention-title">Conservamos según la función, no con una promesa genérica.</h2>
+            <p>Actualmente no existe un plazo automático único de eliminación para todas las categorías. Por eso distinguimos cada contexto y no declaramos un número de días que el sistema no garantice.</p>
+          </div>
+          <ol class="course-route-list js-reveal">
+            <li><span>01</span><strong>Cuenta, perfil y progreso remoto</strong><p>Se conservan mientras la cuenta exista y sean necesarios para entregar acceso, preferencias y continuidad. Una solicitud de eliminación requiere verificar titularidad y coordinar la eliminación de los registros vinculados que corresponda.</p></li>
+            <li><span>02</span><strong>Consentimientos</strong><p>Los registros de versión, fecha, hora y contexto se asocian a la cuenta para documentar la aceptación. No hay hoy un vencimiento automático específico configurado para estos registros.</p></li>
+            <li><span>03</span><strong>Datos locales</strong><p>La actividad y el progreso declarados como locales permanecen hasta que uses una opción de borrado de la experiencia, cierres la sesión cuando corresponda o elimines los datos del navegador. El indicador visual de portada usa almacenamiento de sesión y termina con esa sesión del navegador.</p></li>
+            <li><span>04</span><strong>Mensajes y registros técnicos</strong><p>Los correos se conservan durante la atención y seguimiento razonable de la consulta, sin un plazo automático único publicado. Los logs de infraestructura siguen la configuración y retención de cada proveedor.</p></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="page-intro" aria-labelledby="privacy-law-title">
+        <div class="section-shell intro-grid">
+          <div class="js-reveal">
+            <span class="section-label">Derechos y marco chileno</span>
+            <h2 id="privacy-law-title">La normativa vigente hoy y el cambio futuro.</h2>
+          </div>
+          <div class="intro-copy js-reveal">
+            <p>En Chile, la <a href="https://www.bcn.cl/leychile/navegar?i=141599" target="_blank" rel="noopener noreferrer">Ley N.º 19.628 sobre protección de la vida privada</a> se encuentra vigente actualmente. Conforme a sus reglas y excepciones, puedes solicitar información sobre tus datos, su procedencia, destinatarios y finalidad; pedir modificación de datos erróneos, inexactos, equívocos o incompletos; y solicitar eliminación, cancelación o bloqueo cuando corresponda.</p>
+            <p>La <a href="https://www.bcn.cl/leychile/navegar?i=1209272" target="_blank" rel="noopener noreferrer">Ley N.º 21.719</a> fue publicada, pero su entrada en vigencia está diferida al <strong>1 de diciembre de 2026</strong>. Hasta el 30 de noviembre de 2026 no debe presentarse ese nuevo régimen ni la nueva Agencia de Protección de Datos Personales como si ya estuvieran plenamente vigentes.</p>
+            <p>Para ejercer una solicitud, escribe a <a href="mailto:contacto@nucleovivo.net?subject=Solicitud%20sobre%20mis%20datos">contacto@nucleovivo.net</a> indicando la cuenta o interacción a la que se refiere. Podemos pedir antecedentes acotados para verificar que la solicitud proviene de la persona titular y responderemos según el marco aplicable.</p>
+          </div>
         </div>
       </section>
 
       <section class="privacy-clarity-section" aria-labelledby="privacy-clarity-title">
         <div class="section-shell cta-grid js-reveal">
-          <div><span class="section-label">Control visible</span><h2 id="privacy-clarity-title">Privacidad dentro de la experiencia.</h2><p>Mi Núcleo muestra la versión de consentimiento vigente y ofrece un resumen descargable de los datos de cuenta, personalización y actividad local que puede presentar al usuario.</p></div>
+          <div><span class="section-label">Control visible</span><h2 id="privacy-clarity-title">Privacidad dentro de la experiencia.</h2><p>Mi Núcleo muestra la versión de consentimiento y un resumen descargable de cuenta, preferencias y actividad local. Esa descarga refleja lo que la interfaz puede reunir; no sustituye una solicitud formal cuando necesitas revisar datos conservados por proveedores o sistemas remotos.</p></div>
           <a class="button button-primary" href="/mi-nucleo/" data-local-href="../mi-nucleo/index.html">Ir a Mi Núcleo</a>
         </div>
       </section>
