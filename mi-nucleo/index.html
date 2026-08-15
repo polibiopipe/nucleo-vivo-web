@@ -14,7 +14,7 @@
     <link rel="canonical" href="https://nucleovivo.net/mi-nucleo/" />
     <link rel="icon" href="../assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" type="image/png" />
     <link rel="stylesheet" href="../styles.css?v=20260815b" />
-    <link rel="stylesheet" href="mi-nucleo.css?v=20260815c" />
+    <link rel="stylesheet" href="mi-nucleo.css?v=20260815d" />
   </head>
   <body class="mi-nucleo-page" data-mi-state="loading">
     <a class="skip-link" href="#mi-main">Saltar al contenido</a>
@@ -118,6 +118,11 @@
                 <button id="resend-button" type="button" hidden>Reenviar confirmación</button>
               </div>
             </form>
+
+            <div class="mi-demo-entry" aria-labelledby="demo-entry-title">
+              <button id="demo-button" class="button button-secondary mi-demo-button" type="button">Explorar Mi Núcleo</button>
+              <p id="demo-entry-title">Vista demostrativa · no requiere cuenta ni guarda información</p>
+            </div>
           </div>
         </div>
       </section>
@@ -135,7 +140,7 @@
             <a href="#explorar"><span aria-hidden="true">◇</span>Explorar</a>
             <a href="#herramientas"><span aria-hidden="true">＋</span>Mis herramientas</a>
             <a href="#privacidad-datos"><span aria-hidden="true">◉</span>Privacidad y mis datos</a>
-            <a href="#mi-cuenta"><span aria-hidden="true">○</span>Mi cuenta</a>
+            <a id="account-nav-link" href="#mi-cuenta"><span aria-hidden="true">○</span>Mi cuenta</a>
             <a href="#ayuda"><span aria-hidden="true">?</span>Ayuda</a>
           </nav>
           <div class="mi-sidebar-footer">
@@ -148,9 +153,12 @@
           <header class="mi-app-topbar">
             <div>
               <span class="mi-connection-dot" aria-hidden="true"></span>
-              <span>Tus preferencias están sincronizadas</span>
+              <span id="topbar-status">Tus preferencias están sincronizadas</span>
             </div>
-            <a href="/" data-local-href="../index.html">Ver Núcleo Vivo</a>
+            <nav class="mi-app-topbar-actions" aria-label="Acciones de Mi Núcleo">
+              <a id="demo-auth-link" class="mi-demo-auth-link" href="/mi-nucleo/" data-local-href="index.html" hidden>Crear mi cuenta / Ingresar</a>
+              <a href="/" data-local-href="../index.html">Ver Núcleo Vivo</a>
+            </nav>
           </header>
 
           <div class="mi-dashboard">
@@ -175,7 +183,7 @@
             <section id="mis-experiencias" class="mi-dashboard-section" aria-labelledby="experiences-title">
               <div class="mi-section-heading">
                 <div><p class="mi-eyebrow">Continuidad</p><h2 id="experiences-title">Mis experiencias</h2></div>
-                <span>Tu actividad en este dispositivo</span>
+                <span id="experiences-device-label">Tu actividad en este dispositivo</span>
               </div>
               <div id="experiences-grid" class="mi-product-grid"></div>
             </section>
@@ -224,10 +232,10 @@
                 </article>
                 <article>
                   <span>Datos de personalización</span>
-                  <strong>Una prioridad editable</strong>
-                  <p>Tu área elegida cambia el orden de las tarjetas. No bloquea productos ni crea perfiles sensibles.</p>
+                  <strong id="personalization-summary">Una prioridad editable</strong>
+                  <p id="personalization-copy">Tu área elegida cambia el orden de las tarjetas. No bloquea productos ni crea perfiles sensibles.</p>
                 </article>
-                <article>
+                <article id="data-actions-card">
                   <span>Acciones disponibles</span>
                   <button id="download-data-button" type="button">Descargar resumen de mis datos</button>
                   <a href="mailto:contacto@nucleovivo.net?subject=Solicitud%20sobre%20mis%20datos%20en%20Mi%20N%C3%BAcleo">Solicitar corrección o eliminación</a>
@@ -287,13 +295,22 @@
       <div id="mi-toast" class="mi-toast" role="status" aria-live="polite" hidden></div>
     </main>
 
-    <script src="../sembrar/aula/aula-config.js"></script>
     <script>
-      if (window.AULA_VIVA_CONFIG?.supabaseUrl && window.AULA_VIVA_CONFIG?.supabaseAnonKey) {
+      (() => {
+        const params = new URLSearchParams(window.location.search);
+        const localPreview = ["127.0.0.1", "localhost"].includes(window.location.hostname) && params.get("preview") === "dashboard";
+        window.MI_NUCLEO_DEMO = params.get("demo") === "1" || localPreview;
+        if (!window.MI_NUCLEO_DEMO) {
+          document.write('<script src="../sembrar/aula/aula-config.js"><\/script>');
+        }
+      })();
+    </script>
+    <script>
+      if (!window.MI_NUCLEO_DEMO && window.AULA_VIVA_CONFIG?.supabaseUrl && window.AULA_VIVA_CONFIG?.supabaseAnonKey) {
         document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.0"><\/script>');
       }
     </script>
-    <script src="mi-nucleo.js?v=20260815c"></script>
+    <script src="mi-nucleo.js?v=20260815d"></script>
     <script src="../script.js?v=20260815b" defer></script>
   </body>
 </html>

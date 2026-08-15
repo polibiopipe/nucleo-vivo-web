@@ -10,6 +10,7 @@
   const ACTIVITY_KEY = "nv-mi-nucleo-activity-v1";
   const LOCAL_DASHBOARD_PREVIEW = ["127.0.0.1", "localhost"].includes(window.location.hostname)
     && new URLSearchParams(window.location.search).get("preview") === "dashboard";
+  const DEMO_VIEW = window.MI_NUCLEO_DEMO === true || LOCAL_DASHBOARD_PREVIEW;
   const $ = (selector) => document.querySelector(selector);
   const $$ = (selector) => [...document.querySelectorAll(selector)];
   const state = {
@@ -18,6 +19,7 @@
     authMode: "signin",
     consentRecord: null,
     priority: "all",
+    demo: false,
     busy: false
   };
 
@@ -167,6 +169,7 @@
   }
 
   function metadataConsent(user) {
+    if (state.demo) return null;
     const metadata = user?.user_metadata || {};
     if (metadata.mi_nucleo_consent_version !== CONFIG.consentVersion) return null;
     return {
@@ -177,6 +180,7 @@
   }
 
   async function loadConsent(user) {
+    if (state.demo) return null;
     const fromMetadata = metadataConsent(user);
     if (fromMetadata) return fromMetadata;
     try {
@@ -199,6 +203,7 @@
   }
 
   async function recordConsent(source) {
+    if (state.demo) throw new Error("La vista demostrativa no registra consentimiento.");
     const acceptedAt = new Date().toISOString();
     const metadata = {
       ...(state.user?.user_metadata || {}),
@@ -288,6 +293,7 @@
   }
 
   function displayName(user) {
+    if (state.demo) return "Visitante";
     const fullName = String(user?.user_metadata?.full_name || "").trim();
     if (fullName) return fullName;
     return String(user?.email || "participante").split("@")[0] || "participante";
@@ -302,6 +308,7 @@
   }
 
   function readActivity() {
+    if (state.demo) return {};
     try {
       return JSON.parse(localStorage.getItem(ACTIVITY_KEY) || "{}");
     } catch {
@@ -310,6 +317,7 @@
   }
 
   function trackProduct(productId) {
+    if (state.demo) return;
     const activity = readActivity();
     activity[productId] = { opened_at: new Date().toISOString() };
     localStorage.setItem(ACTIVITY_KEY, JSON.stringify(activity));
@@ -336,6 +344,7 @@
   }
 
   function bindProductTracking() {
+    if (state.demo) return;
     $$('[data-track-product]').forEach((link) => {
       link.addEventListener("click", () => trackProduct(link.dataset.trackProduct));
     });
@@ -354,11 +363,18 @@
       .slice(0, 3);
     $("#experiences-grid").innerHTML = recent.length
       ? recent.map((product) => productCard(product)).join("")
-      : `<div class="mi-empty-card"><div><h3>Tu recorrido comienza aquí.</h3><p>Cuando abras una experiencia desde Mi Núcleo, aparecerá en este espacio para que puedas volver con facilidad.</p><a href="#recomendado">Ver una recomendación</a></div></div>`;
+      : state.demo
+        ? `<div class="mi-empty-card"><div><h3>Explora sin dejar huella.</h3><p>Esta vista no guarda actividad ni progreso. Puedes recorrer los productos desde las secciones siguientes.</p><a href="#recomendado">Ver una recomendación</a></div></div>`
+        : `<div class="mi-empty-card"><div><h3>Tu recorrido comienza aquí.</h3><p>Cuando abras una experiencia desde Mi Núcleo, aparecerá en este espacio para que puedas volver con facilidad.</p><a href="#recomendado">Ver una recomendación</a></div></div>`;
     bindProductTracking();
   }
 
   function renderConsentRecord() {
+    if (state.demo) {
+      $("#consent-record-version").textContent = "No aplica en la demo";
+      $("#consent-record-date").textContent = "La vista demostrativa no registra consentimiento ni datos personales.";
+      return;
+    }
     const record = state.consentRecord || metadataConsent(state.user);
     $("#consent-record-version").textContent = record?.version ? `Versión ${record.version}` : "Sin registro vigente";
     const acceptedAt = record?.accepted_at;
@@ -369,24 +385,38 @@
 
   function renderMember() {
     const name = displayName(state.user);
-    const priorityFromProfile = state.user?.user_metadata?.mi_nucleo_priority;
+    const priorityFromProfile = state.demo ? "all" : state.user?.user_metadata?.mi_nucleo_priority;
     state.priority = priorities[priorityFromProfile] ? priorityFromProfile : "all";
     $("#member-name").textContent = firstName(state.user);
     $("#sidebar-name").textContent = name;
-    $("#sidebar-email").textContent = state.user?.email || "—";
+    $("#sidebar-email").textContent = state.demo ? "Vista sin cuenta" : state.user?.email || "—";
     $("#sidebar-avatar").textContent = initials(state.user);
     $("#account-name").value = name;
     $("#account-email").value = state.user?.email || "";
     $("#priority-label").textContent = priorities[state.priority];
+    document.body.dataset.miDemo = String(state.demo);
+    $("#topbar-status").textContent = state.demo ? "Vista demostrativa · sin datos reales" : "Tus preferencias están sincronizadas";
+    $("#demo-auth-link").hidden = !state.demo;
+    $("#account-nav-link").hidden = state.demo;
+    $("#mi-cuenta").hidden = state.demo;
+    $("#change-priority-button").hidden = state.demo;
+    $("#data-actions-card").hidden = state.demo;
+    $("#account-name").disabled = state.demo;
+    $("#experiences-device-label").textContent = state.demo ? "Vista sin actividad guardada" : "Tu actividad en este dispositivo";
+    $("#personalization-summary").textContent = state.demo ? "Explorar todo · solo lectura" : "Una prioridad editable";
+    $("#personalization-copy").textContent = state.demo
+      ? "La prioridad demostrativa solo ordena esta vista y no se guarda en el navegador ni en una cuenta."
+      : "Tu área elegida cambia el orden de las tarjetas. No bloquea productos ni crea perfiles sensibles.";
     renderProducts();
     renderConsentRecord();
     setPageState("member");
     setLiveStatus(`Mi Núcleo cargado. Hola, ${firstName(state.user)}.`);
     window.setTimeout(() => $("#personal-title")?.focus({ preventScroll: true }), 60);
-    if (!priorityFromProfile) window.setTimeout(openPriorityDialog, 260);
+    if (!state.demo && !priorityFromProfile) window.setTimeout(openPriorityDialog, 260);
   }
 
   function openPriorityDialog() {
+    if (state.demo) return;
     const selected = $(`input[name="priority"][value="${state.priority}"]`) || $('input[name="priority"][value="all"]');
     selected.checked = true;
     const dialog = $("#priority-dialog");
@@ -395,6 +425,7 @@
   }
 
   async function handleSession(user, options = {}) {
+    if (state.demo) return;
     state.user = user;
     if (isRecoveryUrl() && !options.ignoreRecovery) {
       setPageState("auth");
@@ -410,21 +441,19 @@
     renderMember();
   }
 
+  function enterDemo() {
+    state.demo = true;
+    state.client = null;
+    state.user = { id: "demo-visitor" };
+    state.consentRecord = null;
+    state.priority = "all";
+    renderMember();
+  }
+
   async function initialize() {
     $("#consent-version-label").textContent = CONFIG.consentVersion;
-    if (LOCAL_DASHBOARD_PREVIEW) {
-      state.user = {
-        id: "local-preview",
-        email: "visitante@nucleovivo.local",
-        user_metadata: { full_name: "Visitante", mi_nucleo_priority: "all" }
-      };
-      state.consentRecord = {
-        version: CONFIG.consentVersion,
-        accepted_at: new Date().toISOString(),
-        context: { source: "local_dashboard_preview" }
-      };
-      document.querySelector(".mi-app-topbar > div > span:last-child").textContent = "Vista local de revisión · sin datos reales";
-      renderMember();
+    if (DEMO_VIEW) {
+      enterDemo();
       return;
     }
     if (!CONFIG.supabaseUrl || !CONFIG.supabaseAnonKey || !window.supabase?.createClient) {
@@ -472,10 +501,17 @@
 
   $("#signin-tab").addEventListener("click", () => setAuthMode("signin"));
   $("#signup-tab").addEventListener("click", () => setAuthMode("signup"));
+  $("#demo-button").addEventListener("click", () => {
+    const demoUrl = new URL(window.location.href);
+    demoUrl.hash = "";
+    demoUrl.search = "";
+    demoUrl.searchParams.set("demo", "1");
+    window.location.assign(demoUrl.toString());
+  });
 
   $("#auth-form").addEventListener("submit", async (event) => {
     event.preventDefault();
-    if (state.busy || !state.client) return;
+    if (state.demo || state.busy || !state.client) return;
     const emailField = $("#auth-email");
     const passwordField = $("#auth-password");
     const email = emailField.value.trim();
@@ -563,6 +599,7 @@
   });
 
   $("#reset-password-button").addEventListener("click", async () => {
+    if (state.demo || !state.client) return;
     const emailField = $("#auth-email");
     const email = emailField.value.trim();
     if (!email) {
@@ -585,6 +622,7 @@
   });
 
   $("#resend-button").addEventListener("click", async () => {
+    if (state.demo || !state.client) return;
     try {
       const { error } = await state.client.auth.resend({
         type: "signup",
@@ -599,6 +637,7 @@
   });
 
   $("#google-auth-button").addEventListener("click", async () => {
+    if (state.demo || !state.client) return;
     const { error } = await state.client.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: redirectUrl() }
@@ -608,6 +647,7 @@
 
   $("#change-priority-button").addEventListener("click", openPriorityDialog);
   $("#save-priority-button").addEventListener("click", async () => {
+    if (state.demo || !state.client) return;
     const selected = $('input[name="priority"]:checked')?.value || "all";
     const status = $("#priority-status");
     status.textContent = "Guardando…";
@@ -641,6 +681,7 @@
 
   $("#account-form").addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (state.demo || !state.client) return;
     const status = $("#account-status");
     const name = $("#account-name").value.trim();
     if (!name) {
@@ -666,6 +707,7 @@
   });
 
   $("#signout-button").addEventListener("click", async () => {
+    if (state.demo || !state.client) return;
     await state.client.auth.signOut();
     state.user = null;
     state.consentRecord = null;
@@ -676,6 +718,7 @@
   });
 
   $("#download-data-button").addEventListener("click", () => {
+    if (state.demo) return;
     const summary = {
       exported_at: new Date().toISOString(),
       account: { email: state.user?.email || null, display_name: displayName(state.user) },
