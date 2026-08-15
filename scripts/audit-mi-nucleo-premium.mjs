@@ -94,6 +94,9 @@ check("Mi Núcleo: no registra un consentimiento nuevo en cada login", !miScript
 check("Mi Núcleo: vista de QA limitada a entorno local", miScript.includes('["127.0.0.1", "localhost"]'));
 check("Mi Núcleo: sin service role", !/service[_-]?role/i.test(miScript));
 check("Mi Núcleo: sin Mercado Pago activo", !/mercadopago|mercado pago/i.test(miScript));
+check("Mi Núcleo: valida correo antes de autenticar", miScript.includes("Escribe un correo válido para continuar."));
+check("Mi Núcleo: valida contraseña antes de autenticar", miScript.includes("Escribe tu contraseña para continuar."));
+check("Mi Núcleo: recuperación valida formato de correo", miScript.includes("Escribe un correo válido para solicitar el restablecimiento."));
 
 includes(
   "lab/index.html",

@@ -476,10 +476,34 @@
   $("#auth-form").addEventListener("submit", async (event) => {
     event.preventDefault();
     if (state.busy || !state.client) return;
+    const emailField = $("#auth-email");
+    const passwordField = $("#auth-password");
+    const email = emailField.value.trim();
+    const password = passwordField.value;
     const consentAccepted = $("#auth-consent").checked;
     if (["signup", "consent"].includes(state.authMode) && !consentAccepted) {
       setFormStatus("Debes aceptar la Política de Privacidad y los Términos vigentes para continuar.", "error");
       $("#auth-consent").focus();
+      return;
+    }
+    if (["signin", "signup"].includes(state.authMode) && !email) {
+      setFormStatus("Escribe tu correo para continuar.", "error");
+      emailField.focus();
+      return;
+    }
+    if (["signin", "signup"].includes(state.authMode) && !emailField.validity.valid) {
+      setFormStatus("Escribe un correo válido para continuar.", "error");
+      emailField.focus();
+      return;
+    }
+    if (["signin", "signup", "update-password"].includes(state.authMode) && !password) {
+      setFormStatus("Escribe tu contraseña para continuar.", "error");
+      passwordField.focus();
+      return;
+    }
+    if (["signup", "update-password"].includes(state.authMode) && password.length < 8) {
+      setFormStatus("La contraseña debe tener al menos 8 caracteres.", "error");
+      passwordField.focus();
       return;
     }
 
@@ -491,16 +515,12 @@
         await recordConsent("existing_session_gate");
         renderMember();
       } else if (state.authMode === "update-password") {
-        const password = $("#auth-password").value;
-        if (password.length < 8) throw new Error("Password should be at least 8 characters");
         const { error } = await state.client.auth.updateUser({ password });
         if (error) throw error;
         setFormStatus("Contraseña actualizada. Preparando tu espacio…", "success");
         await handleSession(state.user, { ignoreRecovery: true });
       } else if (state.authMode === "signup") {
         const acceptedAt = new Date().toISOString();
-        const email = $("#auth-email").value.trim();
-        const password = $("#auth-password").value;
         const name = $("#auth-name").value.trim();
         if (!name) throw new Error("Escribe tu nombre para crear la cuenta.");
         const { data, error } = await state.client.auth.signUp({
@@ -528,8 +548,8 @@
         }
       } else {
         const { data, error } = await state.client.auth.signInWithPassword({
-          email: $("#auth-email").value.trim(),
-          password: $("#auth-password").value
+          email,
+          password
         });
         if (error) throw error;
         await handleSession(data.user);
@@ -543,10 +563,16 @@
   });
 
   $("#reset-password-button").addEventListener("click", async () => {
-    const email = $("#auth-email").value.trim();
+    const emailField = $("#auth-email");
+    const email = emailField.value.trim();
     if (!email) {
       setFormStatus("Escribe tu correo para solicitar el restablecimiento.", "error");
-      $("#auth-email").focus();
+      emailField.focus();
+      return;
+    }
+    if (!emailField.validity.valid) {
+      setFormStatus("Escribe un correo válido para solicitar el restablecimiento.", "error");
+      emailField.focus();
       return;
     }
     try {
