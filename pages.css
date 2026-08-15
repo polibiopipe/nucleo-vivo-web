@@ -2554,6 +2554,14 @@
 .experience-boundary h2 { margin: 14px 0 0; font-family: var(--serif); font-size: clamp(2.5rem, 5vw, 4.6rem); font-weight: 600; line-height: 1; }
 .experience-boundary p { margin: 21px auto 0; color: var(--nv-text-soft); }
 
+.experience-product-features { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.experience-product-features article { min-height: 145px; padding: 22px; border: 1px solid rgba(248, 250, 250, 0.14); border-radius: 18px; display: grid; grid-template-columns: auto 1fr; gap: 16px; background: rgba(248, 250, 250, 0.045); }
+.experience-product-features article > span { width: 34px; height: 34px; border: 1px solid rgba(118, 208, 207, 0.32); border-radius: 50%; display: grid; place-items: center; color: var(--nv-aqua); font-size: 0.67rem; font-weight: 900; }
+.experience-product-features strong { display: block; font-family: var(--serif); font-size: 1.14rem; }
+.experience-product-features p { margin: 8px 0 0; color: rgba(248, 250, 250, 0.6); font-size: 0.78rem; line-height: 1.55; }
+.experience-inline-link { margin-top: 25px; display: inline-flex; gap: 8px; align-items: center; color: var(--nv-blue); font-weight: 900; text-decoration: none; }
+.experience-inline-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+
 @media (max-width: 1040px) {
   .lab-premium-hero-grid,
   .experience-hero-grid { grid-template-columns: 1fr; }
@@ -2583,7 +2591,8 @@
   .experience-simulation-grid { grid-template-columns: 1fr; }
   .experience-step-label { max-width: 240px; }
   .experience-choice-row,
-  .experience-dimensions { grid-template-columns: 1fr; }
+  .experience-dimensions,
+  .experience-product-features { grid-template-columns: 1fr; }
   .experience-transfer { grid-template-columns: 1fr; }
 }
 

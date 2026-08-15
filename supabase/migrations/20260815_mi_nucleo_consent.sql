@@ -2,6 +2,8 @@
 -- Registra el consentimiento incluido en el alta de una cuenta.
 -- Esta migración amplía únicamente el Supabase de Aula Viva / Mi Núcleo.
 -- No pertenece ni modifica la infraestructura independiente de Escucha Viva.
+-- Es una mejora opcional de trazabilidad: Mi Núcleo conserva el consentimiento
+-- en metadata de Auth y puede funcionar sin aplicar esta migración hoy.
 
 begin;
 

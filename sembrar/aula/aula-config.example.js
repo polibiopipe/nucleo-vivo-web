@@ -5,7 +5,6 @@ window.AULA_VIVA_CONFIG = Object.freeze({
   supabaseAnonKey: "your-public-anon-key",
   previewMode: true,
   enableRemoteSync: true,
-  enableGoogleAuth: false,
   courseSlug: "ia-con-criterio-humano",
   privacyVersion: "2026-07-25",
   organizationName: "Núcleo Vivo"

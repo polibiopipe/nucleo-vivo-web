@@ -5,7 +5,7 @@
     ...(window.AULA_VIVA_CONFIG || {}),
     consentVersion: "2026-08-15",
     consentType: "mi_nucleo_privacy_terms",
-    enableGoogleAuth: Boolean(window.AULA_VIVA_CONFIG?.enableGoogleAuth)
+    enableGoogleAuth: false
   });
   const ACTIVITY_KEY = "nv-mi-nucleo-activity-v1";
   const LOCAL_DASHBOARD_PREVIEW = ["127.0.0.1", "localhost"].includes(window.location.hostname)
@@ -48,12 +48,12 @@
       area: "Docencia",
       categories: ["education"],
       symbol: "UD",
-      status: "Prototipo abierto",
-      statusCode: "prototype",
+      status: "Piloto abierto",
+      statusCode: "available",
       entitlement: "open",
-      description: "Una pausa guiada para leer señales, priorizar cuidado y orientar una próxima acción pedagógica.",
-      href: "/lab/umbral-docente/",
-      localHref: "../lab/umbral-docente/index.html"
+      description: "Aplicación de práctica pedagógica con escenarios, planificación y retroalimentación formativa.",
+      href: "/lab/umbral-docente/app/",
+      localHref: "../lab/umbral-docente/app/index.html"
     },
     {
       id: "empresa-viva",
@@ -61,12 +61,12 @@
       area: "Organizaciones",
       categories: ["business"],
       symbol: "EM",
-      status: "Prototipo abierto",
-      statusCode: "prototype",
+      status: "Piloto abierto",
+      statusCode: "available",
       entitlement: "open",
-      description: "Decisiones organizacionales observadas desde las personas, el propósito y la sostenibilidad.",
-      href: "/lab/empresa-viva/",
-      localHref: "../lab/empresa-viva/index.html"
+      description: "Laboratorio de decisiones empresariales con ocho casos, evidencia y consecuencias simuladas.",
+      href: "/lab/empresa-viva/app/",
+      localHref: "../lab/empresa-viva/app/index.html"
     },
     {
       id: "aula-viva",

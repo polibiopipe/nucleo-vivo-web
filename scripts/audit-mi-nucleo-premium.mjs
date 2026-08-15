@@ -24,7 +24,9 @@ const requiredRoutes = [
   "mi-nucleo/index.html",
   "lab/index.html",
   "lab/empresa-viva/index.html",
+  "lab/empresa-viva/app/index.html",
   "lab/umbral-docente/index.html",
+  "lab/umbral-docente/app/index.html",
   "sembrar/index.html",
   "sembrar/cursos/index.html",
   "sembrar/aula/index.html",
@@ -34,7 +36,9 @@ const requiredRoutes = [
 ];
 
 requiredRoutes.forEach((path) => check(`${path}: existe`, existsSync(resolve(root, path))));
-requiredRoutes.forEach((path) => check(`${path}: enlace para saltar al contenido`, file(path).includes("skip-link")));
+requiredRoutes
+  .filter((path) => !path.includes("/app/"))
+  .forEach((path) => check(`${path}: enlace para saltar al contenido`, file(path).includes("skip-link")));
 check("logo oficial: existe", existsSync(resolve(root, "assets/nucleo-vivo-isotipo-oficial.svg")));
 check("imagen social: existe", existsSync(resolve(root, "assets/og-nucleo-vivo.png")));
 
@@ -98,11 +102,16 @@ includes(
   "Empresa Viva",
   "Umbral Docente",
   "Aplicación externa disponible",
-  "Prototipo funcional"
+  "Piloto abierto"
 );
-includes("lab/empresa-viva/index.html", "Prototipo funcional · sesión local", "No guarda respuestas", "Observar la decisión");
-includes("lab/umbral-docente/index.html", "Prototipo funcional · sesión local", "No diagnostica", "No almacena tus respuestas", "Ver mi orientación");
-includes("lab/lab-experiences.js", "empresaFeedback", "umbralCopy", "result.focus");
+includes("lab/empresa-viva/index.html", "aplicación funcional", "/lab/empresa-viva/app/", "8 casos empresariales", "Entrar a la aplicación");
+includes("lab/umbral-docente/index.html", "aplicación funcional", "/lab/umbral-docente/app/", "18 escenarios", "Entrar a la aplicación");
+check("landings Lab: no existe simulador alternativo", !existsSync(resolve(root, "lab/lab-experiences.js")));
+check("landing Empresa Viva: no contiene formulario alternativo", !file("lab/empresa-viva/index.html").includes("lab-experience-form"));
+check("landing Umbral Docente: no contiene formulario alternativo", !file("lab/umbral-docente/index.html").includes("lab-experience-form"));
+includes("lab/empresa-viva/app/index.html", "id=\"app\"", "./src/app.js");
+includes("lab/umbral-docente/app/index.html", "premium-ui.js", "curriculum-bcep.js", "modules/storage.js");
+includes("mi-nucleo/mi-nucleo.js", "/lab/empresa-viva/app/", "/lab/umbral-docente/app/");
 
 const socialSource = `${file("script.js")}\n${file("contacto/index.html")}\n${file("mi-nucleo/index.html")}`;
 [
@@ -115,7 +124,7 @@ check("redes: noopener noreferrer", socialSource.includes('rel="noopener norefer
 check("redes: etiqueta accesible", socialSource.includes("aria-label"));
 
 includes("privacidad/index.html", "Mi Núcleo", "Supabase", "Escucha Viva", "actividad local");
-includes("terminos/index.html", "Mi Núcleo", "prototipos", "enlaces externos", "pagos");
+includes("terminos/index.html", "Mi Núcleo", "aplicaciones piloto", "enlaces externos", "pagos");
 
 const migration = file("supabase/migrations/20260815_mi_nucleo_consent.sql");
 [
@@ -126,6 +135,11 @@ const migration = file("supabase/migrations/20260815_mi_nucleo_consent.sql");
   "after insert on auth.users"
 ].forEach((needle) => check(`migración: contiene ${needle}`, migration.includes(needle)));
 check("migración: declara límite de Escucha Viva", migration.includes("No pertenece ni modifica la infraestructura independiente de Escucha Viva"));
+check("migración: se declara opcional", migration.includes("puede funcionar sin aplicar esta migración hoy"));
+
+const aulaConfig = file("sembrar/aula/aula-config.js");
+check("Aula: conserva sincronización remota", aulaConfig.includes("enableRemoteSync: true"));
+check("Aula: Mi Núcleo no añade flags a su configuración", !aulaConfig.includes("enableGoogleAuth"));
 
 const styles = `${file("styles.css")}\n${file("pages.css")}\n${file("mi-nucleo/mi-nucleo.css")}`;
 check("estilos: reduced motion", styles.includes("prefers-reduced-motion: reduce"));
@@ -138,6 +152,8 @@ includes(
   "/mi-nucleo",
   "/lab/empresa-viva",
   "/lab/umbral-docente",
+  "/lab/empresa-viva/app",
+  "/lab/umbral-docente/app",
   "/sembrar/cursos/cuando-ensenar-agota"
 );
 
