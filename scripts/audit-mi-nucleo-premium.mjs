@@ -192,14 +192,18 @@ for (const path of [
   "lab/empresa-viva/index.html",
   "lab/umbral-docente/index.html",
   "sembrar/index.html",
-  "sembrar/cursos/index.html",
-  "sembrar/aula/index.html"
+  "sembrar/cursos/index.html"
 ]) {
   const source = file(path);
   check(`${path}: meta description`, /<meta\s+name="description"/m.test(source));
   check(`${path}: canonical`, source.includes('rel="canonical"'));
   check(`${path}: Open Graph`, source.includes('property="og:image"'));
 }
+
+const aulaSource = file("sembrar/aula/index.html");
+check("Aula: conserva meta description existente", /<meta\s+name="description"/m.test(aulaSource));
+check("Aula: canonical premium queda fuera de alcance", !aulaSource.includes('rel="canonical"'));
+check("Aula: Open Graph premium queda fuera de alcance", !aulaSource.includes('property="og:image"'));
 
 if (failures.length) {
   console.error(`Audit Mi Núcleo Premium: ${passed} controles correctos, ${failures.length} fallos.`);
