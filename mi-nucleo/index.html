@@ -14,7 +14,7 @@
     <link rel="canonical" href="https://nucleovivo.net/mi-nucleo/" />
     <link rel="icon" href="../assets/nucleo-vivo-isotipo-oficial.png" type="image/png" />
     <link rel="stylesheet" href="../styles.css?v=20260816brandstructural1" />
-    <link rel="stylesheet" href="mi-nucleo.css?v=20260816block2a2" />
+    <link rel="stylesheet" href="mi-nucleo.css?v=20260816welcome2" />
   </head>
   <body class="mi-nucleo-page" data-mi-state="loading">
     <a class="skip-link" href="#mi-main">Saltar al contenido</a>
@@ -344,26 +344,37 @@
     </main>
 
     <div id="welcome-video-overlay" class="mi-welcome-video-overlay" role="dialog" aria-modal="true" aria-labelledby="welcome-video-title" hidden>
-      <section class="mi-welcome-video-card">
+      <section id="welcome-video-card" class="mi-welcome-video-card">
         <header class="mi-welcome-video-heading">
           <div>
             <p class="mi-eyebrow">Tu espacio personal</p>
             <h2 id="welcome-video-title">Bienvenido a Mi Núcleo</h2>
           </div>
-          <button id="welcome-video-close" class="mi-welcome-video-close" type="button" aria-label="Cerrar video de bienvenida">×</button>
+          <button id="welcome-video-close" class="mi-welcome-video-close" type="button" aria-label="Cerrar bienvenida">×</button>
         </header>
 
-        <div class="mi-welcome-video-media">
-          <video id="welcome-video" src="./assets/mi-nucleo-bienvenida.mp4" controls muted playsinline preload="metadata">
-            Tu navegador no puede reproducir este video.
-          </video>
-          <p id="welcome-video-error" class="mi-welcome-video-error" role="status" hidden>No pudimos cargar el video. Puedes cerrar esta bienvenida y continuar usando Mi Núcleo.</p>
+        <div id="welcome-video-intro" class="mi-welcome-video-intro">
+          <span class="mi-welcome-play-mark" aria-hidden="true">▶</span>
+          <p>Conoce en un minuto cómo organizar tus experiencias, explorar el ecosistema y aprovechar tu espacio personal de aprendizaje.</p>
+          <div class="mi-welcome-intro-actions">
+            <button id="welcome-video-start" class="mi-welcome-start-button" type="button"><span aria-hidden="true">▶</span> Iniciar Mi Núcleo</button>
+            <button id="welcome-video-skip" class="mi-welcome-skip-button" type="button">Omitir por ahora</button>
+          </div>
         </div>
 
-        <footer class="mi-welcome-video-actions">
-          <button id="welcome-sound-button" type="button" aria-pressed="false">Activar sonido</button>
-          <button id="welcome-video-skip" type="button">Omitir</button>
-        </footer>
+        <div id="welcome-video-player" class="mi-welcome-video-player" hidden>
+          <div class="mi-welcome-video-media">
+            <video id="welcome-video" src="./assets/mi-nucleo-bienvenida.mp4" controls muted playsinline preload="metadata">
+              Tu navegador no puede reproducir este video.
+            </video>
+            <p id="welcome-video-error" class="mi-welcome-video-error" role="status" hidden>No pudimos iniciar el video. Puedes usar los controles o cerrar esta bienvenida y continuar en Mi Núcleo.</p>
+          </div>
+
+          <footer class="mi-welcome-video-actions">
+            <button id="welcome-sound-button" type="button" aria-pressed="true">Silenciar</button>
+            <button id="welcome-video-exit" type="button">Salir de la bienvenida</button>
+          </footer>
+        </div>
       </section>
     </div>
 
@@ -383,7 +394,7 @@
         document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.0"><\/script>');
       }
     </script>
-    <script src="mi-nucleo.js?v=20260816block2a2"></script>
+    <script src="mi-nucleo.js?v=20260816welcome2"></script>
     <script src="../script.js?v=20260815b" defer></script>
   </body>
 </html>

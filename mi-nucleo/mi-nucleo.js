@@ -464,35 +464,69 @@
     const video = $("#welcome-video");
     video.pause();
     overlay.hidden = true;
+    $("#welcome-video-card").classList.remove("is-player");
+    $("#welcome-video-intro").hidden = false;
+    $("#welcome-video-player").hidden = true;
     document.body.classList.remove("mi-welcome-video-open");
     state.welcomeVideoMode = null;
     setLiveStatus("Video de bienvenida cerrado. Mi Núcleo está disponible.");
     if (shouldMarkSeen) await markWelcomeVideoSeen();
   }
 
-  function openWelcomeVideo({ automatic = false } = {}) {
-    if (automatic && !shouldShowWelcomeVideo()) return;
-    const overlay = $("#welcome-video-overlay");
-    if (!overlay.hidden) return;
+  function showWelcomeIntro() {
+    const video = $("#welcome-video");
+    video.pause();
+    video.currentTime = 0;
+    video.muted = true;
+    $("#welcome-video-error").hidden = true;
+    $("#welcome-video-card").classList.remove("is-player");
+    $("#welcome-video-intro").hidden = false;
+    $("#welcome-video-player").hidden = true;
+    setLiveStatus("Bienvenida a Mi Núcleo. Puedes iniciar el video u omitirlo por ahora.");
+    window.setTimeout(() => $("#welcome-video-start")?.focus({ preventScroll: true }), 40);
+  }
+
+  function showWelcomePlayer({ withSound = true } = {}) {
     const video = $("#welcome-video");
     const errorMessage = $("#welcome-video-error");
     const soundButton = $("#welcome-sound-button");
-    state.welcomeVideoMode = automatic ? "automatic" : "manual";
+    $("#welcome-video-card").classList.add("is-player");
+    $("#welcome-video-intro").hidden = true;
+    $("#welcome-video-player").hidden = false;
     errorMessage.hidden = true;
-    soundButton.textContent = "Activar sonido";
-    soundButton.setAttribute("aria-pressed", "false");
-    video.muted = true;
     video.currentTime = 0;
+    video.muted = !withSound;
+    soundButton.textContent = video.muted ? "Activar sonido" : "Silenciar";
+    soundButton.setAttribute("aria-pressed", String(!video.muted));
+    setLiveStatus(withSound
+      ? "Reproduciendo el video de bienvenida con sonido."
+      : "Reproduciendo el video de bienvenida sin sonido.");
+    try {
+      const playback = video.play();
+      if (playback && typeof playback.catch === "function") {
+        playback.catch((error) => {
+          errorMessage.hidden = false;
+          console.warn("El navegador no permitió iniciar el video de bienvenida; los controles y el cierre siguen disponibles.", error);
+          setLiveStatus("El video no pudo iniciarse automáticamente. Usa los controles o cierra la bienvenida para continuar.");
+        });
+      }
+    } catch (error) {
+      errorMessage.hidden = false;
+      console.warn("El navegador no permitió iniciar el video de bienvenida; los controles y el cierre siguen disponibles.", error);
+      setLiveStatus("El video no pudo iniciarse automáticamente. Usa los controles o cierra la bienvenida para continuar.");
+    }
+    window.setTimeout(() => video.focus({ preventScroll: true }), 40);
+  }
+
+  function openWelcomeVideo({ automatic = false, directToVideo = !automatic } = {}) {
+    if (automatic && !shouldShowWelcomeVideo()) return;
+    const overlay = $("#welcome-video-overlay");
+    if (!overlay.hidden) return;
+    state.welcomeVideoMode = automatic ? "automatic" : "manual";
     overlay.hidden = false;
     document.body.classList.add("mi-welcome-video-open");
-    setLiveStatus("Video de bienvenida abierto. Puedes activar el sonido u omitirlo.");
-    window.setTimeout(() => $("#welcome-video-close")?.focus({ preventScroll: true }), 40);
-    const playback = video.play();
-    if (playback && typeof playback.catch === "function") {
-      playback.catch((error) => {
-        console.warn("La reproducción automática del video de bienvenida fue bloqueada; los controles siguen disponibles.", error);
-      });
-    }
+    if (directToVideo) showWelcomePlayer({ withSound: true });
+    else showWelcomeIntro();
   }
 
   function renderMember() {
@@ -922,8 +956,16 @@
     closeWelcomeVideo().catch((error) => console.error("No se pudo cerrar la bienvenida correctamente.", error));
   });
 
+  $("#welcome-video-start").addEventListener("click", () => {
+    showWelcomePlayer({ withSound: true });
+  });
+
   $("#welcome-video-skip").addEventListener("click", () => {
     closeWelcomeVideo().catch((error) => console.error("No se pudo omitir la bienvenida correctamente.", error));
+  });
+
+  $("#welcome-video-exit").addEventListener("click", () => {
+    closeWelcomeVideo().catch((error) => console.error("No se pudo salir de la bienvenida correctamente.", error));
   });
 
   $("#welcome-sound-button").addEventListener("click", () => {
@@ -954,7 +996,7 @@
   });
 
   $("#replay-welcome-video-button").addEventListener("click", () => {
-    openWelcomeVideo({ automatic: false });
+    openWelcomeVideo({ automatic: false, directToVideo: true });
   });
 
   document.addEventListener("keydown", (event) => {
