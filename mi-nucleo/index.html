@@ -13,8 +13,8 @@
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="canonical" href="https://nucleovivo.net/mi-nucleo/" />
     <link rel="icon" href="../assets/nucleo-vivo-isotipo-oficial.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="../styles.css?v=20260816premium2" />
-    <link rel="stylesheet" href="mi-nucleo.css?v=20260816premium2" />
+    <link rel="stylesheet" href="../styles.css?v=20260816visualfinal2" />
+    <link rel="stylesheet" href="mi-nucleo.css?v=20260816visualfinal2" />
   </head>
   <body class="mi-nucleo-page" data-mi-state="loading">
     <a class="skip-link" href="#mi-main">Saltar al contenido</a>
@@ -52,23 +52,23 @@
         <div class="section-shell mi-access-grid">
           <div class="mi-access-story">
             <div class="mi-access-message">
-              <p class="mi-eyebrow">Mi Núcleo · Experiencias personales</p>
-              <h1 id="access-title">Tu Núcleo. Tus experiencias.</h1>
-              <p class="mi-access-subtitle">Practica, aprende y vuelve cuando quieras.</p>
+              <p class="mi-eyebrow">Mi Núcleo · Espacio personal de aprendizaje</p>
+              <h1 id="access-title">Practica decisiones reales,<br />en un entorno seguro.</h1>
+              <p class="mi-access-subtitle">En Núcleo Vivo, la psicología, la educación y las organizaciones aprenden haciendo. Practica, equivócate, reflexiona y vuelve a intentar en entornos seguros.</p>
               <p class="mi-access-disciplines">Psicología · Educación · Organizaciones</p>
               <p class="mi-sr-only">Un punto de entrada para experiencias y cursos de Núcleo Vivo.</p>
             </div>
 
             <div class="mi-access-network mi-access-showcase" aria-label="Capturas reales de Escucha Viva, Empresa Viva y Umbral Docente">
+              <figure class="mi-showcase-window is-empresa is-main">
+                <div class="mi-showcase-chrome" aria-hidden="true"><span></span><span></span><span></span></div>
+                <img src="../assets/showcase/empresa-viva.jpg" alt="Interfaz real de Empresa Viva" />
+                <figcaption><span>Organizaciones</span><strong>Empresa Viva</strong><small>Decisiones empresariales aplicadas</small></figcaption>
+              </figure>
               <figure class="mi-showcase-window is-escucha">
                 <div class="mi-showcase-chrome" aria-hidden="true"><span></span><span></span><span></span></div>
                 <img src="../assets/showcase/escucha-viva.jpg" alt="Interfaz real de Escucha Viva" />
                 <figcaption><span>Psicología</span><strong>Escucha Viva</strong><small>Entrevistas psicológicas simuladas</small></figcaption>
-              </figure>
-              <figure class="mi-showcase-window is-empresa">
-                <div class="mi-showcase-chrome" aria-hidden="true"><span></span><span></span><span></span></div>
-                <img src="../assets/showcase/empresa-viva.jpg" alt="Interfaz real de Empresa Viva" />
-                <figcaption><span>Organizaciones</span><strong>Empresa Viva</strong><small>Decisiones empresariales aplicadas</small></figcaption>
               </figure>
               <figure class="mi-showcase-window is-umbral">
                 <div class="mi-showcase-chrome" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -77,15 +77,17 @@
               </figure>
             </div>
 
-            <div class="mi-product-signals" aria-label="Señales del ecosistema de Mi Núcleo">
-              <span>3 experiencias activas</span><span>Cursos Sembrar</span><span>Simulación aplicada</span>
+            <div class="mi-value-signals" aria-label="Valor de las experiencias de Mi Núcleo">
+              <div><strong>Aprendizaje aplicado</strong><span>Practica decisiones antes de actuar.</span></div>
+              <div><strong>Retroalimentación</strong><span>Observa consecuencias y aprendizajes.</span></div>
+              <div><strong>Personas al centro</strong><span>Tecnología que apoya el desarrollo humano.</span></div>
             </div>
           </div>
 
           <div id="access-card" class="mi-access-card">
             <div class="mi-access-brand">
               <span class="mi-brand-mark" aria-hidden="true"><img src="../assets/nucleo-vivo-isotipo-oficial.svg" alt="" /></span>
-              <div class="mi-brand-copy"><strong>Mi Núcleo</strong><span>Núcleo OS</span></div>
+              <div class="mi-brand-copy"><strong>Mi Núcleo</strong><span>Personas al centro</span></div>
             </div>
             <p class="mi-card-kicker" id="auth-kicker">Acceso personal</p>
             <h2 id="auth-title">Entra a tu Núcleo</h2>
@@ -108,8 +110,8 @@
                   <input id="auth-name" name="name" autocomplete="name" />
                 </label>
                 <label>
-                  <span>Correo</span>
-                  <input id="auth-email" name="email" type="email" autocomplete="email" required />
+                  <span>Correo electrónico</span>
+                  <input id="auth-email" name="email" type="email" autocomplete="email" placeholder="tu@correo.cl" required />
                 </label>
                 <label>
                   <span id="password-label">Contraseña</span>
@@ -129,10 +131,12 @@
               <p id="auth-status" class="mi-form-status" role="status" aria-live="polite"></p>
               <button id="auth-submit" class="button button-primary mi-button-full" type="submit">Entrar a Mi Núcleo</button>
               <div class="mi-auth-help">
-                <button id="reset-password-button" type="button">Olvidé mi contraseña</button>
+                <button id="reset-password-button" type="button">¿Olvidaste tu contraseña?</button>
                 <button id="resend-button" type="button" hidden>Reenviar confirmación</button>
               </div>
             </form>
+
+            <p class="mi-access-privacy">Tu información está protegida. Consulta nuestra <a href="/privacidad/" data-local-href="../privacidad/index.html">Política de Privacidad</a>.</p>
 
             <div class="mi-demo-entry" aria-labelledby="demo-entry-title">
               <button id="demo-button" class="button button-secondary mi-demo-button" type="button">Explorar Mi Núcleo</button>
@@ -150,10 +154,14 @@
           </a>
           <nav>
             <a class="is-active" href="#inicio-personal">Inicio</a>
-            <a href="#recomendado">Experiencias</a>
-            <a href="#herramientas">Cursos</a>
+            <a href="#mis-experiencias">Mis experiencias</a>
+            <a href="#recomendado">Recomendado</a>
             <a href="#explorar">Explorar</a>
-            <a id="account-nav-link" href="#mi-cuenta">Cuenta</a>
+            <a href="#mis-experiencias">Mi progreso</a>
+            <span class="mi-sidebar-divider" aria-hidden="true"></span>
+            <a href="#privacidad-datos">Privacidad y mis datos</a>
+            <a href="#ayuda">Ayuda</a>
+            <a id="account-nav-link" href="#mi-cuenta">Mi cuenta</a>
           </nav>
           <div class="mi-sidebar-footer">
             <span id="sidebar-avatar">NV</span>
@@ -177,8 +185,8 @@
             <section id="inicio-personal" class="mi-personal-hero" aria-labelledby="personal-title">
               <div>
                 <p class="mi-eyebrow">Tu punto de partida</p>
-                <h1 id="personal-title" tabindex="-1">Hola, <span id="member-name">participante</span>. <span>¿Qué quieres practicar hoy?</span></h1>
-                <p id="personal-copy">Explora experiencias reales y elige una práctica para comenzar.</p>
+                <h1 id="personal-title" tabindex="-1">Hola, <span id="member-name">participante</span>. <span>Este es tu Núcleo.</span></h1>
+                <p id="personal-copy">Continúa tus prácticas, explora nuevas experiencias y organiza tu camino de aprendizaje.</p>
                 <div class="mi-priority-line">
                   <span>Prioridad actual</span>
                   <strong id="priority-label">Explorar todo</strong>
