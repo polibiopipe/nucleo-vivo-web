@@ -668,7 +668,7 @@
     if (CONFIG.enableGoogleAuth !== true || state.demo || !state.client) return;
     const { error } = await state.client.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: redirectUrl() }
+      options: { redirectTo: "https://www.nucleovivo.net/mi-nucleo/index.html" }
     });
     if (error) setFormStatus(friendlyError(error), "error");
   });

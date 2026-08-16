@@ -266,42 +266,45 @@ body:not([data-mi-state="loading"]) #mi-loading {
   box-shadow: 0 6px 18px rgba(4, 29, 63, 0.08);
 }
 
-.mi-google-button {
+.mi-google-button.google-login-image-button {
   width: 100%;
-  min-height: 52px;
-  padding: 0 18px;
-  border: 1px solid rgba(31, 41, 55, 0.14);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  color: #3c4043;
-  background: #fff;
-  font-size: 0.92rem;
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: 0.01em;
-  box-shadow: 0 1px 2px rgba(6, 24, 44, 0.05);
-  cursor: pointer;
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    transform 0.18s ease;
-}
-
-.mi-google-button:hover,
-.mi-google-button:focus-visible {
-  border-color: rgba(60, 64, 67, 0.24);
-  box-shadow: 0 4px 12px rgba(6, 24, 44, 0.08);
-  transform: translateY(-1px);
-}
-
-.mi-google-button .google-icon {
-  width: 20px;
-  height: 20px;
-  flex: 0 0 auto;
+  max-width: 410px;
+  min-height: 0;
+  margin: 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
   display: block;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, filter 0.18s ease;
+}
+
+.mi-google-button.google-login-image-button:hover,
+.mi-google-button.google-login-image-button:focus-visible {
+  transform: translateY(-2px) scale(1.01);
+  filter: brightness(1.02);
+}
+
+.mi-google-button.google-login-image-button:focus-visible {
+  outline: 2px solid var(--mi-cyan);
+  outline-offset: 4px;
+}
+
+.mi-google-button.google-login-image-button:active {
+  transform: scale(0.985);
+}
+
+.google-login-image {
+  display: block;
+  width: 100%;
+  max-width: 410px;
+  height: auto;
+  margin: 0 auto;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
 }
 
 .mi-divider {
