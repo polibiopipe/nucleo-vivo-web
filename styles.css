@@ -4048,12 +4048,6 @@ section[id] {
   box-shadow: 0 12px 38px rgba(4, 29, 63, 0.12);
 }
 
-.site-header .brand {
-  border-color: rgba(118, 208, 207, 0.2);
-  border-radius: 14px;
-  box-shadow: 0 8px 26px rgba(4, 29, 63, 0.18);
-}
-
 .site-header .header-button {
   border-color: rgba(118, 208, 207, 0.48);
   background: linear-gradient(135deg, rgba(118, 208, 207, 0.16), rgba(10, 165, 173, 0.12));
@@ -5484,6 +5478,14 @@ section[id] {
   box-shadow: none;
   overflow: visible;
   text-decoration: none;
+}
+
+.site-header .brand {
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 8px 26px rgba(0, 12, 34, 0.22);
 }
 
 .brand-logo,
