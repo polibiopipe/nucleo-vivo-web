@@ -144,12 +144,7 @@
     return product.localHref || product.href;
   }
 
-  function redirectUrl() {
-    if (window.location.protocol === "file:") return window.location.href.split(/[?#]/)[0];
-    return new URL("/mi-nucleo/", window.location.origin).toString();
-  }
-
-  function emailConfirmationRedirectUrl() {
+  function miNucleoAuthRedirectUrl() {
     return `${window.location.origin}/mi-nucleo/index.html`;
   }
 
@@ -738,7 +733,7 @@
         const acceptedAt = new Date().toISOString();
         const name = $("#auth-name").value.trim();
         if (!name) throw new Error("Escribe tu nombre para crear la cuenta.");
-        const emailRedirectTo = emailConfirmationRedirectUrl();
+        const emailRedirectTo = miNucleoAuthRedirectUrl();
         const { data, error } = await state.client.auth.signUp({
           email,
           password,
@@ -793,7 +788,9 @@
       return;
     }
     try {
-      const { error } = await state.client.auth.resetPasswordForEmail(email, { redirectTo: redirectUrl() });
+      const { error } = await state.client.auth.resetPasswordForEmail(email, {
+        redirectTo: miNucleoAuthRedirectUrl()
+      });
       if (error) throw error;
       setFormStatus("Si el correo está registrado, recibirás instrucciones para crear una nueva contraseña.", "success");
     } catch (error) {
@@ -804,7 +801,7 @@
   $("#resend-button").addEventListener("click", async () => {
     if (state.demo || !state.client) return;
     try {
-      const emailRedirectTo = emailConfirmationRedirectUrl();
+      const emailRedirectTo = miNucleoAuthRedirectUrl();
       const { error } = await state.client.auth.resend({
         type: "signup",
         email: $("#auth-email").value.trim(),
@@ -823,7 +820,7 @@
     if (CONFIG.enableGoogleAuth !== true || state.demo || !state.client) return;
     const { error } = await state.client.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: "https://www.nucleovivo.net/mi-nucleo/index.html" }
+      options: { redirectTo: miNucleoAuthRedirectUrl() }
     });
     if (error) setFormStatus(friendlyError(error), "error");
   });
