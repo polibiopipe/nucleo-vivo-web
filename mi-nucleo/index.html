@@ -13,8 +13,8 @@
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="canonical" href="https://nucleovivo.net/mi-nucleo/" />
     <link rel="icon" href="../assets/nucleo-vivo-isotipo-exacto-del-moodboard.png" type="image/png" />
-    <link rel="stylesheet" href="../styles.css?v=20260815tech2" />
-    <link rel="stylesheet" href="mi-nucleo.css?v=20260815tech2" />
+    <link rel="stylesheet" href="../styles.css?v=20260815showcase" />
+    <link rel="stylesheet" href="mi-nucleo.css?v=20260815showcase" />
   </head>
   <body class="mi-nucleo-page" data-mi-state="loading">
     <a class="skip-link" href="#mi-main">Saltar al contenido</a>
@@ -58,12 +58,10 @@
             <p>
               Un punto de entrada para experiencias y cursos, organizado según el área que quieras priorizar.
             </p>
-            <div class="mi-access-network" aria-label="Productos conectados con Mi Núcleo">
-              <div class="mi-network-head"><span><i aria-hidden="true"></i> Ecosistema conectado</span><strong>Explora a tu ritmo</strong></div>
-              <article><span class="mi-network-mark">EV</span><div><small>Psicología</small><strong>Escucha Viva</strong></div><span>Entrevistas</span></article>
-              <article><span class="mi-network-mark">EM</span><div><small>Organizaciones</small><strong>Empresa Viva</strong></div><span>Decisiones</span></article>
-              <article><span class="mi-network-mark">UD</span><div><small>Docencia</small><strong>Umbral Docente</strong></div><span>Escenarios</span></article>
-              <div class="mi-network-foot"><span>Preferencias editables</span><span>Privacidad visible</span><span>Acceso abierto</span></div>
+            <div class="mi-access-network mi-access-showcase" aria-label="Capturas reales de productos conectados con Mi Núcleo">
+              <figure class="is-main"><img src="../assets/showcase/empresa-viva.jpg" alt="Interfaz real de Empresa Viva" /></figure>
+              <figure><img src="../assets/showcase/escucha-viva.jpg" alt="Interfaz real de Escucha Viva" /></figure>
+              <figure><img src="../assets/showcase/umbral-docente.jpg" alt="Interfaz real de Umbral Docente" /></figure>
             </div>
             <a class="mi-back-link" href="/" data-local-href="../index.html">← Volver a Núcleo Vivo</a>
           </div>
@@ -135,14 +133,11 @@
             <strong>Mi Núcleo</strong>
           </a>
           <nav>
-            <a class="is-active" href="#inicio-personal"><span aria-hidden="true">⌂</span>Inicio</a>
-            <a href="#mis-experiencias"><span aria-hidden="true">◎</span>Mis experiencias</a>
-            <a href="#recomendado"><span aria-hidden="true">✦</span>Recomendado para mí</a>
-            <a href="#explorar"><span aria-hidden="true">◇</span>Explorar</a>
-            <a href="#herramientas"><span aria-hidden="true">＋</span>Mis herramientas</a>
-            <a href="#privacidad-datos"><span aria-hidden="true">◉</span>Privacidad y mis datos</a>
-            <a id="account-nav-link" href="#mi-cuenta"><span aria-hidden="true">○</span>Mi cuenta</a>
-            <a href="#ayuda"><span aria-hidden="true">?</span>Ayuda</a>
+            <a class="is-active" href="#inicio-personal">Inicio</a>
+            <a href="#recomendado">Experiencias</a>
+            <a href="#herramientas">Cursos</a>
+            <a href="#explorar">Explorar</a>
+            <a id="account-nav-link" href="#mi-cuenta">Cuenta</a>
           </nav>
           <div class="mi-sidebar-footer">
             <span id="sidebar-avatar">NV</span>
@@ -166,22 +161,22 @@
             <section id="inicio-personal" class="mi-personal-hero" aria-labelledby="personal-title">
               <div>
                 <p class="mi-eyebrow">Tu punto de partida</p>
-                <h1 id="personal-title" tabindex="-1">Hola, <span id="member-name">participante</span>. Este es tu Núcleo.</h1>
-                <p id="personal-copy">Reunimos tus experiencias y próximos pasos en un espacio claro, vivo y siempre explorable.</p>
+                <h1 id="personal-title" tabindex="-1">Hola, <span id="member-name">participante</span>. <span>¿Qué quieres practicar hoy?</span></h1>
+                <p id="personal-copy">Explora experiencias reales y elige una práctica para comenzar.</p>
                 <div class="mi-priority-line">
                   <span>Prioridad actual</span>
                   <strong id="priority-label">Explorar todo</strong>
                   <button id="change-priority-button" type="button">Cambiar</button>
                 </div>
               </div>
-              <div class="mi-hero-orbit mi-workspace-preview" aria-hidden="true">
-                <span class="mi-workspace-label">Próxima práctica</span>
-                <strong>Explora una experiencia</strong>
-                <span class="mi-workspace-row"><i>EV</i><span>Entrevista simulada<small>Escucha Viva</small></span></span>
-                <span class="mi-workspace-row"><i>EM</i><span>Decisión estratégica<small>Empresa Viva</small></span></span>
-                <span class="mi-workspace-progress"><i></i></span>
-                <small>Elige una ruta y avanza a tu ritmo.</small>
+            </section>
+
+            <section id="recomendado" class="mi-dashboard-section" aria-labelledby="recommended-title">
+              <div class="mi-section-heading">
+                <div><p class="mi-eyebrow">Según tu prioridad</p><h2 id="recommended-title">Experiencias para practicar hoy</h2></div>
+                <p>El orden cambia contigo. El acceso al resto permanece abierto.</p>
               </div>
+              <div id="recommended-grid" class="mi-product-grid mi-product-grid-featured"></div>
             </section>
 
             <section id="mis-experiencias" class="mi-dashboard-section" aria-labelledby="experiences-title">
@@ -190,14 +185,6 @@
                 <span id="experiences-device-label">Tu actividad en este dispositivo</span>
               </div>
               <div id="experiences-grid" class="mi-product-grid"></div>
-            </section>
-
-            <section id="recomendado" class="mi-dashboard-section" aria-labelledby="recommended-title">
-              <div class="mi-section-heading">
-                <div><p class="mi-eyebrow">Según tu prioridad</p><h2 id="recommended-title">Recomendado para mí</h2></div>
-                <p>El orden cambia contigo. El acceso al resto permanece abierto.</p>
-              </div>
-              <div id="recommended-grid" class="mi-product-grid mi-product-grid-featured"></div>
             </section>
 
             <section id="explorar" class="mi-dashboard-section" aria-labelledby="explore-title">
@@ -216,11 +203,11 @@
             </section>
 
             <section id="herramientas" class="mi-dashboard-section" aria-labelledby="tools-title">
-              <div class="mi-section-heading"><div><p class="mi-eyebrow">Apoyo cotidiano</p><h2 id="tools-title">Mis herramientas</h2></div></div>
-              <div class="mi-tool-grid">
-                <article><span aria-hidden="true">01</span><h3>Mapa de experiencias</h3><p>Vuelve a tus áreas, productos y rutas desde una sola vista.</p><a href="#explorar">Abrir mapa</a></article>
-                <article><span aria-hidden="true">02</span><h3>Aula Viva</h3><p>Revisa cursos, progreso y próximas experiencias de aprendizaje.</p><a href="/sembrar/aula/" data-local-href="../sembrar/aula/index.html">Ir a Mi Aula</a></article>
-                <article><span aria-hidden="true">03</span><h3>Cuadernos</h3><p>Ideas y preguntas para profundizar más allá de cada experiencia.</p><a href="/cuadernos/" data-local-href="../cuadernos/index.html">Explorar contenidos</a></article>
+              <div class="mi-section-heading"><div><p class="mi-eyebrow">Formación aplicada</p><h2 id="tools-title">Continúa aprendiendo</h2></div><p>Cursos y rutas reales de Sembrar.</p></div>
+              <div class="mi-tool-grid mi-learning-grid">
+                <article><img src="../assets/images/aula/ia-con-criterio-humano/modulo-00-reglas-minimas.webp" alt="Portada del curso IA con criterio humano" /><div><span>Curso aplicado</span><h3>IA con criterio humano</h3><p>Productividad, seguridad y responsabilidad humana al trabajar con IA.</p><a href="/sembrar/cursos/ia-con-criterio-humano/" data-local-href="../sembrar/cursos/ia-con-criterio-humano/index.html">Conocer el curso</a></div></article>
+                <article><img src="../assets/images/aula/cuando-ensenar-agota/video-poster.webp" alt="Portada del curso Cuando enseñar agota" /><div><span>Bienestar docente</span><h3>Cuando enseñar agota</h3><p>Una ruta basada en evidencia para comprender el desgaste emocional docente.</p><a href="/sembrar/cursos/cuando-ensenar-agota/" data-local-href="../sembrar/cursos/cuando-ensenar-agota/index.html">Conocer el curso</a></div></article>
+                <article><img src="../assets/ecosistemas/02-sembrar.webp" alt="Sembrar, aprendizaje y desarrollo" /><div><span>Espacio de aprendizaje</span><h3>Aula Viva</h3><p>Accede a tus cursos y a tu progreso real desde el aula.</p><a href="/sembrar/aula/" data-local-href="../sembrar/aula/index.html">Ir a Mi Aula</a></div></article>
               </div>
             </section>
 

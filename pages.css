@@ -3263,3 +3263,182 @@
     font-size: clamp(2rem, 10vw, 2.8rem);
   }
 }
+
+/* Lab · showcase de producto con interfaces reales */
+
+.lab-premium-hero-grid,
+.experience-hero-grid {
+  grid-template-columns: minmax(0, 0.78fr) minmax(500px, 1.22fr);
+  gap: clamp(44px, 6vw, 86px);
+  align-items: center;
+}
+
+.lab-showcase-collage {
+  min-height: 590px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 32px;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 34px 90px rgba(0, 15, 42, 0.3);
+  overflow: hidden;
+}
+
+.lab-showcase-collage figure {
+  min-width: 0;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  overflow: hidden;
+  background: #edf5f4;
+}
+
+.lab-showcase-collage .lab-showcase-main {
+  grid-row: 1 / -1;
+}
+
+.lab-showcase-collage img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform 320ms ease;
+}
+
+.lab-showcase-collage figure:hover img {
+  transform: scale(1.015);
+}
+
+.lab-family-grid {
+  gap: 24px;
+}
+
+.lab-product-card {
+  min-height: 0;
+  padding: 0 28px 30px;
+  overflow: hidden;
+}
+
+.lab-product-media {
+  height: 220px;
+  margin: 0 -28px 27px;
+  overflow: hidden;
+  background: #e6efee;
+}
+
+.lab-product-media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform 280ms ease;
+}
+
+.lab-product-card:hover .lab-product-media img {
+  transform: scale(1.018);
+}
+
+.experience-product-shot {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 30px;
+  overflow: hidden;
+  background: #f5f7f6;
+  box-shadow: 0 36px 96px rgba(0, 15, 42, 0.32);
+}
+
+.experience-product-shot::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 34%;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(4, 29, 63, 0.64));
+  content: "";
+}
+
+.experience-product-shot img {
+  width: 100%;
+  min-height: 520px;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.experience-product-shot figcaption {
+  position: absolute;
+  right: 24px;
+  bottom: 22px;
+  left: 24px;
+  z-index: 1;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1080px) {
+  .lab-premium-hero-grid,
+  .experience-hero-grid {
+    grid-template-columns: minmax(0, 0.82fr) minmax(430px, 1.18fr);
+    gap: 38px;
+  }
+
+  .lab-showcase-collage {
+    min-height: 520px;
+  }
+}
+
+@media (max-width: 900px) {
+  .lab-premium-hero-grid,
+  .experience-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lab-showcase-collage,
+  .experience-product-shot {
+    width: min(100%, 720px);
+  }
+}
+
+@media (max-width: 620px) {
+  .lab-showcase-collage {
+    min-height: 0;
+    padding: 9px;
+    border-radius: 22px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 250px 150px;
+    gap: 8px;
+  }
+
+  .lab-showcase-collage .lab-showcase-main {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .lab-showcase-collage figure {
+    border-radius: 14px;
+  }
+
+  .lab-product-media {
+    height: 190px;
+  }
+
+  .experience-product-shot img {
+    min-height: 310px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-showcase-collage img,
+  .lab-product-media img {
+    transition: none;
+  }
+}

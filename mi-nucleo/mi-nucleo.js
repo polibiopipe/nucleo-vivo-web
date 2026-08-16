@@ -40,6 +40,8 @@
       status: "Disponible",
       statusCode: "available",
       entitlement: "external",
+      image: "../assets/showcase/escucha-viva.jpg",
+      imageAlt: "Interfaz real de Escucha Viva",
       description: "Práctica de entrevistas psicológicas simuladas con casos, decisiones y retroalimentación formativa.",
       href: "https://psicoldp-simulador-limpio.vercel.app/",
       external: true
@@ -53,6 +55,8 @@
       status: "Piloto abierto",
       statusCode: "available",
       entitlement: "open",
+      image: "../assets/showcase/umbral-docente.jpg",
+      imageAlt: "Interfaz real de Umbral Docente",
       description: "Aplicación de práctica pedagógica con escenarios, planificación y retroalimentación formativa.",
       href: "/lab/umbral-docente/app/",
       localHref: "../lab/umbral-docente/app/index.html"
@@ -66,6 +70,8 @@
       status: "Piloto abierto",
       statusCode: "available",
       entitlement: "open",
+      image: "../assets/showcase/empresa-viva.jpg",
+      imageAlt: "Interfaz real de Empresa Viva",
       description: "Laboratorio de decisiones empresariales con ocho casos, evidencia y consecuencias simuladas.",
       href: "/lab/empresa-viva/app/",
       localHref: "../lab/empresa-viva/app/index.html"
@@ -79,6 +85,8 @@
       status: "Acceso activo",
       statusCode: "available",
       entitlement: "account",
+      image: "../assets/ecosistemas/02-sembrar.webp",
+      imageAlt: "Sembrar, espacio de aprendizaje y desarrollo",
       description: "Tu espacio de cursos, progreso y evidencia de aprendizaje aplicado dentro de Sembrar.",
       href: "/sembrar/aula/",
       localHref: "../sembrar/aula/index.html"
@@ -92,6 +100,8 @@
       status: "Curso disponible",
       statusCode: "available",
       entitlement: "account",
+      image: "../assets/images/aula/ia-con-criterio-humano/modulo-00-reglas-minimas.webp",
+      imageAlt: "Portada del curso IA con criterio humano",
       description: "Productividad, seguridad, privacidad y responsabilidad humana en el trabajo con inteligencia artificial.",
       href: "/sembrar/cursos/ia-con-criterio-humano/",
       localHref: "../sembrar/cursos/ia-con-criterio-humano/index.html"
@@ -105,6 +115,8 @@
       status: "Curso disponible",
       statusCode: "available",
       entitlement: "account",
+      image: "../assets/images/aula/cuando-ensenar-agota/video-poster.webp",
+      imageAlt: "Portada del curso Cuando enseñar agota",
       description: "Una ruta basada en evidencia para comprender y transformar el desgaste emocional docente sin culpabilizar.",
       href: "/sembrar/cursos/cuando-ensenar-agota/",
       localHref: "../sembrar/cursos/cuando-ensenar-agota/index.html"
@@ -328,11 +340,14 @@
     const externalHint = product.external ? ' <span aria-hidden="true">↗</span>' : "";
     return `
       <article class="mi-product-card${featured ? " is-featured" : ""}" data-product-id="${escapeHtml(product.id)}" data-status="${escapeHtml(product.statusCode)}" data-entitlement="${escapeHtml(product.entitlement)}">
-        <div class="mi-product-topline"><span class="mi-product-area">${escapeHtml(product.area)}</span><span class="mi-product-status">${escapeHtml(product.status)}</span></div>
-        <span class="mi-product-symbol" aria-hidden="true">${escapeHtml(product.symbol)}</span>
-        <h3>${escapeHtml(product.name)}</h3>
-        <p>${escapeHtml(product.description)}</p>
-        <a href="${escapeHtml(productHref(product))}" data-track-product="${escapeHtml(product.id)}"${external}>${product.external ? "Abrir producto" : "Explorar experiencia"}${externalHint}</a>
+        <div class="mi-product-media"><img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.imageAlt)}" loading="lazy" /></div>
+        <div class="mi-product-content">
+          <div class="mi-product-topline"><span class="mi-product-area">${escapeHtml(product.area)}</span><span class="mi-product-status">${escapeHtml(product.status)}</span></div>
+          <span class="mi-product-symbol" aria-hidden="true">${escapeHtml(product.symbol)}</span>
+          <h3>${escapeHtml(product.name)}</h3>
+          <p>${escapeHtml(product.description)}</p>
+          <a href="${escapeHtml(productHref(product))}" data-track-product="${escapeHtml(product.id)}"${external}>${product.external ? "Abrir producto" : "Explorar experiencia"}${externalHint}</a>
+        </div>
       </article>`;
   }
 
