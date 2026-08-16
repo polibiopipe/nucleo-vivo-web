@@ -7,11 +7,71 @@ const mainNav = document.querySelector("#main-nav");
 const splashWasShown = window.sessionStorage?.getItem("nucleoVivoSplashShown") === "true";
 const shouldSkipSplash = splashWasShown || reducedMotion || Boolean(window.location.hash);
 
+function localSitePath(relativePath) {
+  if (window.location.protocol !== "file:") return `/${relativePath.replace(/^\//, "")}`;
+  const stylesheet = document.querySelector('link[href$="styles.css"]');
+  const prefix = stylesheet?.getAttribute("href")?.replace(/styles\.css$/, "") || "";
+  return `${prefix}${relativePath.replace(/^\//, "")}`;
+}
+
 if (window.location.protocol === "file:") {
   document.querySelectorAll("[data-local-href]").forEach((link) => {
     link.setAttribute("href", link.dataset.localHref);
   });
 }
+
+if (header && menuToggle && !header.querySelector(".mi-nucleo-header-link")) {
+  const accountLink = document.createElement("a");
+  accountLink.className = "header-button mi-nucleo-header-link";
+  accountLink.href = localSitePath("mi-nucleo/index.html");
+  accountLink.textContent = "Mi Núcleo";
+  accountLink.setAttribute("aria-label", "Entrar a Mi Núcleo");
+  if (window.location.pathname.includes("/mi-nucleo")) accountLink.setAttribute("aria-current", "page");
+  menuToggle.before(accountLink);
+
+  if (mainNav) {
+    const mobileAccountLink = accountLink.cloneNode(true);
+    mobileAccountLink.className = "mobile-nucleus-link";
+    mobileAccountLink.textContent = "Entrar a Mi Núcleo";
+    mainNav.append(mobileAccountLink);
+  }
+}
+
+const socialProfiles = [
+  {
+    name: "Instagram",
+    short: "ig",
+    href: "https://www.instagram.com/nucleovivo.lt/"
+  },
+  {
+    name: "TikTok",
+    short: "tt",
+    href: "https://www.tiktok.com/@nucleo.vivo?_r=1&_t=ZN-98suasuUXmZ"
+  },
+  {
+    name: "Facebook",
+    short: "fb",
+    href: "https://www.facebook.com/profile.php?id=61593097242321&mibextid=wwXIfr&rdid=OQ6EqmQoLROYQksZ&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1FyWA8ZEhp%2F%3Fmibextid%3DwwXIfr#"
+  }
+];
+
+document.querySelectorAll(".site-footer .footer-main").forEach((footerMain) => {
+  const footerStatement = footerMain.querySelector(".footer-statement") || footerMain;
+  if (footerStatement.querySelector(".social-links")) return;
+  const socialNav = document.createElement("nav");
+  socialNav.className = "social-links";
+  socialNav.setAttribute("aria-label", "Redes sociales oficiales de Núcleo Vivo");
+  socialProfiles.forEach((profile) => {
+    const link = document.createElement("a");
+    link.href = profile.href;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.setAttribute("aria-label", `Visitar ${profile.name} de Núcleo Vivo (abre en una nueva pestaña)`);
+    link.innerHTML = `<span aria-hidden="true">${profile.short}</span><strong>${profile.name}</strong>`;
+    socialNav.append(link);
+  });
+  footerStatement.append(socialNav);
+});
 
 function showPage() {
   splash?.remove();
@@ -27,7 +87,7 @@ if (splash) {
     window.setTimeout(() => {
       window.sessionStorage?.setItem("nucleoVivoSplashShown", "true");
       showPage();
-    }, reducedMotion ? 120 : 2750);
+    }, reducedMotion ? 120 : 850);
   }
 } else {
   showPage();

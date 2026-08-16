@@ -45,7 +45,7 @@ const EXPECTED_PREMIUM_DATA_ATTRIBUTES = [
 ];
 
 function sha256(source) {
-  return crypto.createHash('sha256').update(source).digest('hex');
+  return crypto.createHash('sha256').update(source.replace(/\r\n/g, '\n')).digest('hex');
 }
 
 function uniqueSorted(values) {
