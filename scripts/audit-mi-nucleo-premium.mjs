@@ -237,6 +237,7 @@ check("marca: sin pseudo-elementos de cobertura", !/\.(?:brand|brand-logo|brand-
 check("marca: logo siempre contain", styles.includes(".brand-logo,") && styles.includes("object-fit: contain"));
 check("simuladores: un único marco 16:9", styles.includes(".simulator-media {") && styles.includes("aspect-ratio: 16 / 9"));
 check("Mi Núcleo: todas las presentaciones conservan 16:9", /\.mi-product-media\.simulator-media\s*\{[^}]*height:\s*auto;[^}]*aspect-ratio:\s*16\s*\/\s*9;/s.test(file("mi-nucleo/mi-nucleo.css")));
+check("Mi Núcleo: isotipos sin placa blanca residual", !/(?:\.mi-loading-core img|\.mi-access-brand img|\.mi-sidebar-brand > span)\s*\{[^}]*background:\s*(?:#fff|#ffffff|white)/s.test(file("mi-nucleo/mi-nucleo.css")));
 check("Mi Núcleo: showroom sin pseudo-overlay", !file("mi-nucleo/mi-nucleo.css").includes(".mi-access-showcase::before"));
 check("Mi Núcleo: showroom sin ventanas absolutas", !/\.mi-access-showcase \.mi-showcase-window\s*\{[^}]*position:\s*absolute/s.test(file("mi-nucleo/mi-nucleo.css")));
 check("Mi Núcleo: showroom sin cromado artificial", !file("mi-nucleo/index.html").includes("mi-showcase-chrome"));

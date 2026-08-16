@@ -90,11 +90,6 @@ body:not([data-mi-state="loading"]) #mi-loading {
 .mi-loading-core img {
   position: relative;
   z-index: 2;
-  width: 82px;
-  height: 82px;
-  padding: 14px;
-  border-radius: 50%;
-  background: #fff;
 }
 
 .mi-loading-core span {
@@ -209,15 +204,6 @@ body:not([data-mi-state="loading"]) #mi-loading {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.mi-access-brand img {
-  width: 46px;
-  height: 46px;
-  padding: 6px;
-  border: 1px solid var(--mi-line);
-  border-radius: 14px;
-  background: #fff;
 }
 
 .mi-access-brand strong,
@@ -3132,7 +3118,7 @@ body[data-mi-demo="true"] .mi-connection-dot {
   .mi-nucleo-page[data-mi-state="member"] .mi-sidebar-brand .mi-brand-mark-compact {
     width: 36px;
     height: 36px;
-    padding: 6px;
+    padding: 0;
   }
 
   .mi-sidebar > nav a:nth-child(n+4) {
@@ -3734,15 +3720,6 @@ body[data-mi-demo="true"] .mi-connection-dot {
   border-bottom: 1px solid rgba(118, 208, 207, 0.13);
   gap: 10px;
   color: #fff;
-}
-
-.mi-nucleo-page[data-mi-state="member"] .mi-sidebar-brand > span {
-  width: 44px;
-  height: 44px;
-  padding: 8px;
-  border-color: rgba(118, 208, 207, 0.15);
-  border-radius: 14px;
-  background: #fff;
 }
 
 .mi-nucleo-page[data-mi-state="member"] .mi-sidebar-brand strong {
