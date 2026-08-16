@@ -4268,6 +4268,13 @@ body[data-mi-demo="true"] .mi-connection-dot {
   grid-template-rows: auto 1fr;
 }
 
+.mi-nucleo-page[data-mi-state="member"] .mi-product-media.simulator-media {
+  width: 100%;
+  min-height: 0;
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+
 .mi-nucleo-page[data-mi-state="member"] .mi-product-grid-featured .mi-product-media,
 .mi-nucleo-page[data-mi-state="member"] .mi-product-grid-featured .mi-product-card:first-child .mi-product-media {
   width: 100%;
