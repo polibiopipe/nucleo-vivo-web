@@ -149,6 +149,10 @@
     return new URL("/mi-nucleo/", window.location.origin).toString();
   }
 
+  function emailConfirmationRedirectUrl() {
+    return `${window.location.origin}/mi-nucleo/index.html`;
+  }
+
   function setLiveStatus(message) {
     const live = $("#mi-live-status");
     if (live) live.textContent = message;
@@ -734,11 +738,12 @@
         const acceptedAt = new Date().toISOString();
         const name = $("#auth-name").value.trim();
         if (!name) throw new Error("Escribe tu nombre para crear la cuenta.");
+        const emailRedirectTo = emailConfirmationRedirectUrl();
         const { data, error } = await state.client.auth.signUp({
           email,
           password,
           options: {
-            emailRedirectTo: redirectUrl(),
+            emailRedirectTo,
             data: {
               full_name: name,
               mi_nucleo_consent_version: CONFIG.consentVersion,
@@ -799,10 +804,13 @@
   $("#resend-button").addEventListener("click", async () => {
     if (state.demo || !state.client) return;
     try {
+      const emailRedirectTo = emailConfirmationRedirectUrl();
       const { error } = await state.client.auth.resend({
         type: "signup",
         email: $("#auth-email").value.trim(),
-        options: { emailRedirectTo: redirectUrl() }
+        options: {
+          emailRedirectTo
+        }
       });
       if (error) throw error;
       setFormStatus("Si la cuenta sigue pendiente, recibirás un nuevo enlace de confirmación.", "success");
