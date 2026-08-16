@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { resolve } from "node:path";
 
 const root = process.cwd();
@@ -39,13 +40,26 @@ requiredRoutes.forEach((path) => check(`${path}: existe`, existsSync(resolve(roo
 requiredRoutes
   .filter((path) => !path.includes("/app/"))
   .forEach((path) => check(`${path}: enlace para saltar al contenido`, file(path).includes("skip-link")));
-check("logo oficial: existe", existsSync(resolve(root, "assets/nucleo-vivo-isotipo-oficial.svg")));
+const officialLogo = "assets/nucleo-vivo-isotipo-oficial-original.jpg";
+check("logo oficial adjunto: existe", existsSync(resolve(root, officialLogo)));
 check("imagen social: existe", existsSync(resolve(root, "assets/og-nucleo-vivo.png")));
 
+function sha256(path) {
+  return createHash("sha256").update(readFileSync(resolve(root, path))).digest("hex").toUpperCase();
+}
+
+const officialAssetHashes = new Map([
+  [officialLogo, "D8B42864D560B348EA3901CB368D49C6326E4D35D1000D929E6521EC6FBCE1E9"],
+  ["assets/showcase/originals/escucha-viva-presentacion-oficial.png", "CF5985AB6188DF6AE7E24D10E334E890848469D09DBC43E17637D4B906B1382F"],
+  ["assets/showcase/originals/umbral-docente-presentacion-oficial.png", "F2A5C69155AD231E8100944FA7A276341AC3B65AD1313CB59FD1B49F6C57D21E"],
+  ["assets/showcase/originals/empresa-viva-presentacion-oficial.png", "EDABA4871ED34C0FE6F37CE33BEAC36A8CD0DA1042D9C0FB4EBEDD31E36E8007"]
+]);
+officialAssetHashes.forEach((expected, path) => check(`${path}: conserva el adjunto exacto`, existsSync(resolve(root, path)) && sha256(path) === expected));
+
 const simulatorPresentations = [
-  "assets/showcase/escucha-viva-presentacion.webp",
-  "assets/showcase/empresa-viva-presentacion.webp",
-  "assets/showcase/umbral-docente-presentacion.webp"
+  "assets/showcase/originals/escucha-viva-presentacion-oficial.png",
+  "assets/showcase/originals/empresa-viva-presentacion-oficial.png",
+  "assets/showcase/originals/umbral-docente-presentacion-oficial.png"
 ];
 simulatorPresentations.forEach((path) => check(`${path}: presentación oficial disponible`, existsSync(resolve(root, path))));
 
@@ -61,8 +75,19 @@ simulatorPresentations.forEach((path) => check(`${path}: integrada en el showroo
 [
   "assets/showcase/escucha-viva.jpg",
   "assets/showcase/empresa-viva.jpg",
-  "assets/showcase/umbral-docente.jpg"
+  "assets/showcase/umbral-docente.jpg",
+  "escucha-viva-presentacion.webp",
+  "empresa-viva-presentacion.webp",
+  "umbral-docente-presentacion.webp"
 ].forEach((path) => check(`${path}: ya no se usa en el showroom`, !simulatorShowroomSource.includes(path)));
+
+[
+  file("index.html"),
+  file("mi-nucleo/index.html"),
+  file("lab/index.html"),
+  file("lab/empresa-viva/index.html"),
+  file("lab/umbral-docente/index.html")
+].forEach((source, index) => check(`vista pública ${index + 1}: usa la fuente única de marca`, source.includes("nucleo-vivo-isotipo-oficial-original.jpg")));
 
 includes(
   "index.html",

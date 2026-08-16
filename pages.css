@@ -3436,6 +3436,42 @@
   }
 }
 
+/* Grid coherente de productos: mismo ancho, media y jerarquía */
+
+.lab-family-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  align-items: stretch;
+}
+
+.lab-product-card,
+.lab-product-card-featured {
+  grid-column: auto;
+  height: 100%;
+}
+
+.lab-product-media.simulator-media {
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 18px;
+}
+
+@media (max-width: 1040px) {
+  .lab-family-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lab-product-card-featured {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 620px) {
+  .lab-family-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .lab-showcase-collage img,
   .lab-product-media img {

@@ -4662,3 +4662,99 @@ body[data-mi-demo="true"] .mi-connection-dot {
     aspect-ratio: 16 / 9;
   }
 }
+
+/* Consistencia final de marca y presentaciones oficiales */
+
+.mi-loading-mark,
+.mi-access-brand .mi-brand-mark,
+.mi-sidebar-brand .mi-brand-mark-compact {
+  padding: 2px;
+  overflow: visible;
+}
+
+.mi-loading-mark img[data-brand-asset="official"],
+.mi-access-brand img[data-brand-asset="official"],
+.mi-sidebar-brand img[data-brand-asset="official"] {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transform: none;
+}
+
+.mi-access-showcase .mi-showcase-window {
+  height: auto !important;
+  filter: none;
+}
+
+.mi-access-showcase .mi-showcase-window .simulator-media {
+  border-radius: 0;
+}
+
+.mi-access-showcase .mi-showcase-window .simulator-media > img.simulator-presentation-image {
+  height: 100% !important;
+  object-position: center;
+  filter: none;
+}
+
+.mi-access-showcase .mi-showcase-window:hover .simulator-media > img {
+  transform: none;
+}
+
+.mi-nucleo-page[data-mi-state="member"] .mi-product-card {
+  height: 100%;
+}
+
+.mi-nucleo-page[data-mi-state="member"] .mi-product-grid-featured {
+  grid-auto-rows: 1fr;
+}
+
+@media (min-width: 961px) {
+  .mi-access-showcase {
+    min-height: 430px;
+  }
+
+  .mi-access-showcase .is-empresa {
+    top: 0;
+    left: 12%;
+    width: 76%;
+  }
+
+  .mi-access-showcase .is-escucha {
+    top: 112px;
+    left: 0;
+    width: 44%;
+  }
+
+  .mi-access-showcase .is-umbral {
+    right: 0;
+    bottom: 8px;
+    width: 44%;
+  }
+}
+
+@media (max-width: 640px) {
+  .mi-access-showcase {
+    min-height: 440px;
+  }
+
+  .mi-access-showcase .is-empresa {
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  .mi-access-showcase .is-escucha {
+    top: 246px;
+    left: 0;
+    width: 59%;
+  }
+
+  .mi-access-showcase .is-umbral {
+    right: 0;
+    bottom: 0;
+    width: 59%;
+  }
+}

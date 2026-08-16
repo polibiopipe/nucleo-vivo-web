@@ -40,7 +40,7 @@
       status: "Disponible",
       statusCode: "available",
       entitlement: "external",
-      image: "../assets/showcase/escucha-viva-presentacion.webp",
+      image: "../assets/showcase/originals/escucha-viva-presentacion-oficial.png",
       imageAlt: "Presentación oficial de Escucha Viva",
       presentation: true,
       description: "Práctica de entrevistas psicológicas simuladas con casos, decisiones y retroalimentación formativa.",
@@ -56,7 +56,7 @@
       status: "Piloto abierto",
       statusCode: "available",
       entitlement: "open",
-      image: "../assets/showcase/umbral-docente-presentacion.webp",
+      image: "../assets/showcase/originals/umbral-docente-presentacion-oficial.png",
       imageAlt: "Presentación oficial de Umbral Docente",
       presentation: true,
       description: "Aplicación de práctica pedagógica con escenarios, planificación y retroalimentación formativa.",
@@ -72,7 +72,7 @@
       status: "Piloto abierto",
       statusCode: "available",
       entitlement: "open",
-      image: "../assets/showcase/empresa-viva-presentacion.webp",
+      image: "../assets/showcase/originals/empresa-viva-presentacion-oficial.png",
       imageAlt: "Presentación oficial de Empresa Viva",
       presentation: true,
       description: "Laboratorio de decisiones empresariales con ocho casos, evidencia y consecuencias simuladas.",
@@ -343,7 +343,7 @@
     const externalHint = product.external ? ' <span aria-hidden="true">↗</span>' : "";
     return `
       <article class="mi-product-card${featured ? " is-featured" : ""}" data-product-id="${escapeHtml(product.id)}" data-status="${escapeHtml(product.statusCode)}" data-entitlement="${escapeHtml(product.entitlement)}">
-        <div class="mi-product-media"><img class="${product.presentation ? `simulator-presentation-image presentation-${escapeHtml(product.id)}` : "mi-product-art"}" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.imageAlt)}" loading="lazy" /></div>
+        <div class="mi-product-media${product.presentation ? " simulator-media" : ""}"><img class="${product.presentation ? `simulator-presentation-image presentation-${escapeHtml(product.id)}` : "mi-product-art"}" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.imageAlt)}" loading="lazy" decoding="async" /></div>
         <div class="mi-product-content">
           <div class="mi-product-topline"><span class="mi-product-area">${escapeHtml(product.area)}</span><span class="mi-product-status">${escapeHtml(product.status)}</span></div>
           <span class="mi-product-symbol" aria-hidden="true">${escapeHtml(product.symbol)}</span>
