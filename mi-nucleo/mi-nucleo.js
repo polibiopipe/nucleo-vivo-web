@@ -22,6 +22,7 @@
     priority: "all",
     demo: false,
     busy: false,
+    passwordRecovery: false,
     welcomeVideoMode: null,
     welcomeVideoSaving: false
   };
@@ -327,6 +328,19 @@
     return hash.get("type") === "recovery" || query.get("type") === "recovery";
   }
 
+  function activatePasswordRecovery(user = null) {
+    state.passwordRecovery = true;
+    if (user) state.user = user;
+    if (!$("#welcome-video-overlay").hidden) {
+      closeWelcomeVideo({ markSeen: false }).catch((error) => {
+        console.error("No se pudo cerrar la bienvenida al iniciar la recuperación de contraseña.", error);
+      });
+    }
+    setPageState("auth");
+    setAuthMode("update-password");
+    setLiveStatus("Crea una nueva contraseña para completar la recuperación de tu cuenta.");
+  }
+
   function displayName(user) {
     if (state.demo) return "Visitante";
     const profileName = String(state.profile?.full_name || "").trim();
@@ -425,6 +439,7 @@
 
   function shouldShowWelcomeVideo() {
     return !state.demo
+      && !state.passwordRecovery
       && Boolean(state.client)
       && Boolean(state.user)
       && Boolean(state.consentRecord)
@@ -433,7 +448,7 @@
   }
 
   async function markWelcomeVideoSeen() {
-    if (state.demo || state.welcomeVideoSaving || !state.client || !state.user || state.profile?.welcome_video_seen_at) return;
+    if (state.demo || state.passwordRecovery || state.welcomeVideoSaving || !state.client || !state.user || state.profile?.welcome_video_seen_at) return;
     state.welcomeVideoSaving = true;
     const seenAt = new Date().toISOString();
     try {
@@ -518,7 +533,7 @@
   }
 
   function openWelcomeVideo({ automatic = false, directToVideo = !automatic } = {}) {
-    if (automatic && !shouldShowWelcomeVideo()) return;
+    if (state.passwordRecovery || (automatic && !shouldShowWelcomeVideo())) return;
     const overlay = $("#welcome-video-overlay");
     if (!overlay.hidden) return;
     state.welcomeVideoMode = automatic ? "automatic" : "manual";
@@ -529,6 +544,10 @@
   }
 
   function renderMember() {
+    if (state.passwordRecovery) {
+      activatePasswordRecovery(state.user);
+      return;
+    }
     const name = displayName(state.user);
     const priorityFromProfile = state.demo ? "all" : state.profile?.mi_nucleo_priority;
     state.priority = priorities[priorityFromProfile] ? priorityFromProfile : "all";
@@ -579,18 +598,25 @@
   async function handleSession(user, options = {}) {
     if (state.demo) return;
     state.user = user;
-    if ((options.recovery || isRecoveryUrl()) && !options.ignoreRecovery) {
-      setPageState("auth");
-      setAuthMode("update-password");
+    if (state.passwordRecovery || ((options.recovery || isRecoveryUrl()) && !options.ignoreRecovery)) {
+      activatePasswordRecovery(user);
       return;
     }
     state.consentRecord = await loadConsent(user);
+    if (state.passwordRecovery) {
+      activatePasswordRecovery(user);
+      return;
+    }
     if (!state.consentRecord) {
       setPageState("auth");
       setAuthMode("consent");
       return;
     }
     state.profile = await loadProfile();
+    if (state.passwordRecovery) {
+      activatePasswordRecovery(user);
+      return;
+    }
     if (!state.profile?.onboarding_completed_at) {
       renderOnboarding();
       return;
@@ -628,6 +654,7 @@
       return;
     }
 
+    state.passwordRecovery = isRecoveryUrl();
     state.client = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
@@ -635,24 +662,15 @@
     $("#google-auth-button").hidden = !googleAuthEnabled;
     $("#auth-divider").hidden = !googleAuthEnabled;
 
-    const { data, error } = await state.client.auth.getSession();
-    if (error) {
-      setPageState("auth");
-      setAuthMode("signin");
-      setFormStatus(friendlyError(error), "error");
-      return;
-    }
-
-    const sessionUser = data.session?.user || null;
-    if (!sessionUser) {
-      setPageState("auth");
-      setAuthMode("signin");
-      setLiveStatus("Acceso a Mi Núcleo disponible.");
-    } else {
-      await handleSession(sessionUser);
-    }
-
     state.client.auth.onAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY") {
+        activatePasswordRecovery(session?.user || null);
+        return;
+      }
+      if (state.passwordRecovery) {
+        activatePasswordRecovery(session?.user || null);
+        return;
+      }
       if (state.busy || event === "INITIAL_SESSION" || event === "TOKEN_REFRESHED") return;
       if (!session?.user) {
         state.user = null;
@@ -662,15 +680,41 @@
         setAuthMode("signin");
         return;
       }
-      if (!["SIGNED_IN", "PASSWORD_RECOVERY"].includes(event)) return;
+      if (event !== "SIGNED_IN") return;
       window.setTimeout(() => {
-        handleSession(session.user, { recovery: event === "PASSWORD_RECOVERY" }).catch((error) => {
+        handleSession(session.user).catch((error) => {
           setPageState("auth");
-          setAuthMode("signin");
-          setFormStatus(friendlyError(error), "error");
+          if (state.passwordRecovery) {
+            activatePasswordRecovery(session.user);
+          } else {
+            setAuthMode("signin");
+            setFormStatus(friendlyError(error), "error");
+          }
         });
       }, 0);
     });
+
+    const { data, error } = await state.client.auth.getSession();
+    if (error) {
+      setPageState("auth");
+      if (state.passwordRecovery) activatePasswordRecovery();
+      else setAuthMode("signin");
+      setFormStatus(friendlyError(error), "error");
+      return;
+    }
+
+    const sessionUser = data.session?.user || null;
+    if (!sessionUser) {
+      if (state.passwordRecovery) {
+        activatePasswordRecovery();
+      } else {
+        setPageState("auth");
+        setAuthMode("signin");
+        setLiveStatus("Acceso a Mi Núcleo disponible.");
+      }
+    } else {
+      await handleSession(sessionUser);
+    }
   }
 
   $("#signin-tab").addEventListener("click", () => setAuthMode("signin"));
@@ -725,8 +769,10 @@
         await recordConsent("existing_session_gate");
         await handleSession(state.user, { ignoreRecovery: true });
       } else if (state.authMode === "update-password") {
-        const { error } = await state.client.auth.updateUser({ password });
+        const { data, error } = await state.client.auth.updateUser({ password });
         if (error) throw error;
+        state.user = data.user || state.user;
+        state.passwordRecovery = false;
         setFormStatus("Contraseña actualizada. Preparando tu espacio…", "success");
         await handleSession(state.user, { ignoreRecovery: true });
       } else if (state.authMode === "signup") {
@@ -930,6 +976,7 @@
     state.user = null;
     state.profile = null;
     state.consentRecord = null;
+    state.passwordRecovery = false;
     setPageState("auth");
     setAuthMode("signin");
     setLiveStatus("Sesión cerrada. Volviste al acceso de Mi Núcleo.");
@@ -1018,7 +1065,8 @@
 
   initialize().catch((error) => {
     setPageState("auth");
-    setAuthMode("signin");
+    if (state.passwordRecovery) activatePasswordRecovery(state.user);
+    else setAuthMode("signin");
     setFormStatus(friendlyError(error), "error");
   });
 })();
