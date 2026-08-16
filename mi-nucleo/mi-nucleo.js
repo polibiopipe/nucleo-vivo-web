@@ -294,7 +294,7 @@
         ? "Aceptar y continuar"
         : isSignup
           ? "Crear cuenta"
-          : "Ingresar";
+          : "Entrar a Mi Núcleo";
     setFormStatus();
   }
 
