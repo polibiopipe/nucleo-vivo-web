@@ -14,7 +14,7 @@
     <link rel="canonical" href="https://nucleovivo.net/mi-nucleo/" />
     <link rel="icon" href="../assets/nucleo-vivo-isotipo-oficial.png" type="image/png" />
     <link rel="stylesheet" href="../styles.css?v=20260816brandstructural1" />
-    <link rel="stylesheet" href="mi-nucleo.css?v=20260816brandstructural1" />
+    <link rel="stylesheet" href="mi-nucleo.css?v=20260816block2a2" />
   </head>
   <body class="mi-nucleo-page" data-mi-state="loading">
     <a class="skip-link" href="#mi-main">Saltar al contenido</a>
@@ -95,22 +95,6 @@
               <button id="signup-tab" type="button" role="tab" aria-selected="false">Crear cuenta</button>
             </div>
 
-            <div id="auth-divider" class="mi-divider" hidden><span>O inicie sesión con su cuenta</span></div>
-            <button
-              id="google-auth-button"
-              class="mi-google-button google-login-image-button"
-              type="button"
-              aria-label="Iniciar sesión con Google"
-              hidden
-            >
-              <img
-                src="./assets/google-login-button.png"
-                alt="Iniciar sesión con Google"
-                class="google-login-image"
-                draggable="false"
-              />
-            </button>
-
             <form id="auth-form" class="mi-auth-form" novalidate>
               <div class="mi-credentials">
                 <label id="name-field" hidden>
@@ -137,12 +121,28 @@
               <p class="mi-consent-meta" id="consent-meta" hidden>Consentimiento versión <span id="consent-version-label">2026-08-15</span>. Registraremos fecha, hora y contexto de aceptación.</p>
 
               <p id="auth-status" class="mi-form-status" role="status" aria-live="polite"></p>
-              <button id="auth-submit" class="button button-primary mi-button-full" type="submit">Entrar a Mi Núcleo</button>
               <div class="mi-auth-help">
                 <button id="reset-password-button" type="button">¿Olvidaste tu contraseña?</button>
                 <button id="resend-button" type="button" hidden>Reenviar confirmación</button>
               </div>
+              <button id="auth-submit" class="button button-primary mi-button-full" type="submit">Entrar a Mi Núcleo</button>
             </form>
+
+            <div id="auth-divider" class="mi-divider" hidden><span>O inicia sesión con tu cuenta</span></div>
+            <button
+              id="google-auth-button"
+              class="mi-google-button google-login-image-button"
+              type="button"
+              aria-label="Iniciar sesión con Google"
+              hidden
+            >
+              <img
+                src="./assets/google-login-button.png"
+                alt="Iniciar sesión con Google"
+                class="google-login-image"
+                draggable="false"
+              />
+            </button>
 
             <p class="mi-access-privacy">Tu información está protegida. Consulta nuestra <a href="/privacidad/" data-local-href="../privacidad/index.html">Política de Privacidad</a>.</p>
 
@@ -151,6 +151,37 @@
               <p id="demo-entry-title">Vista demostrativa · no requiere cuenta ni guarda información</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="onboarding-view" class="mi-onboarding" hidden aria-labelledby="onboarding-title">
+        <div class="section-shell mi-onboarding-shell">
+          <div class="mi-onboarding-intro">
+            <span class="mi-onboarding-mark" aria-hidden="true"><img src="../assets/nucleo-vivo-isotipo-oficial.png" alt="" class="brand-mark" /></span>
+            <p class="mi-eyebrow">Perfil inicial</p>
+            <h1 id="onboarding-title" tabindex="-1">Personalicemos tu Núcleo</h1>
+            <p>Cuéntanos qué quieres priorizar. Esto nos permitirá organizar tus experiencias y recomendaciones dentro de Núcleo Vivo.</p>
+          </div>
+
+          <form id="onboarding-form" class="mi-onboarding-card" novalidate>
+            <label class="mi-onboarding-name">
+              <span>Nombre</span>
+              <input id="onboarding-name" name="name" autocomplete="name" required />
+            </label>
+
+            <fieldset>
+              <legend>¿Qué quieres priorizar?</legend>
+              <div class="mi-priority-options" role="radiogroup" aria-label="Prioridad de Mi Núcleo">
+                <label><input type="radio" name="onboarding-priority" value="psychology" /><span><strong>Psicología</strong><small>Escucha, entrevista y práctica formativa</small></span></label>
+                <label><input type="radio" name="onboarding-priority" value="education" /><span><strong>Educación y docencia</strong><small>Bienestar, criterio y diseño pedagógico</small></span></label>
+                <label><input type="radio" name="onboarding-priority" value="business" /><span><strong>Empresa y gestión</strong><small>Decisiones, equipos y organizaciones</small></span></label>
+                <label><input type="radio" name="onboarding-priority" value="all" checked /><span><strong>Quiero explorar todo</strong><small>Una vista equilibrada del ecosistema</small></span></label>
+              </div>
+            </fieldset>
+
+            <button id="onboarding-submit" class="button button-primary mi-button-full" type="submit">Continuar a Mi Núcleo</button>
+            <p id="onboarding-status" class="mi-form-status" role="status" aria-live="polite"></p>
+          </form>
         </div>
       </section>
 
@@ -197,8 +228,7 @@
                 <p id="personal-copy">Continúa tus prácticas, explora nuevas experiencias y organiza tu camino de aprendizaje.</p>
                 <div class="mi-priority-line">
                   <span>Prioridad actual</span>
-                  <strong id="priority-label">Explorar todo</strong>
-                  <button id="change-priority-button" type="button">Cambiar</button>
+                  <strong id="priority-label">Quiero explorar todo</strong>
                 </div>
               </div>
               <div class="mi-hero-product-dock" aria-label="Experiencias conectadas a Mi Núcleo">
@@ -266,8 +296,8 @@
                 </article>
                 <article>
                   <span>Datos de personalización</span>
-                  <strong id="personalization-summary">Una prioridad editable</strong>
-                  <p id="personalization-copy">Tu área elegida cambia el orden de las tarjetas. No bloquea productos ni crea perfiles sensibles.</p>
+                  <strong id="personalization-summary">Prioridad del perfil</strong>
+                  <p id="personalization-copy">La prioridad definida en tu perfil organiza las recomendaciones. No bloquea productos ni crea perfiles sensibles.</p>
                 </article>
                 <article id="data-actions-card">
                   <span>Acciones disponibles</span>
@@ -293,6 +323,7 @@
                 <h2 id="help-title">¿Necesitas orientación?</h2>
                 <p>Escríbenos si tienes una pregunta sobre tu cuenta, una experiencia o una posible implementación institucional.</p>
                 <a class="button button-primary" href="mailto:contacto@nucleovivo.net?subject=Ayuda%20con%20Mi%20N%C3%BAcleo">Contactar a Núcleo Vivo</a>
+                <button id="replay-welcome-video-button" class="mi-help-video-button" type="button">Ver video de bienvenida</button>
               </div>
               <nav class="mi-help-social" aria-label="Redes sociales oficiales">
                 <a href="https://www.instagram.com/nucleovivo.lt/" target="_blank" rel="noopener noreferrer" aria-label="Visitar Instagram de Núcleo Vivo (abre en una nueva pestaña)">Instagram ↗</a>
@@ -309,25 +340,32 @@
         </div>
       </div>
 
-      <dialog id="priority-dialog" class="mi-dialog" aria-labelledby="priority-title">
-        <form method="dialog" class="mi-dialog-close"><button value="cancel" aria-label="Cerrar selección de prioridad">×</button></form>
-        <div class="mi-dialog-body">
-          <p class="mi-eyebrow">Personaliza el orden</p>
-          <h2 id="priority-title">¿Qué área quieres priorizar?</h2>
-          <p>Esto solo organiza tu inicio. Podrás explorar todo el ecosistema y cambiar la elección cuando quieras.</p>
-          <div class="mi-priority-options" role="radiogroup" aria-label="Área prioritaria">
-            <label><input type="radio" name="priority" value="psychology" /><span><strong>Psicología</strong><small>Escucha, entrevista y práctica formativa</small></span></label>
-            <label><input type="radio" name="priority" value="education" /><span><strong>Docencia y educación</strong><small>Bienestar, criterio y diseño pedagógico</small></span></label>
-            <label><input type="radio" name="priority" value="business" /><span><strong>Administración / Ingeniería Comercial</strong><small>Decisiones, equipos y organizaciones</small></span></label>
-            <label><input type="radio" name="priority" value="all" checked /><span><strong>Explorar todo</strong><small>Una vista equilibrada del ecosistema</small></span></label>
-          </div>
-          <button id="save-priority-button" class="button button-primary mi-button-full" type="button">Guardar y entrar</button>
-          <p id="priority-status" class="mi-form-status" role="status" aria-live="polite"></p>
-        </div>
-      </dialog>
-
       <div id="mi-toast" class="mi-toast" role="status" aria-live="polite" hidden></div>
     </main>
+
+    <div id="welcome-video-overlay" class="mi-welcome-video-overlay" role="dialog" aria-modal="true" aria-labelledby="welcome-video-title" hidden>
+      <section class="mi-welcome-video-card">
+        <header class="mi-welcome-video-heading">
+          <div>
+            <p class="mi-eyebrow">Tu espacio personal</p>
+            <h2 id="welcome-video-title">Bienvenido a Mi Núcleo</h2>
+          </div>
+          <button id="welcome-video-close" class="mi-welcome-video-close" type="button" aria-label="Cerrar video de bienvenida">×</button>
+        </header>
+
+        <div class="mi-welcome-video-media">
+          <video id="welcome-video" src="./assets/mi-nucleo-bienvenida.mp4" controls muted playsinline preload="metadata">
+            Tu navegador no puede reproducir este video.
+          </video>
+          <p id="welcome-video-error" class="mi-welcome-video-error" role="status" hidden>No pudimos cargar el video. Puedes cerrar esta bienvenida y continuar usando Mi Núcleo.</p>
+        </div>
+
+        <footer class="mi-welcome-video-actions">
+          <button id="welcome-sound-button" type="button" aria-pressed="false">Activar sonido</button>
+          <button id="welcome-video-skip" type="button">Omitir</button>
+        </footer>
+      </section>
+    </div>
 
     <script src="mi-nucleo-config.js"></script>
     <script>
@@ -345,7 +383,7 @@
         document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.0"><\/script>');
       }
     </script>
-    <script src="mi-nucleo.js?v=20260816auth1"></script>
+    <script src="mi-nucleo.js?v=20260816block2a2"></script>
     <script src="../script.js?v=20260815b" defer></script>
   </body>
 </html>

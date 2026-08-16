@@ -16,18 +16,21 @@
   const state = {
     client: null,
     user: null,
+    profile: null,
     authMode: "signin",
     consentRecord: null,
     priority: "all",
     demo: false,
-    busy: false
+    busy: false,
+    welcomeVideoMode: null,
+    welcomeVideoSaving: false
   };
 
   const priorities = Object.freeze({
     psychology: "Psicología",
-    education: "Docencia y educación",
-    business: "Administración / Ingeniería Comercial",
-    all: "Explorar todo"
+    education: "Educación y docencia",
+    business: "Empresa y gestión",
+    all: "Quiero explorar todo"
   });
 
   const products = Object.freeze([
@@ -180,6 +183,7 @@
   function setPageState(nextState) {
     document.body.dataset.miState = nextState;
     $("#auth-view").hidden = nextState !== "auth";
+    $("#onboarding-view").hidden = nextState !== "onboarding";
     $("#app-view").hidden = nextState !== "member";
   }
 
@@ -257,6 +261,22 @@
     return state.consentRecord;
   }
 
+  async function loadProfile() {
+    if (state.demo) return state.profile;
+    const { data, error } = await state.client
+      .from("aula_profiles")
+      .select("full_name, mi_nucleo_priority, onboarding_completed_at, welcome_video_seen_at")
+      .eq("id", state.user.id)
+      .single();
+    if (error) throw error;
+    return {
+      full_name: String(data?.full_name || "").trim(),
+      mi_nucleo_priority: priorities[data?.mi_nucleo_priority] ? data.mi_nucleo_priority : null,
+      onboarding_completed_at: data?.onboarding_completed_at || null,
+      welcome_video_seen_at: data?.welcome_video_seen_at || null
+    };
+  }
+
   function setAuthMode(mode) {
     state.authMode = mode;
     const isSignup = mode === "signup";
@@ -291,6 +311,7 @@
           ? "Una cuenta te permite guardar preferencias y conectar tus experiencias."
           : "Usa tu correo y contraseña para continuar.";
     $("#password-label").textContent = isRecovery ? "Nueva contraseña" : "Contraseña";
+    $("#auth-divider span").textContent = isSignup ? "O crea tu cuenta con" : "O inicia sesión con tu cuenta";
     $("#auth-submit").textContent = isRecovery
       ? "Guardar nueva contraseña"
       : isConsentGate
@@ -309,6 +330,8 @@
 
   function displayName(user) {
     if (state.demo) return "Visitante";
+    const profileName = String(state.profile?.full_name || "").trim();
+    if (profileName) return profileName;
     const fullName = String(user?.user_metadata?.full_name || "").trim();
     if (fullName) return fullName;
     return String(user?.email || "participante").split("@")[0] || "participante";
@@ -401,9 +424,80 @@
       : "No encontramos una fecha de aceptación vigente.";
   }
 
+  function shouldShowWelcomeVideo() {
+    return !state.demo
+      && Boolean(state.client)
+      && Boolean(state.user)
+      && Boolean(state.consentRecord)
+      && Boolean(state.profile?.onboarding_completed_at)
+      && !state.profile?.welcome_video_seen_at;
+  }
+
+  async function markWelcomeVideoSeen() {
+    if (state.demo || state.welcomeVideoSaving || !state.client || !state.user || state.profile?.welcome_video_seen_at) return;
+    state.welcomeVideoSaving = true;
+    const seenAt = new Date().toISOString();
+    try {
+      const { data, error } = await state.client
+        .from("aula_profiles")
+        .update({ welcome_video_seen_at: seenAt })
+        .eq("id", state.user.id)
+        .select("welcome_video_seen_at")
+        .single();
+      if (error) throw error;
+      state.profile = {
+        ...state.profile,
+        welcome_video_seen_at: data?.welcome_video_seen_at || seenAt
+      };
+    } catch (error) {
+      console.error("No se pudo guardar el estado del video de bienvenida de Mi Núcleo.", error);
+      showToast("No pudimos guardar esta preferencia. La bienvenida podría aparecer nuevamente.");
+    } finally {
+      state.welcomeVideoSaving = false;
+    }
+  }
+
+  async function closeWelcomeVideo({ markSeen = true } = {}) {
+    const overlay = $("#welcome-video-overlay");
+    if (overlay.hidden) return;
+    const shouldMarkSeen = markSeen && state.welcomeVideoMode === "automatic";
+    const video = $("#welcome-video");
+    video.pause();
+    overlay.hidden = true;
+    document.body.classList.remove("mi-welcome-video-open");
+    state.welcomeVideoMode = null;
+    setLiveStatus("Video de bienvenida cerrado. Mi Núcleo está disponible.");
+    if (shouldMarkSeen) await markWelcomeVideoSeen();
+  }
+
+  function openWelcomeVideo({ automatic = false } = {}) {
+    if (automatic && !shouldShowWelcomeVideo()) return;
+    const overlay = $("#welcome-video-overlay");
+    if (!overlay.hidden) return;
+    const video = $("#welcome-video");
+    const errorMessage = $("#welcome-video-error");
+    const soundButton = $("#welcome-sound-button");
+    state.welcomeVideoMode = automatic ? "automatic" : "manual";
+    errorMessage.hidden = true;
+    soundButton.textContent = "Activar sonido";
+    soundButton.setAttribute("aria-pressed", "false");
+    video.muted = true;
+    video.currentTime = 0;
+    overlay.hidden = false;
+    document.body.classList.add("mi-welcome-video-open");
+    setLiveStatus("Video de bienvenida abierto. Puedes activar el sonido u omitirlo.");
+    window.setTimeout(() => $("#welcome-video-close")?.focus({ preventScroll: true }), 40);
+    const playback = video.play();
+    if (playback && typeof playback.catch === "function") {
+      playback.catch((error) => {
+        console.warn("La reproducción automática del video de bienvenida fue bloqueada; los controles siguen disponibles.", error);
+      });
+    }
+  }
+
   function renderMember() {
     const name = displayName(state.user);
-    const priorityFromProfile = state.demo ? "all" : state.user?.user_metadata?.mi_nucleo_priority;
+    const priorityFromProfile = state.demo ? "all" : state.profile?.mi_nucleo_priority;
     state.priority = priorities[priorityFromProfile] ? priorityFromProfile : "all";
     $("#member-name").textContent = firstName(state.user);
     $("#sidebar-name").textContent = name;
@@ -417,29 +511,36 @@
     $("#demo-auth-link").hidden = !state.demo;
     $("#account-nav-link").hidden = state.demo;
     $("#mi-cuenta").hidden = state.demo;
-    $("#change-priority-button").hidden = state.demo;
     $("#data-actions-card").hidden = state.demo;
     $("#account-name").disabled = state.demo;
     $("#experiences-device-label").textContent = state.demo ? "Vista sin actividad guardada" : "Tu actividad en este dispositivo";
-    $("#personalization-summary").textContent = state.demo ? "Explorar todo · solo lectura" : "Una prioridad editable";
+    $("#personalization-summary").textContent = state.demo ? "Explorar todo · solo lectura" : priorities[state.priority];
     $("#personalization-copy").textContent = state.demo
       ? "La prioridad demostrativa solo ordena esta vista y no se guarda en el navegador ni en una cuenta."
-      : "Tu área elegida cambia el orden de las tarjetas. No bloquea productos ni crea perfiles sensibles.";
+      : "La prioridad definida en tu perfil organiza las recomendaciones. No bloquea productos ni crea perfiles sensibles.";
     renderProducts();
     renderConsentRecord();
     setPageState("member");
     setLiveStatus(`Mi Núcleo cargado. Hola, ${firstName(state.user)}.`);
     window.setTimeout(() => $("#personal-title")?.focus({ preventScroll: true }), 60);
-    if (!state.demo && !priorityFromProfile) window.setTimeout(openPriorityDialog, 260);
+    if (shouldShowWelcomeVideo()) window.setTimeout(() => openWelcomeVideo({ automatic: true }), 260);
   }
 
-  function openPriorityDialog() {
-    if (state.demo) return;
-    const selected = $(`input[name="priority"][value="${state.priority}"]`) || $('input[name="priority"][value="all"]');
+  function renderOnboarding() {
+    const suggestedName = displayName(state.user);
+    $("#onboarding-name").value = suggestedName;
+    const suggestedPriority = priorities[state.profile?.mi_nucleo_priority]
+      ? state.profile.mi_nucleo_priority
+      : "all";
+    const selected = $(`input[name="onboarding-priority"][value="${suggestedPriority}"]`)
+      || $('input[name="onboarding-priority"][value="all"]');
     selected.checked = true;
-    const dialog = $("#priority-dialog");
-    if (typeof dialog.showModal === "function") dialog.showModal();
-    else dialog.setAttribute("open", "");
+    const status = $("#onboarding-status");
+    status.textContent = "";
+    status.className = "mi-form-status";
+    setPageState("onboarding");
+    setLiveStatus("Completa tu perfil para continuar a Mi Núcleo.");
+    window.setTimeout(() => $("#onboarding-title")?.focus({ preventScroll: true }), 60);
   }
 
   async function handleSession(user, options = {}) {
@@ -456,6 +557,11 @@
       setAuthMode("consent");
       return;
     }
+    state.profile = await loadProfile();
+    if (!state.profile?.onboarding_completed_at) {
+      renderOnboarding();
+      return;
+    }
     renderMember();
   }
 
@@ -463,6 +569,12 @@
     state.demo = true;
     state.client = null;
     state.user = { id: "demo-visitor" };
+    state.profile = {
+      full_name: "Visitante",
+      mi_nucleo_priority: "all",
+      onboarding_completed_at: new Date().toISOString(),
+      welcome_video_seen_at: null
+    };
     state.consentRecord = null;
     state.priority = "all";
     renderMember();
@@ -511,6 +623,7 @@
       if (state.busy || event === "INITIAL_SESSION" || event === "TOKEN_REFRESHED") return;
       if (!session?.user) {
         state.user = null;
+        state.profile = null;
         state.consentRecord = null;
         setPageState("auth");
         setAuthMode("signin");
@@ -577,7 +690,7 @@
     try {
       if (state.authMode === "consent") {
         await recordConsent("existing_session_gate");
-        renderMember();
+        await handleSession(state.user, { ignoreRecovery: true });
       } else if (state.authMode === "update-password") {
         const { error } = await state.client.auth.updateUser({ password });
         if (error) throw error;
@@ -673,26 +786,55 @@
     if (error) setFormStatus(friendlyError(error), "error");
   });
 
-  $("#change-priority-button").addEventListener("click", openPriorityDialog);
-  $("#save-priority-button").addEventListener("click", async () => {
-    if (state.demo || !state.client) return;
-    const selected = $('input[name="priority"]:checked')?.value || "all";
-    const status = $("#priority-status");
+  $("#onboarding-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (state.demo || state.busy || !state.client || !state.user) return;
+    const nameField = $("#onboarding-name");
+    const name = nameField.value.trim();
+    const selected = $('input[name="onboarding-priority"]:checked')?.value;
+    const status = $("#onboarding-status");
+    const submit = $("#onboarding-submit");
+    if (!name) {
+      status.textContent = "Escribe tu nombre para continuar.";
+      status.className = "mi-form-status is-error";
+      nameField.focus();
+      return;
+    }
+    if (!priorities[selected]) {
+      status.textContent = "Selecciona una prioridad para continuar.";
+      status.className = "mi-form-status is-error";
+      return;
+    }
+    state.busy = true;
+    submit.disabled = true;
     status.textContent = "Guardando…";
+    status.className = "mi-form-status";
     try {
-      const { data, error } = await state.client.auth.updateUser({
-        data: { ...(state.user.user_metadata || {}), mi_nucleo_priority: selected }
-      });
+      const completedAt = new Date().toISOString();
+      const { data, error } = await state.client
+        .from("aula_profiles")
+        .update({
+          full_name: name,
+          mi_nucleo_priority: selected,
+          onboarding_completed_at: completedAt
+        })
+        .eq("id", state.user.id)
+        .select("full_name, mi_nucleo_priority, onboarding_completed_at, welcome_video_seen_at")
+        .single();
       if (error) throw error;
-      state.user = data.user || state.user;
-      state.priority = selected;
-      $("#priority-label").textContent = priorities[selected];
-      renderProducts();
-      $("#priority-dialog").close();
-      showToast(`Prioridad actualizada: ${priorities[selected]}.`);
+      state.profile = {
+        full_name: String(data.full_name || "").trim(),
+        mi_nucleo_priority: data.mi_nucleo_priority,
+        onboarding_completed_at: data.onboarding_completed_at,
+        welcome_video_seen_at: data.welcome_video_seen_at || null
+      };
+      renderMember();
     } catch (error) {
       status.textContent = friendlyError(error);
       status.className = "mi-form-status is-error";
+    } finally {
+      state.busy = false;
+      submit.disabled = false;
     }
   });
 
@@ -718,11 +860,20 @@
       return;
     }
     try {
-      const { data, error } = await state.client.auth.updateUser({
-        data: { ...(state.user.user_metadata || {}), full_name: name }
-      });
+      const { data, error } = await state.client
+        .from("aula_profiles")
+        .update({ full_name: name })
+        .eq("id", state.user.id)
+        .select("full_name, mi_nucleo_priority, onboarding_completed_at, welcome_video_seen_at")
+        .single();
       if (error) throw error;
-      state.user = data.user || state.user;
+      state.profile = {
+        ...state.profile,
+        full_name: String(data.full_name || "").trim(),
+        mi_nucleo_priority: data.mi_nucleo_priority,
+        onboarding_completed_at: data.onboarding_completed_at,
+        welcome_video_seen_at: data.welcome_video_seen_at || null
+      };
       $("#sidebar-name").textContent = displayName(state.user);
       $("#sidebar-avatar").textContent = initials(state.user);
       $("#member-name").textContent = firstName(state.user);
@@ -738,6 +889,7 @@
     if (state.demo || !state.client) return;
     await state.client.auth.signOut();
     state.user = null;
+    state.profile = null;
     state.consentRecord = null;
     setPageState("auth");
     setAuthMode("signin");
@@ -750,6 +902,7 @@
     const summary = {
       exported_at: new Date().toISOString(),
       account: { email: state.user?.email || null, display_name: displayName(state.user) },
+      profile: state.profile,
       personalization: { priority: state.priority, label: priorities[state.priority] },
       consent: state.consentRecord || metadataConsent(state.user),
       local_activity: readActivity(),
@@ -763,6 +916,51 @@
     link.click();
     URL.revokeObjectURL(url);
     showToast("Resumen de datos preparado para descarga.");
+  });
+
+  $("#welcome-video-close").addEventListener("click", () => {
+    closeWelcomeVideo().catch((error) => console.error("No se pudo cerrar la bienvenida correctamente.", error));
+  });
+
+  $("#welcome-video-skip").addEventListener("click", () => {
+    closeWelcomeVideo().catch((error) => console.error("No se pudo omitir la bienvenida correctamente.", error));
+  });
+
+  $("#welcome-sound-button").addEventListener("click", () => {
+    const video = $("#welcome-video");
+    const button = $("#welcome-sound-button");
+    video.muted = !video.muted;
+    button.textContent = video.muted ? "Activar sonido" : "Silenciar";
+    button.setAttribute("aria-pressed", String(!video.muted));
+    if (!video.muted && video.paused) {
+      const playback = video.play();
+      if (playback && typeof playback.catch === "function") {
+        playback.catch((error) => console.warn("El navegador no permitió reanudar el video con sonido.", error));
+      }
+    }
+  });
+
+  $("#welcome-video").addEventListener("ended", () => {
+    closeWelcomeVideo().catch((error) => console.error("No se pudo finalizar la bienvenida correctamente.", error));
+  });
+
+  $("#welcome-video").addEventListener("error", () => {
+    $("#welcome-video-error").hidden = false;
+    console.error("No se pudo cargar el video de bienvenida de Mi Núcleo.", $("#welcome-video").error || "Error de reproducción sin detalle.");
+  });
+
+  $("#welcome-video").addEventListener("loadeddata", () => {
+    $("#welcome-video-error").hidden = true;
+  });
+
+  $("#replay-welcome-video-button").addEventListener("click", () => {
+    openWelcomeVideo({ automatic: false });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || $("#welcome-video-overlay").hidden) return;
+    event.preventDefault();
+    closeWelcomeVideo().catch((error) => console.error("No se pudo cerrar la bienvenida correctamente.", error));
   });
 
   $$(".mi-sidebar > nav a").forEach((link) => {
