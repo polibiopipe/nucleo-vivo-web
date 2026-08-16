@@ -40,8 +40,12 @@ requiredRoutes.forEach((path) => check(`${path}: existe`, existsSync(resolve(roo
 requiredRoutes
   .filter((path) => !path.includes("/app/"))
   .forEach((path) => check(`${path}: enlace para saltar al contenido`, file(path).includes("skip-link")));
-const officialLogo = "assets/nucleo-vivo-isotipo-oficial-original.jpg";
-check("logo oficial adjunto: existe", existsSync(resolve(root, officialLogo)));
+const officialSourceAsset = "assets/nucleo-vivo-isotipo-oficial-original.jpg";
+const officialLogo = "assets/nucleo-vivo-logotipo-exacto-del-moodboard.png";
+const officialMark = "assets/nucleo-vivo-isotipo-oficial.svg";
+check("fuente oficial adjunta: existe", existsSync(resolve(root, officialSourceAsset)));
+check("logo completo activo: existe", existsSync(resolve(root, officialLogo)));
+check("isotipo transparente activo: existe", existsSync(resolve(root, officialMark)));
 check("imagen social: existe", existsSync(resolve(root, "assets/og-nucleo-vivo.png")));
 
 function sha256(path) {
@@ -49,7 +53,7 @@ function sha256(path) {
 }
 
 const officialAssetHashes = new Map([
-  [officialLogo, "D8B42864D560B348EA3901CB368D49C6326E4D35D1000D929E6521EC6FBCE1E9"],
+  [officialSourceAsset, "D8B42864D560B348EA3901CB368D49C6326E4D35D1000D929E6521EC6FBCE1E9"],
   ["assets/showcase/originals/escucha-viva-presentacion-oficial.png", "CF5985AB6188DF6AE7E24D10E334E890848469D09DBC43E17637D4B906B1382F"],
   ["assets/showcase/originals/umbral-docente-presentacion-oficial.png", "F2A5C69155AD231E8100944FA7A276341AC3B65AD1313CB59FD1B49F6C57D21E"],
   ["assets/showcase/originals/empresa-viva-presentacion-oficial.png", "EDABA4871ED34C0FE6F37CE33BEAC36A8CD0DA1042D9C0FB4EBEDD31E36E8007"]
@@ -81,13 +85,20 @@ simulatorPresentations.forEach((path) => check(`${path}: integrada en el showroo
   "umbral-docente-presentacion.webp"
 ].forEach((path) => check(`${path}: ya no se usa en el showroom`, !simulatorShowroomSource.includes(path)));
 
-[
+const publicBrandSources = [
   file("index.html"),
   file("mi-nucleo/index.html"),
   file("lab/index.html"),
   file("lab/empresa-viva/index.html"),
   file("lab/umbral-docente/index.html")
-].forEach((source, index) => check(`vista pública ${index + 1}: usa la fuente única de marca`, source.includes("nucleo-vivo-isotipo-oficial-original.jpg")));
+];
+publicBrandSources.forEach((source, index) => {
+  check(`vista pública ${index + 1}: header usa logo completo`, source.includes("nucleo-vivo-logotipo-exacto-del-moodboard.png"));
+  check(`vista pública ${index + 1}: no monta el JPG cuadrado en interfaz`, !source.includes("nucleo-vivo-isotipo-oficial-original.jpg"));
+  check(`vista pública ${index + 1}: no conserva selector de parche`, !source.includes("data-brand-asset"));
+});
+check("Home: Mi Núcleo usa isotipo transparente", file("index.html").includes("nucleo-vivo-isotipo-oficial.svg"));
+check("Mi Núcleo: login usa isotipo transparente", file("mi-nucleo/index.html").includes("nucleo-vivo-isotipo-oficial.svg"));
 
 includes(
   "index.html",
@@ -221,6 +232,13 @@ check("estilos: reduced motion", styles.includes("prefers-reduced-motion: reduce
 check("estilos: foco visible", styles.includes(":focus-visible"));
 check("estilos: órbitas", /orbit/i.test(styles));
 check("estilos: hidden consistente", styles.includes('[hidden]'));
+check("marca: sin selectores cosméticos data-brand", !styles.includes("data-brand-asset"));
+check("marca: sin pseudo-elementos de cobertura", !/\.(?:brand|brand-logo|brand-mark|mi-brand-mark)[^{]*(?:::before|::after)\s*\{/m.test(styles));
+check("marca: logo siempre contain", styles.includes(".brand-logo,") && styles.includes("object-fit: contain"));
+check("simuladores: un único marco 16:9", styles.includes(".simulator-media {") && styles.includes("aspect-ratio: 16 / 9"));
+check("Mi Núcleo: showroom sin pseudo-overlay", !file("mi-nucleo/mi-nucleo.css").includes(".mi-access-showcase::before"));
+check("Mi Núcleo: showroom sin ventanas absolutas", !/\.mi-access-showcase \.mi-showcase-window\s*\{[^}]*position:\s*absolute/s.test(file("mi-nucleo/mi-nucleo.css")));
+check("Mi Núcleo: showroom sin cromado artificial", !file("mi-nucleo/index.html").includes("mi-showcase-chrome"));
 
 includes(
   "_redirects",
