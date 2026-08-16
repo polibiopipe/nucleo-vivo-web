@@ -5503,12 +5503,12 @@ section[id] {
 
 .brand-logo {
   max-width: 64px;
-  max-height: 58px;
+  max-height: 64px;
 }
 
 .footer-logo {
   max-width: 140px;
-  max-height: 132px;
+  max-height: 140px;
   padding: 0;
   border: 0;
   border-radius: 0;

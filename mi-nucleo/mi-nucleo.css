@@ -282,15 +282,11 @@ body:not([data-mi-state="loading"]) #mi-loading {
   cursor: pointer;
 }
 
-.mi-google-button span {
-  width: 24px;
-  height: 24px;
-  border: 1px solid var(--mi-line);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  color: #3267c8;
-  font-weight: 900;
+.mi-google-button .google-icon {
+  width: 19px;
+  height: 19px;
+  flex: 0 0 auto;
+  display: block;
 }
 
 .mi-divider {
