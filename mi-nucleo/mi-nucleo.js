@@ -5,7 +5,7 @@
     ...(window.AULA_VIVA_CONFIG || {}),
     consentVersion: "2026-08-15",
     consentType: "mi_nucleo_privacy_terms",
-    enableGoogleAuth: false
+    ...(window.MI_NUCLEO_CONFIG || {})
   });
   const ACTIVITY_KEY = "nv-mi-nucleo-activity-v1";
   const LOCAL_DASHBOARD_PREVIEW = ["127.0.0.1", "localhost"].includes(window.location.hostname)
@@ -445,7 +445,7 @@
   async function handleSession(user, options = {}) {
     if (state.demo) return;
     state.user = user;
-    if (isRecoveryUrl() && !options.ignoreRecovery) {
+    if ((options.recovery || isRecoveryUrl()) && !options.ignoreRecovery) {
       setPageState("auth");
       setAuthMode("update-password");
       return;
@@ -486,8 +486,9 @@
     state.client = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
-    $("#google-auth-button").hidden = !CONFIG.enableGoogleAuth;
-    $("#auth-divider").hidden = !CONFIG.enableGoogleAuth;
+    const googleAuthEnabled = CONFIG.enableGoogleAuth === true;
+    $("#google-auth-button").hidden = !googleAuthEnabled;
+    $("#auth-divider").hidden = !googleAuthEnabled;
 
     const { data, error } = await state.client.auth.getSession();
     if (error) {
@@ -513,7 +514,16 @@
         state.consentRecord = null;
         setPageState("auth");
         setAuthMode("signin");
+        return;
       }
+      if (!["SIGNED_IN", "PASSWORD_RECOVERY"].includes(event)) return;
+      window.setTimeout(() => {
+        handleSession(session.user, { recovery: event === "PASSWORD_RECOVERY" }).catch((error) => {
+          setPageState("auth");
+          setAuthMode("signin");
+          setFormStatus(friendlyError(error), "error");
+        });
+      }, 0);
     });
   }
 
@@ -655,7 +665,7 @@
   });
 
   $("#google-auth-button").addEventListener("click", async () => {
-    if (state.demo || !state.client) return;
+    if (CONFIG.enableGoogleAuth !== true || state.demo || !state.client) return;
     const { error } = await state.client.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: redirectUrl() }

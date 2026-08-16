@@ -98,7 +98,7 @@
             <button id="google-auth-button" class="mi-google-button" type="button" hidden>
               <span aria-hidden="true">G</span> Continuar con Google
             </button>
-            <div id="auth-divider" class="mi-divider"><span>o continúa con correo</span></div>
+            <div id="auth-divider" class="mi-divider" hidden><span>o continúa con correo</span></div>
 
             <form id="auth-form" class="mi-auth-form" novalidate>
               <div class="mi-credentials">
@@ -318,6 +318,7 @@
       <div id="mi-toast" class="mi-toast" role="status" aria-live="polite" hidden></div>
     </main>
 
+    <script src="mi-nucleo-config.js"></script>
     <script>
       (() => {
         const params = new URLSearchParams(window.location.search);
@@ -333,7 +334,7 @@
         document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.0"><\/script>');
       }
     </script>
-    <script src="mi-nucleo.js?v=20260815d"></script>
+    <script src="mi-nucleo.js?v=20260816auth1"></script>
     <script src="../script.js?v=20260815b" defer></script>
   </body>
 </html>
