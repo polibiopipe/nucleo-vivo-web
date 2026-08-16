@@ -5566,3 +5566,32 @@ section[id] {
     transition: none;
   }
 }
+
+/* Presentaciones oficiales de simuladores */
+
+img.simulator-presentation-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.experience-showcase-media img.simulator-presentation-image {
+  object-position: center;
+}
+
+.experience-showcase-block:nth-child(even) {
+  grid-template-columns: minmax(300px, 0.62fr) minmax(0, 1.38fr);
+}
+
+@media (max-width: 900px) {
+  .experience-showcase-block:nth-child(even) {
+    grid-template-columns: 1fr;
+  }
+
+  .experience-showcase-media:has(.simulator-presentation-image) {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+}

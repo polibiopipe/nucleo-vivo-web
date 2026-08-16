@@ -3442,3 +3442,46 @@
     transition: none;
   }
 }
+
+/* Showroom de presentaciones oficiales */
+
+.lab-showcase-collage {
+  min-height: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto auto;
+}
+
+.lab-showcase-collage .lab-showcase-main {
+  grid-column: 1 / -1;
+  grid-row: auto;
+}
+
+.lab-showcase-collage figure {
+  position: relative;
+  aspect-ratio: 16 / 9;
+}
+
+.lab-showcase-collage img.simulator-presentation-image,
+.lab-product-media img.simulator-presentation-image,
+.experience-product-shot img.simulator-presentation-image {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.experience-product-shot:has(.simulator-presentation-image) {
+  aspect-ratio: 16 / 9;
+}
+
+@media (max-width: 620px) {
+  .lab-showcase-collage {
+    grid-template-rows: auto auto;
+  }
+
+  .experience-product-shot:has(.simulator-presentation-image) {
+    width: 100%;
+  }
+}

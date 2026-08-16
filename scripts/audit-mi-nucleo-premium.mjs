@@ -42,6 +42,28 @@ requiredRoutes
 check("logo oficial: existe", existsSync(resolve(root, "assets/nucleo-vivo-isotipo-oficial.svg")));
 check("imagen social: existe", existsSync(resolve(root, "assets/og-nucleo-vivo.png")));
 
+const simulatorPresentations = [
+  "assets/showcase/escucha-viva-presentacion.webp",
+  "assets/showcase/empresa-viva-presentacion.webp",
+  "assets/showcase/umbral-docente-presentacion.webp"
+];
+simulatorPresentations.forEach((path) => check(`${path}: presentación oficial disponible`, existsSync(resolve(root, path))));
+
+const simulatorShowroomSource = [
+  file("index.html"),
+  file("mi-nucleo/index.html"),
+  file("mi-nucleo/mi-nucleo.js"),
+  file("lab/index.html"),
+  file("lab/empresa-viva/index.html"),
+  file("lab/umbral-docente/index.html")
+].join("\n");
+simulatorPresentations.forEach((path) => check(`${path}: integrada en el showroom`, simulatorShowroomSource.includes(path.split("/").at(-1))));
+[
+  "assets/showcase/escucha-viva.jpg",
+  "assets/showcase/empresa-viva.jpg",
+  "assets/showcase/umbral-docente.jpg"
+].forEach((path) => check(`${path}: ya no se usa en el showroom`, !simulatorShowroomSource.includes(path)));
+
 includes(
   "index.html",
   "Un ecosistema vivo para aprender, crear, practicar y transformar.",
