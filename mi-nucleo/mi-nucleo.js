@@ -146,6 +146,10 @@
   }
 
   function miNucleoAuthRedirectUrl() {
+    const hostname = window.location.hostname.toLowerCase();
+    if (hostname === "nucleovivo.net" || hostname === "www.nucleovivo.net") {
+      return "https://www.nucleovivo.net/mi-nucleo/index.html";
+    }
     return `${window.location.origin}/mi-nucleo/index.html`;
   }
 
