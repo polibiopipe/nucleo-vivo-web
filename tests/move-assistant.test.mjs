@@ -43,5 +43,5 @@ test('API rejects cross-origin, malformed and excessive requests before inferenc
   assert.equal((await call({method:'POST',headers:{origin:'https://evil.test'}})).code,403);
   assert.equal((await call({method:'POST',headers:{origin:'https://www.nucleovivo.net','content-type':'application/json'},body:{messages:[]}})).code,400);
   assert.equal((await call({method:'POST',headers:{origin:'https://www.nucleovivo.net','content-type':'application/json','content-length':'30000'}})).code,413);
-  const health=await call({method:'GET',headers:{}});assert.equal(health.code,200);assert.equal(health.body.version,'20260906-ai');
+  const health=await call({method:'GET',headers:{}});assert.equal(health.code,200);assert.equal(health.body.version,'20260906-gemini-direct');assert.equal(health.body.provider,'google-gemini');
 });

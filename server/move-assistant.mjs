@@ -1,8 +1,8 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { generateText, Output, jsonSchema } from 'ai';
+import { generateGemini, MODEL } from './move-gemini.mjs';
 
-export const MODEL = 'google/gemini-3.8-flash';
+export { MODEL };
 export const catalog = JSON.parse(readFileSync(new URL('./move-catalog.json', import.meta.url), 'utf8'));
 const productIndex = new Map(catalog.map(p => [p.rank, p]));
 const normalize = text => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -30,7 +30,7 @@ export function safetyResponse(messages) {
   return { message: urgentMessage, intent: 'urgent', referral: 'unknown', products: [], followUp: [], source: 'safety' };
 }
 
-const schema = jsonSchema({
+const schema = {
   type: 'object', additionalProperties: false,
   properties: {
     message: { type: 'string', maxLength: 1600 },
@@ -44,7 +44,7 @@ const schema = jsonSchema({
     followUp: { type: 'array', maxItems: 3, items: { type: 'string', maxLength: 100 } },
   },
   required: ['message', 'intent', 'referral', 'products', 'followUp'],
-});
+};
 
 export const systemPrompt = `Eres MOVE Select, asistente de orientación comercial de la demo MOVE de Núcleo Vivo en Villarrica, Chile. Habla español claro, cercano, preciso; 2-4 frases y máximo una pregunta útil por turno. Recuerda lo dicho. La respuesta es JSON según el esquema; message es texto plano sin Markdown ni HTML.
 
@@ -105,16 +105,15 @@ export function isAllowedOrigin(origin, previewHost) {
   return allowed.includes(origin);
 }
 
-export async function answer(input, generate = generateText) {
+export async function answer(input, generate = generateGemini) {
   const id = randomUUID();
   const safety = safetyResponse(input.messages);
   if (safety) return { ...safety, id };
   const extra = `\nProducto consultado: ${input.productRank ?? 'ninguno'}. Límite explícito por alternativa: ${input.budget ?? 'no indicado'} CLP.`;
   const result = await generate({
     model: MODEL, system: systemPrompt + extra, messages: input.messages,
-    output: Output.object({ schema }), maxOutputTokens: 2400, maxRetries: 0,
+    schema, maxOutputTokens: 2400,
     abortSignal: AbortSignal.timeout(25000),
-    providerOptions: { gateway: { tags: ['move-select', 'demo'] } },
   });
   const safe = sanitizeOutput(result.output, input.budget);
   // Operational metadata only. Do not log prompts, replies, IPs or contact data.
