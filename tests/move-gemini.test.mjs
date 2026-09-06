@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { generateGemini } from '../server/move-gemini.mjs';
+import { generateGemini, classifyGoogleError } from '../server/move-gemini.mjs';
 import { answer, validateInput } from '../server/move-assistant.mjs';
 
 const env = { GEMINI_API_KEY: 'test-only-key' };
@@ -22,8 +22,8 @@ test('complete MOVE flow calls Google directly with private header, history and 
   assert.deepEqual(request.body.contents.map(c => c.role), ['user', 'model', 'user']);
   assert.equal(request.body.contents[2].parts[0].text, '10000');
   assert.match(request.body.systemInstruction.parts[0].text, /CATÁLOGO DE REFERENCIA/);
-  assert.equal(request.body.generationConfig.responseFormat.text.mimeType, 'application/json');
-  assert.ok(request.body.generationConfig.responseFormat.text.schema.required.includes('referral'));
+  assert.equal(request.body.generationConfig.responseMimeType, 'application/json');
+  assert.ok(request.body.generationConfig.responseJsonSchema.required.includes('referral'));
   assert.equal(result.source, 'ai');
   assert.equal(result.products[0].price, '$5.990');
   assert.ok(!JSON.stringify(result).includes(env.GEMINI_API_KEY));
@@ -63,4 +63,11 @@ test('thinking content is excluded from the user-facing structured reply', async
   data.candidates[0].content.parts.unshift({ thought: true, text: 'internal thought' });
   const result = await generateGemini(params, { env, fetchImpl: async () => Response.json(data) });
   assert.deepEqual(result.output, output);
+});
+
+test('Google 400 responses distinguish invalid credentials from incompatible request fields', () => {
+  assert.equal(classifyGoogleError(400, { error: { details: [{ reason: 'API_KEY_INVALID' }] } }), 'AI_CREDENTIAL_REJECTED');
+  assert.equal(classifyGoogleError(400, { error: { message: 'Invalid JSON payload received. Unknown name "responseFormat" at generation_config.' } }), 'AI_REQUEST_FORMAT');
+  assert.equal(classifyGoogleError(403, { error: { details: [{ reason: 'SERVICE_DISABLED' }] } }), 'AI_SERVICE_DISABLED');
+  assert.equal(classifyGoogleError(404, { error: { message: 'Model unavailable' } }), 'AI_MODEL_UNAVAILABLE');
 });
