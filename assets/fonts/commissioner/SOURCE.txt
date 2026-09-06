@@ -1,3 +1,0 @@
-Commissioner — Kostas Bartsokas
-Source: https://github.com/kosbarts/Commissioner
-Unmodified upstream variable webfont, SIL Open Font License 1.1. See OFL.txt.
