@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOVE Gestión · Demostración | Núcleo Vivo</title>
+  <meta name="description" content="Demostración interactiva del acceso y los roles de MOVE Gestión dentro de Núcleo Vivo." />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+    :root{
+      --ink:#0c110e;
+      --deep:#101713;
+      --panel:#151d18;
+      --panel-2:#1b251f;
+      --paper:#f5f2eb;
+      --paper-2:#ebe7dd;
+      --acid:#d7ff3f;
+      --orange:#e87942;
+      --sage:#bac8b5;
+      --white:#fff;
+      --muted:#7a837c;
+      --line:rgba(12,17,14,.12);
+      --line-dark:rgba(255,255,255,.09);
+      --shadow:0 28px 80px rgba(12,17,14,.16);
+      --r-xl:34px;
+      --r-lg:26px;
+      --r-md:18px;
+      --r-sm:12px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:'DM Sans',system-ui,sans-serif;background:var(--paper);color:var(--ink);min-height:100vh}
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    a{color:inherit;text-decoration:none}
+    [hidden]{display:none!important}
+    .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .demo-ribbon{position:fixed;z-index:100;top:0;left:0;right:0;height:30px;background:var(--acid);display:flex;justify-content:center;align-items:center;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#19200f}
+    .shell{width:min(1480px,calc(100% - 44px));margin:0 auto}
+
+    /* ACCESS */
+    .access-page{min-height:100vh;padding-top:30px;background:
+      radial-gradient(circle at 78% 10%,rgba(215,255,63,.16),transparent 30%),
+      linear-gradient(135deg,#0a100c 0%,#101913 56%,#1a261b 100%);color:white;overflow:hidden;position:relative}
+    .access-page:before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;border:1px solid rgba(215,255,63,.18);right:-300px;top:-330px;box-shadow:0 0 0 60px rgba(215,255,63,.025),0 0 0 130px rgba(215,255,63,.02)}
+    .access-nav{height:84px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2}
+    .brandline{display:flex;align-items:center;gap:18px;font-family:'Manrope';font-weight:800;letter-spacing:-.04em}
+    .nv-brand{display:flex;align-items:center;gap:10px;font-size:18px}
+    .nv-mark{width:26px;height:26px;position:relative}
+    .nv-mark:before,.nv-mark:after{content:'';position:absolute;border-radius:50%}
+    .nv-mark:before{width:22px;height:22px;background:#1b79ff;left:0;top:2px}
+    .nv-mark:after{width:13px;height:13px;background:#ffbb2e;right:-1px;top:7px;box-shadow:0 0 0 3px #0c120e}
+    .brand-x{color:#849087;font-weight:500;font-size:14px}
+    .move-brand{font-size:25px;letter-spacing:-.08em;display:flex;align-items:center;gap:8px}
+    .move-dots{display:inline-flex;gap:3px}.move-dots i{width:8px;height:8px;border-radius:50%;background:var(--acid)}.move-dots i:last-child{background:var(--orange)}
+    .nav-actions{display:flex;gap:10px}
+    .ghost-btn,.solid-btn{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#f2f5f1;border-radius:999px;padding:12px 18px;font-weight:700;backdrop-filter:blur(12px)}
+    .solid-btn{background:var(--acid);color:#11170f;border-color:var(--acid)}
+    .access-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:40px;align-items:center;min-height:calc(100vh - 114px);padding:24px 0 54px;position:relative;z-index:2}
+    .access-story{padding:24px 0}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.17);border-radius:999px;padding:8px 12px;font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#dce4dc}
+    .eyebrow:before{content:'';width:7px;height:7px;border-radius:50%;background:var(--acid);box-shadow:0 0 18px var(--acid)}
+    .access-story h1{font-family:'Manrope';font-size:clamp(50px,6vw,96px);line-height:.9;letter-spacing:-.07em;margin:28px 0 22px;max-width:830px}
+    .access-story h1 span{color:var(--acid)}
+    .access-story>p{font-size:18px;line-height:1.55;color:#bdc7bf;max-width:680px}
+    .access-proof{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:34px;max-width:760px}
+    .proof{border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);padding:16px;border-radius:18px;min-height:104px}
+    .proof small{display:block;color:#87948b;font-size:10px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:9px}.proof b{display:block;font-size:15px;line-height:1.2}.proof span{display:block;color:#aeb9b0;font-size:12px;margin-top:7px;line-height:1.35}
+    .access-card{background:rgba(247,246,241,.96);color:var(--ink);border-radius:34px;padding:28px;box-shadow:0 38px 110px rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.4);backdrop-filter:blur(20px)}
+    .access-card-head{display:flex;justify-content:space-between;align-items:start;gap:16px;margin-bottom:22px}
+    .access-card h2{font-family:'Manrope';font-size:30px;line-height:1;letter-spacing:-.045em;margin:6px 0 8px}.access-card p{color:#636b65;margin:0;line-height:1.45}
+    .demo-chip{background:#e8efd6;color:#43531d;border-radius:999px;padding:8px 11px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+    .role-list{display:grid;gap:10px;margin-top:22px}
+    .role-card{border:1px solid #dfe3dc;background:#fff;border-radius:20px;padding:15px;display:grid;grid-template-columns:48px 1fr auto;gap:13px;align-items:center;text-align:left;transition:.25s;box-shadow:0 8px 24px rgba(12,17,14,.035)}
+    .role-card:hover{transform:translateY(-3px);border-color:#a9c130;box-shadow:0 18px 34px rgba(12,17,14,.09)}
+    .role-avatar{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:#101612;color:white;font-family:'Manrope';font-weight:800;letter-spacing:-.03em;position:relative;overflow:hidden}
+    .role-avatar:after{content:'';position:absolute;width:26px;height:26px;border-radius:50%;background:var(--acid);right:-12px;bottom:-10px;opacity:.9}
+    .role-card[data-role="juan"] .role-avatar{background:#172419}.role-card[data-role="polibio"] .role-avatar{background:#08285b}.role-card[data-role="leyla"] .role-avatar{background:#542b50}.role-card[data-role="daniel"] .role-avatar{background:#61311e}
+    .role-copy b{display:block;font-family:'Manrope';font-size:15px}.role-copy span{display:block;color:#6c746e;font-size:12px;margin-top:3px}.role-arrow{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#eff2eb;font-size:18px}
+    .access-note{border-top:1px solid #e1e4de;margin-top:20px;padding-top:15px;display:flex;gap:10px;color:#68716a;font-size:12px;line-height:1.45}.access-note i{width:8px;height:8px;border-radius:50%;background:var(--acid);margin-top:5px;flex:0 0 auto}
+
+    /* DASHBOARD */
+    .dashboard-page{min-height:100vh;padding-top:30px;background:#e8e5de}
+    .dashboard-layout{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:calc(100vh - 30px)}
+    .sidebar{background:#0d130f;color:white;padding:24px 18px;display:flex;flex-direction:column;position:sticky;top:30px;height:calc(100vh - 30px);overflow:auto}
+    .sidebar-brand{display:flex;align-items:center;gap:10px;padding:6px 9px 24px;font-family:'Manrope';font-weight:800;font-size:22px;letter-spacing:-.06em}.sidebar-brand small{display:block;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#8b978e;margin-top:5px}
+    .side-profile{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);border-radius:18px;padding:12px;display:flex;align-items:center;gap:11px;margin-bottom:18px}
+    .side-profile .role-avatar{width:42px;height:42px;border-radius:14px}.side-profile b{display:block;font-size:13px}.side-profile span{display:block;color:#96a198;font-size:11px;margin-top:3px}
+    .side-nav{display:grid;gap:4px}.side-nav button{border:0;background:transparent;color:#aeb8b0;text-align:left;border-radius:13px;padding:12px 13px;display:flex;align-items:center;gap:11px;font-weight:600;font-size:13px}.side-nav button:hover,.side-nav button.active{background:rgba(215,255,63,.1);color:white}.side-nav button.active:before{background:var(--acid);box-shadow:0 0 14px rgba(215,255,63,.5)}.side-nav button:before{content:'';width:7px;height:7px;border-radius:50%;background:#526058}
+    .side-bottom{margin-top:auto;padding-top:20px}.side-bottom button{width:100%;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:white;border-radius:14px;padding:12px;font-weight:700}.side-bottom small{display:block;color:#738077;font-size:10px;line-height:1.4;text-align:center;margin-top:10px}
+    .workspace{min-width:0;overflow:hidden}
+    .topbar{height:78px;background:rgba(247,245,239,.88);backdrop-filter:blur(18px);border-bottom:1px solid rgba(12,17,14,.1);display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:30px;z-index:30}
+    .crumb{font-size:12px;color:#6d756f}.crumb b{color:#111711}
+    .top-actions{display:flex;gap:9px;align-items:center}.top-actions button,.top-actions select{border:1px solid #d8ddd6;background:white;border-radius:999px;padding:10px 14px;color:#1a211b}.top-actions select{font-weight:700}
+    .workspace-main{padding:26px 30px 50px;max-width:1500px;margin:0 auto}
+    .welcome{display:grid;grid-template-columns:1fr auto;gap:28px;align-items:end;margin-bottom:25px}.welcome small{display:block;color:#6f7771;text-transform:uppercase;letter-spacing:.11em;font-size:10px;font-weight:800}.welcome h1{font-family:'Manrope';font-size:clamp(34px,4vw,58px);letter-spacing:-.055em;line-height:.98;margin:7px 0 8px}.welcome p{margin:0;color:#687069;max-width:690px;line-height:1.5}.datebox{background:#111713;color:white;border-radius:20px;padding:15px 18px;min-width:170px}.datebox small{color:#9aa49c}.datebox b{display:block;font-family:'Manrope';font-size:26px;margin-top:4px}.datebox span{display:block;color:#c0c8c1;font-size:12px;margin-top:4px}
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}.kpi{background:#f8f6f1;border:1px solid rgba(12,17,14,.08);border-radius:22px;padding:18px;box-shadow:0 14px 34px rgba(12,17,14,.045);position:relative;overflow:hidden}.kpi:after{content:'';position:absolute;width:95px;height:95px;border-radius:50%;right:-48px;top:-48px;border:18px solid rgba(215,255,63,.25)}.kpi small{display:block;color:#757d77;font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:800}.kpi strong{display:block;font-family:'Manrope';font-size:31px;letter-spacing:-.04em;margin-top:9px}.kpi span{display:block;color:#667068;font-size:12px;margin-top:5px}.kpi .trend{color:#376416;font-weight:800}
+    .content-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.8fr);gap:14px}.panel{background:#f8f6f1;border:1px solid rgba(12,17,14,.08);border-radius:26px;padding:20px;box-shadow:0 14px 34px rgba(12,17,14,.04);min-width:0}.panel.dark{background:#111713;color:white;border-color:#111713}.panel-head{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:17px}.panel-head h2{font-family:'Manrope';font-size:20px;letter-spacing:-.03em;margin:0}.panel-head p{margin:4px 0 0;color:#757e77;font-size:12px}.dark .panel-head p{color:#9ca79f}.panel-head button{border:1px solid #d9ded7;background:white;border-radius:999px;padding:9px 12px;font-size:11px;font-weight:700}.dark .panel-head button{background:rgba(255,255,255,.06);color:white;border-color:rgba(255,255,255,.12)}
+    .appointments{display:grid;gap:9px}.appointment{display:grid;grid-template-columns:70px 1fr auto;gap:14px;align-items:center;background:#fff;border:1px solid #e5e7e2;border-radius:18px;padding:12px}.appointment-time{background:#eef2e8;border-radius:13px;padding:10px;text-align:center}.appointment-time b{display:block;font-size:15px}.appointment-time span{font-size:10px;color:#6d756e}.appointment h3{font-size:14px;margin:0 0 4px}.appointment p{font-size:11px;color:#707871;margin:0}.status{display:inline-flex;padding:7px 9px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}.status.ok{background:#eaf5d6;color:#3f5d17}.status.pending{background:#fff0d5;color:#785318}.status.review{background:#e5eaf6;color:#33496f}.status.content{background:#f2e7f0;color:#6e365f}
+    .action-list{display:grid;gap:9px}.action-card{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);border-radius:18px;padding:15px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}.action-card small{display:block;color:#95a197;font-size:10px;text-transform:uppercase;letter-spacing:.09em}.action-card b{display:block;margin-top:6px;font-size:14px}.action-card span{display:block;color:#b7c0b8;font-size:11px;margin-top:5px}.action-card button{border:0;background:var(--acid);color:#10150f;border-radius:12px;padding:9px 11px;font-weight:800;font-size:11px}
+    .chart-wrap{height:250px;display:flex;gap:12px;align-items:end;padding-top:12px}.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end}.bar{width:100%;max-width:42px;border-radius:12px 12px 5px 5px;background:linear-gradient(180deg,var(--acid),#8cab28);position:relative;min-height:14px;box-shadow:0 9px 22px rgba(125,155,38,.22)}.bar-col:nth-child(2n) .bar{background:linear-gradient(180deg,#1a291f,#536459)}.bar-col span{font-size:10px;color:#6c746e}.dark .bar-col span{color:#9aa59d}
+    .funnel{display:grid;gap:10px}.funnel-step{border-radius:17px;padding:14px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:#edf0ea}.funnel-step:nth-child(2){margin-left:18px;background:#e6ebdf}.funnel-step:nth-child(3){margin-left:36px;background:#dce7c7}.funnel-step:nth-child(4){margin-left:54px;background:#d7ff3f}.funnel-step small{display:block;color:#637064;font-size:10px;text-transform:uppercase;letter-spacing:.08em}.funnel-step b{display:block;margin-top:5px}.funnel-step strong{font-family:'Manrope';font-size:24px}
+    .task-list{display:grid;gap:9px}.task{display:grid;grid-template-columns:24px 1fr auto;gap:11px;align-items:start;padding:12px;border:1px solid #e2e5df;background:white;border-radius:16px}.task-check{width:21px;height:21px;border-radius:7px;border:1.5px solid #aeb8af;display:grid;place-items:center;font-size:12px}.task.done .task-check{background:#d7ff3f;border-color:#9dbd22}.task h3{font-size:13px;margin:1px 0 4px}.task p{font-size:11px;color:#737b74;margin:0;line-height:1.4}.task time{font-size:10px;color:#747c75;background:#eef1ec;border-radius:999px;padding:6px 8px;white-space:nowrap}
+    .asset-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.asset{aspect-ratio:16/10;border-radius:18px;position:relative;overflow:hidden;background:#cdd3c8}.asset:nth-child(1){background:linear-gradient(135deg,#151c17,#303d32)}.asset:nth-child(2){background:linear-gradient(135deg,#9aa493,#e7ebdf)}.asset:nth-child(3){background:linear-gradient(135deg,#c06e42,#f3d3b9)}.asset:nth-child(4){background:linear-gradient(135deg,#24293b,#a9b2df)}.asset:before{content:'';position:absolute;width:120px;height:120px;border:25px solid rgba(215,255,63,.75);border-radius:50%;right:-50px;top:-40px}.asset div{position:absolute;inset:auto 12px 12px 12px;background:rgba(10,15,12,.75);color:white;border-radius:12px;padding:10px;backdrop-filter:blur(10px)}.asset b{display:block;font-size:12px}.asset span{display:block;font-size:10px;color:#bbc4bc;margin-top:3px}
+    .permission-table{width:100%;border-collapse:collapse;font-size:12px}.permission-table th,.permission-table td{text-align:left;padding:12px 10px;border-bottom:1px solid #e1e4df}.permission-table th{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#68716b}.permission-table td:nth-child(n+2){text-align:center}.tick{color:#3c6f17;font-weight:900}.dash{color:#adb3ae}
+    .notice{background:#fff8df;border:1px solid #efdfa4;border-radius:18px;padding:15px;display:flex;gap:11px;color:#655527;font-size:12px;line-height:1.45;margin-bottom:14px}.notice b{display:block;color:#403716;margin-bottom:3px}.notice i{width:10px;height:10px;border-radius:50%;background:#f0bb2e;margin-top:4px;flex:0 0 auto}
+    .empty-panel{min-height:320px;display:grid;place-items:center;text-align:center}.empty-panel div{max-width:430px}.empty-panel h2{font-family:'Manrope';font-size:32px;margin:0 0 10px}.empty-panel p{color:#6e766f;line-height:1.55}.empty-panel button{border:0;background:#111713;color:white;border-radius:15px;padding:12px 16px;font-weight:800}
+    .modal{position:fixed;inset:0;z-index:200;background:rgba(8,12,9,.72);display:grid;place-items:center;padding:22px;backdrop-filter:blur(10px)}
+    .modal-card{width:min(650px,100%);background:#f8f6f1;border-radius:28px;padding:24px;box-shadow:0 30px 100px rgba(0,0,0,.35)}.modal-head{display:flex;justify-content:space-between;align-items:start;gap:18px}.modal-head h2{font-family:'Manrope';font-size:25px;margin:4px 0}.modal-head button{border:0;width:38px;height:38px;border-radius:50%;background:#e9ece6;font-size:20px}.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.modal-field{background:white;border:1px solid #e1e5df;border-radius:16px;padding:13px}.modal-field small{display:block;color:#778079;font-size:10px;text-transform:uppercase;letter-spacing:.08em}.modal-field b{display:block;font-size:13px;margin-top:6px}.modal-actions{display:flex;justify-content:flex-end;gap:9px}.modal-actions button{border:1px solid #d7dcd5;background:white;border-radius:13px;padding:11px 14px;font-weight:800}.modal-actions button.primary{background:#111713;color:white;border-color:#111713}
+    .toast{position:fixed;right:24px;bottom:24px;z-index:300;background:#0e1510;color:white;padding:14px 17px;border-radius:15px;box-shadow:0 18px 50px rgba(0,0,0,.25);font-size:13px;transform:translateY(20px);opacity:0;pointer-events:none;transition:.25s}.toast.show{transform:none;opacity:1}
+
+    @media(max-width:1100px){.access-grid{grid-template-columns:1fr}.access-story{padding-bottom:0}.access-card{max-width:760px}.dashboard-layout{grid-template-columns:82px 1fr}.sidebar{padding:20px 11px}.sidebar-brand strong,.sidebar-brand small,.side-profile div,.side-nav button span,.side-bottom small{display:none}.sidebar-brand{justify-content:center}.side-profile{justify-content:center;padding:9px}.side-nav button{justify-content:center;padding:14px}.side-nav button:before{width:9px;height:9px}.content-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){.shell{width:min(100% - 26px,1480px)}.access-nav{height:70px}.nv-brand{font-size:14px}.move-brand{font-size:21px}.brand-x{display:none}.access-story h1{font-size:54px}.access-proof{grid-template-columns:1fr}.access-card{padding:21px}.dashboard-layout{display:block}.sidebar{position:fixed;z-index:60;left:0;right:0;bottom:0;top:auto;height:68px;display:block;padding:8px 12px;border-top:1px solid rgba(255,255,255,.09)}.sidebar-brand,.side-profile,.side-bottom{display:none}.side-nav{grid-template-columns:repeat(5,1fr);gap:3px}.side-nav button{padding:10px 4px;font-size:0}.side-nav button:before{width:9px;height:9px}.topbar{top:30px;padding:0 14px;height:68px}.top-actions button:first-child{display:none}.workspace-main{padding:20px 14px 100px}.welcome{grid-template-columns:1fr}.datebox{display:none}.kpi-grid{grid-template-columns:1fr 1fr}.appointment{grid-template-columns:60px 1fr}.appointment>.status{grid-column:2}.modal-grid{grid-template-columns:1fr}.nav-actions .ghost-btn{display:none}}
+    @media(max-width:500px){.access-story h1{font-size:44px}.role-card{grid-template-columns:43px 1fr auto}.role-avatar{width:43px;height:43px}.kpi-grid{grid-template-columns:1fr}.asset-grid{grid-template-columns:1fr}.top-actions select{max-width:150px}}
+  </style>
+<meta name="robots" content="noindex, nofollow" /></head>
+<body><nav aria-label="Volver a la propuesta" style="padding:12px 24px;background:#092d41;color:white;font:14px/1.4 system-ui,sans-serif"><a href="/prototipos/" style="color:inherit;text-decoration:underline">Volver a Prototipos de Núcleo Vivo</a></nav>
+  <div class="demo-ribbon">Modo demostración · datos y personas ficticias · no crea cuentas ni guarda información</div>
+
+  <section class="access-page" id="accessView">
+    <div class="shell">
+      <nav class="access-nav">
+        <div class="brandline">
+          <div class="nv-brand"><span class="nv-mark" aria-hidden="true"></span>NÚCLEO VIVO</div>
+          <span class="brand-x">×</span>
+          <div class="move-brand"><span class="move-dots"><i></i><i></i></span>MOVE</div>
+        </div>
+        <div class="nav-actions">
+          <a class="ghost-btn" href="/prototipos/move/" target="_blank" rel="noopener">Explorar tienda MOVE</a>
+          <button class="solid-btn" type="button" onclick="enterRole('juan')">Entrar a la demo</button>
+        </div>
+      </nav>
+
+      <div class="access-grid">
+        <div class="access-story">
+          <span class="eyebrow">Demostración de acceso por roles</span>
+          <h1>Una plataforma.<br><span>Cada persona ve sólo lo suyo.</span></h1>
+          <p>Esta versión permite mostrarle a Juan Pablo y al equipo cómo funcionaría MOVE dentro de Núcleo Vivo, sin crear usuarios reales, sin enviar invitaciones y sin conectar datos clínicos.</p>
+          <div class="access-proof">
+            <div class="proof"><small>Acceso</small><b>Un clic por perfil</b><span>Para la presentación no pedimos correo ni contraseña.</span></div>
+            <div class="proof"><small>Permisos</small><b>Vistas diferentes</b><span>Agenda, estrategia, contenidos y comunicación se separan.</span></div>
+            <div class="proof"><small>Seguridad</small><b>Datos simulados</b><span>Ninguna acción afecta calendarios, pacientes o inventarios reales.</span></div>
+          </div>
+        </div>
+
+        <aside class="access-card" aria-labelledby="accessTitle">
+          <div class="access-card-head">
+            <div><span class="eyebrow" style="color:#4f594f;border-color:#d8ddd6">MOVE Gestión</span><h2 id="accessTitle">¿Qué perfil quieres mostrar?</h2><p>Cada acceso abre un panel distinto para explicar permisos y responsabilidades.</p></div>
+            <span class="demo-chip">Demo guiada</span>
+          </div>
+          <div class="role-list">
+            <button class="role-card" data-role="juan" type="button" onclick="enterRole('juan')"><span class="role-avatar">JP</span><span class="role-copy"><b>Juan Pablo</b><span>Propietario MOVE · agenda y atención</span></span><span class="role-arrow">↗</span></button>
+            <button class="role-card" data-role="polibio" type="button" onclick="enterRole('polibio')"><span class="role-avatar">PS</span><span class="role-copy"><b>Polibio</b><span>Estrategia y administración de plataforma</span></span><span class="role-arrow">↗</span></button>
+            <button class="role-card" data-role="leyla" type="button" onclick="enterRole('leyla')"><span class="role-avatar">LL</span><span class="role-copy"><b>Leyla</b><span>Coordinación, productos y contenidos</span></span><span class="role-arrow">↗</span></button>
+            <button class="role-card" data-role="daniel" type="button" onclick="enterRole('daniel')"><span class="role-avatar">DT</span><span class="role-copy"><b>Daniel</b><span>Experiencia, campañas y comunicación</span></span><span class="role-arrow">↗</span></button>
+          </div>
+          <div class="access-note"><i></i><span>En producción cada integrante ingresaría con su propia cuenta. Aquí usamos perfiles simulados únicamente para visualizar el funcionamiento.</span></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="dashboard-page" id="dashboardView" hidden>
+    <div class="dashboard-layout">
+      <aside class="sidebar">
+        <a class="sidebar-brand" href="#" onclick="returnToAccess();return false"><span class="move-dots"><i></i><i></i></span><span><strong>MOVE</strong><small>Gestión · Núcleo Vivo</small></span></a>
+        <div class="side-profile"><span class="role-avatar" id="sideAvatar">JP</span><div><b id="sideName">Juan Pablo</b><span id="sideRole">Propietario MOVE</span></div></div>
+        <nav class="side-nav" id="sideNav" aria-label="Secciones del panel"></nav>
+        <div class="side-bottom"><button type="button" onclick="returnToAccess()">Cambiar perfil</button><small>La demo no guarda acciones ni datos.</small></div>
+      </aside>
+
+      <div class="workspace">
+        <header class="topbar">
+          <div class="crumb"><span>Núcleo Vivo</span> / <b>MOVE Gestión</b> / <span id="crumbRole">Juan Pablo</span></div>
+          <div class="top-actions">
+            <button type="button" onclick="window.open('/prototipos/move/','_blank')">Ver tienda pública ↗</button>
+            <label class="sr-only" for="roleSelect">Cambiar perfil</label>
+            <select id="roleSelect" onchange="enterRole(this.value)">
+              <option value="juan">Juan Pablo</option>
+              <option value="polibio">Polibio</option>
+              <option value="leyla">Leyla</option>
+              <option value="daniel">Daniel</option>
+            </select>
+          </div>
+        </header>
+
+        <main class="workspace-main">
+          <div class="welcome">
+            <div><small id="welcomeKicker">Vista clínica y operativa</small><h1 id="welcomeTitle">Hola, Juan Pablo.</h1><p id="welcomeText">Aquí ves la agenda, las solicitudes de atención y el estado de las derivaciones, sin mezclarlo con las tareas de comunicación del equipo.</p></div>
+            <div class="datebox"><small>Presentación</small><b>Demo activa</b><span>Sin conexión a datos reales</span></div>
+          </div>
+          <div id="dashboardContent"></div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal" id="detailModal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div class="modal-head"><div><span class="eyebrow" style="color:#536054;border-color:#d8ddd6">Detalle simulado</span><h2 id="modalTitle">Solicitud de atención</h2><p style="margin:0;color:#6d756e">Esta información es ficticia y sólo ilustra el flujo.</p></div><button type="button" onclick="closeModal()" aria-label="Cerrar">×</button></div>
+      <div class="modal-grid" id="modalFields"></div>
+      <div class="modal-actions"><button type="button" onclick="closeModal()">Cerrar</button><button class="primary" type="button" onclick="demoAction('Solicitud marcada para revisión')">Marcar para revisión</button></div>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const roles = {
+    juan: {
+      name:'Juan Pablo', initials:'JP', role:'Propietario MOVE · responsable clínico', kicker:'Vista clínica y operativa',
+      title:'Hola, Juan Pablo.', text:'Aquí ves la agenda, las solicitudes de atención y el estado de las derivaciones, sin mezclarlo con las tareas de comunicación del equipo.',
+      nav:['Resumen','Agenda','Solicitudes','Derivaciones','Pacientes','Stock'],
+      render: renderJuan
+    },
+    polibio: {
+      name:'Polibio', initials:'PS', role:'Estrategia · administración de plataforma', kicker:'Vista estratégica y comercial',
+      title:'Hola, Polibio.', text:'Este panel resume negocio, conversión, catálogo y funcionamiento de la IA. Los documentos clínicos permanecen fuera de esta vista.',
+      nav:['Resumen','Ventas','MOVE Select','Catálogo','Equipo','Configuración'],
+      render: renderPolibio
+    },
+    leyla: {
+      name:'Leyla', initials:'LL', role:'Coordinación · productos y contenidos', kicker:'Vista de coordinación y contenidos',
+      title:'Hola, Leyla.', text:'Aquí se organizan productos, guías, contenidos y avances. La información clínica de pacientes no aparece en este perfil.',
+      nav:['Resumen','Productos','Guías','Contenidos','Calendario','Aprobaciones'],
+      render: renderLeyla
+    },
+    daniel: {
+      name:'Daniel', initials:'DT', role:'Experiencia · campañas y comunicación', kicker:'Vista creativa y de comunicación',
+      title:'Hola, Daniel.', text:'Este espacio concentra piezas visuales, campañas y mensajes comerciales. No incluye agenda clínica ni documentos de salud.',
+      nav:['Resumen','Campañas','Fotografías','Videos','Mensajes','Aprobaciones'],
+      render: renderDaniel
+    }
+  };
+  let currentRole='juan';
+
+  function enterRole(id){
+    currentRole=id;
+    const r=roles[id];
+    document.getElementById('accessView').hidden=true;
+    document.getElementById('dashboardView').hidden=false;
+    document.getElementById('roleSelect').value=id;
+    document.getElementById('sideAvatar').textContent=r.initials;
+    document.getElementById('sideAvatar').style.background=id==='polibio'?'#08285b':id==='leyla'?'#542b50':id==='daniel'?'#61311e':'#172419';
+    document.getElementById('sideName').textContent=r.name;
+    document.getElementById('sideRole').textContent=r.role;
+    document.getElementById('crumbRole').textContent=r.name;
+    document.getElementById('welcomeKicker').textContent=r.kicker;
+    document.getElementById('welcomeTitle').textContent=r.title;
+    document.getElementById('welcomeText').textContent=r.text;
+    const nav=document.getElementById('sideNav');
+    nav.innerHTML=r.nav.map((n,i)=>`<button type="button" class="${i===0?'active':''}" onclick="selectNav(this,'${n.replace(/'/g,"\\'")}')"><span>${n}</span></button>`).join('');
+    r.render();
+    window.scrollTo({top:0,behavior:'auto'});
+  }
+
+  function returnToAccess(){
+    document.getElementById('dashboardView').hidden=true;
+    document.getElementById('accessView').hidden=false;
+    window.scrollTo({top:0,behavior:'auto'});
+  }
+
+  function selectNav(btn,label){
+    document.querySelectorAll('#sideNav button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    if(label==='Resumen'){roles[currentRole].render();return;}
+    document.getElementById('dashboardContent').innerHTML=`<section class="panel empty-panel"><div><span class="eyebrow" style="color:#536054;border-color:#d8ddd6">Módulo demostrativo</span><h2>${label}</h2><p>En la versión productiva, esta sección se conectaría a los permisos y datos correspondientes al perfil de ${roles[currentRole].name}. Para esta presentación mostramos solamente su ubicación y propósito.</p><button type="button" onclick="roles[currentRole].render()">Volver al resumen</button></div></section>`;
+  }
+
+  function kpis(items){return `<div class="kpi-grid">${items.map(x=>`<article class="kpi"><small>${x.label}</small><strong>${x.value}</strong><span class="${x.trend?'trend':''}">${x.note}</span></article>`).join('')}</div>`}
+
+  function renderJuan(){
+    document.getElementById('dashboardContent').innerHTML=
+      `<div class="notice"><i></i><div><b>Vista de demostración.</b>Los nombres, horarios, derivaciones y estados son ficticios. En el sistema real sólo Juan Pablo y profesionales autorizados podrían abrir antecedentes clínicos.</div></div>`+
+      kpis([
+        {label:'Atenciones de hoy',value:'5',note:'3 presenciales · 2 online'},
+        {label:'Solicitudes nuevas',value:'8',note:'3 pendientes de revisar',trend:true},
+        {label:'Derivaciones recibidas',value:'6',note:'5 listas · 1 incompleta'},
+        {label:'Ocupación semanal',value:'74%',note:'+12% respecto de la semana anterior',trend:true}
+      ])+
+      `<div class="content-grid">
+        <section class="panel"><div class="panel-head"><div><h2>Agenda de hoy</h2><p>Horarios y modalidad de cada atención.</p></div><button type="button" onclick="demoAction('Vista semanal abierta en la demo')">Ver semana</button></div>
+          <div class="appointments">
+            ${appointment('09:00','Presencial','Camila R.','Rodilla · 1ª sesión','Confirmada','ok')}
+            ${appointment('10:20','Online','Martín A.','Movilidad de hombro','Orden por revisar','pending')}
+            ${appointment('12:00','Presencial','Sofía M.','Seguimiento · sesión 4','Confirmada','ok')}
+            ${appointment('15:30','Online','Paula C.','Orientación inicial','Pendiente','review')}
+          </div>
+        </section>
+        <aside class="panel dark"><div class="panel-head"><div><h2>Requieren tu atención</h2><p>Acciones clínicas u operativas.</p></div></div>
+          <div class="action-list">
+            ${action('Derivación','Revisar orden médica','Martín A. · archivo recibido','openRequest()')}
+            ${action('Agenda','Confirmar modalidad online','Paula C. · jueves 15:30',"demoAction('Modalidad confirmada en la demo')")}
+            ${action('Stock','Rodillera talla M bajo mínimo','Quedan 3 unidades',"demoAction('Alerta enviada a stock')")}
+          </div>
+        </aside>
+      </div>`;
+  }
+
+  function appointment(time,mode,name,detail,status,cls){return `<article class="appointment"><div class="appointment-time"><b>${time}</b><span>${mode}</span></div><div><h3>${name}</h3><p>${detail}</p></div><span class="status ${cls}">${status}</span></article>`}
+  function action(type,title,detail,onclick){return `<article class="action-card"><div><small>${type}</small><b>${title}</b><span>${detail}</span></div><button type="button" onclick="${onclick}">Abrir</button></article>`}
+
+  function renderPolibio(){
+    document.getElementById('dashboardContent').innerHTML=
+      `<div class="notice"><i></i><div><b>Separación de responsabilidades.</b>Esta vista muestra indicadores comerciales y técnicos. No permite abrir órdenes médicas, fichas ni notas de atención.</div></div>`+
+      kpis([
+        {label:'Ventas demostrativas',value:'$1,84 M',note:'+18% en el período',trend:true},
+        {label:'Conversión tienda',value:'3,7%',note:'Meta inicial: 4,2%'},
+        {label:'Uso de MOVE Select',value:'412',note:'Sesiones guiadas este mes',trend:true},
+        {label:'Ticket promedio',value:'$27.840',note:'+8% por kits',trend:true}
+      ])+
+      `<div class="content-grid">
+        <section class="panel"><div class="panel-head"><div><h2>Rendimiento comercial</h2><p>Demostración de ventas por semana.</p></div><button type="button" onclick="demoAction('Reporte exportado en la demo')">Exportar</button></div>
+          <div class="chart-wrap">${[42,57,49,72,66,86,78,94].map((h,i)=>`<div class="bar-col"><div class="bar" style="height:${h}%"></div><span>S${i+1}</span></div>`).join('')}</div>
+        </section>
+        <aside class="panel"><div class="panel-head"><div><h2>Embudo MOVE Select</h2><p>Desde la consulta hasta la acción.</p></div></div>
+          <div class="funnel"><div class="funnel-step"><div><small>Inician orientación</small><b>Necesidad expresada</b></div><strong>412</strong></div><div class="funnel-step"><div><small>Reciben ruta</small><b>Recomendación completa</b></div><strong>338</strong></div><div class="funnel-step"><div><small>Agregan producto</small><b>Carrito</b></div><strong>106</strong></div><div class="funnel-step"><div><small>Compran o agendan</small><b>Conversión</b></div><strong>43</strong></div></div>
+        </aside>
+      </div>`;
+  }
+
+  function renderLeyla(){
+    document.getElementById('dashboardContent').innerHTML=
+      `<div class="notice"><i></i><div><b>Vista no clínica.</b>Leyla puede coordinar productos, guías y publicaciones, pero no acceder a derivaciones ni antecedentes de pacientes.</div></div>`+
+      kpis([
+        {label:'Productos revisados',value:'36/50',note:'14 pendientes'},
+        {label:'Guías aprobadas',value:'12',note:'+4 esta semana',trend:true},
+        {label:'Contenidos en proceso',value:'9',note:'3 requieren validación'},
+        {label:'Avance general',value:'72%',note:'Piloto próximo a revisión',trend:true}
+      ])+
+      `<div class="content-grid">
+        <section class="panel"><div class="panel-head"><div><h2>Flujo de contenidos</h2><p>Tareas y responsables del piloto MOVE.</p></div><button type="button" onclick="demoAction('Nueva tarea creada en la demo')">Nueva tarea</button></div>
+          <div class="task-list">
+            ${task(true,'Revisar descripción de rodilleras','Validar lenguaje claro y no diagnóstico','Hoy')}
+            ${task(false,'Completar guía de selección de bandas','Coordinar revisión con Juan Pablo','Mañana')}
+            ${task(false,'Aprobar preguntas frecuentes de agenda','Revisar derivación, modalidad y privacidad','Vie 4')}
+            ${task(false,'Ordenar catálogo inicial','Priorizar 20 SKU para el piloto','Lun 7')}
+          </div>
+        </section>
+        <aside class="panel dark"><div class="panel-head"><div><h2>Próximas aprobaciones</h2><p>Contenido antes de publicar.</p></div></div>
+          <div class="action-list">
+            ${action('Guía','¿Qué rodillera elegir?','Versión 2 · revisión técnica',"demoAction('Guía aprobada en la demo')")}
+            ${action('Producto','Foam roller 33 cm','Ficha comercial completa',"demoAction('Ficha enviada a publicación')")}
+            ${action('Agenda','Texto de consentimiento','Requiere validación final',"demoAction('Documento enviado a revisión')")}
+          </div>
+        </aside>
+      </div>`;
+  }
+
+  function task(done,title,detail,date){return `<article class="task ${done?'done':''}"><span class="task-check">${done?'✓':''}</span><div><h3>${title}</h3><p>${detail}</p></div><time>${date}</time></article>`}
+
+  function renderDaniel(){
+    document.getElementById('dashboardContent').innerHTML=
+      `<div class="notice"><i></i><div><b>Vista creativa.</b>Daniel trabaja con imágenes, videos, mensajes y campañas. No ve agenda clínica, archivos médicos ni datos personales de pacientes.</div></div>`+
+      kpis([
+        {label:'Piezas en campaña',value:'14',note:'6 activas · 8 programadas'},
+        {label:'Videos pendientes',value:'5',note:'2 requieren locución'},
+        {label:'Interacciones',value:'8,4 k',note:'+22% en la demo',trend:true},
+        {label:'Aprobaciones',value:'7',note:'3 listas para publicar',trend:true}
+      ])+
+      `<div class="content-grid">
+        <section class="panel"><div class="panel-head"><div><h2>Biblioteca visual</h2><p>Piezas y campañas demostrativas.</p></div><button type="button" onclick="demoAction('Archivo cargado en la demo')">Subir pieza</button></div>
+          <div class="asset-grid"><article class="asset"><div><b>Vuelve a moverte</b><span>Campaña principal · aprobada</span></div></article><article class="asset"><div><b>MOVE Select</b><span>Reel explicativo · edición</span></div></article><article class="asset"><div><b>Rodilla en movimiento</b><span>Kit destacado · revisión</span></div></article><article class="asset"><div><b>Retiro en Villarrica</b><span>Historia · programada</span></div></article></div>
+        </section>
+        <aside class="panel dark"><div class="panel-head"><div><h2>Mensajes por completar</h2><p>Comerciales, claros y responsables.</p></div></div>
+          <div class="action-list">
+            ${action('Campaña','Lanzamiento MOVE Select','Definir versión de 15 segundos',"demoAction('Campaña abierta en la demo')")}
+            ${action('Producto','Kit Rodilla','Revisar fotografía y jerarquía',"demoAction('Pieza marcada como revisada')")}
+            ${action('Marca','Sistema de mensajes','Alinear voz MOVE y Núcleo Vivo',"demoAction('Documento abierto en la demo')")}
+          </div>
+        </aside>
+      </div>`;
+  }
+
+  function openRequest(){
+    document.getElementById('modalTitle').textContent='Solicitud de atención · Martín A.';
+    document.getElementById('modalFields').innerHTML=`
+      <div class="modal-field"><small>Estado</small><b>Orden médica por revisar</b></div>
+      <div class="modal-field"><small>Modalidad solicitada</small><b>Online</b></div>
+      <div class="modal-field"><small>Zona general</small><b>Hombro</b></div>
+      <div class="modal-field"><small>Profesional derivante</small><b>Traumatología</b></div>
+      <div class="modal-field"><small>Horario</small><b>Hoy · 10:20</b></div>
+      <div class="modal-field"><small>Documento</small><b>Archivo ficticio recibido</b></div>`;
+    document.getElementById('detailModal').hidden=false;
+  }
+  function closeModal(){document.getElementById('detailModal').hidden=true}
+  function demoAction(message){closeModal();const t=document.getElementById('toast');t.textContent=message+' · no se guardaron cambios';t.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove('show'),2600)}
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+</script>
+</body>
+</html>
