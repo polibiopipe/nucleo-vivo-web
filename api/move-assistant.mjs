@@ -4,7 +4,7 @@ const allow = createLimiter();
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  if (req.method === 'GET') return res.status(200).json({ service: 'MOVE Select', version: '20260906-gemini-direct', provider: 'google-gemini', generation: 'POST', demo: true });
+  if (req.method === 'GET') return res.status(200).json({ service: 'MOVE Select', version: '20260906-gemini-direct', provider: 'google-gemini', configured: Boolean(process.env.GEMINI_API_KEY?.trim() || process.env.GOOGLE_GENERATIVE_AI_API_KEY?.trim()), generation: 'POST', demo: true });
   if (req.method !== 'POST') { res.setHeader('Allow','GET, POST'); return res.status(405).json({ error: 'METHOD_NOT_ALLOWED' }); }
   if (!isAllowedOrigin(req.headers.origin, process.env.VERCEL_URL) || req.headers['sec-fetch-site'] === 'cross-site') return res.status(403).json({ error: 'ORIGIN_NOT_ALLOWED' });
   if (!String(req.headers['content-type'] || '').startsWith('application/json')) return res.status(415).json({ error: 'JSON_REQUIRED' });
