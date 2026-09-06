@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0d0b" />
+  <title>MOVE · Prototipo interactivo | Núcleo Vivo</title>
+  <meta name="description" content="MOVE: ortopedia, recuperación, movilidad y entrenamiento, seleccionados con criterio profesional." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#0a0d0b;
+      --ink-2:#151a16;
+      --ivory:#f4f0e7;
+      --paper:#fbf9f4;
+      --line:rgba(10,13,11,.13);
+      --lime:#d9ff37;
+      --lime-deep:#a7c919;
+      --sage:#789176;
+      --sage-pale:#dce5d7;
+      --orange:#ef6b3b;
+      --muted:#697069;
+      --white:#fff;
+      --shadow:0 28px 80px rgba(8,12,9,.13);
+      --radius:28px;
+      --ease:cubic-bezier(.2,.8,.2,1);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--ink)}
+    body{margin:0;color:var(--ink);background:var(--ivory);font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
+    body.locked{overflow:hidden}
+    button,input{font:inherit}
+    button{color:inherit}
+    a{color:inherit}
+    img{max-width:100%;display:block}
+    ::selection{background:var(--lime);color:var(--ink)}
+    .wrap{width:min(1440px,calc(100% - 48px));margin-inline:auto}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+    /* header */
+    .utility{height:31px;background:var(--lime);display:flex;align-items:center;position:relative;z-index:110;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.105em}
+    .utility .wrap{display:flex;justify-content:space-between;gap:20px;align-items:center}
+    .utility .soft{font-weight:600;opacity:.74}
+    .header{height:76px;position:fixed;top:31px;left:0;right:0;z-index:100;color:#fff;transition:background .35s var(--ease),color .35s var(--ease),transform .35s var(--ease),box-shadow .35s var(--ease)}
+    .header.scrolled{background:rgba(244,240,231,.9);color:var(--ink);backdrop-filter:blur(18px) saturate(140%);box-shadow:0 1px 0 rgba(10,13,11,.09)}
+    .header.hidden{transform:translateY(-110%)}
+    .nav{height:100%;display:grid;grid-template-columns:200px 1fr auto;align-items:center;gap:30px}
+    .logo{display:flex;align-items:center;text-decoration:none;font-family:"Manrope",sans-serif;font-size:29px;font-weight:800;letter-spacing:-.075em;position:relative;width:max-content}
+    .logo-dots{display:flex;gap:3px;margin-right:8px;transform:translateY(1px)}
+    .logo-dots i{display:block;width:13px;height:13px;border-radius:50%;background:var(--lime)}
+    .logo-dots i:last-child{background:var(--orange)}
+    .logo sup{font-size:7px;letter-spacing:.08em;margin-left:5px;transform:translateY(-9px);font-weight:700}
+    .menu{display:flex;justify-content:center;align-items:center;gap:34px}
+    .menu a{text-decoration:none;font-size:13px;font-weight:600;position:relative;opacity:.83}
+    .menu a::after{content:"";position:absolute;left:0;right:100%;bottom:-8px;height:1px;background:currentColor;transition:right .25s var(--ease)}
+    .menu a:hover::after{right:0}
+    .nav-actions{display:flex;gap:8px;align-items:center}
+    .nav-btn{height:42px;border:1px solid currentColor;background:rgba(255,255,255,.09);border-radius:999px;padding:0 15px;display:flex;align-items:center;gap:8px;cursor:pointer;backdrop-filter:blur(12px);transition:transform .2s,background .2s}
+    .header.scrolled .nav-btn{background:rgba(255,255,255,.58);border-color:rgba(10,13,11,.14)}
+    .nav-btn:hover{transform:translateY(-2px)}
+    .nav-btn svg{width:17px;height:17px}
+    .bag-count{display:grid;place-items:center;min-width:21px;height:21px;border-radius:999px;background:var(--lime);color:var(--ink);font-size:11px;font-weight:800}
+
+    /* hero */
+    .hero{min-height:100svh;position:relative;background:var(--ink);color:#fff;overflow:hidden;isolation:isolate}
+    .hero-media{position:absolute;inset:0;z-index:-3;overflow:hidden}
+    .hero-media img{width:100%;height:100%;object-fit:cover;object-position:center 50%;filter:saturate(.85) contrast(1.06);transform:scale(1.025);transition:transform 1.4s var(--ease)}
+    .hero::after{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,rgba(4,7,5,.97) 0%,rgba(4,7,5,.86) 32%,rgba(4,7,5,.23) 67%,rgba(4,7,5,.18) 100%),linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.47));}
+    .hero::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at calc(76% + var(--mx,0px)) calc(34% + var(--my,0px)),rgba(217,255,55,.22),transparent 22%),linear-gradient(120deg,transparent 0 63%,rgba(217,255,55,.07) 63% 64%,transparent 64%);mix-blend-mode:screen;pointer-events:none}
+    .hero-grid{min-height:100svh;padding-top:150px;padding-bottom:72px;display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:40px;align-items:end}
+    .hero-copy{max-width:790px;padding-bottom:10px}
+    .kicker{display:inline-flex;align-items:center;gap:9px;text-transform:uppercase;letter-spacing:.14em;font-size:11px;font-weight:800;color:var(--lime)}
+    .kicker::before{content:"";width:26px;height:2px;background:currentColor;border-radius:999px}
+    .hero h1{font-family:"Manrope",sans-serif;font-size:clamp(53px,6.6vw,105px);line-height:.88;letter-spacing:-.075em;margin:24px 0 24px;max-width:930px;font-weight:700}
+    .hero h1 em{font-family:"Instrument Serif",Georgia,serif;font-weight:400;letter-spacing:-.035em;color:var(--lime)}
+    .hero-lead{font-size:clamp(17px,1.5vw,21px);line-height:1.52;color:rgba(255,255,255,.74);max-width:620px;margin:0 0 30px}
+    .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .btn{height:54px;border-radius:999px;border:1px solid transparent;padding:0 23px;font-weight:800;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;text-decoration:none;transition:transform .22s var(--ease),box-shadow .22s var(--ease),background .22s var(--ease)}
+    .btn:hover{transform:translateY(-3px)}
+    .btn-primary{background:var(--lime);color:var(--ink);box-shadow:0 16px 45px rgba(217,255,55,.18)}
+    .btn-secondary{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.22);color:#fff;backdrop-filter:blur(14px)}
+    .btn-dark{background:var(--ink);color:#fff}
+    .btn-outline{border-color:var(--line);background:transparent}
+    .hero-quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+    .hero-quick button{border:1px solid rgba(255,255,255,.18);background:rgba(7,10,8,.28);color:rgba(255,255,255,.84);padding:9px 13px;border-radius:999px;cursor:pointer;font-size:12px;transition:background .2s,transform .2s}
+    .hero-quick button:hover{background:rgba(255,255,255,.13);transform:translateY(-2px)}
+
+    .hero-product{align-self:end;justify-self:end;width:100%;perspective:1000px;position:relative;transform:translate3d(var(--px,0px),var(--py,0px),0)}
+    .hero-product-card{border-radius:30px;overflow:hidden;background:rgba(246,243,236,.94);color:var(--ink);box-shadow:0 45px 100px rgba(0,0,0,.38);transform:rotateY(-9deg) rotateX(3deg) translateZ(0);transform-style:preserve-3d;transition:transform .55s var(--ease)}
+    .hero-product:hover .hero-product-card{transform:rotateY(-2deg) rotateX(0deg) translateY(-8px)}
+    .hero-product-image{height:260px;position:relative;overflow:hidden;background:#ece7dd}
+    .hero-product-image img{width:100%;height:100%;object-fit:cover}
+    .hero-product-image::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(10,13,11,.35))}
+    .hero-product-rank{position:absolute;left:18px;top:18px;width:45px;height:45px;border-radius:50%;display:grid;place-items:center;background:var(--lime);font-weight:900;z-index:2}
+    .hero-product-body{padding:20px 22px 22px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end}
+    .hero-product-body small{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+    .hero-product-body h2{font-size:24px;line-height:1.04;margin:0;font-family:"Manrope";letter-spacing:-.045em}
+    .hero-product-body strong{font-size:24px;white-space:nowrap}
+    .hero-orbit{position:absolute;width:170px;height:170px;border:1px solid rgba(217,255,55,.45);border-radius:50%;right:-53px;top:-70px;animation:orbit 12s linear infinite;pointer-events:none}
+    .hero-orbit::after{content:"";width:14px;height:14px;background:var(--lime);border-radius:50%;position:absolute;left:16px;top:24px;box-shadow:0 0 28px var(--lime)}
+    @keyframes orbit{to{transform:rotate(360deg)}}
+
+    .trust-dock{position:absolute;left:0;right:0;bottom:0;border-top:1px solid rgba(255,255,255,.14);background:rgba(7,10,8,.44);backdrop-filter:blur(18px);z-index:3}
+    .trust-dock .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+    .trust-item{padding:17px 20px;border-right:1px solid rgba(255,255,255,.12);display:flex;gap:12px;align-items:center;min-height:66px}
+    .trust-item:last-child{border-right:0}
+    .trust-icon{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(217,255,55,.1);color:var(--lime);font-weight:800;flex:0 0 auto}
+    .trust-item b{display:block;font-size:13px}.trust-item span{display:block;font-size:11px;color:rgba(255,255,255,.58);margin-top:3px}
+
+    /* generic */
+    section{position:relative}
+    .section-pad{padding:112px 0}
+    .eyebrow{display:flex;align-items:center;gap:10px;color:var(--sage);text-transform:uppercase;font-size:11px;font-weight:800;letter-spacing:.14em;margin-bottom:16px}
+    .eyebrow::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--lime);box-shadow:12px 0 0 var(--orange);margin-right:8px}
+    .section-title{font-family:"Manrope";font-size:clamp(42px,5.2vw,76px);line-height:.94;letter-spacing:-.065em;margin:0;max-width:930px}
+    .section-title em{font-family:"Instrument Serif",Georgia,serif;font-weight:400;color:var(--sage);letter-spacing:-.035em}
+    .section-lead{font-size:17px;line-height:1.62;color:var(--muted);max-width:620px}
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .75s var(--ease),transform .75s var(--ease)}
+    .reveal.visible{opacity:1;transform:none}
+
+    /* goal selector */
+    .goal-section{background:var(--paper);overflow:hidden}
+    .goal-head{display:grid;grid-template-columns:1.1fr .75fr;gap:40px;align-items:end;margin-bottom:42px}
+    .goal-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}
+    .goal-tab{border:1px solid var(--line);background:transparent;padding:12px 16px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;transition:all .25s var(--ease)}
+    .goal-tab:hover,.goal-tab.active{background:var(--ink);color:#fff;border-color:var(--ink);transform:translateY(-2px)}
+    .goal-stage{display:grid;grid-template-columns:1.05fr .95fr;min-height:660px;border-radius:40px;background:var(--ink);overflow:hidden;box-shadow:var(--shadow)}
+    .goal-visual{position:relative;min-height:620px;overflow:hidden;perspective:1200px}
+    .goal-visual img{width:100%;height:100%;object-fit:cover;transition:opacity .25s,transform .9s var(--ease);transform:scale(1.02)}
+    .goal-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(6,8,7,.68));pointer-events:none}
+    .goal-badge{position:absolute;left:28px;top:28px;z-index:3;background:rgba(10,13,11,.72);color:#fff;border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(12px);padding:11px 14px;border-radius:999px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.12em}
+    .goal-caption{position:absolute;left:30px;right:30px;bottom:28px;z-index:3;color:#fff;display:flex;justify-content:space-between;align-items:end;gap:20px}
+    .goal-caption strong{font-family:"Manrope";font-size:34px;letter-spacing:-.05em;line-height:1}
+    .goal-caption span{font-size:12px;color:rgba(255,255,255,.62);max-width:210px;text-align:right}
+    .goal-content{color:#fff;padding:52px 48px;display:flex;flex-direction:column;justify-content:space-between;background:radial-gradient(circle at 100% 0%,rgba(217,255,55,.12),transparent 40%),var(--ink)}
+    .goal-content .num{font-size:12px;color:var(--lime);font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+    .goal-content h3{font-family:"Manrope";font-size:clamp(40px,4vw,61px);line-height:.96;letter-spacing:-.06em;margin:18px 0 18px}
+    .goal-content>div>p{color:rgba(255,255,255,.65);font-size:16px;line-height:1.58;max-width:520px}
+    .goal-steps{margin:30px 0;display:grid;gap:10px}
+    .goal-step{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+    .goal-step i{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:rgba(217,255,55,.1);color:var(--lime);font-style:normal;font-weight:800;font-size:12px}
+    .goal-step b{font-size:14px}.goal-step span{display:block;font-size:12px;color:rgba(255,255,255,.48);margin-top:3px}
+    .goal-reco{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .mini-product{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:8px;border-radius:18px;cursor:pointer;transition:background .2s,transform .2s}
+    .mini-product:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
+    .mini-product img{width:72px;height:72px;object-fit:cover;border-radius:13px;background:#eee}
+    .mini-product small{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--lime)}
+    .mini-product b{font-size:13px;display:block;margin:4px 0}.mini-product span{font-size:12px;color:rgba(255,255,255,.58)}
+
+    /* bestseller product rail */
+    .bestsellers{background:var(--ivory);overflow:hidden}
+    .section-head-row{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:40px}
+    .section-head-row .section-lead{margin:0}
+    .product-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;perspective:1400px}
+    .product-card{position:relative;border-radius:26px;background:var(--paper);border:1px solid rgba(10,13,11,.08);overflow:hidden;min-width:0;transform-style:preserve-3d;transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s var(--ease);box-shadow:0 9px 28px rgba(10,13,11,.05)}
+    .product-card:hover{box-shadow:0 28px 68px rgba(10,13,11,.14);border-color:rgba(10,13,11,.15)}
+    .product-media{aspect-ratio:1/.9;background:#e9e5db;position:relative;overflow:hidden}
+    .product-media img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
+    .product-card:hover .product-media img{transform:scale(1.055)}
+    .rank-pill{position:absolute;left:13px;top:13px;z-index:3;border-radius:999px;background:rgba(10,13,11,.86);backdrop-filter:blur(8px);color:#fff;padding:8px 10px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .rank-pill strong{color:var(--lime)}
+    .wish{position:absolute;right:13px;top:13px;z-index:3;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.88);display:grid;place-items:center;font-size:19px;cursor:pointer;transition:transform .2s}
+    .wish:hover{transform:scale(1.08)}
+    .product-body{padding:17px 18px 18px}
+    .product-cat{font-size:10px;text-transform:uppercase;letter-spacing:.11em;color:var(--sage);font-weight:800}
+    .product-body h3{font-family:"Manrope";font-size:20px;line-height:1.06;letter-spacing:-.045em;margin:8px 0 10px;min-height:43px}
+    .product-reason{font-size:12px;color:var(--muted);line-height:1.38;min-height:34px}
+    .product-meta{display:flex;gap:7px;flex-wrap:wrap;margin:13px 0 14px}
+    .product-meta span{font-size:10px;background:#edf1e8;border-radius:999px;padding:6px 8px;color:#4b564c}
+    .product-buy{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--line);padding-top:13px}
+    .product-price small{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:#8a908a;margin-bottom:3px}
+    .product-price strong{font-size:21px}
+    .add-btn{width:42px;height:42px;border-radius:50%;border:0;background:var(--ink);color:#fff;cursor:pointer;font-size:22px;display:grid;place-items:center;transition:transform .2s,background .2s}
+    .add-btn:hover{background:var(--lime);color:var(--ink);transform:rotate(8deg) scale(1.07)}
+    .product-rail-footer{display:flex;justify-content:center;margin-top:32px}
+
+    /* merchandising scene */
+    .scene-section{background:var(--ink);color:#fff;padding:20px 0 100px}
+    .scene{position:relative;min-height:760px;border-radius:42px;overflow:hidden;background:#eee;box-shadow:0 38px 100px rgba(0,0,0,.3)}
+    .scene>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .scene::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,10,8,.88) 0%,rgba(7,10,8,.58) 37%,rgba(7,10,8,.04) 70%),linear-gradient(180deg,transparent 55%,rgba(7,10,8,.42));}
+    .scene-copy{position:absolute;z-index:3;left:52px;top:56px;max-width:520px}
+    .scene-copy .eyebrow{color:var(--lime)}
+    .scene-copy h2{font-family:"Manrope";font-size:clamp(48px,5vw,76px);line-height:.91;letter-spacing:-.065em;margin:0 0 20px}
+    .scene-copy h2 em{font-family:"Instrument Serif";font-weight:400;color:var(--lime)}
+    .scene-copy p{color:rgba(255,255,255,.68);font-size:16px;line-height:1.55;max-width:450px}
+    .bundle-bar{position:absolute;z-index:4;left:52px;bottom:50px;width:min(620px,calc(100% - 104px));background:rgba(248,246,240,.94);color:var(--ink);backdrop-filter:blur(18px);border-radius:24px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:20px;box-shadow:0 24px 60px rgba(0,0,0,.2)}
+    .bundle-bar small{display:block;text-transform:uppercase;letter-spacing:.1em;color:var(--sage);font-weight:800;font-size:10px}.bundle-bar b{display:block;font-size:18px;margin:5px 0 3px}.bundle-bar span{font-size:12px;color:var(--muted)}
+    .bundle-price{display:flex;align-items:center;gap:12px;white-space:nowrap}.bundle-price strong{font-size:26px}.bundle-price del{font-size:13px;color:#969b96}.bundle-price button{height:44px;border:0;border-radius:999px;background:var(--lime);font-weight:800;padding:0 17px;cursor:pointer}
+    .hotspot{position:absolute;z-index:5;width:34px;height:34px;border-radius:50%;background:var(--lime);border:7px solid rgba(255,255,255,.78);box-shadow:0 0 0 0 rgba(217,255,55,.55);animation:pulse 2.4s infinite;cursor:pointer}
+    .hotspot::after{content:attr(data-label);position:absolute;left:50%;bottom:43px;transform:translateX(-50%) translateY(7px);background:var(--ink);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 11px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+    .hotspot:hover::after{opacity:1;transform:translateX(-50%) translateY(0)}
+    .hotspot.h1{left:20%;top:55%}.hotspot.h2{left:72%;top:48%}.hotspot.h3{left:62%;top:76%}
+    @keyframes pulse{70%{box-shadow:0 0 0 18px rgba(217,255,55,0)}100%{box-shadow:0 0 0 0 rgba(217,255,55,0)}}
+
+    /* tiered bundles */
+    .tiers{background:var(--paper)}
+    .tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:44px;align-items:stretch}
+    .tier-card{border-radius:30px;border:1px solid var(--line);background:var(--ivory);padding:26px;position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:540px;transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+    .tier-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+    .tier-card.featured{background:var(--ink);color:#fff;transform:translateY(-14px);box-shadow:var(--shadow);border-color:var(--ink)}
+    .tier-card.featured:hover{transform:translateY(-20px)}
+    .tier-label{font-size:10px;text-transform:uppercase;letter-spacing:.11em;font-weight:800;color:var(--sage)}
+    .tier-card.featured .tier-label{color:var(--lime)}
+    .tier-card h3{font-family:"Manrope";font-size:31px;letter-spacing:-.05em;margin:8px 0 8px}.tier-card>p{color:var(--muted);font-size:14px;line-height:1.5}.tier-card.featured>p{color:rgba(255,255,255,.64)}
+    .tier-media{height:210px;border-radius:20px;overflow:hidden;margin:18px 0;background:#e8e4da;transform:translateZ(0)}
+    .tier-media img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}.tier-card:hover .tier-media img{transform:scale(1.055)}
+    .tier-list{display:grid;gap:10px;margin:0 0 22px;padding:0;list-style:none;font-size:13px;color:var(--muted)}
+    .tier-card.featured .tier-list{color:rgba(255,255,255,.76)}
+    .tier-list li::before{content:"✓";display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--sage-pale);color:#314033;font-weight:800;margin-right:8px;font-size:11px}.tier-card.featured .tier-list li::before{background:rgba(217,255,55,.15);color:var(--lime)}
+    .tier-bottom{margin-top:auto;display:flex;justify-content:space-between;gap:15px;align-items:end}.tier-price small{display:block;text-transform:uppercase;letter-spacing:.09em;font-size:9px;color:#8a908a}.tier-price strong{font-size:29px}.tier-card.featured .tier-price small{color:rgba(255,255,255,.45)}
+    .tier-card .btn{height:45px;padding:0 16px;font-size:12px}.tier-card.featured .btn{background:var(--lime);color:var(--ink)}
+    .recommend{position:absolute;right:18px;top:18px;background:var(--lime);color:var(--ink);padding:8px 10px;border-radius:999px;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.1em}
+
+    /* editorial */
+    .stories{background:var(--ivory)}
+    .story-grid{display:grid;grid-template-columns:1.25fr .75fr .75fr;grid-auto-rows:520px;gap:14px;margin-top:42px}
+    .story-card{position:relative;border-radius:30px;overflow:hidden;color:#fff;isolation:isolate;cursor:pointer;box-shadow:0 12px 36px rgba(10,13,11,.07)}
+    .story-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .8s var(--ease)}
+    .story-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.78));z-index:-1}
+    .story-card:hover img{transform:scale(1.055)}
+    .story-content{position:absolute;left:24px;right:24px;bottom:24px}.story-content small{text-transform:uppercase;letter-spacing:.11em;font-size:10px;color:var(--lime);font-weight:800}.story-content h3{font-family:"Manrope";font-size:31px;line-height:1;letter-spacing:-.05em;margin:8px 0}.story-content p{font-size:13px;color:rgba(255,255,255,.66);max-width:420px}
+
+    /* local / service */
+    .local{background:var(--ink);color:#fff;overflow:hidden}
+    .local-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:14px;align-items:stretch}
+    .local-copy{padding:52px;border-radius:36px;background:radial-gradient(circle at 12% 0%,rgba(217,255,55,.12),transparent 42%),#111612}
+    .local-copy .section-title{font-size:clamp(43px,4.8vw,68px)}
+    .local-copy .section-lead{color:rgba(255,255,255,.62)}
+    .local-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+    .local-visual{border-radius:36px;background:var(--lime);padding:22px;display:grid;grid-template-columns:1.1fr .9fr;gap:12px;color:var(--ink);min-height:540px;overflow:hidden;position:relative}
+    .map-card{background:var(--paper);border-radius:24px;padding:23px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+    .map-card::after{content:"";position:absolute;width:300px;height:300px;border:58px solid rgba(10,13,11,.06);border-radius:50%;right:-120px;bottom:-140px}
+    .map-card h3{font-family:"Manrope";font-size:32px;line-height:1;letter-spacing:-.05em;margin:12px 0}.map-card p{font-size:13px;color:var(--muted);max-width:270px}.map-card strong{font-size:14px}
+    .service-stack{display:grid;gap:12px}.service-card{border-radius:24px;background:var(--ink);color:#fff;padding:22px;display:flex;flex-direction:column;justify-content:space-between}.service-card.light{background:#eef2e9;color:var(--ink)}.service-card small{text-transform:uppercase;letter-spacing:.11em;color:var(--lime);font-size:10px;font-weight:800}.service-card.light small{color:var(--sage)}.service-card h4{font-size:22px;line-height:1.05;margin:9px 0}.service-card p{font-size:12px;color:rgba(255,255,255,.58)}.service-card.light p{color:var(--muted)}
+
+    /* catalog */
+    .catalog{background:var(--paper)}
+    .catalog-entry{border:1px solid var(--line);background:var(--ivory);border-radius:36px;padding:34px;margin-top:42px}
+    .category-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .category-tile{min-height:190px;border-radius:24px;padding:22px;position:relative;overflow:hidden;cursor:pointer;border:0;text-align:left;background:#dfe7da;transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+    .category-tile:nth-child(2){background:#efe4d9}.category-tile:nth-child(3){background:#171c18;color:#fff}
+    .category-tile:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(10,13,11,.12)}
+    .category-tile strong{font-family:"Manrope";font-size:25px;letter-spacing:-.045em;display:block;position:relative;z-index:2}.category-tile span{font-size:12px;color:var(--muted);position:relative;z-index:2}.category-tile:nth-child(3) span{color:rgba(255,255,255,.58)}.category-tile b{position:absolute;right:18px;bottom:12px;font-family:"Instrument Serif";font-size:76px;font-weight:400;opacity:.18}
+    .catalog-controls{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:25px 0 18px;flex-wrap:wrap}
+    .catalog-search{flex:1;min-width:260px;display:flex;align-items:center;background:#fff;border:1px solid var(--line);border-radius:999px;padding:0 17px;height:48px}.catalog-search input{width:100%;border:0;outline:0;background:transparent;padding:0 10px}
+    .filters{display:flex;gap:7px;flex-wrap:wrap}.filter{height:42px;border:1px solid var(--line);background:transparent;border-radius:999px;padding:0 14px;cursor:pointer;font-size:12px;font-weight:700}.filter.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .catalog-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-height:0;overflow:hidden;opacity:0;transition:max-height 1s var(--ease),opacity .5s var(--ease),margin .5s var(--ease);margin-top:0}
+    .catalog-grid.open{max-height:16000px;opacity:1;margin-top:20px}
+    .catalog-card{background:#fff;border:1px solid rgba(10,13,11,.08);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+    .catalog-card img{width:100%;aspect-ratio:1.2/1;object-fit:cover;background:#e8e4da}.catalog-card-body{padding:14px;display:flex;flex-direction:column;flex:1}.catalog-card .cat{font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--sage);font-weight:800}.catalog-card h4{font-family:"Manrope";font-size:16px;line-height:1.08;letter-spacing:-.035em;margin:7px 0 8px}.catalog-card p{font-size:11px;line-height:1.35;color:var(--muted);margin:0 0 12px}.catalog-card-bottom{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:10px}.catalog-card-bottom strong{font-size:17px}.catalog-card-bottom button{width:35px;height:35px;border-radius:50%;border:0;background:var(--ink);color:#fff;cursor:pointer;font-size:18px}
+    .catalog-toggle{margin-top:20px;display:flex;justify-content:center}
+
+    /* footer */
+    footer{background:#070a08;color:#fff;padding:72px 0 24px}
+    .footer-top{display:grid;grid-template-columns:1.3fr repeat(3,.65fr);gap:34px;padding-bottom:54px}.footer-logo{font-family:"Manrope";font-size:64px;letter-spacing:-.08em;font-weight:800}.footer-about{color:rgba(255,255,255,.48);line-height:1.55;max-width:360px}.footer-col h4{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--lime);margin:0 0 16px}.footer-col a{display:block;text-decoration:none;color:rgba(255,255,255,.62);font-size:13px;margin:10px 0}.footer-col a:hover{color:#fff}.footer-bottom{border-top:1px solid rgba(255,255,255,.12);padding-top:20px;display:flex;justify-content:space-between;gap:20px;color:rgba(255,255,255,.38);font-size:11px}
+
+    /* overlays */
+    .floating-help{position:fixed;right:20px;bottom:20px;z-index:80;height:50px;border-radius:999px;border:0;background:var(--lime);color:var(--ink);font-weight:800;padding:0 19px;box-shadow:0 15px 45px rgba(0,0,0,.22);cursor:pointer;display:flex;align-items:center;gap:9px;transition:transform .2s}.floating-help:hover{transform:translateY(-3px)}
+    .backdrop{position:fixed;inset:0;background:rgba(4,7,5,.72);backdrop-filter:blur(9px);z-index:190;opacity:0;pointer-events:none;transition:opacity .3s}.backdrop.open{opacity:1;pointer-events:auto}
+    .drawer{position:fixed;right:0;top:0;bottom:0;width:min(460px,100%);background:var(--paper);z-index:200;transform:translateX(105%);transition:transform .42s var(--ease);padding:26px;display:flex;flex-direction:column;box-shadow:-30px 0 80px rgba(0,0,0,.28)}.drawer.open{transform:none}
+    .drawer-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--line)}.drawer-head h2{font-family:"Manrope";font-size:32px;letter-spacing:-.05em;margin:0}.close{border:1px solid var(--line);width:42px;height:42px;border-radius:50%;background:transparent;cursor:pointer;font-size:24px}
+    .shipping-goal{margin:18px 0;background:#eaf0e4;border-radius:18px;padding:15px}.shipping-goal b{font-size:13px}.meter{height:8px;border-radius:999px;background:#d5ddd0;overflow:hidden;margin:11px 0 7px}.meter span{display:block;height:100%;width:0;background:var(--lime-deep);transition:width .35s}.shipping-goal small{color:var(--muted);font-size:11px}
+    .cart-items{overflow:auto;flex:1}.cart-empty{color:var(--muted);text-align:center;padding:70px 20px}.cart-item{display:grid;grid-template-columns:72px 1fr auto;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);align-items:center}.cart-item img{width:72px;height:72px;object-fit:cover;border-radius:14px;background:#eee}.cart-item b{font-size:13px}.cart-item small{display:block;color:var(--muted);margin-top:4px}.remove{border:0;background:transparent;color:#8f948f;cursor:pointer;font-size:18px}.cart-total{border-top:1px solid var(--line);padding-top:18px}.cart-line{display:flex;justify-content:space-between;gap:20px;margin-bottom:14px}.cart-line strong{font-size:24px}.checkout{width:100%;height:54px;border:0;border-radius:18px;background:var(--lime);font-weight:900;cursor:pointer}
+    .quickview{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%) scale(.96);width:min(930px,calc(100% - 32px));max-height:88vh;overflow:auto;background:var(--paper);z-index:205;border-radius:30px;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s var(--ease);box-shadow:0 40px 120px rgba(0,0,0,.42)}.quickview.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+    .quickview-grid{display:grid;grid-template-columns:1.05fr .95fr}.quickview-media{min-height:560px;background:#e9e5dc}.quickview-media img{width:100%;height:100%;object-fit:cover}.quickview-body{padding:38px;position:relative}.quickview-body .close{position:absolute;right:20px;top:20px}.quickview-body .cat{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--sage);font-weight:800}.quickview-body h2{font-family:"Manrope";font-size:42px;line-height:.98;letter-spacing:-.055em;margin:14px 0}.quickview-body .price{font-size:29px;font-weight:800;margin:20px 0}.quickview-body p{color:var(--muted);line-height:1.55}.quick-benefits{display:grid;gap:10px;margin:22px 0}.quick-benefits div{padding:12px 14px;background:#edf1e8;border-radius:15px;font-size:13px}.quick-actions{display:grid;grid-template-columns:1fr auto;gap:10px}.quick-actions .btn{border-radius:16px}.quick-actions .wish-big{width:54px;border:1px solid var(--line);background:transparent;border-radius:16px;font-size:20px}
+    .search-overlay{position:fixed;inset:0;z-index:210;background:var(--ivory);transform:translateY(-105%);transition:transform .45s var(--ease);padding:42px 0;overflow:auto}.search-overlay.open{transform:none}.search-top{display:flex;justify-content:space-between;align-items:center}.search-top .logo{color:var(--ink)}.search-box-large{max-width:980px;margin:70px auto 26px;display:flex;border-bottom:2px solid var(--ink);align-items:center}.search-box-large input{width:100%;border:0;outline:0;background:transparent;font-family:"Manrope";font-size:clamp(32px,5vw,68px);letter-spacing:-.055em;padding:15px 0}.search-results{max-width:980px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.search-result{background:#fff;border-radius:20px;padding:10px;display:grid;grid-template-columns:80px 1fr;gap:12px;align-items:center;cursor:pointer}.search-result img{width:80px;height:80px;object-fit:cover;border-radius:14px}.search-result b{font-size:13px}.search-result span{font-size:12px;color:var(--muted);display:block;margin-top:4px}.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,120px);z-index:300;background:var(--ink);color:#fff;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:13px 17px;font-size:12px;box-shadow:0 14px 50px rgba(0,0,0,.28);transition:transform .35s var(--ease)}.toast.show{transform:translate(-50%,0)}
+
+    @media(max-width:1180px){
+      .hero-grid{grid-template-columns:1fr 340px}.menu{gap:20px}.product-grid{grid-template-columns:repeat(3,1fr)}.catalog-grid{grid-template-columns:repeat(3,1fr)}
+      .goal-stage{grid-template-columns:1fr 1fr}.story-grid{grid-template-columns:1.1fr .9fr;grid-auto-rows:460px}.story-card:last-child{grid-column:span 2}.local-grid{grid-template-columns:1fr}.local-visual{min-height:460px}
+    }
+    @media(max-width:900px){
+      .wrap{width:min(100% - 30px,1440px)}.header{top:0}.utility{display:none}.nav{grid-template-columns:1fr auto}.menu{display:none}.nav-actions .search-label,.nav-actions .bag-label{display:none}
+      .hero-grid{grid-template-columns:1fr;padding-top:130px;align-items:end}.hero-product{display:none}.hero-copy{padding-bottom:86px}.hero::after{background:linear-gradient(90deg,rgba(4,7,5,.92),rgba(4,7,5,.46)),linear-gradient(180deg,rgba(0,0,0,.06),rgba(0,0,0,.66))}.trust-dock .wrap{grid-template-columns:1fr 1fr}.trust-item:nth-child(2){border-right:0}.trust-item:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.12)}
+      .section-pad{padding:82px 0}.goal-head{grid-template-columns:1fr}.goal-stage{grid-template-columns:1fr}.goal-visual{min-height:500px}.goal-content{padding:42px 30px}.product-grid{grid-template-columns:repeat(2,1fr)}.scene{min-height:720px}.scene-copy{left:30px;top:40px}.bundle-bar{left:30px;bottom:30px;width:calc(100% - 60px)}.tier-grid{grid-template-columns:1fr}.tier-card.featured{transform:none}.story-grid{grid-template-columns:1fr;grid-auto-rows:480px}.story-card:last-child{grid-column:auto}.category-tiles{grid-template-columns:1fr}.catalog-grid{grid-template-columns:repeat(2,1fr)}.footer-top{grid-template-columns:1fr 1fr}.quickview-grid{grid-template-columns:1fr}.quickview-media{min-height:360px}.search-results{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:620px){
+      .hero h1{font-size:54px}.hero-lead{font-size:16px}.hero-ctas{display:grid}.btn{width:100%}.hero-quick{display:none}.trust-dock{position:relative}.trust-dock .wrap{grid-template-columns:1fr}.trust-item{border-right:0;border-bottom:1px solid rgba(255,255,255,.12)!important}.trust-item:last-child{border-bottom:0!important}.hero-grid{min-height:84svh;padding-bottom:24px}.hero{min-height:auto}
+      .section-title{font-size:43px}.goal-tabs{flex-wrap:nowrap;overflow:auto;padding-bottom:6px}.goal-tab{white-space:nowrap}.goal-stage{border-radius:26px}.goal-visual{min-height:420px}.goal-content{padding:32px 21px}.goal-content h3{font-size:39px}.goal-reco{grid-template-columns:1fr}.goal-caption{left:20px;right:20px}.goal-caption strong{font-size:27px}.goal-caption span{display:none}
+      .section-head-row{display:block}.product-grid{display:flex;overflow:auto;scroll-snap-type:x mandatory;padding-bottom:15px}.product-card{min-width:82vw;scroll-snap-align:start}.scene{min-height:790px;border-radius:26px}.scene-copy{left:22px;right:22px;top:30px}.scene-copy h2{font-size:49px}.bundle-bar{display:block;left:18px;bottom:18px;width:calc(100% - 36px)}.bundle-price{margin-top:13px;justify-content:space-between}.hotspot{display:none}
+      .tier-card{min-height:auto}.story-grid{grid-auto-rows:420px}.local-copy{padding:32px 22px}.local-visual{grid-template-columns:1fr;min-height:auto}.catalog-entry{padding:20px;border-radius:26px}.catalog-grid{grid-template-columns:1fr}.footer-top{grid-template-columns:1fr}.footer-bottom{display:block}.footer-bottom span{display:block;margin:6px 0}.floating-help{right:12px;bottom:12px;padding:0 15px}.quickview-body{padding:27px 21px}.quickview-body h2{font-size:34px}.search-results{grid-template-columns:1fr}.search-overlay{padding:22px 0}.search-box-large{margin-top:55px}.drawer{padding:20px}
+    }
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
+
+
+    /* =========================================================
+       MOVE SELECT · IA conversacional integrada
+       ========================================================= */
+    .menu-ai{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer;padding:0;position:relative}
+    .menu-ai::after{content:"";position:absolute;left:0;right:100%;bottom:-8px;height:1px;background:currentColor;transition:right .25s ease}.menu-ai:hover::after{right:0}
+    .menu-ai i{font-style:normal;font-size:9px;line-height:1;padding:5px 6px;border-radius:999px;background:var(--lime);color:var(--ink);font-weight:900;letter-spacing:.08em}
+    .hero-ctas button.btn{font:inherit;cursor:pointer}
+    .product-fit{width:100%;margin:2px 0 15px;border:1px solid rgba(16,20,17,.1);background:#edf1e9;color:var(--ink);border-radius:14px;padding:11px 12px;font-weight:800;font-size:12px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:.22s}
+    .product-fit:hover{background:var(--ink);color:white;transform:translateY(-1px)}
+    .product-fit span:first-child{display:flex;align-items:center;gap:8px}.product-fit i{font-style:normal;color:#5d665e}.product-fit:hover i{color:#cfd6cf}
+    .catalog-fit{border:0;background:transparent;color:#d8ff42;font-size:11px;font-weight:800;padding:0;cursor:pointer;text-align:left;margin-top:9px}
+    .quick-actions{grid-template-columns:1fr 1fr auto!important}.quick-ai{border:1px solid var(--line);background:#eef2e9;color:var(--ink);border-radius:16px;font-weight:800;cursor:pointer;padding:0 16px}
+    .quick-ai:hover{background:var(--ink);color:white}
+    .floating-help{background:linear-gradient(135deg,var(--lime),#f2ffb4);box-shadow:0 20px 55px rgba(172,210,42,.25),0 8px 30px rgba(0,0,0,.25)}
+    .floating-help .ai-live-dot{width:7px;height:7px;border-radius:50%;background:#0c6d38;box-shadow:0 0 0 5px rgba(12,109,56,.12)}
+
+    body.ms-locked{overflow:hidden}
+    .ms-overlay{position:fixed;inset:0;z-index:5000;background:#0a0d0b;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s ease,visibility .35s ease;color:var(--ink)}
+    .ms-overlay.open{opacity:1;visibility:visible;pointer-events:auto}
+    .ms-shell{height:100%;display:grid;grid-template-columns:minmax(390px,44%) 1fr;overflow:hidden}
+    .ms-visual{position:relative;overflow:hidden;background:
+      radial-gradient(circle at 74% 19%,rgba(214,255,63,.28),transparent 21%),
+      radial-gradient(circle at 18% 82%,rgba(202,107,67,.2),transparent 23%),
+      linear-gradient(145deg,#101512 0%,#171f19 52%,#0b0e0c 100%);color:#f5f6f2;padding:34px 38px;display:flex;flex-direction:column;isolation:isolate}
+    .ms-visual::before{content:"";position:absolute;inset:-30%;z-index:-2;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:54px 54px;transform:perspective(800px) rotateX(58deg) rotateZ(-12deg) translateY(15%);mask-image:linear-gradient(to bottom,rgba(0,0,0,.72),transparent 82%)}
+    .ms-visual::after{content:"";position:absolute;width:620px;height:620px;border:1px solid rgba(216,255,66,.12);border-radius:50%;right:-290px;bottom:-270px;box-shadow:0 0 0 70px rgba(216,255,66,.025),0 0 0 150px rgba(216,255,66,.018);z-index:-1}
+    .ms-visual-top{display:flex;align-items:center;justify-content:space-between;gap:18px;position:relative;z-index:2}
+    .ms-logo{color:white!important}.ms-logo sup{color:#98a198}
+    .ms-ai-chip{display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.055);backdrop-filter:blur(12px);border-radius:999px;padding:9px 12px;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#dce2da}
+    .ms-ai-chip i{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 5px rgba(216,255,66,.1)}
+    .ms-visual-copy{position:relative;z-index:3;margin-top:7vh;max-width:500px}
+    .ms-visual-copy .kicker{color:var(--lime)}
+    .ms-visual-copy h2{font-family:"Manrope",sans-serif;font-size:clamp(44px,4.4vw,76px);line-height:.88;letter-spacing:-.065em;margin:18px 0 18px;max-width:560px}
+    .ms-visual-copy p{color:#b9c1b9;font-size:15px;line-height:1.6;max-width:440px;margin:0}
+    .ms-object-wrap{position:absolute;right:-6%;bottom:7%;width:min(38vw,540px);height:min(42vw,540px);perspective:1200px;z-index:1}
+    .ms-object{position:absolute;inset:12%;border-radius:40% 60% 52% 48%/46% 39% 61% 54%;transform:rotate(-7deg) rotateY(-12deg);transform-style:preserve-3d;background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.12);box-shadow:0 70px 110px rgba(0,0,0,.45);overflow:hidden;transition:transform .65s cubic-bezier(.2,.8,.2,1),border-radius .65s ease}
+    .ms-object::after{content:"";position:absolute;inset:0;background:linear-gradient(145deg,rgba(255,255,255,.16),transparent 28%,transparent 68%,rgba(216,255,66,.12));pointer-events:none}
+    .ms-object img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.8) contrast(1.03);transition:opacity .3s ease,transform .7s ease}
+    .ms-object:hover{transform:rotate(-3deg) rotateY(-4deg) translateY(-8px);border-radius:46% 54% 44% 56%/42% 48% 52% 58%}.ms-object:hover img{transform:scale(1.05)}
+    .ms-orbit{position:absolute;inset:0;border:1px solid rgba(216,255,66,.22);border-radius:50%;transform:rotateX(69deg) rotateZ(-12deg);animation:msOrbit 16s linear infinite}.ms-orbit::before{content:"";position:absolute;width:18px;height:18px;background:var(--lime);border-radius:50%;left:12%;top:18%;box-shadow:0 0 28px rgba(216,255,66,.55)}
+    @keyframes msOrbit{to{transform:rotateX(69deg) rotateZ(348deg)}}
+    .ms-object-label{position:absolute;left:4%;bottom:5%;z-index:4;background:rgba(9,13,10,.72);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(18px);padding:14px 16px;border-radius:18px;max-width:210px}
+    .ms-object-label small{display:block;color:#9ea89e;font-size:9px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px}.ms-object-label b{display:block;font-size:14px;line-height:1.25}
+    .ms-visual-foot{margin-top:auto;position:relative;z-index:4;display:flex;gap:18px;align-items:center;color:#98a198;font-size:11px;max-width:450px}.ms-visual-foot b{color:#eef2ec}.ms-visual-foot span{display:flex;align-items:center;gap:7px}.ms-visual-foot i{width:5px;height:5px;background:var(--lime);border-radius:50%}
+
+    .ms-panel{height:100%;background:linear-gradient(180deg,#f6f3ec 0%,#f1eee7 100%);display:grid;grid-template-rows:auto auto 1fr auto;min-width:0}
+    .ms-top{min-height:84px;padding:20px clamp(24px,4vw,62px);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(16,20,17,.09);gap:24px}
+    .ms-top-left{display:flex;align-items:center;gap:14px;min-width:0}.ms-top-left>div{min-width:0}
+    .ms-status{display:inline-flex;align-items:center;gap:8px;font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#596159}.ms-status i{width:8px;height:8px;border-radius:50%;background:#9aa39b;box-shadow:0 0 0 5px rgba(154,163,155,.12)}.ms-status.ai i{background:#0b7b42;box-shadow:0 0 0 5px rgba(11,123,66,.11)}.ms-status.demo i{background:#c67342;box-shadow:0 0 0 5px rgba(198,115,66,.11)}
+    .ms-step-label{display:block;margin-top:5px;color:#8a918b;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:420px}
+    .ms-close{width:46px;height:46px;border-radius:50%;border:1px solid rgba(16,20,17,.12);background:rgba(255,255,255,.58);font-size:25px;line-height:1;cursor:pointer;transition:.2s}.ms-close:hover{background:var(--ink);color:white;transform:rotate(7deg)}
+    .ms-progress{height:4px;background:#e3dfd6;position:relative;overflow:hidden}.ms-progress span{position:absolute;inset:0 auto 0 0;width:8%;background:linear-gradient(90deg,#98b42e,var(--lime));transition:width .5s cubic-bezier(.2,.8,.2,1)}
+    .ms-stage{overflow:auto;padding:clamp(28px,5vh,62px) clamp(24px,5.2vw,78px) 44px;scrollbar-width:thin;scrollbar-color:#c7cbc5 transparent}
+    .ms-content{max-width:860px;margin:0 auto;animation:msIn .45s cubic-bezier(.2,.8,.2,1)}
+    @keyframes msIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:none}}
+    .ms-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:#69716a;font-weight:800;display:flex;align-items:center;gap:8px}.ms-kicker::before{content:"";width:28px;height:1px;background:#98b42e}
+    .ms-content h1,.ms-content h2{font-family:"Manrope",sans-serif;letter-spacing:-.055em;line-height:.96;margin:18px 0 14px}.ms-content h1{font-size:clamp(42px,5vw,72px)}.ms-content h2{font-size:clamp(34px,4vw,56px)}
+    .ms-lead{font-size:16px;line-height:1.58;color:#636a64;max-width:670px;margin:0 0 26px}
+    .ms-context-product{display:grid;grid-template-columns:74px 1fr auto;align-items:center;gap:14px;border:1px solid #dedbd3;background:rgba(255,255,255,.55);padding:10px;border-radius:20px;margin:0 0 22px}.ms-context-product img{width:74px;height:70px;object-fit:cover;border-radius:14px}.ms-context-product small{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#7b837c;margin-bottom:5px}.ms-context-product b{font-size:14px}.ms-context-product i{font-style:normal;color:#7a827b;padding-right:10px}
+    .ms-input-card{background:white;border:1px solid #dedbd3;border-radius:25px;padding:18px 19px;box-shadow:0 20px 60px rgba(19,24,20,.055);transition:.2s}.ms-input-card:focus-within{border-color:#a9c734;box-shadow:0 20px 60px rgba(169,199,52,.1)}.ms-input-card label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#747c75;font-weight:800}.ms-input-card textarea{display:block;width:100%;min-height:96px;resize:vertical;border:0;outline:0;background:transparent;padding:12px 0 0;font:600 19px/1.4 "Manrope",sans-serif;color:var(--ink)}.ms-input-card textarea::placeholder{color:#adb2ad;font-weight:500}
+    .ms-prompts{display:flex;gap:8px;flex-wrap:wrap;margin:13px 0 26px}.ms-prompt{border:1px solid #dadfd6;background:#eef1eb;border-radius:999px;padding:9px 12px;font-size:11px;color:#4f5750;cursor:pointer;transition:.2s}.ms-prompt:hover{background:var(--ink);color:white;border-color:var(--ink)}
+    .ms-question-note{font-size:12px;color:#7d857e;margin:0 0 12px}
+    .ms-goal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 24px}.ms-goal{border:1px solid #dedbd3;background:rgba(255,255,255,.66);border-radius:21px;padding:17px 14px;text-align:left;cursor:pointer;min-height:126px;transition:.22s;position:relative;overflow:hidden}.ms-goal::after{content:"";position:absolute;width:90px;height:90px;border:18px solid currentColor;border-radius:50%;right:-50px;bottom:-50px;opacity:.05}.ms-goal small{display:block;color:#798079;font-size:9px;text-transform:uppercase;letter-spacing:.11em;margin-bottom:9px}.ms-goal b{display:block;font-family:"Manrope";font-size:15px;line-height:1.15}.ms-goal span{display:block;color:#747c75;font-size:11px;margin-top:9px;line-height:1.35}.ms-goal:hover,.ms-goal.selected{background:var(--ink);color:white;border-color:var(--ink);transform:translateY(-3px);box-shadow:0 18px 42px rgba(10,14,11,.13)}.ms-goal:hover small,.ms-goal.selected small,.ms-goal:hover span,.ms-goal.selected span{color:#b8c0b8}.ms-goal.selected{box-shadow:inset 0 0 0 2px var(--lime),0 18px 42px rgba(10,14,11,.13)}
+    .ms-primary{border:0;background:var(--ink);color:white;min-height:56px;border-radius:17px;padding:0 21px;font-weight:850;cursor:pointer;display:inline-flex;align-items:center;gap:18px;justify-content:center;transition:.22s}.ms-primary:hover{background:#1e2821;transform:translateY(-2px);box-shadow:0 18px 35px rgba(13,18,14,.18)}.ms-primary span{width:30px;height:30px;border-radius:50%;background:var(--lime);color:var(--ink);display:grid;place-items:center}.ms-primary.lime{background:var(--lime);color:var(--ink)}.ms-primary.lime span{background:var(--ink);color:white}
+    .ms-inline-actions{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}.ms-privacy{font-size:10px;color:#858c86;line-height:1.45;max-width:430px}
+    .ms-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:25px}.ms-option{border:1px solid #dedbd3;background:rgba(255,255,255,.7);border-radius:22px;padding:17px;display:grid;grid-template-columns:43px 1fr auto;gap:13px;align-items:center;text-align:left;cursor:pointer;transition:.22s;min-height:94px}.ms-option:hover,.ms-option.selected{background:var(--ink);color:white;border-color:var(--ink);transform:translateY(-2px);box-shadow:0 17px 42px rgba(10,14,11,.12)}.ms-option-icon{width:43px;height:43px;border-radius:15px;background:#e8ece5;display:grid;place-items:center;font-family:"Manrope";font-weight:850;font-size:12px;color:#343b35}.ms-option:hover .ms-option-icon,.ms-option.selected .ms-option-icon{background:var(--lime);color:var(--ink)}.ms-option b{display:block;font-family:"Manrope";font-size:15px;line-height:1.15}.ms-option small{display:block;color:#788078;font-size:11px;line-height:1.4;margin-top:5px}.ms-option:hover small,.ms-option.selected small{color:#b7bfb8}.ms-option>i{font-style:normal;color:#909790}.ms-option:hover>i,.ms-option.selected>i{color:var(--lime)}
+    .ms-zone-map{display:grid;grid-template-columns:minmax(180px,.7fr) 1.3fr;gap:20px;margin-top:22px}.ms-body{min-height:440px;border-radius:28px;background:linear-gradient(180deg,#e8ece4,#dce2da);position:relative;overflow:hidden;border:1px solid #d5dbd3}.ms-body::before{content:"";position:absolute;inset:8% 20%;background:linear-gradient(180deg,#202721,#3a443b);clip-path:polygon(42% 0,58% 0,62% 7%,69% 13%,75% 32%,68% 53%,66% 100%,54% 100%,50% 63%,46% 100%,34% 100%,32% 53%,25% 32%,31% 13%,38% 7%);filter:drop-shadow(0 20px 22px rgba(13,18,14,.19));opacity:.92}.ms-body::after{content:"";position:absolute;left:50%;top:6%;width:56px;height:56px;background:#202721;border-radius:50%;transform:translateX(-50%)}.ms-body-label{position:absolute;left:16px;bottom:16px;background:rgba(255,255,255,.76);backdrop-filter:blur(8px);padding:10px 12px;border-radius:14px;font-size:10px;color:#606861;max-width:170px}.ms-zone-map .ms-options{margin:0;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start}
+    .ms-bottom{min-height:66px;padding:14px clamp(24px,5.2vw,78px);border-top:1px solid rgba(16,20,17,.09);display:flex;align-items:center;justify-content:space-between;gap:18px;color:#8a918b;font-size:10px}.ms-back{border:0;background:transparent;color:#555d56;font-weight:800;cursor:pointer;padding:9px 0;visibility:hidden}.ms-back.show{visibility:visible}.ms-back:hover{color:var(--ink)}
+    .ms-analysis{text-align:center;max-width:600px;margin:8vh auto 0}.ms-brain{width:154px;height:154px;border-radius:50%;margin:0 auto 28px;position:relative;background:radial-gradient(circle at 35% 30%,#efffb0,var(--lime) 36%,#7d9427 76%,#222b22 77%);box-shadow:0 30px 80px rgba(124,148,39,.25);animation:msPulse 2.2s ease-in-out infinite}.ms-brain::before,.ms-brain::after{content:"";position:absolute;border:1px solid rgba(16,20,17,.15);border-radius:50%;inset:-24px;animation:msWave 2.2s ease-out infinite}.ms-brain::after{inset:-48px;animation-delay:.7s}.ms-brain i{position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;left:30%;top:24%;box-shadow:0 0 35px #fff}.ms-analysis h2{font-size:clamp(34px,4vw,55px)}.ms-analysis p{color:#687069;line-height:1.55}.ms-analysis-list{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:24px}.ms-analysis-list span{padding:9px 12px;border-radius:999px;background:#e8ece5;color:#5d655e;font-size:10px;text-transform:uppercase;letter-spacing:.08em}.ms-analysis-list span.active{background:var(--ink);color:white}
+    @keyframes msPulse{50%{transform:scale(1.035) rotate(3deg)}}@keyframes msWave{0%{opacity:.5;transform:scale(.9)}100%{opacity:0;transform:scale(1.23)}}
+    .ms-result-head{display:grid;grid-template-columns:1fr auto;align-items:end;gap:20px;margin-bottom:24px}.ms-result-head p{margin:0;color:#687069;line-height:1.55;max-width:620px}.ms-mode-label{background:#e7ebdf;border:1px solid #d7ddcf;border-radius:999px;padding:9px 12px;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#5b635c;white-space:nowrap}
+    .ms-result-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.ms-result-card{background:#fff;border:1px solid #dedbd3;border-radius:26px;padding:12px;display:flex;flex-direction:column;min-width:0;position:relative;transition:.22s;box-shadow:0 18px 45px rgba(17,22,18,.045)}.ms-result-card:hover{transform:translateY(-4px);box-shadow:0 24px 60px rgba(17,22,18,.1)}.ms-result-card.recommended{background:#111713;color:white;border-color:#111713;transform:translateY(-8px);box-shadow:0 28px 70px rgba(10,14,11,.22)}.ms-result-card.recommended:hover{transform:translateY(-11px)}.ms-result-media{height:180px;border-radius:19px;overflow:hidden;background:#ece8df;position:relative}.ms-result-media img{width:100%;height:100%;object-fit:cover;display:block}.ms-result-tier{position:absolute;left:10px;top:10px;padding:7px 9px;border-radius:999px;background:rgba(255,255,255,.88);backdrop-filter:blur(8px);font-size:9px;text-transform:uppercase;letter-spacing:.1em;font-weight:900;color:var(--ink)}.ms-result-card.recommended .ms-result-tier{background:var(--lime)}.ms-result-body{padding:16px 6px 6px;display:flex;flex-direction:column;flex:1}.ms-result-body small{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#7d857e}.ms-result-card.recommended .ms-result-body small{color:#9fa9a0}.ms-result-body h3{font-family:"Manrope";font-size:21px;line-height:1.08;letter-spacing:-.035em;margin:8px 0}.ms-result-reason{font-size:12px;line-height:1.48;color:#646c65;min-height:72px}.ms-result-card.recommended .ms-result-reason{color:#bdc5bd}.ms-result-price{font-family:"Manrope";font-weight:900;font-size:23px;margin-top:auto;padding-top:16px}.ms-result-add{margin-top:13px;border:0;border-radius:15px;min-height:46px;background:#edf1e9;color:var(--ink);font-weight:850;cursor:pointer}.ms-result-card.recommended .ms-result-add{background:var(--lime)}.ms-result-add:hover{filter:brightness(.96)}
+    .ms-bundle-thumbs{height:180px;display:grid;grid-template-columns:1fr 1fr;border-radius:19px;overflow:hidden;gap:2px;background:#e4e0d7}.ms-bundle-thumbs img{width:100%;height:100%;object-fit:cover}.ms-bundle-thumbs img:first-child:nth-last-child(3){grid-row:span 2}.ms-bundle-thumbs img:nth-child(3){height:89px}
+    .ms-result-actions{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.ms-link-btn{border:1px solid #d3d8d0;background:transparent;border-radius:14px;padding:12px 15px;font-weight:800;color:#545c55;cursor:pointer}.ms-link-btn:hover{background:white}.ms-result-note{margin-top:17px;padding:15px 17px;border-radius:18px;background:#e8ece5;color:#606861;font-size:11px;line-height:1.5}.ms-result-note b{color:#202621}
+    .ms-safety{max-width:690px;margin:4vh auto 0;background:#fff;border:1px solid #dedbd3;border-radius:30px;padding:clamp(24px,4vw,42px);box-shadow:0 28px 75px rgba(16,20,17,.08)}.ms-safety-icon{width:68px;height:68px;border-radius:22px;background:#fff2e8;color:#a55026;display:grid;place-items:center;font-size:27px;margin-bottom:24px}.ms-safety h2{font-size:clamp(34px,4vw,54px)}.ms-safety p{color:#606861;line-height:1.6}.ms-safety-box{padding:16px 18px;border-radius:18px;background:#f5eee8;color:#784828;font-size:12px;line-height:1.55;margin:20px 0}.ms-safety-actions{display:flex;gap:10px;flex-wrap:wrap}.ms-safety-actions a,.ms-safety-actions button{text-decoration:none}
+    .ms-error{padding:14px 16px;border-radius:16px;background:#fff0e8;color:#8d4420;font-size:12px;margin:12px 0;display:none}.ms-error.show{display:block}
+
+    @media(max-width:1120px){.menu-ai{display:none}.ms-shell{grid-template-columns:38% 62%}.ms-visual{padding:28px}.ms-visual-copy h2{font-size:52px}.ms-object-wrap{width:42vw;height:42vw}.ms-goal-grid{grid-template-columns:1fr 1fr}.ms-result-grid{grid-template-columns:1fr}.ms-result-card.recommended{transform:none}.ms-result-card.recommended:hover{transform:translateY(-4px)}.ms-result-media,.ms-bundle-thumbs{height:230px}.ms-result-reason{min-height:auto}.ms-result-head{grid-template-columns:1fr}}
+    @media(max-width:780px){.ms-shell{display:block;overflow:auto;background:#f1eee7}.ms-visual{height:250px;min-height:250px;padding:20px 18px}.ms-visual-top{align-items:flex-start}.ms-ai-chip{padding:7px 9px}.ms-visual-copy{margin-top:34px;max-width:70%}.ms-visual-copy h2{font-size:38px;margin:10px 0 8px}.ms-visual-copy p{font-size:12px;line-height:1.45;max-height:37px;overflow:hidden}.ms-object-wrap{width:240px;height:240px;right:-40px;bottom:-55px}.ms-object-label,.ms-visual-foot{display:none}.ms-panel{height:auto;min-height:calc(100% - 250px);grid-template-rows:auto auto minmax(520px,auto) auto}.ms-top{min-height:68px;padding:12px 17px}.ms-stage{padding:30px 17px 40px;overflow:visible}.ms-bottom{padding:12px 17px}.ms-zone-map{grid-template-columns:1fr}.ms-body{display:none}.ms-zone-map .ms-options{grid-template-columns:1fr 1fr}.quick-actions{grid-template-columns:1fr!important}.quick-actions .wish-big{display:none}}
+    @media(max-width:540px){.ms-visual{height:220px;min-height:220px}.ms-visual-copy{max-width:72%;margin-top:25px}.ms-visual-copy h2{font-size:31px}.ms-object-wrap{width:205px;height:205px;right:-54px;bottom:-54px}.ms-logo{font-size:22px!important}.ms-stage{padding-top:25px}.ms-content h1{font-size:40px}.ms-content h2{font-size:35px}.ms-goal-grid,.ms-options,.ms-zone-map .ms-options{grid-template-columns:1fr}.ms-goal{min-height:100px}.ms-result-media,.ms-bundle-thumbs{height:205px}.ms-inline-actions{display:block}.ms-primary{width:100%}.ms-privacy{margin-top:13px}.ms-context-product{grid-template-columns:60px 1fr}.ms-context-product img{width:60px;height:60px}.ms-context-product i{display:none}.floating-help{font-size:11px;height:46px}}
+
+
+    /* MOVE Agenda · derivación médica y reserva condicionada */
+    .agenda-overlay{position:fixed;inset:0;z-index:230;background:#f4f1e8;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s;overflow:hidden}
+    .agenda-overlay.open{opacity:1;visibility:visible}
+    body.agenda-locked{overflow:hidden}
+    .agenda-shell{height:100%;display:grid;grid-template-columns:minmax(340px,.78fr) minmax(560px,1.22fr)}
+    .agenda-visual{position:relative;overflow:hidden;background:linear-gradient(145deg,#0a0e0b 0%,#121813 62%,#24301d 100%);color:#fff;padding:34px;display:flex;flex-direction:column;justify-content:space-between}
+    .agenda-visual:before{content:'';position:absolute;width:520px;height:520px;border-radius:50%;border:1px solid rgba(216,255,66,.2);right:-250px;top:14%;box-shadow:0 0 0 72px rgba(216,255,66,.035),0 0 0 145px rgba(216,255,66,.018)}
+    .agenda-visual:after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 78% 38%,rgba(216,255,66,.13),transparent 32%),linear-gradient(180deg,transparent 58%,rgba(4,7,5,.72));pointer-events:none}
+    .agenda-visual-top,.agenda-visual-copy,.agenda-visual-foot,.agenda-visual-object{position:relative;z-index:2}
+    .agenda-visual-top{display:flex;align-items:center;justify-content:space-between;gap:15px}
+    .agenda-chip{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:9px 12px;font-size:10px;letter-spacing:.12em;font-weight:800}
+    .agenda-chip i{width:7px;height:7px;background:var(--lime);border-radius:50%;box-shadow:0 0 0 5px rgba(216,255,66,.09)}
+    .agenda-visual-copy{margin-top:auto;margin-bottom:22px;max-width:510px}
+    .agenda-visual-copy .kicker{color:var(--lime);font-size:11px;letter-spacing:.13em;text-transform:uppercase;font-weight:800}
+    .agenda-visual-copy h2{font-family:"Manrope";font-size:clamp(44px,5vw,72px);line-height:.91;letter-spacing:-.065em;margin:16px 0 18px}
+    .agenda-visual-copy p{font-size:15px;line-height:1.58;color:rgba(255,255,255,.62);max-width:470px}
+    .agenda-visual-object{height:240px;margin:8px 0 26px;border-radius:28px;overflow:hidden;border:1px solid rgba(255,255,255,.12);box-shadow:0 25px 65px rgba(0,0,0,.28)}
+    .agenda-visual-object img{width:100%;height:100%;object-fit:cover;filter:saturate(.78) contrast(1.04);transition:opacity .25s ease,transform .7s var(--ease)}
+    .agenda-overlay.open .agenda-visual-object img{transform:scale(1.03)}
+    .agenda-visual-object:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(4,7,5,.7))}
+    .agenda-visual-badge{position:absolute;z-index:3;left:18px;bottom:16px;right:18px;display:flex;align-items:end;justify-content:space-between;gap:12px}
+    .agenda-visual-badge small{display:block;color:var(--lime);letter-spacing:.11em;text-transform:uppercase;font-size:9px;margin-bottom:5px}.agenda-visual-badge b{font-size:16px}.agenda-visual-badge span{font-size:11px;color:rgba(255,255,255,.6)}
+    .agenda-visual-foot{display:flex;justify-content:space-between;gap:18px;border-top:1px solid rgba(255,255,255,.12);padding-top:18px;color:rgba(255,255,255,.48);font-size:11px;line-height:1.45}
+    .agenda-panel{background:#f7f5ef;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+    .agenda-top{height:88px;padding:0 clamp(24px,4vw,52px);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(13,16,14,.09)}
+    .agenda-status{display:flex;align-items:center;gap:10px}.agenda-status i{width:9px;height:9px;border-radius:50%;background:var(--lime-deep);box-shadow:0 0 0 6px rgba(130,157,39,.1)}.agenda-status b{font-size:13px}.agenda-status small{display:block;color:#828981;margin-top:3px;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+    .agenda-close{border:1px solid rgba(13,16,14,.13);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.62);cursor:pointer;font-size:23px}
+    .agenda-progress{height:4px;background:#e3e0d9}.agenda-progress span{height:100%;display:block;width:14%;background:linear-gradient(90deg,#829d27,var(--lime));transition:width .42s var(--ease)}
+    .agenda-stage{flex:1;overflow:auto;padding:clamp(30px,5vw,72px) clamp(24px,5vw,72px) 38px}
+    .agenda-content{width:min(780px,100%);margin:auto}.agenda-kicker{display:inline-flex;align-items:center;gap:8px;color:#6f7f2e;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:900}.agenda-kicker:before{content:'';width:18px;height:2px;background:var(--lime-deep)}
+    .agenda-content h1,.agenda-content h2{font-family:"Manrope";font-size:clamp(38px,4.5vw,62px);line-height:.96;letter-spacing:-.058em;margin:15px 0 16px}.agenda-lead{color:#606861;line-height:1.62;font-size:15px;max-width:680px;margin:0 0 28px}
+    .agenda-note{background:#eef2e9;border:1px solid #dce4d7;border-radius:18px;padding:15px 17px;font-size:12px;line-height:1.55;color:#556057;margin:18px 0}.agenda-note strong{color:#202621}
+    .agenda-options{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.agenda-option{border:1px solid #dfddd6;background:#fff;border-radius:22px;padding:19px;text-align:left;cursor:pointer;min-height:148px;transition:transform .22s,border-color .22s,box-shadow .22s;display:flex;flex-direction:column}.agenda-option:hover{transform:translateY(-3px);border-color:#aebd80;box-shadow:0 17px 38px rgba(20,26,21,.07)}.agenda-option.selected{border-color:#7e9a26;box-shadow:0 0 0 3px rgba(126,154,38,.12);background:#fbfff0}.agenda-option small{color:#7c857c;font-size:9px;letter-spacing:.11em;text-transform:uppercase;font-weight:800}.agenda-option b{font-family:"Manrope";font-size:18px;letter-spacing:-.03em;margin:12px 0 7px}.agenda-option span{color:#707770;font-size:12px;line-height:1.45;margin-top:auto}
+    .agenda-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.agenda-field{display:grid;gap:7px}.agenda-field.full{grid-column:1/-1}.agenda-field label{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#626a63}.agenda-field input,.agenda-field select,.agenda-field textarea{width:100%;border:1px solid #dcd9d1;background:#fff;border-radius:16px;padding:14px 15px;outline:none;color:#171b18}.agenda-field input:focus,.agenda-field select:focus,.agenda-field textarea:focus{border-color:#7e9a26;box-shadow:0 0 0 3px rgba(126,154,38,.1)}.agenda-field textarea{min-height:104px;resize:vertical}
+    .agenda-upload{border:1px dashed #aab39f;background:#f4f7f0;border-radius:20px;padding:20px;display:flex;align-items:center;justify-content:space-between;gap:18px;cursor:pointer}.agenda-upload input{position:absolute;opacity:0;pointer-events:none}.agenda-upload-icon{width:50px;height:50px;border-radius:16px;background:#dfff60;display:grid;place-items:center;font-size:23px;color:#111}.agenda-upload-copy{flex:1}.agenda-upload-copy b{display:block;font-size:14px}.agenda-upload-copy span{display:block;color:#6c746d;font-size:11px;margin-top:4px}.agenda-file-name{font-size:11px;color:#4f6250;background:#fff;border:1px solid #dfe5db;border-radius:999px;padding:8px 10px;max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .agenda-inline{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:26px}.agenda-primary,.agenda-secondary{border:0;border-radius:16px;padding:15px 19px;font-weight:900;cursor:pointer}.agenda-primary{background:var(--lime);color:#111;box-shadow:0 12px 28px rgba(153,184,47,.18)}.agenda-secondary{background:#111613;color:#fff}.agenda-link{border:0;background:transparent;padding:8px 0;color:#566057;text-decoration:underline;text-underline-offset:4px;cursor:pointer;font-weight:700}
+    .agenda-error{display:none;color:#a7492c;font-size:12px;margin-top:12px}.agenda-error.show{display:block}
+    .agenda-date-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}.agenda-date{border:1px solid #ddd9d0;background:#fff;border-radius:18px;padding:13px 8px;text-align:center;cursor:pointer}.agenda-date small{display:block;text-transform:uppercase;letter-spacing:.08em;color:#737b74;font-size:9px}.agenda-date b{display:block;font-size:23px;margin:4px 0}.agenda-date span{font-size:10px;color:#7f877f}.agenda-date.selected{background:#131814;color:#fff;border-color:#131814}.agenda-date.selected small,.agenda-date.selected span{color:#c7cec6}.agenda-date.selected b{color:var(--lime)}
+    .agenda-times{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:20px}.agenda-time{border:1px solid #ddd9d0;background:#fff;border-radius:14px;padding:13px 8px;cursor:pointer;font-weight:800}.agenda-time.selected{background:var(--lime);border-color:var(--lime-deep)}
+    .agenda-summary{background:#fff;border:1px solid #dfddd6;border-radius:24px;padding:22px;margin-top:20px}.agenda-summary-row{display:flex;justify-content:space-between;gap:20px;padding:12px 0;border-bottom:1px solid #ece9e2}.agenda-summary-row:last-child{border-bottom:0}.agenda-summary-row span{color:#747c75;font-size:12px}.agenda-summary-row b{text-align:right;font-size:13px}
+    .agenda-consent{display:flex;align-items:flex-start;gap:10px;margin-top:18px;color:#616a62;font-size:12px;line-height:1.5}.agenda-consent input{margin-top:3px;accent-color:#7e9a26}
+    .agenda-success{max-width:690px;margin:3vh auto 0;background:#fff;border:1px solid #dfddd6;border-radius:30px;padding:clamp(26px,4vw,46px);box-shadow:0 28px 80px rgba(16,20,17,.08)}.agenda-success-icon{width:74px;height:74px;border-radius:24px;background:#e6ff8c;color:#23300e;display:grid;place-items:center;font-size:31px;margin-bottom:22px}.agenda-success h2{font-size:clamp(38px,4vw,56px)}.agenda-success p{color:#606861;line-height:1.6}.agenda-success .agenda-note{margin:20px 0}
+    .agenda-no-order{max-width:690px;margin:2vh auto}.agenda-no-order-card{background:#fff;border:1px solid #dfddd6;border-radius:28px;padding:clamp(24px,4vw,40px);box-shadow:0 24px 70px rgba(18,23,19,.07)}.agenda-no-order-icon{width:68px;height:68px;border-radius:22px;background:#fff0e7;color:#a54f28;display:grid;place-items:center;font-size:28px;margin-bottom:22px}.agenda-no-order h2{font-size:clamp(36px,4vw,54px)}.agenda-no-order-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    .agenda-bottom{height:74px;border-top:1px solid rgba(13,16,14,.09);padding:0 clamp(24px,4vw,52px);display:flex;align-items:center;justify-content:space-between;gap:20px;color:#7c847d;font-size:10px}.agenda-back{border:0;background:transparent;font-weight:900;cursor:pointer;visibility:hidden}.agenda-back.show{visibility:visible}
+    .ms-referral-prompt{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#eef3e8;border:1px solid #dce5d5;border-radius:18px;padding:14px 15px;margin:16px 0 18px}.ms-referral-prompt b{display:block;font-size:13px}.ms-referral-prompt span{display:block;color:#687168;font-size:11px;margin-top:3px}.ms-referral-prompt button{border:0;background:#111613;color:#fff;border-radius:12px;padding:11px 13px;font-weight:800;white-space:nowrap;cursor:pointer}
+    @media(max-width:980px){.agenda-shell{grid-template-columns:1fr}.agenda-visual{display:none}.agenda-panel{height:100svh}.agenda-options{grid-template-columns:1fr 1fr}.agenda-date-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:620px){.agenda-top{height:72px;padding:0 17px}.agenda-stage{padding:27px 16px 26px}.agenda-bottom{height:auto;min-height:68px;padding:14px 17px}.agenda-options,.agenda-form-grid{grid-template-columns:1fr}.agenda-option{min-height:118px}.agenda-date-grid{grid-template-columns:repeat(3,1fr)}.agenda-times{grid-template-columns:repeat(3,1fr)}.agenda-inline{display:grid}.agenda-inline>*{width:100%}.agenda-upload{align-items:flex-start;flex-wrap:wrap}.ms-referral-prompt{display:block}.ms-referral-prompt button{margin-top:11px;width:100%}}
+
+  </style>
+<meta name="robots" content="noindex, nofollow" /><style>.nv-demo-bar{position:relative;z-index:110;min-height:46px;background:#092d41;color:white;font:500 14px/1.4 system-ui,sans-serif;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 24px;flex-wrap:wrap}.nv-demo-bar a{color:white;text-decoration:underline;text-underline-offset:3px}.nv-demo-bar nav{display:flex;gap:20px}.header{top:77px}.header.scrolled{top:0}.nv-demo-receipt{margin-top:14px;padding:18px;border:1px solid currentColor;font-size:14px;line-height:1.5}.nv-demo-receipt[hidden]{display:none}.nv-demo-receipt button{margin-top:14px;text-decoration:underline;cursor:pointer}.agenda-overlay .agenda-lead{overflow-wrap:anywhere}@media(max-width:900px){.header{top:66px}.nv-demo-bar{min-height:66px;padding:9px 15px;font-size:13px}.nv-demo-bar>span{width:100%}.nv-demo-bar nav{gap:18px}}</style><link rel="stylesheet" href="/prototipos/move/move-ai.css?v=20260906-ai" /></head>
+<body><div class="nv-demo-bar"><span>MOVE · Demo sin compras ni reservas reales</span><nav aria-label="Recorrer el prototipo"><a href="/prototipos/">Volver a Núcleo Vivo</a><a href="/prototipos/move/gestion/">Gestión del equipo</a></nav></div>
+  <div class="utility"><div class="wrap"><span>Despachos a todo Chile · Retiro en MOVE Villarrica</span><span class="soft">Compra guiada · orientación profesional</span></div></div>
+  <header class="header" id="header">
+    <div class="wrap nav">
+      <a class="logo" href="#inicio" aria-label="MOVE inicio"><span class="logo-dots"><i></i><i></i></span>MOVE<sup>CL</sup></a>
+      <nav class="menu" aria-label="Navegación principal">
+        <a href="#objetivos">Compra por objetivo</a><a href="#mas-vendidos">Más vendidos</a><a href="#rutina">Kits MOVE</a><a href="#kinesiologia">Kinesiología</a><button class="menu-ai" type="button" data-agenda-open>Agenda</button><a href="#catalogo">Catálogo</a><button class="menu-ai" type="button" data-ai-open>MOVE Select <i>IA</i></button>
+      </nav>
+      <div class="nav-actions">
+        <button class="nav-btn" type="button" data-search-open aria-label="Buscar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><span class="search-label">Buscar</span></button>
+        <button class="nav-btn" type="button" data-cart-open aria-label="Abrir bolsa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg><span class="bag-label">Bolsa</span><span class="bag-count" id="bagCount">0</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-media"><img src="assets/inline/ad8a2c89d226.webp" alt="Persona entrenando con balón de estabilidad en un estudio contemporáneo"></div>
+      <div class="wrap hero-grid">
+        <div class="hero-copy reveal visible">
+          <span class="kicker">MOVE · salud en movimiento</span>
+          <h1>Vuelve a lo que <em>te mueve.</em></h1>
+          <p class="hero-lead">Equipamiento para recuperación, movilidad y entrenamiento, elegido con criterio profesional para que compres con claridad y no entre cientos de opciones.</p>
+          <div class="hero-ctas">
+            <button class="btn btn-primary" type="button" data-ai-open>Encontrar mi ruta con IA <span>↗</span></button>
+            <a class="btn btn-secondary" href="#mas-vendidos">Ver más vendidos</a>
+          </div>
+          <div class="hero-quick"><button data-ai-seed="Me molesta la rodilla" data-ai-goal="dolor">Me molesta la rodilla</button><button data-ai-seed="Quiero volver a entrenar" data-ai-goal="entrenar">Quiero volver a entrenar</button><button data-ai-seed="Quiero más movilidad" data-ai-goal="movilidad">Quiero más movilidad</button></div>
+        </div>
+        <aside class="hero-product" aria-label="Producto destacado">
+          <div class="hero-orbit"></div>
+          <article class="hero-product-card" data-tilt>
+            <div class="hero-product-image"><span class="hero-product-rank">01</span><img src="assets/inline/e0b77e26a301.webp" alt="Kit de recuperación MOVE"></div>
+            <div class="hero-product-body"><div><small>Kit MOVE · retorno activo</small><h2>Recupera, activa y vuelve.</h2></div><strong>$27.990</strong></div>
+          </article>
+        </aside>
+      </div>
+      <div class="trust-dock"><div class="wrap">
+        <div class="trust-item"><i class="trust-icon">01</i><div><b>Selección con criterio</b><span>Menos ruido, mejores decisiones</span></div></div>
+        <div class="trust-item"><i class="trust-icon">02</i><div><b>Retiro en Villarrica</b><span>Compra online y continúa en tienda</span></div></div>
+        <div class="trust-item"><i class="trust-icon">03</i><div><b>Despacho nacional</b><span>Alternativas para todo Chile</span></div></div>
+        <div class="trust-item"><i class="trust-icon">04</i><div><b>Profesional detrás</b><span>Ayuda para elegir cuando la necesitas</span></div></div>
+      </div></div>
+    </section>
+
+    <section class="goal-section section-pad" id="objetivos">
+      <div class="wrap">
+        <div class="goal-head reveal">
+          <div><div class="eyebrow">MOVE SELECT</div><h2 class="section-title">No empieces por el producto. Empieza por <em>lo que quieres volver a hacer.</em></h2></div>
+          <div><p class="section-lead">Elige un objetivo y MOVE ordena la experiencia: qué mirar primero, qué productos tienen sentido y cuándo conviene consultar a un profesional.</p><div class="goal-tabs" role="tablist"><button class="goal-tab active" data-goal="dolor">Dolor y recuperación</button><button class="goal-tab" data-goal="entrenar">Volver a entrenar</button><button class="goal-tab" data-goal="movilidad">Ganar movilidad</button><button class="goal-tab" data-goal="autonomia">Autonomía diaria</button></div></div>
+        </div>
+        <div class="goal-stage reveal">
+          <div class="goal-visual"><img id="goalImage" src="assets/inline/e0b77e26a301.webp" alt="Solución MOVE seleccionada"><span class="goal-badge" id="goalBadge">Dolor & recuperación</span><div class="goal-caption"><strong id="goalCaption">Rodilla en movimiento</strong><span id="goalCaptionSmall">Soporte, movilidad y retorno gradual.</span></div></div>
+          <div class="goal-content"><div><div class="num" id="goalNumber">Ruta MOVE 01</div><h3 id="goalTitle">Vuelve a caminar y entrenar con más confianza.</h3><p id="goalText">Una selección breve para acompañar el movimiento: soporte, activación progresiva y recuperación. Sin prometer resultados clínicos ni reemplazar una evaluación.</p><div class="goal-steps" id="goalSteps"></div></div><div><div class="goal-reco" id="goalProducts"></div><button class="btn btn-primary" id="goalCta" style="margin-top:18px;width:100%">Ver la selección recomendada</button></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bestsellers section-pad" id="mas-vendidos">
+      <div class="wrap">
+        <div class="section-head-row reveal"><div><div class="eyebrow">RADAR MOVE</div><h2 class="section-title">Productos con <em>alta demanda</em> y sentido comercial.</h2></div><p class="section-lead">Primero mostramos una selección manejable. El catálogo completo queda disponible más abajo, sin saturar la decisión inicial.</p></div>
+        <div class="product-grid" id="featuredProducts"></div>
+        <div class="product-rail-footer reveal"><button class="btn btn-dark" data-catalog-open>Explorar los 50 productos <span>↓</span></button></div>
+      </div>
+    </section>
+
+    <section class="scene-section" id="rutina">
+      <div class="wrap">
+        <div class="scene reveal">
+          <img src="assets/inline/e0b77e26a301.webp" alt="Rodillera, foam roller y bandas de resistencia">
+          <div class="scene-copy"><div class="eyebrow">SHOP THE ROUTINE</div><h2>Compra la <em>rutina</em>, no las piezas.</h2><p>Una solución resulta más fácil de comprender cuando cada producto ocupa un lugar claro: soporte, activación y recuperación.</p></div>
+          <button class="hotspot h1" data-quick-rank="7" data-label="Rodillera estabilizadora" aria-label="Ver rodillera estabilizadora"></button>
+          <button class="hotspot h2" data-quick-rank="23" data-label="Foam roller" aria-label="Ver foam roller"></button>
+          <button class="hotspot h3" data-quick-rank="1" data-label="Bandas de resistencia" aria-label="Ver bandas de resistencia"></button>
+          <div class="bundle-bar"><div><small>Kit MOVE · Rodilla en movimiento</small><b>Soporte + activación + recuperación</b><span>Rodillera estabilizadora · set de bandas · foam roller</span></div><div class="bundle-price"><del>$32.970</del><strong>$27.990</strong><button data-add-bundle>Agregar kit</button></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tiers section-pad">
+      <div class="wrap">
+        <div class="section-head-row reveal"><div><div class="eyebrow">UNA ENTRADA PARA CADA MOMENTO</div><h2 class="section-title">Elige cuánto <em>acompañamiento</em> necesitas.</h2></div><p class="section-lead">Tres niveles claros permiten comparar valor sin obligarte a revisar decenas de combinaciones.</p></div>
+        <div class="tier-grid reveal">
+          <article class="tier-card" data-tilt><span class="tier-label">Empieza simple</span><h3>Activación</h3><p>Una base accesible para movilidad, calentamiento y ejercicios progresivos.</p><div class="tier-media"><img src="assets/inline/f75185f11b81.webp" alt="Bandas de resistencia premium"></div><ul class="tier-list"><li>Set de 3 bandas</li><li>Guía digital de elección</li><li>Retiro o despacho</li></ul><div class="tier-bottom"><div class="tier-price"><small>Desde</small><strong>$5.990</strong></div><button class="btn btn-dark" data-quick-rank="1">Ver opción</button></div></article>
+          <article class="tier-card featured" data-tilt><span class="recommend">Recomendado por MOVE</span><span class="tier-label">Solución completa</span><h3>Retorno activo</h3><p>Una combinación equilibrada para soporte, activación y recuperación.</p><div class="tier-media"><img src="assets/inline/e0b77e26a301.webp" alt="Kit retorno activo MOVE"></div><ul class="tier-list"><li>Rodillera estabilizadora</li><li>Bandas de resistencia</li><li>Foam roller texturizado</li></ul><div class="tier-bottom"><div class="tier-price"><small>Kit referencial</small><strong>$27.990</strong></div><button class="btn" data-add-bundle>Agregar kit</button></div></article>
+          <article class="tier-card" data-tilt><span class="tier-label">Más equipamiento</span><h3>Performance</h3><p>Para quien quiere construir una rutina doméstica de entrenamiento y recuperación.</p><div class="tier-media"><img src="assets/inline/ad8a2c89d226.webp" alt="Entrenamiento con balón de estabilidad"></div><ul class="tier-list"><li>Gym ball + bandas</li><li>Foam roller</li><li>Mat de entrenamiento</li></ul><div class="tier-bottom"><div class="tier-price"><small>Desde</small><strong>$44.990</strong></div><button class="btn btn-dark" data-quick-rank="32">Explorar</button></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="stories section-pad" id="guias">
+      <div class="wrap">
+        <div class="section-head-row reveal"><div><div class="eyebrow">APRENDE ANTES DE COMPRAR</div><h2 class="section-title">Contenido que convierte una compra en <em>una decisión informada.</em></h2></div><p class="section-lead">Guías breves y visuales para disminuir dudas sobre resistencia, talla, uso y compatibilidad.</p></div>
+        <div class="story-grid reveal">
+          <article class="story-card"><img src="assets/inline/1a1cf4ee3302.webp" alt="Rodillera deportiva"><div class="story-content"><small>Guía MOVE · 4 min</small><h3>Cómo elegir una rodillera sin comprar de más.</h3><p>Compresión, estabilización y soporte: qué cambia realmente entre una y otra.</p></div></article>
+          <article class="story-card"><img src="assets/inline/f75185f11b81.webp" alt="Bandas de resistencia"><div class="story-content"><small>Movilidad · 3 min</small><h3>Qué resistencia necesitas.</h3><p>Una regla simple para comenzar sin quedarte corto ni excederte.</p></div></article>
+          <article class="story-card"><img src="assets/inline/0a1cb58de5e0.webp" alt="Foam roller"><div class="story-content"><small>Recuperación · 5 min</small><h3>Foam roller: textura, largo y uso.</h3><p>Cómo elegir según el objetivo y el espacio disponible.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="local section-pad" id="kinesiologia">
+      <div class="wrap local-grid">
+        <div class="local-copy reveal"><div class="eyebrow" style="color:var(--lime)">MOVE VILLARRICA</div><h2 class="section-title">La experiencia no termina <em>en el carrito.</em></h2><p class="section-lead">Retira en tienda, resuelve dudas y mantén la posibilidad de pasar a una evaluación profesional cuando comprar un producto no sea suficiente.</p><div class="local-actions"><button class="btn btn-primary">Consultar por WhatsApp</button><button class="btn btn-secondary" data-agenda-open>Agendar kinesiología</button></div></div>
+        <div class="local-visual reveal">
+          <div class="map-card"><div><span class="kicker" style="color:var(--sage)">Presencia local</span><h3>Villarrica, Chile.</h3><p>Una tienda digital con un lugar físico reconocible y continuidad profesional.</p></div><strong>Retiro en MOVE · ubicación por confirmar</strong></div>
+          <div class="service-stack"><article class="service-card"><div><small>MOVE SELECT</small><h4>¿No sabes cuál elegir?</h4><p>Responde preguntas breves y recibe una selección reducida.</p></div><span>Iniciar orientación →</span></article><article class="service-card light"><div><small>MOVE EMPRESAS</small><h4>Compra por volumen.</h4><p>Ergonomía, bienestar y equipamiento para equipos.</p></div><span>Solicitar cotización →</span></article></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="catalog section-pad" id="catalogo">
+      <div class="wrap">
+        <div class="section-head-row reveal"><div><div class="eyebrow">CATÁLOGO MOVE</div><h2 class="section-title">Todo el surtido, <em>ordenado para encontrar.</em></h2></div><p class="section-lead">Entra por categoría o busca directamente. Los 50 productos siguen disponibles, pero no compiten todos por tu atención al mismo tiempo.</p></div>
+        <div class="catalog-entry reveal">
+          <div class="category-tiles"><button class="category-tile" data-category="Ortopedia"><strong>Ortopedia</strong><span>17 productos · soporte y estabilidad</span><b>O</b></button><button class="category-tile" data-category="Recupera"><strong>Recuperación</strong><span>10 productos · movilidad y autocuidado</span><b>R</b></button><button class="category-tile" data-category="Entrena"><strong>Entrenamiento</strong><span>23 productos · fuerza y control</span><b>E</b></button></div>
+          <div class="catalog-controls"><label class="catalog-search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input id="catalogSearch" placeholder="Buscar rodillera, bandas, foam roller…"></label><div class="filters"><button class="filter active" data-filter="Todos">Todos</button><button class="filter" data-filter="Ortopedia">Ortopedia</button><button class="filter" data-filter="Recupera">Recuperación</button><button class="filter" data-filter="Entrena">Entrenamiento</button></div></div>
+          <div class="catalog-grid" id="catalogGrid"></div>
+          <div class="catalog-toggle"><button class="btn btn-dark" id="catalogToggle">Mostrar catálogo completo</button></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><div class="footer-top"><div><div class="footer-logo"><span style="color:var(--lime)">•</span><span style="color:var(--orange)">•</span>MOVE</div><p class="footer-about">Ortopedia, recuperación, movilidad y entrenamiento seleccionados para ayudarte a volver a lo que te mueve.</p></div><div class="footer-col"><h4>Comprar</h4><a href="#objetivos">Por objetivo</a><a href="#mas-vendidos">Más vendidos</a><a href="#rutina">Kits MOVE</a><a href="#catalogo">Catálogo</a></div><div class="footer-col"><h4>MOVE</h4><a href="#kinesiologia">Kinesiología</a><a href="#guias">Guías</a><a href="#kinesiologia">Empresas</a><a href="#inicio">Villarrica</a></div><div class="footer-col"><h4>Ayuda</h4><a href="#">Despachos</a><a href="#">Retiro en tienda</a><a href="#">Cambios</a><a href="#">Contacto</a></div></div><div class="footer-bottom"><span>© 2026 MOVE · Villarrica, Chile</span><span>Valores e inventario mostrados son referenciales para la propuesta comercial.</span></div></div></footer>
+
+  <button class="floating-help" data-ai-open><span class="ai-live-dot"></span><span>MOVE Select · IA</span></button>
+  <div class="backdrop" id="backdrop"></div>
+  <aside class="drawer" id="cartDrawer" aria-label="Bolsa de compra"><div class="drawer-head"><h2>Tu bolsa</h2><button class="close" data-close aria-label="Cerrar">×</button></div><div class="shipping-goal"><b id="shippingText">Envío gratis sobre $39.990</b><div class="meter"><span id="shippingMeter"></span></div><small id="shippingSub">Completa tu selección y alcanza el despacho sin costo.</small></div><div class="cart-items" id="cartItems"><div class="cart-empty">Tu bolsa está esperando algo que te mueva.</div></div><div class="cart-total"><div class="cart-line"><span>Total</span><strong id="cartTotal">$0</strong></div><button class="checkout">Revisar compra de prueba →</button><div id="demoReceipt" class="nv-demo-receipt" role="status" hidden></div></div></aside>
+  <section class="quickview" id="quickview" aria-modal="true" role="dialog"><div class="quickview-grid"><div class="quickview-media"><img id="quickImage" alt="Producto MOVE"></div><div class="quickview-body"><button class="close" data-close aria-label="Cerrar">×</button><span class="cat" id="quickCat"></span><h2 id="quickTitle"></h2><p id="quickReason"></p><div class="price" id="quickPrice"></div><div class="quick-benefits"><div>✓ Retiro en MOVE Villarrica</div><div>✓ Alternativa de despacho a todo Chile</div><div>✓ Orientación de producto disponible</div></div><div class="quick-actions"><button class="btn btn-primary" id="quickAdd">Agregar a la bolsa</button><button class="quick-ai" id="quickAsk" type="button">✦ ¿Es adecuado para mí?</button><button class="wish-big" aria-label="Guardar">♡</button></div></div></div></section>
+  <section class="search-overlay" id="searchOverlay"><div class="wrap"><div class="search-top"><a class="logo" href="#inicio"><span class="logo-dots"><i></i><i></i></span>MOVE</a><button class="close" data-search-close>×</button></div><div class="search-box-large"><input id="globalSearch" placeholder="¿Qué quieres volver a hacer?" autocomplete="off"></div><div class="search-results" id="searchResults"></div></div></section>
+
+
+  <section class="agenda-overlay" id="agendaOverlay" role="dialog" aria-modal="true" aria-labelledby="agendaTitle" aria-hidden="true">
+    <div class="agenda-shell">
+      <aside class="agenda-visual">
+        <div class="agenda-visual-top">
+          <a class="logo ms-logo" href="#inicio" data-agenda-close aria-label="Cerrar MOVE Agenda"><span class="logo-dots"><i></i><i></i></span>MOVE<sup>CL</sup></a>
+          <span class="agenda-chip"><i></i> MOVE AGENDA</span>
+        </div>
+        <div class="agenda-visual-copy">
+          <span class="kicker" id="agendaVisualKicker">Atención con criterio</span>
+          <h2 id="agendaVisualTitle">Primero la indicación.<br>Después la hora.</h2>
+          <p id="agendaVisualText">La agenda verifica si existe una indicación médica escrita antes de ofrecer una sesión de tratamiento kinésico.</p>
+        </div>
+        <div class="agenda-visual-object">
+          <img id="agendaVisualImage" alt="MOVE Kinesiología">
+          <div class="agenda-visual-badge"><div><small id="agendaVisualTag">MOVE KINESIOLOGÍA</small><b id="agendaVisualProduct">Reserva responsable</b></div><span id="agendaVisualSide">Villarrica · online o presencial</span></div>
+        </div>
+        <div class="agenda-visual-foot"><span>La reserva queda sujeta a revisión de antecedentes.</span><span>No se diagnostica mediante este formulario.</span></div>
+      </aside>
+      <section class="agenda-panel">
+        <header class="agenda-top">
+          <div class="agenda-status"><i></i><div><b>MOVE Agenda</b><small id="agendaStepLabel">Verificación médica</small></div></div>
+          <button class="agenda-close" type="button" data-agenda-close aria-label="Cerrar">×</button>
+        </header>
+        <div class="agenda-progress"><span id="agendaProgress"></span></div>
+        <main class="agenda-stage" id="agendaStage"></main>
+        <footer class="agenda-bottom"><button class="agenda-back" id="agendaBack" type="button">← Atrás</button><span>Los horarios mostrados son de demostración hasta conectar el calendario real de MOVE.</span></footer>
+      </section>
+    </div>
+  </section>
+
+  <section class="ms-overlay" id="moveSelectOverlay" role="dialog" aria-modal="true" aria-labelledby="msTitle" aria-hidden="true">
+    <div class="ms-shell">
+      <aside class="ms-visual" id="msVisual">
+        <div class="ms-visual-top">
+          <a class="logo ms-logo" href="#inicio" data-ai-close aria-label="Cerrar MOVE Select"><span class="logo-dots"><i></i><i></i></span>MOVE<sup>CL</sup></a>
+          <span class="ms-ai-chip"><i></i> MOVE SELECT</span>
+        </div>
+        <div class="ms-visual-copy">
+          <span class="kicker" id="msVisualKicker">Tu ruta comienza aquí</span>
+          <h2 id="msVisualTitle">Menos duda.<br>Más movimiento.</h2>
+          <p id="msVisualText">Una experiencia guiada para ordenar productos según tu objetivo, contexto y presupuesto.</p>
+        </div>
+        <div class="ms-object-wrap" aria-hidden="true">
+          <div class="ms-orbit"></div>
+          <div class="ms-object"><img id="msVisualImage" alt="Selección MOVE"></div>
+          <div class="ms-object-label"><small id="msVisualTag">MOVE SELECT</small><b id="msVisualProduct">Ruta personalizada</b></div>
+        </div>
+        <div class="ms-visual-foot"><span><i></i><b>Orientación de compra</b></span><span>No diagnostica ni reemplaza una evaluación profesional.</span></div>
+      </aside>
+      <section class="ms-panel">
+        <header class="ms-top">
+          <div class="ms-top-left"><div><span class="ms-status demo" id="msStatus"><i></i><b id="msModeText">Demostración inteligente</b></span><small class="ms-step-label" id="msStepLabel">Ruta MOVE · inicio</small></div></div>
+          <button class="ms-close" type="button" data-ai-close aria-label="Cerrar">×</button>
+        </header>
+        <div class="ms-progress"><span id="msProgress"></span></div>
+        <main class="ms-stage" id="msStage"></main>
+        <footer class="ms-bottom"><button class="ms-back" id="msBack" type="button">← Atrás</button><span>Preguntas guiadas sin IA. Precios e inventario referenciales.</span></footer>
+      </section>
+    </div>
+  </section>
+
+  <div class="toast" id="toast">Agregado a tu bolsa</div>
+
+  <script>
+    const products = [{"rank": 1, "category": "Entrena", "name": "Set 3 bandas de resistencia", "why": "Demanda masiva · +10 mil ventas visibles", "price": "$5.990", "value": 5990}, {"rank": 2, "category": "Entrena", "name": "Loop bands set x5", "why": "Alta rotación · fácil despacho", "price": "$6.990", "value": 6990}, {"rank": 3, "category": "Entrena", "name": "Power bands set x4", "why": "Fuerza, asistencia y progresiones", "price": "$17.990", "value": 17990}, {"rank": 4, "category": "Recupera", "name": "Banda terapéutica 1,5 m", "why": "Rehabilitación y movilidad progresiva", "price": "$4.990", "value": 4990}, {"rank": 5, "category": "Entrena", "name": "Kit tubos con manillas", "why": "Versátil para casa y entrenamiento", "price": "$18.990", "value": 18990}, {"rank": 6, "category": "Ortopedia", "name": "Rodillera de compresión", "why": "Más elegido transversal", "price": "$12.990", "value": 12990}, {"rank": 7, "category": "Ortopedia", "name": "Rodillera estabilizadora rotuliana", "why": "Soporte ajustable para actividad", "price": "$16.990", "value": 16990}, {"rank": 8, "category": "Ortopedia", "name": "Banda infrapatelar", "why": "Formato compacto y complementario", "price": "$8.990", "value": 8990}, {"rank": 9, "category": "Ortopedia", "name": "Rodillera con bisagras", "why": "Mayor soporte y ticket medio", "price": "$29.990", "value": 29990}, {"rank": 10, "category": "Ortopedia", "name": "Tobillera estabilizadora", "why": "Categoría fuerte en retail chileno", "price": "$19.990", "value": 19990}, {"rank": 11, "category": "Ortopedia", "name": "Tobillera elástica deportiva", "why": "Compra recurrente deportiva", "price": "$10.990", "value": 10990}, {"rank": 12, "category": "Ortopedia", "name": "Inmovilizador de muñeca", "why": "Top visible en ortopedia online", "price": "$15.990", "value": 15990}, {"rank": 13, "category": "Ortopedia", "name": "Muñequera de compresión", "why": "Deporte, oficina y uso cotidiano", "price": "$8.990", "value": 8990}, {"rank": 14, "category": "Ortopedia", "name": "Codera de compresión", "why": "Bajo volumen y venta cruzada", "price": "$9.990", "value": 9990}, {"rank": 15, "category": "Ortopedia", "name": "Banda para epicondilitis", "why": "Producto específico de alta intención", "price": "$11.990", "value": 11990}, {"rank": 16, "category": "Ortopedia", "name": "Faja lumbar ajustable", "why": "Categoría ortopédica de alta búsqueda", "price": "$22.990", "value": 22990}, {"rank": 17, "category": "Ortopedia", "name": "Soporte de hombro", "why": "Complementa recuperación y deporte", "price": "$18.990", "value": 18990}, {"rank": 18, "category": "Ortopedia", "name": "Collar cervical blando", "why": "Producto ortopédico esencial", "price": "$12.990", "value": 12990}, {"rank": 19, "category": "Ortopedia", "name": "Cabestrillo ajustable", "why": "Bajo costo y demanda clínica estable", "price": "$10.990", "value": 10990}, {"rank": 20, "category": "Ortopedia", "name": "Bota ortopédica corta", "why": "Ticket superior · compra por necesidad", "price": "$49.990", "value": 49990}, {"rank": 21, "category": "Ortopedia", "name": "Plantillas anatómicas", "why": "N.º 1 visible en ortopedia ML", "price": "$18.990", "value": 18990}, {"rank": 22, "category": "Ortopedia", "name": "Taloneras de silicona", "why": "Versátil · complemento de plantilla", "price": "$9.990", "value": 9990}, {"rank": 23, "category": "Recupera", "name": "Foam roller texturizado 33 cm", "why": "Categoría con +1.000 ventas visibles", "price": "$9.990", "value": 9990}, {"rank": 24, "category": "Recupera", "name": "Foam roller liso 45 cm", "why": "Movilidad, Pilates y elongación", "price": "$14.990", "value": 14990}, {"rank": 25, "category": "Recupera", "name": "Set roller 5 en 1", "why": "Kit de alto valor percibido", "price": "$17.990", "value": 17990}, {"rank": 26, "category": "Recupera", "name": "Pelota de masaje miofascial", "why": "Excelente venta complementaria", "price": "$5.990", "value": 5990}, {"rank": 27, "category": "Recupera", "name": "Pelota doble tipo peanut", "why": "Espalda y liberación localizada", "price": "$7.990", "value": 7990}, {"rank": 28, "category": "Recupera", "name": "Rodillo masajeador de pies", "why": "Autocuidado y recuperación", "price": "$6.990", "value": 6990}, {"rank": 29, "category": "Recupera", "name": "Pistola de masaje compacta", "why": "Ticket medio/alto y regalo deportivo", "price": "$34.990", "value": 34990}, {"rank": 30, "category": "Recupera", "name": "Compresa gel frío/calor", "why": "Producto transversal y recurrente", "price": "$7.990", "value": 7990}, {"rank": 31, "category": "Recupera", "name": "Pack frío instantáneo reutilizable", "why": "Deporte y primeros cuidados", "price": "$5.990", "value": 5990}, {"rank": 32, "category": "Entrena", "name": "Gym ball 65 cm + inflador", "why": "+1.000 ventas visibles en Chile", "price": "$7.990", "value": 7990}, {"rank": 33, "category": "Entrena", "name": "Gym ball 75 cm + inflador", "why": "N.º 1 visible en Pilates/Fitness ML", "price": "$8.990", "value": 8990}, {"rank": 34, "category": "Entrena", "name": "Soft ball Pilates 24 cm", "why": "Miles de reseñas en Decathlon", "price": "$5.990", "value": 5990}, {"rank": 35, "category": "Entrena", "name": "Disco de equilibrio propioceptivo", "why": "Balance, tobillo y control motor", "price": "$10.990", "value": 10990}, {"rank": 36, "category": "Entrena", "name": "Balance board", "why": "Propiocepción y entrenamiento funcional", "price": "$24.990", "value": 24990}, {"rank": 37, "category": "Entrena", "name": "Step aeróbico 2 niveles", "why": "Miles de ventas visibles", "price": "$16.990", "value": 16990}, {"rank": 38, "category": "Entrena", "name": "Mat NBR 10–15 mm", "why": "Alta rotación y uso multipropósito", "price": "$17.990", "value": 17990}, {"rank": 39, "category": "Entrena", "name": "Colchoneta plegable ejercicio", "why": "Rehabilitación y entrenamiento en suelo", "price": "$18.990", "value": 18990}, {"rank": 40, "category": "Entrena", "name": "Bloques yoga EVA x2", "why": "Complemento barato y de alta rotación", "price": "$7.990", "value": 7990}, {"rank": 41, "category": "Entrena", "name": "Correa de estiramiento 2,5 m", "why": "Movilidad y flexibilidad", "price": "$7.990", "value": 7990}, {"rank": 42, "category": "Entrena", "name": "Mancuernas 1 kg x2", "why": "Más de 3.000 reseñas en Decathlon", "price": "$11.990", "value": 11990}, {"rank": 43, "category": "Entrena", "name": "Mancuernas 2 kg x2", "why": "Más de 2.700 reseñas", "price": "$16.990", "value": 16990}, {"rank": 44, "category": "Entrena", "name": "Mancuernas 3 kg x2", "why": "Progresión simple para hogar", "price": "$21.990", "value": 21990}, {"rank": 45, "category": "Entrena", "name": "Set mancuernas ajustables 20 kg", "why": "Miles de ventas visibles online", "price": "$34.990", "value": 34990}, {"rank": 46, "category": "Entrena", "name": "Cuerda de salto ajustable", "why": "Producto masivo y fácil de enviar", "price": "$6.990", "value": 6990}, {"rank": 47, "category": "Entrena", "name": "Hand grip regulable", "why": "Fuerza de mano y antebrazo", "price": "$9.990", "value": 9990}, {"rank": 48, "category": "Recupera", "name": "Kit rehabilitación de manos", "why": "Casi 800 reseñas en Decathlon", "price": "$16.990", "value": 16990}, {"rank": 49, "category": "Entrena", "name": "Balón medicinal 2 kg", "why": "Fuerza funcional y acondicionamiento", "price": "$18.990", "value": 18990}, {"rank": 50, "category": "Entrena", "name": "Kit suspensión tipo straps", "why": "Entrenamiento funcional de alto valor", "price": "$29.990", "value": 29990}];
+    const imageMap = {
+      bands:'assets/inline/f75185f11b81.webp', knee:'assets/inline/1a1cf4ee3302.webp', roller:'assets/inline/0a1cb58de5e0.webp', ball:'assets/inline/9505236ef639.webp', wrist:'assets/inline/345e993e0217.webp', massage:'assets/inline/5b837a4e445b.webp', mat:'assets/inline/3d178589f5e0.webp', dumbbell:'assets/inline/03ebfc7ea487.webp', cold:'assets/inline/c7dac61705d3.webp', insole:'assets/inline/61ee9705df8f.webp', step:'assets/inline/0e0bd000a9ab.webp', straps:'assets/inline/9552be83b3d8.webp', grip:'assets/inline/ee2722e22926.webp', bundle:'assets/inline/e0b77e26a301.webp'
+    };
+    function imageFor(p){
+      const n=p.name.toLowerCase();
+      if(n.includes('banda')||n.includes('loop')||n.includes('power bands')||n.includes('tubos')) return imageMap.bands;
+      if(n.includes('rodillera')||n.includes('infrapatelar')||n.includes('tobillera')||n.includes('bota ortop')) return imageMap.knee;
+      if(n.includes('muñe')||n.includes('codera')||n.includes('epicondilitis')||n.includes('hombro')||n.includes('collar')||n.includes('cabestrillo')) return imageMap.wrist;
+      if(n.includes('plantilla')||n.includes('talonera')) return imageMap.insole;
+      if(n.includes('foam')||n.includes('roller')||n.includes('miofascial')||n.includes('peanut')||n.includes('pies')) return imageMap.roller;
+      if(n.includes('pistola')) return imageMap.massage;
+      if(n.includes('frío')||n.includes('frio')||n.includes('calor')||n.includes('instantáneo')) return imageMap.cold;
+      if(n.includes('gym ball')||n.includes('soft ball')||n.includes('balón medicinal')) return imageMap.ball;
+      if(n.includes('mancuerna')) return imageMap.dumbbell;
+      if(n.includes('mat')||n.includes('colchoneta')||n.includes('bloques yoga')||n.includes('correa de estiramiento')) return imageMap.mat;
+      if(n.includes('suspensión')||n.includes('straps')) return imageMap.straps;
+      if(n.includes('step')||n.includes('balance')||n.includes('disco de equilibrio')) return imageMap.step;
+      if(n.includes('hand grip')||n.includes('rehabilitación de manos')) return imageMap.grip;
+      return p.category==='Ortopedia'?imageMap.knee:p.category==='Recupera'?imageMap.roller:imageMap.bands;
+    }
+    function metaFor(p){
+      const n=p.name.toLowerCase(), out=[];
+      if(p.rank<=10) out.push('Alta demanda');
+      if(n.includes('kit')||n.includes('set')) out.push('Buena relación valor');
+      if(p.category==='Ortopedia') out.push('Soporte');
+      if(p.category==='Recupera') out.push('Recuperación');
+      if(p.category==='Entrena') out.push('Entrenamiento');
+      return out.slice(0,2);
+    }
+    const byRank = rank => products.find(p=>p.rank===Number(rank));
+    const money = n => '$'+Number(n).toLocaleString('es-CL');
+    const featuredRanks=[1,7,23,32,29,12,38,45];
+    let cart=[];
+    let currentQuick=null;
+    let catalogFilter='Todos';
+    let catalogOpen=false;
+
+    const goalData={
+      dolor:{badge:'Dolor & recuperación',number:'Ruta MOVE 01',caption:'Rodilla en movimiento',captionSmall:'Soporte, movilidad y retorno gradual.',title:'Vuelve a caminar y entrenar con más confianza.',text:'Una selección breve para acompañar el movimiento: soporte, activación progresiva y recuperación. Sin prometer resultados clínicos ni reemplazar una evaluación.',image:'assets/inline/e0b77e26a301.webp',steps:[['Define el tipo de apoyo','Compresión, estabilidad o descarga.'],['Activa progresivamente','Bandas para controlar la intensidad.'],['Recupera entre sesiones','Movilidad y automasaje localizado.']],ranks:[7,1]},
+      entrenar:{badge:'Retorno al entrenamiento',number:'Ruta MOVE 02',caption:'Vuelve a cargar con control',captionSmall:'Fuerza, estabilidad y progresión.',title:'Retoma tu rutina sin partir desde cero.',text:'Equipamiento versátil para recuperar fuerza, control y confianza, con progresiones que puedes adaptar a tu nivel.',image:'assets/inline/ad8a2c89d226.webp',steps:[['Prepara el movimiento','Movilidad y activación antes de cargar.'],['Progresa resistencia','Bandas, mancuernas y suspensión.'],['Cuida la recuperación','Foam roller y elongación.']],ranks:[3,32]},
+      movilidad:{badge:'Movilidad',number:'Ruta MOVE 03',caption:'Más libertad de movimiento',captionSmall:'Elongación, activación y control.',title:'Muévete con menos rigidez y más continuidad.',text:'Una ruta simple para incorporar movilidad a la vida diaria o complementar rehabilitación y entrenamiento.',image:'assets/inline/f75185f11b81.webp',steps:[['Elige resistencia amable','Empieza con una banda que permita control.'],['Amplía rango gradualmente','Prioriza calidad antes que intensidad.'],['Integra a tu rutina','Pocos minutos, varias veces por semana.']],ranks:[4,24]},
+      autonomia:{badge:'Autonomía diaria',number:'Ruta MOVE 04',caption:'Movimiento cotidiano',captionSmall:'Seguridad, soporte y práctica.',title:'Haz más cosas por ti, con apoyo cuando lo necesitas.',text:'Productos para acompañar movilidad cotidiana, equilibrio y confianza en tareas diarias, siempre con criterios de seguridad.',image:'assets/inline/1a1cf4ee3302.webp',steps:[['Prioriza estabilidad','Reduce complejidad y riesgos innecesarios.'],['Entrena lo cotidiano','Equilibrio, fuerza de manos y apoyo.'],['Consulta cuando corresponda','El producto no reemplaza evaluación.']],ranks:[35,48]}
+    };
+
+    function productCard(p){
+      const tags=metaFor(p).map(t=>`<span>${t}</span>`).join('');
+      return `<article class="product-card reveal" data-tilt data-rank="${p.rank}"><div class="product-media" data-quick-rank="${p.rank}"><span class="rank-pill"><strong>#${String(p.rank).padStart(2,'0')}</strong> Radar MOVE</span><button class="wish" aria-label="Guardar">♡</button><img loading="lazy" src="${imageFor(p)}" alt="${p.name}"></div><div class="product-body"><span class="product-cat">${p.category}</span><h3>${p.name}</h3><div class="product-reason">${p.why}</div><div class="product-meta">${tags}</div><button class="product-fit" type="button" data-ai-product="${p.rank}"><span>✦ ¿Es adecuado para mí?</span><i>MOVE Select →</i></button><div class="product-buy"><div class="product-price"><small>Precio referencial</small><strong>${p.price}</strong></div><button class="add-btn" data-add-rank="${p.rank}" aria-label="Agregar ${p.name}">+</button></div></div></article>`;
+    }
+    function renderFeatured(){
+      document.getElementById('featuredProducts').innerHTML=featuredRanks.map(r=>productCard(byRank(r))).join('');
+      bindDynamic();
+      requestAnimationFrame(()=>document.querySelectorAll('#featuredProducts .reveal').forEach(el=>el.classList.add('visible')));
+    }
+    function catalogCard(p){return `<article class="catalog-card"><img loading="lazy" src="${imageFor(p)}" alt="${p.name}" data-quick-rank="${p.rank}"><div class="catalog-card-body"><span class="cat">#${String(p.rank).padStart(2,'0')} · ${p.category}</span><h4>${p.name}</h4><p>${p.why}</p><button class="catalog-fit" type="button" data-ai-product="${p.rank}">✦ Consultar a MOVE Select</button><div class="catalog-card-bottom"><strong>${p.price}</strong><button data-add-rank="${p.rank}" aria-label="Agregar">+</button></div></div></article>`}
+    function renderCatalog(){
+      const q=document.getElementById('catalogSearch').value.trim().toLowerCase();
+      const list=products.filter(p=>(catalogFilter==='Todos'||p.category===catalogFilter)&&(!q||(p.name+' '+p.why).toLowerCase().includes(q)));
+      document.getElementById('catalogGrid').innerHTML=list.map(catalogCard).join('');
+      bindDynamic();
+    }
+    function setGoal(id){
+      const d=goalData[id]; if(!d)return;
+      document.querySelectorAll('.goal-tab').forEach(b=>b.classList.toggle('active',b.dataset.goal===id));
+      const im=document.getElementById('goalImage'); im.style.opacity=.18; im.style.transform='scale(1.08)';
+      setTimeout(()=>{im.src=d.image;im.style.opacity=1;im.style.transform='scale(1.02)'},180);
+      document.getElementById('goalBadge').textContent=d.badge;document.getElementById('goalNumber').textContent=d.number;document.getElementById('goalCaption').textContent=d.caption;document.getElementById('goalCaptionSmall').textContent=d.captionSmall;document.getElementById('goalTitle').textContent=d.title;document.getElementById('goalText').textContent=d.text;
+      document.getElementById('goalSteps').innerHTML=d.steps.map((s,i)=>`<div class="goal-step"><i>${i+1}</i><div><b>${s[0]}</b><span>${s[1]}</span></div></div>`).join('');
+      document.getElementById('goalProducts').innerHTML=d.ranks.map(r=>{const p=byRank(r);return `<article class="mini-product" data-quick-rank="${p.rank}"><img src="${imageFor(p)}" alt="${p.name}"><div><small>Recomendado</small><b>${p.name}</b><span>${p.price}</span></div></article>`}).join('');
+      document.getElementById('goalCta').onclick=()=>{catalogFilter=id==='dolor'||id==='autonomia'?'Ortopedia':id==='movilidad'?'Recupera':'Entrena';openCatalog();};bindDynamic();
+    }
+    function addProduct(p){cart.push({...p,image:imageFor(p)});updateCart();showToast(`${p.name} agregado`);openCart();}
+    function addBundle(){cart.push({rank:1001,name:'Kit MOVE · Rodilla en movimiento',price:'$27.990',value:27990,category:'Kit MOVE',image:imageMap.bundle});updateCart();showToast('Kit MOVE agregado');openCart();}
+    function updateCart(){
+      document.getElementById('demoReceipt').hidden=true;
+      document.getElementById('bagCount').textContent=cart.length;
+      const total=cart.reduce((a,b)=>a+b.value,0),goal=39990,remain=Math.max(goal-total,0);
+      document.getElementById('cartTotal').textContent=money(total);document.getElementById('shippingMeter').style.width=Math.min(total/goal*100,100)+'%';
+      document.getElementById('shippingText').textContent=remain?`Te faltan ${money(remain)} para envío gratis`:'Desbloqueaste el envío gratis';document.getElementById('shippingSub').textContent=remain?'Completa tu selección con un producto que tenga sentido para tu objetivo.':'Tu compra ya alcanzó el beneficio de despacho del prototipo.';
+      document.getElementById('cartItems').innerHTML=cart.length?cart.map((p,i)=>`<div class="cart-item"><img src="${p.image}" alt="${p.name}"><div><b>${p.name}</b><small>${p.price}</small></div><button class="remove" data-remove="${i}" aria-label="Eliminar">×</button></div>`).join(''):'<div class="cart-empty">Tu bolsa está esperando algo que te mueva.</div>';
+      document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{cart.splice(Number(b.dataset.remove),1);updateCart()});
+    }
+    function openCart(){closeOverlays(false);document.getElementById('backdrop').classList.add('open');document.getElementById('cartDrawer').classList.add('open');document.body.classList.add('locked')}
+    function openQuick(rank){const p=byRank(rank);if(!p)return;currentQuick=p;document.getElementById('quickImage').src=imageFor(p);document.getElementById('quickTitle').textContent=p.name;document.getElementById('quickCat').textContent=`#${String(p.rank).padStart(2,'0')} · ${p.category}`;document.getElementById('quickReason').textContent=p.why;document.getElementById('quickPrice').textContent=p.price;document.getElementById('quickAdd').onclick=()=>addProduct(p);document.getElementById('quickAsk').onclick=()=>{closeOverlays();setTimeout(()=>openMoveSelect({productRank:p.rank}),180)};document.getElementById('backdrop').classList.add('open');document.getElementById('quickview').classList.add('open');document.body.classList.add('locked')}
+    function closeOverlays(removeBackdrop=true){document.getElementById('cartDrawer').classList.remove('open');document.getElementById('quickview').classList.remove('open');if(removeBackdrop)document.getElementById('backdrop').classList.remove('open');if(removeBackdrop)document.body.classList.remove('locked')}
+    function openSearch(){document.getElementById('searchOverlay').classList.add('open');document.body.classList.add('locked');setTimeout(()=>document.getElementById('globalSearch').focus(),250);renderSearch('')}
+    function closeSearch(){document.getElementById('searchOverlay').classList.remove('open');document.body.classList.remove('locked')}
+    function renderSearch(q){q=q.trim().toLowerCase();const list=(q?products.filter(p=>(p.name+' '+p.why).toLowerCase().includes(q)):featuredRanks.map(byRank)).slice(0,9);document.getElementById('searchResults').innerHTML=list.map(p=>`<article class="search-result" data-search-rank="${p.rank}"><img src="${imageFor(p)}" alt="${p.name}"><div><b>${p.name}</b><span>${p.price} · ${p.category}</span></div></article>`).join('');document.querySelectorAll('[data-search-rank]').forEach(x=>x.onclick=()=>{closeSearch();setTimeout(()=>openQuick(x.dataset.searchRank),250)})}
+    function showToast(text){const t=document.getElementById('toast');t.textContent=text;t.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove('show'),1700)}
+    function openCatalog(){catalogOpen=true;document.getElementById('catalogGrid').classList.add('open');document.getElementById('catalogToggle').textContent='Ocultar catálogo';renderCatalog();document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})}
+    function bindDynamic(){
+      document.querySelectorAll('[data-add-rank]').forEach(b=>b.onclick=e=>{e.stopPropagation();addProduct(byRank(b.dataset.addRank))});
+      document.querySelectorAll('[data-ai-product]').forEach(b=>b.onclick=e=>{e.stopPropagation();openMoveSelect({productRank:Number(b.dataset.aiProduct)})});
+      document.querySelectorAll('[data-quick-rank]').forEach(el=>el.onclick=e=>{if(e.target.closest('[data-add-rank]')||e.target.closest('[data-ai-product]')||e.target.classList.contains('wish'))return;openQuick(el.dataset.quickRank)});
+      bindTilt();
+    }
+    function bindTilt(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;document.querySelectorAll('[data-tilt]').forEach(card=>{if(card.dataset.tiltBound)return;card.dataset.tiltBound='1';card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`rotateX(${(-y*5).toFixed(2)}deg) rotateY(${(x*7).toFixed(2)}deg) translateY(-4px)`});card.addEventListener('pointerleave',()=>card.style.transform='')})}
+
+
+
+    /* =========================================================
+       MOVE SELECT · motor guiado + conexión opcional a IA
+       ========================================================= */
+
+
+    /* MOVE Agenda */
+    const agendaOverlay=document.getElementById('agendaOverlay');
+    const agendaStage=document.getElementById('agendaStage');
+    const agendaProgress=document.getElementById('agendaProgress');
+    const agendaBack=document.getElementById('agendaBack');
+    const agendaStepLabel=document.getElementById('agendaStepLabel');
+    const agendaVisualImage=document.getElementById('agendaVisualImage');
+    const agendaVisualKicker=document.getElementById('agendaVisualKicker');
+    const agendaVisualTitle=document.getElementById('agendaVisualTitle');
+    const agendaVisualText=document.getElementById('agendaVisualText');
+    const agendaVisualTag=document.getElementById('agendaVisualTag');
+    const agendaVisualProduct=document.getElementById('agendaVisualProduct');
+    const agendaVisualSide=document.getElementById('agendaVisualSide');
+    const agendaDefaults=()=>({orderStatus:'',issuer:'',reason:'',sessions:'',orderDate:'',documentName:'',modality:'',date:'',dateLabel:'',time:'',name:'',email:'',phone:'',consent:false});
+    let agendaState=agendaDefaults(),agendaStep=0;
+    const agendaVisuals={
+      0:{label:'Verificación médica',pct:16,kicker:'Atención con criterio',title:'Primero la indicación.<br>Después la hora.',text:'MOVE verifica si existe una indicación médica escrita antes de ofrecer una sesión de tratamiento kinésico.',tag:'MOVE KINESIOLOGÍA',product:'Reserva responsable',side:'Villarrica · online o presencial',image:'knee'},
+      1:{label:'Antecedentes de la orden',pct:34,kicker:'Paso 2 · antecedentes',title:'La orden orienta<br>el inicio del proceso.',text:'Registramos sólo los datos necesarios para revisar la derivación y preparar la atención.',tag:'INDICACIÓN MÉDICA',product:'Revisión previa',side:'Documento protegido',image:'bundle'},
+      2:{label:'Modalidad',pct:52,kicker:'Paso 3 · modalidad',title:'Presencial u online,<br>según pertinencia.',text:'La modalidad online queda sujeta a que el profesional confirme que es adecuada para el caso.',tag:'MODALIDAD',product:'Online o Villarrica',side:'Sujeto a revisión',image:'hero'},
+      3:{label:'Fecha y hora',pct:70,kicker:'Paso 4 · disponibilidad',title:'Elige un horario<br>para solicitar.',text:'En producción, estos bloques se sincronizarán con el calendario real del kinesiólogo.',tag:'DISPONIBILIDAD',product:'Horario de demostración',side:'Sin doble reserva',image:'hero'},
+      4:{label:'Datos de contacto',pct:86,kicker:'Paso 5 · confirmación',title:'Sólo lo necesario<br>para contactarte.',text:'La solicitud se confirma después de revisar la indicación médica y la disponibilidad real.',tag:'DATOS MÍNIMOS',product:'Privacidad primero',side:'Solicitud condicionada',image:'bundle'},
+      5:{label:'Solicitud preparada',pct:100,kicker:'Solicitud preparada',title:'La ruta quedó<br>ordenada.',text:'En la versión conectada, MOVE revisará la orden y enviará la confirmación definitiva.',tag:'MOVE AGENDA',product:'Pendiente de revisión',side:'No es una reserva real aún',image:'bundle'}
+    };
+    function agendaSetVisual(step){const v=agendaVisuals[step]||agendaVisuals[0];agendaProgress.style.width=v.pct+'%';agendaStepLabel.textContent=v.label;agendaVisualKicker.textContent=v.kicker;agendaVisualTitle.innerHTML=v.title;agendaVisualText.textContent=v.text;agendaVisualTag.textContent=v.tag;agendaVisualProduct.textContent=v.product;agendaVisualSide.textContent=v.side;const src=imageMap[v.image]||imageMap.bundle;agendaVisualImage.style.opacity='.15';setTimeout(()=>{agendaVisualImage.src=src;agendaVisualImage.style.opacity='1'},100);agendaBack.classList.toggle('show',step>0&&step<5)}
+    function agendaOpen(){closeSearch();closeMoveSelect();closeOverlays();agendaState=agendaDefaults();agendaStep=0;agendaOverlay.classList.add('open');agendaOverlay.setAttribute('aria-hidden','false');document.body.classList.add('agenda-locked');agendaVisualImage.src=imageMap.knee;agendaRenderReferral()}
+    function agendaClose(){agendaOverlay.classList.remove('open');agendaOverlay.setAttribute('aria-hidden','true');document.body.classList.remove('agenda-locked')}
+    function agendaRenderReferral(){agendaStep=0;agendaSetVisual(0);agendaStage.innerHTML=`<div class="agenda-content"><span class="agenda-kicker">ANTES DE AGENDAR</span><h1 id="agendaTitle">¿Cuentas con una indicación médica escrita para kinesiología?</h1><p class="agenda-lead">Muchas derivaciones musculoesqueléticas provienen de traumatología, pero también pueden ser emitidas por otro médico tratante. Para iniciar tratamiento, MOVE debe revisar esa indicación.</p><div class="agenda-options"><button class="agenda-option" data-order-status="ready"><small>Sí</small><b>Tengo la orden disponible</b><span>Puedo ingresar sus antecedentes y adjuntarla para revisión.</span></button><button class="agenda-option" data-order-status="pending"><small>Sí, pero</small><b>No la tengo a mano</b><span>Puedo solicitar un horario, pero quedará pendiente hasta enviarla.</span></button><button class="agenda-option" data-order-status="none"><small>No / no sé</small><b>Aún no tengo indicación</b><span>MOVE no confirmará tratamiento kinésico sin una indicación médica escrita.</span></button></div><div class="agenda-note"><strong>Importante:</strong> esto no evalúa si necesitas kinesiología ni reemplaza un diagnóstico médico. Sólo organiza el acceso de manera responsable.</div></div>`;document.querySelectorAll('[data-order-status]').forEach(b=>b.onclick=()=>{agendaState.orderStatus=b.dataset.orderStatus;if(agendaState.orderStatus==='none')agendaRenderNoOrder();else agendaRenderOrder()})}
+    function agendaRenderNoOrder(){agendaStep=0;agendaSetVisual(0);agendaStage.innerHTML=`<div class="agenda-content agenda-no-order"><div class="agenda-no-order-card"><div class="agenda-no-order-icon">!</div><span class="agenda-kicker">AÚN NO ES MOMENTO DE RESERVAR TRATAMIENTO</span><h2 id="agendaTitle">Primero necesitas una evaluación e indicación médica.</h2><p class="agenda-lead">MOVE puede seguir orientándote sobre productos generales, pero no debe presentar una sesión kinésica terapéutica como sustituto de una evaluación médica.</p><div class="agenda-note"><strong>Qué puedes hacer ahora:</strong> solicitar una evaluación médica con el profesional que corresponda, buscar atención urgente si existen señales de alarma, o continuar con MOVE Select para revisar productos sin tomarlos como tratamiento.</div><div class="agenda-no-order-actions"><button class="agenda-primary" id="agendaGoSelect">Continuar con MOVE Select</button><button class="agenda-secondary" id="agendaHaveOrder">Sí tengo una indicación</button><button class="agenda-link" id="agendaCloseNoOrder">Volver a la web</button></div></div></div>`;document.getElementById('agendaGoSelect').onclick=()=>{agendaClose();setTimeout(()=>openMoveSelect(),180)};document.getElementById('agendaHaveOrder').onclick=()=>{agendaState.orderStatus='ready';agendaRenderOrder()};document.getElementById('agendaCloseNoOrder').onclick=agendaClose}
+    function agendaRenderOrder(){agendaStep=1;agendaSetVisual(1);const pending=agendaState.orderStatus==='pending';agendaStage.innerHTML=`<div class="agenda-content"><span class="agenda-kicker">ANTECEDENTES BÁSICOS</span><h2 id="agendaTitle">Cuéntanos qué indica la derivación.</h2><p class="agenda-lead">No necesitamos una historia clínica extensa. Sólo la información suficiente para revisar la solicitud y preparar la atención.</p><div class="agenda-form-grid"><div class="agenda-field"><label>Profesional que emitió la indicación</label><select id="agendaIssuer"><option value="">Selecciona una opción</option><option value="Traumatología">Traumatología</option><option value="Medicina física y rehabilitación / Fisiatría">Medicina física y rehabilitación / Fisiatría</option><option value="Medicina general">Medicina general</option><option value="Otra especialidad médica">Otra especialidad médica</option><option value="No lo recuerdo">No lo recuerdo</option></select></div><div class="agenda-field"><label>Número de sesiones indicadas</label><input id="agendaSessions" inputmode="numeric" maxlength="3" placeholder="Ej.: 10" value="${nvDemoEscape(agendaState.sessions||'')}"></div><div class="agenda-field full"><label>Motivo general o zona indicada</label><input id="agendaReason" maxlength="120" placeholder="Ej.: rehabilitación de rodilla derecha" value="${nvDemoEscape(agendaState.reason||'')}"></div><div class="agenda-field"><label>Fecha de la orden (opcional)</label><input id="agendaOrderDate" type="date" value="${nvDemoEscape(agendaState.orderDate||'')}"></div><div class="agenda-field"><label>Estado del documento</label><input value="${pending?'Pendiente de envío':'Disponible para adjuntar'}" disabled></div><div class="agenda-field full"><label class="agenda-upload" for="agendaDocument"><input id="agendaDocument" type="file" accept="image/*,.pdf"><span class="agenda-upload-icon">↥</span><span class="agenda-upload-copy"><b>${pending?'Puedes adjuntarla ahora o después':'Adjunta una foto o PDF de la indicación'}</b><span>En este prototipo el archivo no se sube ni se almacena.</span></span><span class="agenda-file-name" id="agendaFileName">${nvDemoEscape(agendaState.documentName||'Sin archivo')}</span></label></div></div><div class="agenda-error" id="agendaOrderError">Completa el profesional que emitió la indicación y el motivo general.</div><div class="agenda-inline"><button class="agenda-primary" id="agendaOrderContinue">Continuar a modalidad →</button><span style="font-size:11px;color:#7b837c">La atención quedará sujeta a revisión de la indicación.</span></div></div>`;document.getElementById('agendaIssuer').value=agendaState.issuer||'';document.getElementById('agendaDocument').onchange=e=>{const f=e.target.files&&e.target.files[0];agendaState.documentName=f?f.name:'';document.getElementById('agendaFileName').textContent=agendaState.documentName||'Sin archivo'};document.getElementById('agendaOrderContinue').onclick=()=>{agendaState.issuer=document.getElementById('agendaIssuer').value;agendaState.sessions=document.getElementById('agendaSessions').value.trim();agendaState.reason=document.getElementById('agendaReason').value.trim();agendaState.orderDate=document.getElementById('agendaOrderDate').value;if(!agendaState.issuer||!agendaState.reason){document.getElementById('agendaOrderError').classList.add('show');return}agendaRenderModality()}}
+    function agendaRenderModality(){agendaStep=2;agendaSetVisual(2);agendaStage.innerHTML=`<div class="agenda-content"><span class="agenda-kicker">MODALIDAD DE PREFERENCIA</span><h2 id="agendaTitle">¿Cómo prefieres atenderte?</h2><p class="agenda-lead">Puedes indicar tu preferencia. El kinesiólogo confirmará si la modalidad online es pertinente después de revisar la orden y el motivo.</p><div class="agenda-options"><button class="agenda-option ${agendaState.modality==='Presencial'?'selected':''}" data-agenda-modality="Presencial"><small>Villarrica</small><b>Atención presencial</b><span>Evaluación y tratamiento en MOVE, con acceso directo al espacio físico.</span></button><button class="agenda-option ${agendaState.modality==='Online'?'selected':''}" data-agenda-modality="Online"><small>Teleatención</small><b>Atención online</b><span>Disponible cuando el profesional determine que puede realizarse de forma segura a distancia.</span></button><button class="agenda-option ${agendaState.modality==='Indistinta'?'selected':''}" data-agenda-modality="Indistinta"><small>Flexible</small><b>Me sirve cualquiera</b><span>MOVE propondrá la opción más adecuada según antecedentes y disponibilidad.</span></button></div><div class="agenda-error" id="agendaModalityError">Selecciona una modalidad de preferencia.</div><div class="agenda-inline"><button class="agenda-primary" id="agendaModalityContinue">Ver horarios →</button><span style="font-size:11px;color:#7b837c">La modalidad definitiva se confirma tras la revisión profesional.</span></div></div>`;document.querySelectorAll('[data-agenda-modality]').forEach(b=>b.onclick=()=>{agendaState.modality=b.dataset.agendaModality;document.querySelectorAll('[data-agenda-modality]').forEach(x=>x.classList.toggle('selected',x===b))});document.getElementById('agendaModalityContinue').onclick=()=>{if(!agendaState.modality){document.getElementById('agendaModalityError').classList.add('show');return}agendaRenderSlots()}}
+    function agendaBuildDates(){const out=[],d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+1);while(out.length<6){if(d.getDay()!==0){out.push({iso:d.toISOString().slice(0,10),day:new Intl.DateTimeFormat('es-CL',{weekday:'short'}).format(d).replace('.',''),num:d.getDate(),month:new Intl.DateTimeFormat('es-CL',{month:'short'}).format(d).replace('.',''),label:new Intl.DateTimeFormat('es-CL',{weekday:'long',day:'numeric',month:'long'}).format(d)})}d.setDate(d.getDate()+1)}return out}
+    function agendaRenderSlots(){agendaStep=3;agendaSetVisual(3);const dates=agendaBuildDates(),times=['09:00','10:30','12:00','15:00','16:30','18:00'];agendaStage.innerHTML=`<div class="agenda-content"><span class="agenda-kicker">HORARIO PREFERIDO</span><h2 id="agendaTitle">Elige un bloque para solicitar.</h2><p class="agenda-lead">Los siguientes horarios son de demostración. En la versión operativa aparecerán únicamente los espacios realmente libres del calendario de MOVE.</p><div class="agenda-date-grid">${dates.map(d=>`<button class="agenda-date ${agendaState.date===d.iso?'selected':''}" data-agenda-date="${d.iso}" data-agenda-date-label="${d.label}"><small>${d.day}</small><b>${d.num}</b><span>${d.month}</span></button>`).join('')}</div><div class="agenda-times">${times.map(t=>`<button class="agenda-time ${agendaState.time===t?'selected':''}" data-agenda-time="${t}">${t}</button>`).join('')}</div><div class="agenda-error" id="agendaSlotError">Selecciona una fecha y una hora.</div><div class="agenda-inline"><button class="agenda-primary" id="agendaSlotContinue">Continuar →</button><span style="font-size:11px;color:#7b837c">No se bloqueará ningún horario real desde este archivo local.</span></div></div>`;document.querySelectorAll('[data-agenda-date]').forEach(b=>b.onclick=()=>{agendaState.date=b.dataset.agendaDate;agendaState.dateLabel=b.dataset.agendaDateLabel;document.querySelectorAll('[data-agenda-date]').forEach(x=>x.classList.toggle('selected',x===b))});document.querySelectorAll('[data-agenda-time]').forEach(b=>b.onclick=()=>{agendaState.time=b.dataset.agendaTime;document.querySelectorAll('[data-agenda-time]').forEach(x=>x.classList.toggle('selected',x===b))});document.getElementById('agendaSlotContinue').onclick=()=>{if(!agendaState.date||!agendaState.time){document.getElementById('agendaSlotError').classList.add('show');return}agendaRenderContact()}}
+    function agendaRenderContact(){agendaStep=4;agendaSetVisual(4);agendaStage.innerHTML=`<div class="agenda-content"><span class="agenda-kicker">DATOS DE CONTACTO</span><h2 id="agendaTitle">Prepara tu solicitud.</h2><p class="agenda-note">Usa datos ficticios para probar esta demostración.</p><p class="agenda-lead">En una versión operativa, MOVE utilizaría estos datos para revisar la indicación, confirmar disponibilidad y enviarte la respuesta.</p><div class="agenda-form-grid"><div class="agenda-field full"><label>Nombre completo</label><input id="agendaName" autocomplete="name" maxlength="100" value="${nvDemoEscape(agendaState.name||'')}" placeholder="Nombre y apellido"></div><div class="agenda-field"><label>Correo electrónico</label><input id="agendaEmail" type="email" autocomplete="email" maxlength="120" value="${nvDemoEscape(agendaState.email||'')}" placeholder="correo@ejemplo.cl"></div><div class="agenda-field"><label>Teléfono</label><input id="agendaPhone" type="tel" autocomplete="tel" maxlength="30" value="${nvDemoEscape(agendaState.phone||'')}" placeholder="+56 9 ..."></div></div><div class="agenda-summary"><div class="agenda-summary-row"><span>Indicación médica</span><b>${agendaState.orderStatus==='ready'?'Disponible':'Pendiente de envío'}</b></div><div class="agenda-summary-row"><span>Emitida por</span><b>${nvDemoEscape(agendaState.issuer)}</b></div><div class="agenda-summary-row"><span>Motivo general</span><b>${nvDemoEscape(agendaState.reason)}</b></div><div class="agenda-summary-row"><span>Preferencia</span><b>${nvDemoEscape(agendaState.modality)}</b></div><div class="agenda-summary-row"><span>Horario solicitado</span><b>${nvDemoEscape(agendaState.dateLabel)} · ${nvDemoEscape(agendaState.time)}</b></div></div><label class="agenda-consent"><input id="agendaConsent" type="checkbox" ${agendaState.consent?'checked':''}><span>Confirmo que la información es correcta y comprendo que esta es una <b>solicitud condicionada</b>: el horario sólo se confirma después de revisar la indicación médica y la disponibilidad real.</span></label><div class="agenda-error" id="agendaContactError">Completa nombre, correo, teléfono y acepta la condición de la solicitud.</div><div class="agenda-inline"><button class="agenda-primary" id="agendaSubmit">Preparar solicitud →</button><span style="font-size:11px;color:#7b837c">En el prototipo no se envían datos a ningún servidor.</span></div></div>`;document.getElementById('agendaSubmit').onclick=()=>{agendaState.name=document.getElementById('agendaName').value.trim();agendaState.email=document.getElementById('agendaEmail').value.trim();agendaState.phone=document.getElementById('agendaPhone').value.trim();agendaState.consent=document.getElementById('agendaConsent').checked;const validEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(agendaState.email);if(!agendaState.name||!validEmail||!agendaState.phone||!agendaState.consent){document.getElementById('agendaContactError').classList.add('show');return}agendaRenderSuccess()}}
+    function agendaRenderSuccess(){agendaStep=5;agendaSetVisual(5);const ref='MOVE-'+Math.random().toString(36).slice(2,8).toUpperCase();agendaStage.innerHTML=`<div class="agenda-content agenda-success"><div class="agenda-success-icon">✓</div><span class="agenda-kicker">SOLICITUD DE DEMOSTRACIÓN</span><h2 id="agendaTitle">Tu solicitud quedó preparada.</h2><p>La ruta respeta el orden correcto: primero verificar la indicación médica, luego revisar la pertinencia de la modalidad y finalmente confirmar el horario.</p><div class="agenda-summary"><div class="agenda-summary-row"><span>Referencia</span><b>${ref}</b></div><div class="agenda-summary-row"><span>Persona</span><b>${nvDemoEscape(agendaState.name)}</b></div><div class="agenda-summary-row"><span>Solicitud</span><b>${nvDemoEscape(agendaState.dateLabel)} · ${nvDemoEscape(agendaState.time)}</b></div><div class="agenda-summary-row"><span>Modalidad preferida</span><b>${nvDemoEscape(agendaState.modality)}</b></div><div class="agenda-summary-row"><span>Estado</span><b>Pendiente de revisión</b></div></div><div class="agenda-note"><strong>Esta demostración no reservó una hora real ni envió tu documento.</strong> Para operar en producción se conectará el calendario, un almacenamiento privado para la orden médica y el sistema de confirmación de MOVE.</div><div class="agenda-no-order-actions"><button class="agenda-primary" id="agendaFinish">Volver a MOVE</button><button class="agenda-link" id="agendaRestart">Preparar otra solicitud</button></div></div>`;document.getElementById('agendaFinish').onclick=agendaClose;document.getElementById('agendaRestart').onclick=()=>{agendaState=agendaDefaults();agendaRenderReferral()}}
+    function agendaBackAction(){if(agendaStep===1)agendaRenderReferral();else if(agendaStep===2)agendaRenderOrder();else if(agendaStep===3)agendaRenderModality();else if(agendaStep===4)agendaRenderSlots()}
+    agendaBack.onclick=agendaBackAction;
+    document.querySelectorAll('[data-agenda-close]').forEach(b=>b.onclick=e=>{e.preventDefault();agendaClose()});
+    document.querySelectorAll('[data-agenda-open]').forEach(b=>b.onclick=e=>{e.preventDefault();agendaOpen()});
+
+    const msOverlay=document.getElementById('moveSelectOverlay');
+    const msStage=document.getElementById('msStage');
+    const msProgress=document.getElementById('msProgress');
+    const msBack=document.getElementById('msBack');
+    const msStepLabel=document.getElementById('msStepLabel');
+    const msStatus=document.getElementById('msStatus');
+    const msModeText=document.getElementById('msModeText');
+    const msVisualImage=document.getElementById('msVisualImage');
+    const msVisualKicker=document.getElementById('msVisualKicker');
+    const msVisualTitle=document.getElementById('msVisualTitle');
+    const msVisualText=document.getElementById('msVisualText');
+    const msVisualTag=document.getElementById('msVisualTag');
+    const msVisualProduct=document.getElementById('msVisualProduct');
+
+    const msDefaults=()=>({text:'',goal:'',zone:'',context:'',support:'unsure',budget:'flexible',fulfillment:'any',productRank:null});
+    let msState=msDefaults();
+    let msStep=0;
+    let msResult=null;
+
+    const msStepVisuals={
+      0:{kicker:'Tu ruta comienza aquí',title:'Menos duda.\nMás movimiento.',text:'Cuéntanos el objetivo. MOVE Select ordenará el catálogo sin convertir la experiencia en un interrogatorio.',image:'bundle',tag:'MOVE SELECT',product:'Ruta personalizada'},
+      1:{kicker:'Paso 2 · zona corporal',title:'Ubica la zona.\nNo busques el SKU.',text:'La zona ayuda a filtrar; no se utiliza para emitir un diagnóstico.',image:'knee',tag:'ORIENTACIÓN',product:'Productos compatibles con tu objetivo'},
+      2:{kicker:'Paso 3 · contexto',title:'El mismo producto\nno sirve igual para todo.',text:'Actividad cotidiana, deporte, recuperación o trabajo cambian la selección.',image:'bands',tag:'CONTEXTO',product:'Uso real antes que catálogo'},
+      3:{kicker:'Paso 4 · soporte',title:'Elige cuánto\napoyo buscas.',text:'Ligero, medio, firme o simplemente “no lo sé”. La duda también es una respuesta válida.',image:'knee',tag:'AJUSTE',product:'Nivel de soporte'},
+      4:{kicker:'Paso 5 · presupuesto',title:'Valor claro.\nSin empujarte de más.',text:'El presupuesto evita mostrar alternativas que no tienen sentido para ti.',image:'bundle',tag:'VALOR',product:'Opciones dentro de tu rango'},
+      5:{kicker:'Paso 6 · entrega',title:'Decide cómo\nquieres recibirlo.',text:'Retiro en Villarrica o despacho a cualquier región de Chile.',image:'bundle',tag:'ENTREGA',product:'Retiro o despacho'},
+      6:{kicker:'MOVE SELECT está trabajando',title:'Ordenamos señales,\nno inventamos certezas.',text:'Objetivo, zona, contexto, nivel de soporte, presupuesto y forma de entrega.',image:'bundle',tag:'ANÁLISIS',product:'Construyendo tu ruta'},
+      7:{kicker:'Tu ruta MOVE',title:'Tres formas\nde avanzar.',text:'Una alternativa esencial, una recomendación principal y una ruta completa.',image:'bundle',tag:'RESULTADO',product:'Selección explicada'}
+    };
+
+    const msQuestions={
+      1:{key:'zone',eyebrow:'ZONA CORPORAL',title:'¿Dónde necesitas orientar la búsqueda?',lead:'Selecciona la zona principal. Si son varias, elige la que más influye en tu decisión de compra.',layout:'zone',options:[
+        ['knee','Rodilla','Soporte, retorno al ejercicio y movilidad'],['ankle','Tobillo y pie','Estabilidad, apoyo y cuidado del pie'],['back','Espalda','Soporte, movilidad y trabajo cotidiano'],['shoulder','Hombro','Sujeción, activación y recuperación'],['wrist','Muñeca y mano','Soporte, fuerza y tareas repetitivas'],['elbow','Codo','Compresión y apoyo localizado'],['neck','Cuello','Apoyo general y movilidad'],['hip','Cadera','Movilidad y control'],['general','Cuerpo completo','Acondicionamiento o bienestar general']
+      ]},
+      2:{key:'context',eyebrow:'CONTEXTO DE USO',title:'¿En qué situación lo necesitas?',lead:'Esto nos permite distinguir entre apoyo cotidiano, deporte, recuperación y trabajo.',options:[
+        ['daily','Vida cotidiana','Caminar, desplazarte o realizar tareas habituales'],['sport','Deporte y entrenamiento','Gimnasio, running o actividad física'],['recovery','Recuperación','Retorno gradual, movilidad y autocuidado'],['work','Trabajo','Oficina, esfuerzo físico o movimientos repetitivos']
+      ]},
+      3:{key:'support',eyebrow:'NIVEL DE SOPORTE',title:'¿Cuánta sujeción buscas?',lead:'No es una indicación clínica. Sólo nos ayuda a ordenar productos por sensación de soporte y estructura.',options:[
+        ['light','Ligero','Compresión suave y libertad de movimiento'],['medium','Medio','Ajuste más estable para actividad'],['firm','Firme','Estructura superior y mayor contención'],['unsure','No estoy seguro','MOVE Select priorizará opciones versátiles']
+      ]},
+      4:{key:'budget',eyebrow:'PRESUPUESTO',title:'¿Qué rango quieres considerar?',lead:'No mostraremos una alternativa más cara sólo porque exista.',options:[
+        ['low','Hasta $10.000','Accesorios y soluciones esenciales'],['mid','$10.000 a $20.000','La franja con más alternativas'],['high','$20.000 a $35.000','Soportes y kits más completos'],['flexible','Flexible','Priorizar encaje antes que precio']
+      ]},
+      5:{key:'fulfillment',eyebrow:'ENTREGA',title:'¿Cómo prefieres recibir tu compra?',lead:'La recomendación puede considerar continuidad en tienda o comodidad de despacho.',options:[
+        ['pickup','Retiro en Villarrica','Comprar online y retirar en MOVE'],['shipping','Despacho a todo Chile','Recibir en domicilio o punto disponible'],['any','Cualquiera','Elegir según disponibilidad real']
+      ]}
+    };
+
+    const msGoalOptions=[
+      ['dolor','Dolor y recuperación','Encontrar soporte y acompañar un retorno gradual'],
+      ['entrenar','Volver a entrenar','Recuperar fuerza, estabilidad y confianza'],
+      ['movilidad','Ganar movilidad','Sentirte menos rígido y moverte con continuidad'],
+      ['autonomia','Autonomía diaria','Caminar y hacer tareas con mayor seguridad']
+    ];
+
+    const msOptionDescriptions={
+      knee:'Rodilla',ankle:'Tobillo y pie',back:'Espalda',shoulder:'Hombro',wrist:'Muñeca y mano',elbow:'Codo',neck:'Cuello',hip:'Cadera',general:'Cuerpo completo',
+      daily:'Vida cotidiana',sport:'Deporte y entrenamiento',recovery:'Recuperación',work:'Trabajo',light:'Soporte ligero',medium:'Soporte medio',firm:'Soporte firme',unsure:'Sin preferencia definida',low:'Hasta $10.000',mid:'$10.000 a $20.000',high:'$20.000 a $35.000',flexible:'Presupuesto flexible',pickup:'Retiro en Villarrica',shipping:'Despacho a todo Chile',any:'Cualquier modalidad'
+    };
+
+    function msSetMode(mode){
+      msStatus.classList.remove('ai','demo');
+      msStatus.classList.add(mode==='ai'?'ai':'demo');
+      msModeText.textContent=mode==='ai'?'IA conectada':'Preguntas guiadas · sin IA';
+    }
+    function msUpdateVisual(step=msStep,product=null){
+      const d=msStepVisuals[step]||msStepVisuals[0];
+      msVisualKicker.textContent=d.kicker;
+      msVisualTitle.innerHTML=d.title.replace(/\n/g,'<br>');
+      msVisualText.textContent=d.text;
+      msVisualTag.textContent=d.tag;
+      msVisualProduct.textContent=product?product.name:d.product;
+      const next=product?imageFor(product):imageMap[d.image]||imageMap.bundle;
+      msVisualImage.style.opacity='.15';
+      setTimeout(()=>{msVisualImage.src=next;msVisualImage.style.opacity='1'},130);
+    }
+    function msSetStepMeta(step){
+      const labels=['Objetivo','Zona corporal','Contexto de uso','Nivel de soporte','Presupuesto','Entrega','Análisis','Recomendación'];
+      const pct=[10,25,40,55,70,84,94,100][step]||10;
+      msProgress.style.width=pct+'%';
+      msStepLabel.textContent=`Ruta MOVE · ${labels[step]||'inicio'}`;
+      msBack.classList.toggle('show',step>0&&step<6);
+      msUpdateVisual(step);
+    }
+    function msInferGoal(text){
+      const t=msNormalize(text);
+      if(/entren|gimnas|correr|running|deporte|fuerza/.test(t)) return 'entrenar';
+      if(/movilidad|rigid|elong|estirar|flexib/.test(t)) return 'movilidad';
+      if(/mama|madre|padre|adulto mayor|autonom|caminar seguro|equilibrio/.test(t)) return 'autonomia';
+      return 'dolor';
+    }
+    function msInferZone(text){
+      const t=msNormalize(text);
+      if(/rodilla|rotula/.test(t)) return 'knee';
+      if(/tobillo|pie|talon|plantar/.test(t)) return 'ankle';
+      if(/espalda|lumbar|columna/.test(t)) return 'back';
+      if(/hombro/.test(t)) return 'shoulder';
+      if(/muneca|mano|dedo/.test(t)) return 'wrist';
+      if(/codo|epicond/.test(t)) return 'elbow';
+      if(/cuello|cervical/.test(t)) return 'neck';
+      if(/cadera/.test(t)) return 'hip';
+      return '';
+    }
+    function msNormalize(value=''){return String(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()}
+    function msHasSafetySignal(text=''){
+      const t=msNormalize(text);
+      const patterns=[
+        /no puedo apoyar/,/incapaz de apoyar/,/no puedo mover/,/perdida de fuerza/,/perdida de sensibilidad/,/entumecimiento intenso/,/paralisis/,/deformidad/,/hueso expuesto/,/herida abierta/,/sangrado abundante/,/accidente fuerte/,/golpe muy fuerte/,/caida fuerte/,/dolor insoportable/,/dolor repentino muy intenso/,/hinchazon repentina/,/fiebre con/,/dificultad para respirar/,/dolor de pecho/,/extremidad fria/,/cambio de color repentino/
+      ];
+      return patterns.some(rx=>rx.test(t));
+    }
+    function msProductContext(){
+      if(!msState.productRank)return '';
+      const p=byRank(msState.productRank);if(!p)return '';
+      return `<div class="ms-context-product"><img src="${imageFor(p)}" alt="${p.name}"><div><small>Estás consultando</small><b>${p.name}</b></div><i>${p.price}</i></div>`;
+    }
+    function msRenderIntro(){
+      msStep=0;msSetStepMeta(0);
+      const selected=msState.goal;
+      msStage.innerHTML=`<div class="ms-content"><span class="ms-kicker">MOVE SELECT · MENOS DE UN MINUTO</span><h1 id="msTitle">¿Qué quieres volver a hacer?</h1><p class="ms-lead">Descríbelo con tus palabras o elige una ruta. No necesitas saber cómo se llama el producto.</p><div class="ms-referral-prompt"><div><b>¿Ya fuiste derivado/a a kinesiología?</b><span>Si tienes una indicación médica escrita, podemos llevarte directamente a la agenda.</span></div><button type="button" data-ms-agenda>Revisar y agendar →</button></div>${msProductContext()}<div class="ms-input-card"><label for="msFreeText">Cuéntanos tu objetivo</label><textarea id="msFreeText" maxlength="500" placeholder="Ej.: Me molesta la rodilla al subir escaleras y quiero volver al gimnasio.">${nvDemoEscape(msState.text||'')}</textarea></div><div class="ms-prompts"><button class="ms-prompt" data-ms-prompt="Quiero volver a correr sin sentir tanta inseguridad en la rodilla" data-ms-goal="entrenar">Volver a correr</button><button class="ms-prompt" data-ms-prompt="Busco apoyo para mi espalda mientras trabajo" data-ms-goal="dolor">Cuidar mi espalda</button><button class="ms-prompt" data-ms-prompt="Quiero ganar movilidad y sentir menos rigidez" data-ms-goal="movilidad">Ganar movilidad</button><button class="ms-prompt" data-ms-prompt="Busco alternativas simples para que un adulto mayor se mueva con más confianza" data-ms-goal="autonomia">Apoyar autonomía</button></div><p class="ms-question-note">Elige el objetivo que más se aproxima:</p><div class="ms-goal-grid">${msGoalOptions.map((o,i)=>`<button class="ms-goal ${selected===o[0]?'selected':''}" data-ms-goal-choice="${o[0]}"><small>Ruta 0${i+1}</small><b>${o[1]}</b><span>${o[2]}</span></button>`).join('')}</div><div class="ms-error" id="msError">Elige un objetivo o escribe brevemente qué quieres lograr.</div><div class="ms-inline-actions"><button class="ms-primary" id="msContinue" type="button">Continuar <span>→</span></button><div class="ms-privacy">Tus respuestas se usan sólo para esta orientación. En la demostración no se guardan ni se envían datos cuando abres el archivo localmente.</div></div></div>`;
+      const input=document.getElementById('msFreeText');
+      input.oninput=e=>{msState.text=e.target.value};
+      const msAgendaButton=document.querySelector('[data-ms-agenda]');if(msAgendaButton)msAgendaButton.onclick=()=>{closeMoveSelect();setTimeout(agendaOpen,180)};
+      document.querySelectorAll('[data-ms-prompt]').forEach(b=>b.onclick=()=>{msState.text=b.dataset.msPrompt;msState.goal=b.dataset.msGoal;input.value=msState.text;msRenderIntro()});
+      document.querySelectorAll('[data-ms-goal-choice]').forEach(b=>b.onclick=()=>{msState.goal=b.dataset.msGoalChoice;document.querySelectorAll('[data-ms-goal-choice]').forEach(x=>x.classList.toggle('selected',x===b))});
+      document.getElementById('msContinue').onclick=()=>{
+        msState.text=input.value.trim();
+        if(!msState.goal&&msState.text)msState.goal=msInferGoal(msState.text);
+        if(!msState.goal){document.getElementById('msError').classList.add('show');return}
+        if(!msState.zone&&msState.text)msState.zone=msInferZone(msState.text);
+        msRenderQuestion(1);
+      };
+    }
+    function msRenderQuestion(step){
+      msStep=step;msSetStepMeta(step);
+      const q=msQuestions[step],current=msState[q.key];
+      const optionMarkup=q.options.map((o,i)=>`<button class="ms-option ${current===o[0]?'selected':''}" data-ms-value="${o[0]}"><span class="ms-option-icon">${String(i+1).padStart(2,'0')}</span><span><b>${o[1]}</b><small>${o[2]}</small></span><i>↗</i></button>`).join('');
+      msStage.innerHTML=`<div class="ms-content"><span class="ms-kicker">${q.eyebrow}</span><h2>${q.title}</h2><p class="ms-lead">${q.lead}</p>${q.layout==='zone'?`<div class="ms-zone-map"><div class="ms-body"><div class="ms-body-label">Selecciona sólo la zona principal. MOVE Select no realiza diagnósticos.</div></div><div class="ms-options">${optionMarkup}</div></div>`:`<div class="ms-options">${optionMarkup}</div>`}</div>`;
+      document.querySelectorAll('[data-ms-value]').forEach(b=>b.onclick=()=>{
+        msState[q.key]=b.dataset.msValue;
+        document.querySelectorAll('[data-ms-value]').forEach(x=>x.classList.toggle('selected',x===b));
+        const zoneImages={knee:'knee',ankle:'knee',back:'roller',shoulder:'wrist',wrist:'wrist',elbow:'wrist',neck:'wrist',hip:'bands',general:'bundle'};
+        if(q.key==='zone')msUpdateVisual(step,byRank(msSuggestedPreviewRank(msState.zone)));
+        setTimeout(()=>step<5?msRenderQuestion(step+1):msAnalyze(),260);
+      });
+    }
+    function msSuggestedPreviewRank(zone){return {knee:7,ankle:10,back:16,shoulder:17,wrist:12,elbow:15,neck:18,hip:4,general:1}[zone]||1}
+    function msBudgetMax(){return {low:10000,mid:20000,high:35000,flexible:Infinity}[msState.budget]||Infinity}
+    function msKeywordBoost(p){
+      const t=msNormalize(msState.text),n=msNormalize(p.name);let s=0;
+      const pairs=[['rodilla','rodillera'],['tobillo','tobillera'],['pie','plantilla'],['talon','talonera'],['espalda','lumbar'],['cuello','cervical'],['codo','epicondilitis'],['muneca','muneca'],['mano','mano'],['hombro','hombro'],['frio','frio'],['calor','calor'],['masaje','masaje'],['correr','banda'],['gimnasio','banda']];
+      pairs.forEach(([a,b])=>{if(t.includes(a)&&n.includes(b))s+=42});return s;
+    }
+    function msLocalRecommendation(){
+      const zoneMap={
+        knee:[7,6,8,9,30,4,23,1,35],ankle:[10,11,20,22,21,35,4,30],back:[16,23,27,24,41,30,38],shoulder:[17,4,30,23,42],wrist:[13,12,48,47,30,4],elbow:[15,14,4,30,42],neck:[18,30,41,24],hip:[4,23,32,41,35],general:[1,4,23,32,38,41,42,46]
+      };
+      const goalMap={dolor:['Ortopedia','Recupera'],entrenar:['Entrena','Recupera'],movilidad:['Recupera','Entrena'],autonomia:['Ortopedia','Recupera','Entrena']};
+      const contextMap={daily:[6,8,11,13,16,18,21,22,28,30,34,41,47,48],sport:[7,10,11,3,1,35,23,29,32,42,43,44,45,46,49,50],recovery:[4,23,24,25,26,27,28,29,30,31,34,35,48],work:[13,16,18,21,22,27,28,30,41,47]};
+      const supportMap={light:[6,8,11,13,14,18,19,22],medium:[7,10,12,15,16,17],firm:[9,20,36,50],unsure:[]};
+      const z=zoneMap[msState.zone]||zoneMap.general,cats=goalMap[msState.goal]||goalMap.dolor,ctx=contextMap[msState.context]||[],sup=supportMap[msState.support]||[],max=msBudgetMax();
+      const scored=products.map(p=>{let score=0;const zi=z.indexOf(p.rank);if(zi>=0)score+=110-zi*7;if(cats.includes(p.category))score+=28;const ci=ctx.indexOf(p.rank);if(ci>=0)score+=35-Math.min(ci,10);const si=sup.indexOf(p.rank);if(si>=0)score+=28-Math.min(si,8);if(p.value<=max)score+=22;else score-=120;if(p.rank<=10)score+=8;score+=msKeywordBoost(p);if(msState.goal==='autonomia'&&[45,46,49,50].includes(p.rank))score-=45;if(msState.productRank===p.rank)score+=38;return {p,score}}).sort((a,b)=>b.score-a.score);
+      const affordable=scored.filter(x=>x.p.value<=max&&x.score>5);const pool=affordable.length>=4?affordable:scored.filter(x=>x.score>5);
+      const recommended=(pool[0]||scored[0]).p;
+      const essentials=pool.slice(0,8).map(x=>x.p).sort((a,b)=>a.value-b.value);
+      let essential=essentials.find(p=>p.rank!==recommended.rank)||recommended;
+      const complementary=[];
+      const preferredCats=[recommended.category==='Ortopedia'?'Recupera':'Ortopedia','Entrena','Recupera'];
+      [recommended,...pool.map(x=>x.p)].forEach(p=>{if(complementary.some(x=>x.rank===p.rank))return;if(complementary.length===0||preferredCats.includes(p.category)||complementary.length<2)complementary.push(p)});
+      const bundle=complementary.slice(0,3);
+      const zoneLabel=msOptionDescriptions[msState.zone]||'tu objetivo';
+      const contextLabel=msOptionDescriptions[msState.context]||'tu contexto';
+      return {status:'recommendation',summary:`Ordenamos el catálogo para ${zoneLabel.toLowerCase()} considerando ${contextLabel.toLowerCase()} y tu rango de presupuesto.`,safety_message:'',recommendations:[
+        {tier:'essential',rank:essential.rank,reason:`Una entrada simple y de menor inversión dentro de las opciones relacionadas con ${zoneLabel.toLowerCase()}.`,usage_note:'Revisa siempre talla, material e indicaciones del fabricante.'},
+        {tier:'recommended',rank:recommended.rank,reason:`Es la alternativa que mejor coincide con la combinación de objetivo, zona, contexto y nivel de soporte que seleccionaste.`,usage_note:'Confirma medidas y compatibilidad antes de finalizar la compra.'}
+      ],bundle_ranks:bundle.map(p=>p.rank),bundle_reason:'Una ruta complementaria que reúne apoyo, activación o recuperación sin obligarte a buscar cada pieza por separado.',follow_up:'Puedes ajustar una respuesta, comparar los productos o continuar al catálogo completo.'};
+    }
+    function msSanitizeAIResult(data){
+      const validRanks=new Set(products.map(p=>p.rank));
+      if(!data||!['recommendation','professional'].includes(data.status))return null;
+      const recs=Array.isArray(data.recommendations)?data.recommendations.filter(r=>validRanks.has(Number(r.rank))).slice(0,2).map(r=>({...r,rank:Number(r.rank)})):[];
+      const bundle=Array.isArray(data.bundle_ranks)?[...new Set(data.bundle_ranks.map(Number).filter(r=>validRanks.has(r)))].slice(0,3):[];
+      if(data.status==='recommendation'&&(recs.length<2||bundle.length<2))return null;
+      return {...data,recommendations:recs,bundle_ranks:bundle};
+    }
+    async function msRequestAI(){ return null; }
+    function msAnalyze(){
+      msStep=6;msSetStepMeta(6);msBack.classList.remove('show');
+      msStage.innerHTML=`<div class="ms-content ms-analysis"><div class="ms-brain"><i></i></div><span class="ms-kicker" style="justify-content:center">MOVE SELECT</span><h2>Estamos ordenando el catálogo.</h2><p>Primero comprobamos seguridad; después cruzamos objetivo, zona, contexto, soporte, presupuesto y entrega.</p><div class="ms-analysis-list"><span class="active">Objetivo</span><span>Contexto</span><span>Compatibilidad</span><span>Valor</span></div></div>`;
+      if(msHasSafetySignal(msState.text)){setTimeout(()=>msRenderSafety(),850);return}
+      const started=Date.now();
+      msRequestAI().then(ai=>{
+        const wait=Math.max(950-(Date.now()-started),0);
+        setTimeout(()=>{msResult=ai||msLocalRecommendation();msSetMode(ai?'ai':'demo');msRenderResults()},wait);
+      });
+    }
+    function msTierLabel(tier){return tier==='essential'?'Esencial':'Recomendada por MOVE'}
+    function msResultCard(rec,featured=false){
+      const p=byRank(rec.rank);if(!p)return '';
+      return `<article class="ms-result-card ${featured?'recommended':''}"><div class="ms-result-media"><img src="${imageFor(p)}" alt="${p.name}"><span class="ms-result-tier">${msTierLabel(rec.tier)}</span></div><div class="ms-result-body"><small>#${String(p.rank).padStart(2,'0')} · ${p.category}</small><h3>${p.name}</h3><div class="ms-result-reason">${rec.reason}</div><div class="ms-result-price">${p.price}</div><button class="ms-result-add" data-ms-add-rank="${p.rank}">Agregar a la bolsa</button></div></article>`;
+    }
+    function msRenderResults(){
+      msStep=7;msSetStepMeta(7);msBack.classList.remove('show');
+      if(!msResult||msResult.status==='professional'){msRenderSafety(msResult&&msResult.safety_message);return}
+      const recs=msResult.recommendations,bundle=msResult.bundle_ranks.map(byRank).filter(Boolean),total=bundle.reduce((a,b)=>a+b.value,0);
+      const main=byRank(recs[1].rank);msUpdateVisual(7,main);
+      msStage.innerHTML=`<div class="ms-content"><span class="ms-kicker">TU RUTA MOVE</span><div class="ms-result-head"><div><h2 id="msTitle">Tres formas de avanzar.</h2><p>${msResult.summary}</p></div><span class="ms-mode-label">${msStatus.classList.contains('ai')?'Selección generada con IA':'Selección de demostración'}</span></div><div class="ms-result-grid">${msResultCard(recs[0],false)}${msResultCard(recs[1],true)}<article class="ms-result-card"><div class="ms-bundle-thumbs">${bundle.map(p=>`<img src="${imageFor(p)}" alt="${p.name}">`).join('')}</div><div class="ms-result-body"><small>RUTA COMPLETA · ${bundle.length} PRODUCTOS</small><h3>${bundle.map(p=>p.name).join(' + ')}</h3><div class="ms-result-reason">${msResult.bundle_reason}</div><div class="ms-result-price">${money(total)}</div><button class="ms-result-add" data-ms-add-bundle>Agregar ruta completa</button></div></article></div><div class="ms-result-note"><b>Orientación de compra, no diagnóstico.</b> ${recs[1].usage_note||'Confirma las medidas, talla e indicaciones del fabricante.'} Los precios y la disponibilidad aún son referenciales en este prototipo.</div><div class="ms-result-actions"><button class="ms-link-btn" id="msRestart">Rehacer mi ruta</button><button class="ms-link-btn" id="msOpenCatalog">Ver catálogo completo</button><button class="ms-link-btn" id="msAskProfessional">Agendar si tengo indicación médica</button></div></div>`;
+      document.querySelectorAll('[data-ms-add-rank]').forEach(b=>b.onclick=()=>{const p=byRank(b.dataset.msAddRank);if(!p)return;cart.push({...p,image:imageFor(p)});updateCart();showToast(`${p.name} agregado`);closeMoveSelect();setTimeout(openCart,180)});
+      const bundleButton=document.querySelector('[data-ms-add-bundle]');if(bundleButton)bundleButton.onclick=()=>{bundle.forEach(p=>cart.push({...p,image:imageFor(p)}));updateCart();showToast('Ruta MOVE agregada');closeMoveSelect();setTimeout(openCart,180)};
+      document.getElementById('msRestart').onclick=()=>{msState=msDefaults();msSetMode('demo');msRenderIntro()};
+      document.getElementById('msOpenCatalog').onclick=()=>{closeMoveSelect();setTimeout(openCatalog,180)};
+      document.getElementById('msAskProfessional').onclick=()=>{closeMoveSelect();setTimeout(agendaOpen,180)};
+    }
+    function msRenderSafety(custom=''){
+      msStep=7;msSetStepMeta(7);msBack.classList.remove('show');msUpdateVisual(7,byRank(30));
+      msStage.innerHTML=`<div class="ms-content ms-safety"><div class="ms-safety-icon">!</div><span class="ms-kicker">PRIMERO, SEGURIDAD</span><h2 id="msTitle">No sería responsable recomendar sólo un producto.</h2><p>${custom||'Algunas expresiones de tu mensaje sugieren que necesitas una orientación más específica antes de comprar. MOVE Select no puede evaluar lesiones ni emitir diagnósticos.'}</p><div class="ms-safety-box">Cuando hay dolor muy intenso o repentino, incapacidad para apoyar, pérdida de fuerza o sensibilidad, deformidad, herida abierta, dificultad para respirar o un trauma importante, busca atención profesional o urgente según la gravedad.</div><div class="ms-safety-actions"><a class="ms-primary lime" href="#kinesiologia" data-ms-professional>Revisar opciones de atención <span>↗</span></a><button class="ms-link-btn" id="msGeneralCatalog">Continuar con productos generales</button><button class="ms-link-btn" id="msSafetyRestart">Reformular mi respuesta</button></div></div>`;
+      document.querySelector('[data-ms-professional]').onclick=e=>{e.preventDefault();closeMoveSelect();setTimeout(agendaOpen,180)};
+      document.getElementById('msGeneralCatalog').onclick=()=>{closeMoveSelect();setTimeout(openCatalog,180)};
+      document.getElementById('msSafetyRestart').onclick=()=>{msState.text='';msRenderIntro()};
+    }
+    function openMoveSelect(options={}){
+      closeSearch();closeOverlays();
+      msState=msDefaults();msResult=null;msSetMode('demo');
+      if(options.text)msState.text=options.text;
+      if(options.goal)msState.goal=options.goal;
+      if(options.productRank){
+        const p=byRank(options.productRank);if(p){msState.productRank=p.rank;msState.text=`Quiero saber si ${p.name} es adecuado para lo que necesito.`;msState.goal=p.category==='Entrena'?'entrenar':p.category==='Recupera'?'movilidad':'dolor';msState.zone=msInferZone(p.name)||''}
+      }
+      msOverlay.classList.add('open');msOverlay.setAttribute('aria-hidden','false');document.body.classList.add('ms-locked');msVisualImage.src=imageMap.bundle;msRenderIntro();
+      setTimeout(()=>{const input=document.getElementById('msFreeText');if(input)input.focus()},320);
+    }
+    function closeMoveSelect(){msOverlay.classList.remove('open');msOverlay.setAttribute('aria-hidden','true');document.body.classList.remove('ms-locked')}
+    msBack.onclick=()=>{if(msStep<=1)msRenderIntro();else if(msStep<6)msRenderQuestion(msStep-1)};
+    document.querySelectorAll('[data-ai-close]').forEach(b=>b.onclick=e=>{e.preventDefault();closeMoveSelect()});
+    document.querySelectorAll('[data-ai-open]').forEach(b=>b.onclick=()=>openMoveSelect());
+    document.querySelectorAll('[data-ai-seed]').forEach(b=>b.onclick=()=>openMoveSelect({text:b.dataset.aiSeed,goal:b.dataset.aiGoal}));
+
+
+    document.querySelectorAll('.goal-tab').forEach(b=>b.onclick=()=>setGoal(b.dataset.goal));
+    document.querySelectorAll('[data-add-bundle]').forEach(b=>b.onclick=addBundle);
+    document.querySelectorAll('[data-cart-open]').forEach(b=>b.onclick=openCart);document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeOverlays());document.getElementById('backdrop').onclick=()=>closeOverlays();
+    document.querySelectorAll('[data-search-open]').forEach(b=>b.onclick=openSearch);document.querySelectorAll('[data-search-close]').forEach(b=>b.onclick=closeSearch);document.getElementById('globalSearch').oninput=e=>renderSearch(e.target.value);
+    document.getElementById('catalogSearch').oninput=renderCatalog;
+    document.querySelectorAll('.filter').forEach(b=>b.onclick=()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');catalogFilter=b.dataset.filter;if(!catalogOpen)openCatalog();else renderCatalog()});
+    document.querySelectorAll('[data-category]').forEach(b=>b.onclick=()=>{catalogFilter=b.dataset.category;document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x.dataset.filter===catalogFilter));openCatalog()});
+    document.querySelectorAll('[data-catalog-open]').forEach(b=>b.onclick=openCatalog);
+    document.getElementById('catalogToggle').onclick=()=>{catalogOpen=!catalogOpen;document.getElementById('catalogGrid').classList.toggle('open',catalogOpen);document.getElementById('catalogToggle').textContent=catalogOpen?'Ocultar catálogo':'Mostrar catálogo completo';if(catalogOpen)renderCatalog()};
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMoveSelect();closeSearch();closeOverlays()}});
+
+    const observer=new IntersectionObserver(entries=>entries.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');observer.unobserve(x.target)}}),{threshold:.12});document.querySelectorAll('.reveal:not(.visible)').forEach(x=>observer.observe(x));
+    let lastY=0;addEventListener('scroll',()=>{const y=scrollY,header=document.getElementById('header');header.classList.toggle('scrolled',y>80);header.classList.toggle('hidden',y>lastY&&y>500);lastY=y},{passive:true});
+    const hero=document.querySelector('.hero');if(!matchMedia('(prefers-reduced-motion: reduce)').matches){hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;hero.style.setProperty('--mx',`${x*35}px`);hero.style.setProperty('--my',`${y*25}px`);const hp=document.querySelector('.hero-product');if(hp){hp.style.setProperty('--px',`${x*12}px`);hp.style.setProperty('--py',`${y*9}px`)}})}
+
+    function nvDemoEscape(value){return String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));}
+    document.querySelector('.checkout').addEventListener('click',()=>{
+      if(!cart.length){showToast('Agrega un producto para probar este paso.');return;}
+      const receipt=document.getElementById('demoReceipt');receipt.hidden=false;
+      receipt.innerHTML='<strong>Resumen de demostración</strong><p>'+cart.length+' artículo(s) · '+money(cart.reduce((sum,item)=>sum+item.value,0))+'</p><p>Este paso muestra el cierre de una compra. No se ha realizado un pedido ni un cobro.</p><button type="button" id="demoReceiptBack">Seguir explorando</button>';
+      document.getElementById('demoReceiptBack').onclick=()=>{receipt.hidden=true;closeOverlays()};
+      receipt.scrollIntoView({block:'nearest',behavior:'smooth'});
+    });
+    document.querySelectorAll('[data-cart-open]').forEach(button=>button.addEventListener('click',()=>{document.getElementById('demoReceipt').hidden=true}));
+    document.addEventListener('keydown',event=>{if(event.key==='Escape')agendaClose()});
+
+    renderFeatured();renderCatalog();setGoal('dolor');updateCart();if(new URLSearchParams(location.search).get('select')==='1')setTimeout(()=>openMoveSelect({text:'Me molesta la rodilla al subir escaleras y quiero volver al gimnasio',goal:'entrenar'}),650);
+  </script>
+<script src="/prototipos/move/move-ai.js?v=20260906-ai" defer></script>
+</body>
+</html>

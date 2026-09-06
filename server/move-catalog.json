@@ -1,0 +1,402 @@
+[
+  {
+    "rank": 1,
+    "name": "Set 3 bandas de resistencia",
+    "category": "Entrena",
+    "price": "$5.990",
+    "value": 5990,
+    "why": "Demanda masiva · +10 mil ventas visibles"
+  },
+  {
+    "rank": 2,
+    "name": "Loop bands set x5",
+    "category": "Entrena",
+    "price": "$6.990",
+    "value": 6990,
+    "why": "Alta rotación · fácil despacho"
+  },
+  {
+    "rank": 3,
+    "name": "Power bands set x4",
+    "category": "Entrena",
+    "price": "$17.990",
+    "value": 17990,
+    "why": "Fuerza, asistencia y progresiones"
+  },
+  {
+    "rank": 4,
+    "name": "Banda terapéutica 1,5 m",
+    "category": "Recupera",
+    "price": "$4.990",
+    "value": 4990,
+    "why": "Rehabilitación y movilidad progresiva"
+  },
+  {
+    "rank": 5,
+    "name": "Kit tubos con manillas",
+    "category": "Entrena",
+    "price": "$18.990",
+    "value": 18990,
+    "why": "Versátil para casa y entrenamiento"
+  },
+  {
+    "rank": 6,
+    "name": "Rodillera de compresión",
+    "category": "Ortopedia",
+    "price": "$12.990",
+    "value": 12990,
+    "why": "Más elegido transversal"
+  },
+  {
+    "rank": 7,
+    "name": "Rodillera estabilizadora rotuliana",
+    "category": "Ortopedia",
+    "price": "$16.990",
+    "value": 16990,
+    "why": "Soporte ajustable para actividad"
+  },
+  {
+    "rank": 8,
+    "name": "Banda infrapatelar",
+    "category": "Ortopedia",
+    "price": "$8.990",
+    "value": 8990,
+    "why": "Formato compacto y complementario"
+  },
+  {
+    "rank": 9,
+    "name": "Rodillera con bisagras",
+    "category": "Ortopedia",
+    "price": "$29.990",
+    "value": 29990,
+    "why": "Mayor soporte y ticket medio"
+  },
+  {
+    "rank": 10,
+    "name": "Tobillera estabilizadora",
+    "category": "Ortopedia",
+    "price": "$19.990",
+    "value": 19990,
+    "why": "Categoría fuerte en retail chileno"
+  },
+  {
+    "rank": 11,
+    "name": "Tobillera elástica deportiva",
+    "category": "Ortopedia",
+    "price": "$10.990",
+    "value": 10990,
+    "why": "Compra recurrente deportiva"
+  },
+  {
+    "rank": 12,
+    "name": "Inmovilizador de muñeca",
+    "category": "Ortopedia",
+    "price": "$15.990",
+    "value": 15990,
+    "why": "Top visible en ortopedia online"
+  },
+  {
+    "rank": 13,
+    "name": "Muñequera de compresión",
+    "category": "Ortopedia",
+    "price": "$8.990",
+    "value": 8990,
+    "why": "Deporte, oficina y uso cotidiano"
+  },
+  {
+    "rank": 14,
+    "name": "Codera de compresión",
+    "category": "Ortopedia",
+    "price": "$9.990",
+    "value": 9990,
+    "why": "Bajo volumen y venta cruzada"
+  },
+  {
+    "rank": 15,
+    "name": "Banda para epicondilitis",
+    "category": "Ortopedia",
+    "price": "$11.990",
+    "value": 11990,
+    "why": "Producto específico de alta intención"
+  },
+  {
+    "rank": 16,
+    "name": "Faja lumbar ajustable",
+    "category": "Ortopedia",
+    "price": "$22.990",
+    "value": 22990,
+    "why": "Categoría ortopédica de alta búsqueda"
+  },
+  {
+    "rank": 17,
+    "name": "Soporte de hombro",
+    "category": "Ortopedia",
+    "price": "$18.990",
+    "value": 18990,
+    "why": "Complementa recuperación y deporte"
+  },
+  {
+    "rank": 18,
+    "name": "Collar cervical blando",
+    "category": "Ortopedia",
+    "price": "$12.990",
+    "value": 12990,
+    "why": "Producto ortopédico esencial"
+  },
+  {
+    "rank": 19,
+    "name": "Cabestrillo ajustable",
+    "category": "Ortopedia",
+    "price": "$10.990",
+    "value": 10990,
+    "why": "Bajo costo y demanda clínica estable"
+  },
+  {
+    "rank": 20,
+    "name": "Bota ortopédica corta",
+    "category": "Ortopedia",
+    "price": "$49.990",
+    "value": 49990,
+    "why": "Ticket superior · compra por necesidad"
+  },
+  {
+    "rank": 21,
+    "name": "Plantillas anatómicas",
+    "category": "Ortopedia",
+    "price": "$18.990",
+    "value": 18990,
+    "why": "N.º 1 visible en ortopedia ML"
+  },
+  {
+    "rank": 22,
+    "name": "Taloneras de silicona",
+    "category": "Ortopedia",
+    "price": "$9.990",
+    "value": 9990,
+    "why": "Versátil · complemento de plantilla"
+  },
+  {
+    "rank": 23,
+    "name": "Foam roller texturizado 33 cm",
+    "category": "Recupera",
+    "price": "$9.990",
+    "value": 9990,
+    "why": "Categoría con +1.000 ventas visibles"
+  },
+  {
+    "rank": 24,
+    "name": "Foam roller liso 45 cm",
+    "category": "Recupera",
+    "price": "$14.990",
+    "value": 14990,
+    "why": "Movilidad, Pilates y elongación"
+  },
+  {
+    "rank": 25,
+    "name": "Set roller 5 en 1",
+    "category": "Recupera",
+    "price": "$17.990",
+    "value": 17990,
+    "why": "Kit de alto valor percibido"
+  },
+  {
+    "rank": 26,
+    "name": "Pelota de masaje miofascial",
+    "category": "Recupera",
+    "price": "$5.990",
+    "value": 5990,
+    "why": "Excelente venta complementaria"
+  },
+  {
+    "rank": 27,
+    "name": "Pelota doble tipo peanut",
+    "category": "Recupera",
+    "price": "$7.990",
+    "value": 7990,
+    "why": "Espalda y liberación localizada"
+  },
+  {
+    "rank": 28,
+    "name": "Rodillo masajeador de pies",
+    "category": "Recupera",
+    "price": "$6.990",
+    "value": 6990,
+    "why": "Autocuidado y recuperación"
+  },
+  {
+    "rank": 29,
+    "name": "Pistola de masaje compacta",
+    "category": "Recupera",
+    "price": "$34.990",
+    "value": 34990,
+    "why": "Ticket medio/alto y regalo deportivo"
+  },
+  {
+    "rank": 30,
+    "name": "Compresa gel frío/calor",
+    "category": "Recupera",
+    "price": "$7.990",
+    "value": 7990,
+    "why": "Producto transversal y recurrente"
+  },
+  {
+    "rank": 31,
+    "name": "Pack frío instantáneo reutilizable",
+    "category": "Recupera",
+    "price": "$5.990",
+    "value": 5990,
+    "why": "Deporte y primeros cuidados"
+  },
+  {
+    "rank": 32,
+    "name": "Gym ball 65 cm + inflador",
+    "category": "Entrena",
+    "price": "$7.990",
+    "value": 7990,
+    "why": "+1.000 ventas visibles en Chile"
+  },
+  {
+    "rank": 33,
+    "name": "Gym ball 75 cm + inflador",
+    "category": "Entrena",
+    "price": "$8.990",
+    "value": 8990,
+    "why": "N.º 1 visible en Pilates/Fitness ML"
+  },
+  {
+    "rank": 34,
+    "name": "Soft ball Pilates 24 cm",
+    "category": "Entrena",
+    "price": "$5.990",
+    "value": 5990,
+    "why": "Miles de reseñas en Decathlon"
+  },
+  {
+    "rank": 35,
+    "name": "Disco de equilibrio propioceptivo",
+    "category": "Entrena",
+    "price": "$10.990",
+    "value": 10990,
+    "why": "Balance, tobillo y control motor"
+  },
+  {
+    "rank": 36,
+    "name": "Balance board",
+    "category": "Entrena",
+    "price": "$24.990",
+    "value": 24990,
+    "why": "Propiocepción y entrenamiento funcional"
+  },
+  {
+    "rank": 37,
+    "name": "Step aeróbico 2 niveles",
+    "category": "Entrena",
+    "price": "$16.990",
+    "value": 16990,
+    "why": "Miles de ventas visibles"
+  },
+  {
+    "rank": 38,
+    "name": "Mat NBR 10–15 mm",
+    "category": "Entrena",
+    "price": "$17.990",
+    "value": 17990,
+    "why": "Alta rotación y uso multipropósito"
+  },
+  {
+    "rank": 39,
+    "name": "Colchoneta plegable ejercicio",
+    "category": "Entrena",
+    "price": "$18.990",
+    "value": 18990,
+    "why": "Rehabilitación y entrenamiento en suelo"
+  },
+  {
+    "rank": 40,
+    "name": "Bloques yoga EVA x2",
+    "category": "Entrena",
+    "price": "$7.990",
+    "value": 7990,
+    "why": "Complemento barato y de alta rotación"
+  },
+  {
+    "rank": 41,
+    "name": "Correa de estiramiento 2,5 m",
+    "category": "Entrena",
+    "price": "$7.990",
+    "value": 7990,
+    "why": "Movilidad y flexibilidad"
+  },
+  {
+    "rank": 42,
+    "name": "Mancuernas 1 kg x2",
+    "category": "Entrena",
+    "price": "$11.990",
+    "value": 11990,
+    "why": "Más de 3.000 reseñas en Decathlon"
+  },
+  {
+    "rank": 43,
+    "name": "Mancuernas 2 kg x2",
+    "category": "Entrena",
+    "price": "$16.990",
+    "value": 16990,
+    "why": "Más de 2.700 reseñas"
+  },
+  {
+    "rank": 44,
+    "name": "Mancuernas 3 kg x2",
+    "category": "Entrena",
+    "price": "$21.990",
+    "value": 21990,
+    "why": "Progresión simple para hogar"
+  },
+  {
+    "rank": 45,
+    "name": "Set mancuernas ajustables 20 kg",
+    "category": "Entrena",
+    "price": "$34.990",
+    "value": 34990,
+    "why": "Miles de ventas visibles online"
+  },
+  {
+    "rank": 46,
+    "name": "Cuerda de salto ajustable",
+    "category": "Entrena",
+    "price": "$6.990",
+    "value": 6990,
+    "why": "Producto masivo y fácil de enviar"
+  },
+  {
+    "rank": 47,
+    "name": "Hand grip regulable",
+    "category": "Entrena",
+    "price": "$9.990",
+    "value": 9990,
+    "why": "Fuerza de mano y antebrazo"
+  },
+  {
+    "rank": 48,
+    "name": "Kit rehabilitación de manos",
+    "category": "Recupera",
+    "price": "$16.990",
+    "value": 16990,
+    "why": "Casi 800 reseñas en Decathlon"
+  },
+  {
+    "rank": 49,
+    "name": "Balón medicinal 2 kg",
+    "category": "Entrena",
+    "price": "$18.990",
+    "value": 18990,
+    "why": "Fuerza funcional y acondicionamiento"
+  },
+  {
+    "rank": 50,
+    "name": "Kit suspensión tipo straps",
+    "category": "Entrena",
+    "price": "$29.990",
+    "value": 29990,
+    "why": "Entrenamiento funcional de alto valor"
+  }
+]
