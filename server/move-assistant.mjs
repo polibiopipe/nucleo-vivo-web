@@ -117,6 +117,6 @@ export async function answer(input, generate = generateGemini) {
   });
   const safe = sanitizeOutput(result.output, input.budget);
   // Operational metadata only. Do not log prompts, replies, IPs or contact data.
-  console.info(JSON.stringify({ event: 'move_ai_generation', id, model: MODEL, inputTokens: result.usage?.inputTokens, outputTokens: result.usage?.outputTokens }));
+  console.info(JSON.stringify({ event: 'move_ai_generation', id, model: result.model || MODEL, attempts: result.attempts, inputTokens: result.usage?.inputTokens, outputTokens: result.usage?.outputTokens }));
   return { ...safe, id };
 }

@@ -44,18 +44,80 @@ test('existing Google provider variable is accepted without changing its secret'
 });
 
 test('provider rejection and quota errors preserve safe status without retaining response contents', async () => {
-  for (const [status, code] of [[403, 'AI_CREDENTIAL_REJECTED'], [429, 'AI_QUOTA_EXCEEDED'], [500, 'AI_PROVIDER_ERROR']]) {
-    await assert.rejects(generateGemini(params, { env, fetchImpl: async () => Response.json({ error: { message: 'sensitive response should be discarded' } }, { status }) }), error => {
+  for (const [status, code] of [[400, 'AI_PROVIDER_ERROR'], [403, 'AI_CREDENTIAL_REJECTED'], [429, 'AI_QUOTA_EXCEEDED']]) {
+    let calls = 0;
+    await assert.rejects(generateGemini(params, { env, fetchImpl: async () => {
+      calls++;
+      return Response.json({ error: { message: 'sensitive response should be discarded' } }, { status });
+    } }), error => {
       assert.equal(error.code, code); assert.equal(error.statusCode, status);
       assert.ok(!JSON.stringify(error).includes('sensitive')); return true;
     });
+    assert.equal(calls, 1);
   }
 });
 
 test('blocked, truncated and invalid JSON replies never become successful AI answers', async () => {
   for (const data of [{ promptFeedback: { blockReason: 'SAFETY' } }, { candidates: [{ finishReason: 'MAX_TOKENS', content: { parts: [{ text: JSON.stringify(output) }] } }] }, { candidates: [{ finishReason: 'STOP', content: { parts: [{ text: 'not json' }] } }] }]) {
-    await assert.rejects(generateGemini(params, { env, fetchImpl: async () => Response.json(data) }));
+    let calls = 0;
+    await assert.rejects(generateGemini(params, { env, fetchImpl: async () => { calls++; return Response.json(data); } }));
+    assert.equal(calls, 1);
   }
+});
+
+test('503 recovers with one alternate Gemini model, identical context and bounded backoff', async () => {
+  const requests = [];
+  let waited = false;
+  const result = await generateGemini({ ...params, model: 'gemini-3.8-flash' }, {
+    env,
+    waitImpl: async (ms, signal) => { assert.ok(ms >= 1000 && ms <= 1250); assert.equal(signal.aborted, false); waited = true; },
+    fetchImpl: async (url, init) => {
+      requests.push({ url, init });
+      if (requests.length === 1) return Response.json({ error: { message: 'Overloaded' } }, { status: 503 });
+      assert.ok(waited);
+      return Response.json(completed);
+    },
+  });
+  assert.equal(requests.length, 2);
+  assert.match(requests[0].url, /gemini-3\.8-flash:generateContent$/);
+  assert.match(requests[1].url, /gemini-3\.5-flash-lite:generateContent$/);
+  assert.equal(requests[0].init.body, requests[1].init.body);
+  assert.equal(requests[1].init.headers['x-goog-api-key'], env.GEMINI_API_KEY);
+  assert.equal(result.model, 'gemini-3.5-flash-lite');
+  assert.equal(result.attempts, 2);
+  assert.deepEqual(result.output, output);
+});
+
+test('persistent provider failure stops after two requests and discards error bodies', async () => {
+  let calls = 0;
+  await assert.rejects(generateGemini(params, { env, waitImpl: async () => {}, fetchImpl: async () => {
+    calls++;
+    return Response.json({ error: { message: 'sensitive' } }, { status: 503 });
+  } }), error => {
+    assert.equal(error.code, 'AI_PROVIDER_BUSY');
+    assert.equal(error.statusCode, 503);
+    assert.ok(!JSON.stringify(error).includes('sensitive'));
+    return true;
+  });
+  assert.equal(calls, 2);
+});
+
+test('first-attempt timeout can recover, but cancellation prevents a second request', async () => {
+  let calls = 0;
+  const result = await generateGemini(params, { env, waitImpl: async () => {}, fetchImpl: async () => {
+    if (++calls === 1) throw new DOMException('timeout', 'TimeoutError');
+    return Response.json(completed);
+  } });
+  assert.equal(result.attempts, 2);
+
+  const controller = new AbortController();
+  calls = 0;
+  await assert.rejects(generateGemini({ ...params, abortSignal: controller.signal }, {
+    env,
+    waitImpl: async () => controller.abort(),
+    fetchImpl: async () => { calls++; return Response.json({}, { status: 503 }); },
+  }), { code: 'AI_TIMEOUT' });
+  assert.equal(calls, 1);
 });
 
 test('thinking content is excluded from the user-facing structured reply', async () => {

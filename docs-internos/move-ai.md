@@ -5,7 +5,7 @@ La interfaz en `prototipos/move/` conversa con `/api/move-assistant`. El servido
 ## Activación de Gemini
 
 1. Configurar `GEMINI_API_KEY` como variable secreta del proyecto Vercel `nucleo-vivo-web` en Production; también en Preview si se probará ese entorno. Se admite `GOOGLE_GENERATIVE_AI_API_KEY` como alternativa existente. No usar prefijos públicos ni pegar claves en el código o el chat.
-2. Si se necesita un modelo distinto disponible para esa cuenta, configurar `MOVE_GEMINI_MODEL`; el valor predeterminado es `gemini-3.8-flash`.
+2. Si se necesita un modelo distinto disponible para esa cuenta, configurar `MOVE_GEMINI_MODEL`; el valor predeterminado es `gemini-3.8-flash`. Ante errores transitorios 500/502/503/504, modelo no disponible o tiempo agotado en el primer intento, se realiza un único intento adicional con `gemini-3.5-flash-lite` (configurable con `MOVE_GEMINI_FALLBACK_MODEL`). Se espera 1–1,25 segundos antes de ese intento; ambos comparten un límite total de 25 segundos. El primero tiene un máximo de 12 segundos para reservar tiempo al segundo. No se reintentan errores de clave, cuota, formato ni respuestas bloqueadas/truncadas/inválidas.
 3. Publicar el código actualizado o volver a desplegar después de configurar la variable. Una modificación de variables no actualiza despliegues ya creados.
 4. Ejecutar las consultas sintéticas y comprobar `source=ai`. El endpoint GET identifica la versión y el proveedor, pero no demuestra una generación exitosa.
 
@@ -27,7 +27,7 @@ Las peticiones tienen límite de extensión, historial, tiempo y tokens. El cont
 
 ## Validación
 
-La conexión anterior por AI Gateway devolvió `customer_verification_required`. Se sustituyó por la API directa de Gemini. Las pruebas con respuestas controladas verifican el destino Google, las credenciales sólo en cabeceras, el historial, el catálogo, las cuotas y el rechazo de respuestas truncadas o bloqueadas. No se ha confirmado todavía una inferencia real con Google: falta una clave de Gemini configurada y ejecutar el smoke.
+La conexión anterior por AI Gateway devolvió `customer_verification_required`. Se sustituyó por la API directa de Gemini. La clave está configurada en Production. Tras corregir el formato de solicitud, los registros de producción del 6 de septiembre muestran respuestas 503 del proveedor. Se añadió recuperación limitada con un segundo modelo y registro del modelo que realmente responde. Las pruebas con respuestas controladas verifican el destino Google, las credenciales sólo en cabeceras, el historial, el catálogo, las cuotas y el rechazo de respuestas truncadas o bloqueadas. Todavía falta confirmar una inferencia real exitosa en producción.
 
 `npm run test:move` prueba validación de entrada, seguridad, restricciones del catálogo, presupuesto, frecuencia, origen, conversación, carrito, apertura de agenda, errores y renderizado seguro de texto generado. Son pruebas de lógica y DOM, no una certificación clínica ni una inspección visual en dispositivos.
 
@@ -38,6 +38,8 @@ La conexión anterior por AI Gateway devolvió `customer_verification_required`.
 Fuentes técnicas y orientación urgente:
 - https://ai.google.dev/gemini-api/docs/api-key
 - https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash
+- https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash-lite
+- https://ai.google.dev/gemini-api/docs/troubleshooting
 - https://ai.google.dev/gemini-api/docs/generate-content/structured-output
 - https://ai.google.dev/api/generate-content
 - https://www.minsal.cl/servicios-de-urgencia-cuando-asistir-a-un-recinto-de-atencion-primaria-o-a-un-hospital/
