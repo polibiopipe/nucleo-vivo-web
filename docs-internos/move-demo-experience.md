@@ -4,7 +4,8 @@ Actualización del 6 de septiembre de 2026 autorizada por Polibio.
 
 - Inicio con tres acciones: ver productos, solicitar una hora, pedir ayuda para elegir.
 - Textos dirigidos al visitante; retirada de afirmaciones de ventas y envío gratuito no confirmadas.
-- Chat con mayor espacio, panel visual reducido y contraste mejorado; pantalla completa a anchos pequeños.
+- Chat a pantalla completa, sin panel decorativo, con cabecera y ficha de contexto compactas. La conversación ocupa la altura restante y mantiene un ancho de lectura limitado; el campo de escritura crece sólo al escribir. El presupuesto y los detalles del aviso de IA son desplegables; «Nueva conversación» y «Preguntas guiadas» están en «Opciones».
+- Las respuestas extensas se muestran desde el comienzo, sin saltar a la tarjeta final. Si la persona ha retrocedido para leer el historial mientras espera, se conserva su posición. Al consultar un producto, el foco queda en la conversación para poder leer con el teclado sin abrir el teclado de escritura en el móvil.
 - Comparación de dos o tres productos con nombre, precio referencial, categoría y datos que debe verificar el comprador. No se inventan materiales, medidas, resistencia ni disponibilidad.
 - Las tarjetas de orientación abren preguntas concretas en MOVE Select.
 - «Consultar características» muestra nombre, imagen y precio del producto y envía automáticamente una pregunta contextual a Gemini. Las preguntas específicas de las guías y el comparador también se envían al seleccionarlas; el acceso general al chat espera la consulta del visitante.
@@ -25,7 +26,7 @@ El panel sigue siendo una demostración pública de roles; elegir un perfil no e
 
 ## Verificación
 
-26 pruebas pasan: incluyen catálogo, IA, seguridad, carrito, comparación limitada a tres artículos, selección conservada al filtrar, derivación entre chat y agenda, recorrido completo de solicitud ficticia a Gestión, revisión, borrado y rechazo de almacenamiento inválido/expirado. Se verifican las consultas automáticas de los 50 productos con respuestas controladas, Gym Ball desde destacados y ficha, mantenimiento del producto en preguntas posteriores y descarte de respuestas que llegan después de cerrar. Las pruebas de interfaz usan jsdom; no sustituyen una inspección visual.
+28 pruebas pasan: incluyen catálogo, IA, seguridad, carrito, comparación limitada a tres artículos, selección conservada al filtrar, derivación entre chat y agenda, recorrido completo de solicitud ficticia a Gestión, revisión, borrado y rechazo de almacenamiento inválido/expirado. Se verifican las consultas automáticas de los 50 productos con respuestas controladas, Gym Ball desde destacados y ficha, mantenimiento del producto en preguntas posteriores y descarte de respuestas que llegan después de cerrar. También se comprueba la posición de lectura ante respuestas extensas y revisión del historial (con geometría simulada), el foco en la respuesta del producto, la validación del presupuesto desplegable y el cambio a preguntas guiadas. Las pruebas de interfaz usan jsdom; no sustituyen una inspección visual.
 
 La compilación publica 202 archivos mediante una lista explícita. El navegador de trabajo no pudo abrir la vista previa local (`ERR_BLOCKED_BY_CLIENT`), por lo que no se afirma una comprobación visual completa en dispositivos.
 

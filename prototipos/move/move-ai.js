@@ -27,11 +27,19 @@
     const log = document.getElementById('moveAIConversation');
     if (log) log.scrollTop = log.scrollHeight;
   }
+  function scrollStart(item) {
+    const log = document.getElementById('moveAIConversation');
+    log.scrollTop = Math.max(0, log.scrollTop + item.getBoundingClientRect().top - log.getBoundingClientRect().top - 16);
+  }
+  function resizeInput(input) {
+    input.style.height = 'auto';
+    input.style.height = `${Math.min(96, Math.max(44, input.scrollHeight + 2))}px`;
+  }
   function message(role, text) {
     const item = el('article', `move-ai-message move-ai-${role}`);
     item.append(el('span', 'move-ai-speaker', role === 'user' ? 'Tú' : 'MOVE Select'));
     item.append(el('p', '', text));
-    document.getElementById('moveAIConversation').append(item); scrollEnd(); return item;
+    document.getElementById('moveAIConversation').append(item); return item;
   }
   function setBusy(value) {
     busy = value;
@@ -43,6 +51,7 @@
   }
   function guided() {
     abort(); history = [];
+    overlay.querySelector('.move-ai-tools')?.remove();
     overlay.classList.remove('move-ai-open');
     msState = msDefaults(); msSetMode('demo'); msRenderIntro();
     status('Preguntas guiadas · sin IA');
@@ -90,23 +99,26 @@
     const follow = el('div','move-ai-suggestions');
     for (const text of data.followUp || []) follow.append(button(text, () => send(text)));
     if (follow.childElementCount) item.append(follow);
-    scrollEnd();
+    return item;
   }
   async function send(text) {
     text = String(text || '').trim();
     if (busy || !text || text.length > 1000) return;
     if (history.length >= 14) {
-      message('assistant','Llegamos al límite de esta conversación de prueba. Usa «Nueva conversación» para comenzar otra.'); return;
+      scrollStart(message('assistant','Llegamos al límite de esta conversación de prueba. Usa «Nueva conversación» para comenzar otra.')); return;
     }
     const input = document.getElementById('moveAIInput');
     const limit = document.getElementById('moveAIBudget');
-    if (limit.value && !limit.checkValidity()) { limit.reportValidity(); return; }
+    if (limit.value && !limit.checkValidity()) { limit.closest('details').open = true; limit.reportValidity(); return; }
     const budget = limit.value ? Number(limit.value) : null;
-    if (input) input.value = '';
+    stage.querySelectorAll('.move-ai-form details').forEach(details=>{details.open=false;});
+    if (input) { input.value = ''; resizeInput(input); }
     const requestHistory = [...history, {role:'user',content:text}];
     message('user',text); setBusy(true); status('Consultando la IA…');
     const pending = el('p','move-ai-pending','Estoy revisando tu consulta y el catálogo…');
     pending.setAttribute('role','status'); document.getElementById('moveAIConversation').append(pending); scrollEnd();
+    const log = document.getElementById('moveAIConversation');
+    const sentScrollTop = log.scrollTop;
     controller = new AbortController();
     const current = ++revision;
     const timer = setTimeout(() => controller?.abort(), 32000);
@@ -124,7 +136,11 @@
       }
       history = [...requestHistory,{role:'assistant',content:data.message}];
       status(data.source === 'ai' ? 'IA conectada' : 'Orientación de seguridad', data.source === 'ai');
-      present(data);
+      // Reveal the start of a long answer, unless the visitor scrolled back to read history.
+      const revealAnswer = log.scrollTop >= sentScrollTop - 16;
+      pending.remove();
+      const answer = present(data);
+      if (revealAnswer) scrollStart(answer);
     } catch (error) {
       if (current !== revision) return;
       const activationRequired = error.code === 'AI_ACTIVATION_REQUIRED';
@@ -132,11 +148,13 @@
       const note = el('div','move-ai-error'); note.setAttribute('role','alert');
       note.append(el('p','',activationRequired ? 'El asistente de IA está pendiente de activación. Mientras tanto, puedes explorar el catálogo con las preguntas guiadas.' : error.name === 'AbortError' ? 'La respuesta está tardando más de lo esperado. Puedes intentarlo de nuevo.' : 'No pudimos obtener una respuesta de la IA. Puedes reintentar o usar las preguntas guiadas.'));
       note.append(button('Reintentar',()=>{note.remove();send(text);}),button('Usar preguntas guiadas',guided));
-      document.getElementById('moveAIConversation').append(note);
-      if (input) input.value = text;
+      const revealError = log.scrollTop >= sentScrollTop - 16;
+      pending.remove(); log.append(note);
+      if (input) { input.value = text; resizeInput(input); }
+      if (revealError) scrollStart(note);
     } finally {
       clearTimeout(timer);
-      if (current === revision) { pending.remove(); setBusy(false); controller = null; scrollEnd(); }
+      if (current === revision) { pending.remove(); setBusy(false); controller = null; }
     }
   }
   function render(options = {}) {
@@ -144,24 +162,28 @@
     overlay.classList.add('move-ai-open');
     stage.replaceChildren();
     document.getElementById('msBack').classList.remove('show');
-    document.getElementById('msStepLabel').textContent = 'Conversación · Catálogo y atención';
+    document.getElementById('msStepLabel').textContent = 'MOVE Select';
     document.getElementById('msVisualKicker').textContent = 'Hablemos de lo que buscas';
     document.getElementById('msVisualTitle').textContent = 'Una consulta. Un siguiente paso.';
     document.getElementById('msVisualText').textContent = 'Compara productos, aclara diferencias y encuentra el recorrido de atención que corresponde a tu consulta.';
-    status('MOVE Select · Asistente IA');
+    status('Asistente IA');
     const heading = el('div','move-ai-heading');
     const title = el('h2','',product ? product.name : '¿Qué te gustaría encontrar?'); title.id = 'msTitle';
     if (product) {
       const context = el('div','move-ai-context');
       const img = el('img'); img.src = imageFor(product); img.alt = '';
       const copy = el('div');
-      copy.append(el('small','','Características del producto'), title, el('p','',`${product.price} · Precio referencial`));
+      copy.append(title, el('p','',`${product.price} · Precio referencial`));
       context.append(img, copy); heading.append(context);
-    } else heading.append(title,el('p','','Conversemos sobre productos, presupuesto o cómo acceder a kinesiología.'));
-    const tools = el('div','move-ai-tools');
-    tools.append(button('Nueva conversación',()=>window.openMoveSelect()),button('Preguntas guiadas',guided));
-    heading.append(tools); stage.append(heading);
+    } else heading.append(title);
+    overlay.querySelector('.move-ai-tools')?.remove();
+    const tools = el('details','move-ai-tools');
+    const menu = el('div');
+    menu.append(button('Nueva conversación',()=>window.openMoveSelect()),button('Preguntas guiadas',guided));
+    tools.append(el('summary','','Opciones'),menu);
+    overlay.querySelector('.ms-close').before(tools); stage.append(heading);
     const log = el('div','move-ai-conversation'); log.id = 'moveAIConversation';
+    log.tabIndex = 0;
     log.setAttribute('role','log'); log.setAttribute('aria-live','polite'); log.setAttribute('aria-label','Conversación con MOVE Select');
     stage.append(log);
     if (!product && !options.text?.trim()) {
@@ -170,25 +192,41 @@
       ['Busco bandas para entrenar en casa','¿Qué diferencia hay entre los foam rollers?','Ya tengo derivación a kinesiología'].forEach(t=>suggestions.append(button(t,()=>send(t))));
       opening.append(suggestions);
     }
-    const form = el('form','move-ai-form');
+    const form = el('form','move-ai-form'); form.noValidate = true;
     const budgetLabel = el('label','move-ai-budget','Máximo por producto (opcional)'); budgetLabel.htmlFor = 'moveAIBudget';
     const budget = el('input'); budget.id = 'moveAIBudget'; budget.type = 'number'; budget.min = '1'; budget.max = '10000000'; budget.step = '1'; budget.placeholder = 'CLP · ej. 20000'; budget.inputMode = 'numeric'; budgetLabel.append(budget);
-    form.append(budgetLabel);
     const label = el('label','move-ai-input-label','Tu consulta'); label.htmlFor = 'moveAIInput'; form.append(label);
     const composer = el('div','move-ai-composer');
-    const input = el('textarea'); input.id = 'moveAIInput'; input.maxLength = 1000; input.rows = 2;
+    const input = el('textarea'); input.id = 'moveAIInput'; input.maxLength = 1000; input.rows = 1;
     input.placeholder = product ? '¿Qué más quieres saber de este producto?' : 'Ej.: Quiero comparar bandas por menos de $20.000';
     input.setAttribute('aria-describedby','moveAIPrivacy');
+    input.addEventListener('input',()=>resizeInput(input));
     input.addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();form.requestSubmit();}});
     const submit = el('button','move-ai-primary','Enviar'); submit.type='submit'; submit.id='moveAISend';
     composer.append(input,submit); form.append(composer);
-    const privacy = el('p','move-ai-privacy','Las consultas de producto se envían a un servicio de IA al abrirlas. Al enviar mensajes, compartes también la conversación. Usa ejemplos ficticios, sin datos personales ni documentos clínicos. La IA puede equivocarse.');
-    privacy.id='moveAIPrivacy'; form.append(privacy);
+    const foot = el('div','move-ai-form-foot');
+    const privacy = el('details','move-ai-privacy');
+    const privacySummary = el('summary','','Conversación enviada a IA · usa datos ficticios'); privacySummary.id='moveAIPrivacy';
+    privacy.append(privacySummary, el('p','','Las consultas de producto se envían a un servicio de IA al abrirlas. Al enviar mensajes, compartes también la conversación. No incluyas datos personales ni documentos clínicos. La IA puede equivocarse y no reemplaza una evaluación profesional.'));
+    const optionsPanel = el('details','move-ai-options');
+    const optionsSummary = el('summary','','Presupuesto');
+    optionsPanel.append(optionsSummary,budgetLabel);
+    budget.addEventListener('input',()=>{optionsSummary.textContent = budget.value && budget.checkValidity() ? `Máximo: $${Number(budget.value).toLocaleString('es-CL')}` : 'Presupuesto';});
+    foot.append(privacy,optionsPanel); form.append(foot);
+    // Keep optional details available without letting them occupy the conversation together.
+    for (const [opened, other] of [[privacy,optionsPanel],[optionsPanel,privacy]]) {
+      opened.addEventListener('toggle',()=>{if(opened.open) other.open=false;});
+    }
     form.addEventListener('submit',event=>{event.preventDefault();send(input.value);}); stage.append(form);
-    setTimeout(()=>input.focus(),50);
+    setTimeout(()=>{
+      if (input.isConnected && overlay.classList.contains('move-ai-open')) {
+        (product || options.text?.trim() ? log : input).focus({preventScroll:true});
+      }
+    },50);
   }
   window.openMoveSelect = function(options = {}) {
-    abort(); history=[]; selectedRank=byRank(options.productRank)?.rank || null; lastFocus=document.activeElement;
+    if (!overlay.classList.contains('open')) lastFocus=document.activeElement;
+    abort(); history=[]; selectedRank=byRank(options.productRank)?.rank || null;
     originalOpen(options); render(options);
     const product = byRank(selectedRank);
     const initialQuestion = options.text?.trim() || (product
@@ -198,11 +236,12 @@
   };
   window.closeMoveSelect = function() {
     abort(); history=[]; originalClose(); overlay.classList.remove('move-ai-open');
+    overlay.querySelector('.move-ai-tools')?.remove();
     lastFocus?.focus?.();
   };
   overlay.addEventListener('keydown',event=>{
     if(event.key !== 'Tab' || !overlay.classList.contains('open')) return;
-    const nodes = [...overlay.querySelectorAll('a[href],button:not([disabled]),input,textarea')].filter(n=>n.getClientRects().length);
+    const nodes = [...overlay.querySelectorAll('a[href],button:not([disabled]),input,textarea,summary,[tabindex="0"]')].filter(n=>n.getClientRects().length);
     if (!nodes.length) return;
     if(event.shiftKey&&document.activeElement===nodes[0]){event.preventDefault();nodes.at(-1).focus();}
     else if(!event.shiftKey&&document.activeElement===nodes.at(-1)){event.preventDefault();nodes[0].focus();}

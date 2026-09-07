@@ -87,6 +87,60 @@ test('a selected question sends once, and closing a product consultation discard
     assert.deepEqual(errors,[]);
   }finally{w.close();}
 });
+test('long answers reveal their beginning and preserve the position of a visitor reading history',async()=>{
+  let finish;
+  const {w,d,errors}=setup(()=>new Promise(resolve=>{finish=()=>resolve({ok:true,json:async()=>({source:'ai',intent:'question',referral:'unknown',message:'Respuesta extensa.\n'.repeat(100),products:[],followUp:[]})});}));
+  try{
+    w.openMoveSelect();
+    const log=d.querySelector('#moveAIConversation');
+    // jsdom has no layout: supply a scrollable viewport and the position of a long answer.
+    let scrollTop=0,contentHeight=2000;
+    const viewportHeight=400,answerTop=1750;
+    Object.defineProperties(log,{
+      scrollHeight:{get:()=>contentHeight},
+      scrollTop:{get:()=>scrollTop,set:value=>{scrollTop=Math.max(0,Math.min(value,contentHeight-viewportHeight));}},
+    });
+    log.getBoundingClientRect=()=>({top:120,bottom:520});
+    const originalRect=w.HTMLElement.prototype.getBoundingClientRect;
+    w.HTMLElement.prototype.getBoundingClientRect=function(){
+      return this.classList.contains('move-ai-assistant')?{top:120+answerTop-scrollTop}:originalRect.call(this);
+    };
+    d.querySelector('#moveAIInput').value='Explica las características';d.querySelector('#moveAISend').click();
+    contentHeight=3600;finish();await tick();
+    const answer=log.querySelector('.move-ai-assistant:last-child');
+    assert.ok(answer);assert.equal(answer.getBoundingClientRect().top,136,'the answer begins just below the conversation top');
+    assert.ok(scrollTop<contentHeight-viewportHeight,'completion must not jump to the bottom of a long answer');
+    d.querySelector('#moveAIInput').value='Tengo otra pregunta';d.querySelector('#moveAISend').click();
+    log.scrollTop=80;contentHeight=5200;finish();await tick();
+    assert.equal(log.scrollTop,80,'an incoming response must not interrupt review of earlier messages');
+    assert.deepEqual(errors,[]);
+  }finally{w.close();}
+});
+test('compact chat retains optional budget validation and keyboard access to the product response',async()=>{
+  const calls=[];
+  const {w,d,errors}=setup(async(url,options)=>{
+    calls.push(JSON.parse(options.body));
+    return {ok:true,json:async()=>({source:'ai',intent:'question',referral:'unknown',message:'Características de la Gym ball.',products:[],followUp:[]})};
+  });
+  try{
+    w.openMoveSelect({productRank:32});await tick(70);
+    assert.equal(d.activeElement,d.querySelector('#moveAIConversation'),'product reading must not open the input keyboard');
+    const input=d.querySelector('#moveAIInput'),budget=d.querySelector('#moveAIBudget'),options=budget.closest('details');
+    assert.equal(options.open,false);
+    input.value='Compara dentro de mi presupuesto';budget.value='-1';d.querySelector('#moveAISend').click();
+    assert.equal(calls.length,1);assert.equal(options.open,true,'invalid collapsed budget is opened for correction');
+    budget.value='15000';budget.dispatchEvent(new w.Event('input'));
+    d.querySelector('#moveAISend').click();await tick();
+    assert.equal(calls[1].budget,15000);assert.equal(options.open,false);
+    assert.match(options.querySelector('summary').textContent,/15\.000/);
+    assert.ok(d.querySelector('label[for="moveAIInput"]'));
+    [...d.querySelectorAll('.move-ai-tools button')].find(b=>b.textContent==='Nueva conversación').click();
+    assert.equal(d.querySelectorAll('.move-ai-tools').length,1);
+    [...d.querySelectorAll('.move-ai-tools button')].find(b=>b.textContent==='Preguntas guiadas').click();
+    assert.ok(d.querySelector('#msFreeText'));assert.equal(d.querySelector('.move-ai-tools'),null);
+    assert.deepEqual(errors,[]);
+  }finally{w.close();}
+});
 test('confirmed referral opens the existing agenda; failures retain guided alternative',async()=>{
   let fail=false;
   const {w,d,errors}=setup(async()=>({ok:!fail,json:async()=>fail?{message:'Unavailable'}:{source:'ai',intent:'appointment',referral:'yes',message:'Puedes probar la agenda.',products:[],followUp:[]}}));
