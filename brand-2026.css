@@ -475,24 +475,23 @@
   .nv-integrated-photo img[data-image-origin="ai-illustration"] { aspect-ratio: 3/2; max-height: 30rem; object-fit: contain; }
 }
 
-/* Keep the consulting introduction and its photograph aligned at readable scale. */
-.nv-public .page-hero-consultoria { padding-block: 30px 38px; }
+/* Blend the consulting scene into the same surface as the introduction. */
+.nv-public .page-hero-consultoria { position: relative; isolation: isolate; overflow: hidden; padding-block: 30px 38px; }
+.nv-consultoria-backdrop { position: absolute; z-index: -1; inset: 0 0 0 34%; pointer-events: none; }
+.nv-consultoria-backdrop img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 42%; }
+.nv-consultoria-backdrop::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, #041f32 0%, #041f32f5 20%, #041f32a6 45%, #041f320d 70%), linear-gradient(0deg, #041f32, #041f3200 28%), linear-gradient(180deg, #041f3259, #041f3200 32%); }
 .nv-public .page-hero-consultoria .breadcrumb { margin: 0 0 24px; }
-.nv-consultoria-layout { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); gap: 48px; align-items: start; }
-.nv-consultoria-layout > * { min-width: 0; }
+.nv-consultoria-layout { display: block; }
+.nv-consultoria-copy { width: 55%; max-width: 620px; min-width: 0; }
 .nv-public .page-hero-consultoria .subpage-kicker { margin: 0 0 16px; font-size: .875rem; line-height: 1.5; letter-spacing: .015em; }
 .nv-public .page-hero-consultoria h1 { margin: 0 0 20px; max-width: 650px; font-size: clamp(1.875rem,2.7vw,2.625rem); font-weight: 520; line-height: 1.18; letter-spacing: -.02em; text-wrap: initial; }
 .nv-public .page-hero-consultoria .subpage-lead { margin: 0; max-width: 620px; font-size: 1.0625rem; line-height: 1.6; }
 .nv-public .page-hero-consultoria .subpage-actions { margin-top: 24px; gap: 12px; }
-.nv-public .page-hero-consultoria .subpage-photo { width: 100%; min-height: 0; max-height: none; aspect-ratio: 3/2; align-self: start; }
-.nv-public .page-hero-consultoria .subpage-photo img { display: block; width: 100%; height: auto; min-height: 0; aspect-ratio: 3/2; object-fit: contain; }
-@media (max-width: 1100px) {
-  .nv-consultoria-layout { gap: 32px; }
-}
 @media (max-width: 900px) {
-  .nv-consultoria-layout { grid-template-columns: 1fr; gap: 28px; }
+  .nv-consultoria-copy { width: 100%; }
+  .nv-consultoria-backdrop { inset: 0; }
+  .nv-consultoria-backdrop::after { background: linear-gradient(90deg, #041f32f5, #041f32d9 65%, #041f32a6), linear-gradient(0deg, #041f32, #041f3200 40%); }
   .nv-public .page-hero-consultoria { padding-block: 24px 32px; }
-  .nv-public .page-hero-consultoria .subpage-photo { max-width: 620px; }
 }
 @media (max-width: 640px) {
   .nv-public .page-hero-consultoria h1 { font-size: clamp(1.75rem,6.8vw,2.125rem); }
