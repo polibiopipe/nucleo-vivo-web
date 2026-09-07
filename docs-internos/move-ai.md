@@ -27,13 +27,15 @@ Las peticiones tienen límite de extensión, historial, tiempo y tokens. El cont
 
 ## Validación
 
-La conexión anterior por AI Gateway devolvió `customer_verification_required`. Se sustituyó por la API directa de Gemini. La clave está configurada en Production. Tras corregir el formato de solicitud, los registros de producción del 6 de septiembre muestran respuestas 503 del proveedor. Se añadió recuperación limitada con un segundo modelo y registro del modelo que realmente responde. Las pruebas con respuestas controladas verifican el destino Google, las credenciales sólo en cabeceras, el historial, el catálogo, las cuotas y el rechazo de respuestas truncadas o bloqueadas. Todavía falta confirmar una inferencia real exitosa en producción.
+La conexión anterior por AI Gateway devolvió `customer_verification_required`. Se sustituyó por la API directa de Gemini. La clave está configurada en Production. Tras corregir el formato de solicitud, se añadió recuperación limitada con un segundo modelo. Los registros del 6 de septiembre de 2026, entre 23:40:55 y 23:42:14 UTC, confirman cinco peticiones POST con estado 200 y evento `move_ai_generation`: dos con `gemini-3.8-flash` y tres con `gemini-3.5-flash-lite` tras recuperarse de un 503. Son generaciones reales; los registros contienen modelo y tokens, no el texto de la conversación. La revisión semántica de esas respuestas no se puede deducir de los registros.
 
 `npm run test:move` prueba validación de entrada, seguridad, restricciones del catálogo, presupuesto, frecuencia, origen, conversación, carrito, apertura de agenda, errores y renderizado seguro de texto generado. Son pruebas de lógica y DOM, no una certificación clínica ni una inspección visual en dispositivos.
 
 `node scripts/smoke-move-ai.mjs` realiza tres consultas sintéticas a la IA y exige que el modelo compare productos dentro del presupuesto, reconozca una derivación confirmada y pregunte por ella cuando falta. Requiere `GEMINI_API_KEY` o `GOOGLE_GENERATIVE_AI_API_KEY` en el entorno y consume inferencia de Google. Para cargar un archivo local de secretos: `node --env-file=.env.local scripts/smoke-move-ai.mjs`.
 
 `npm run build` genera `public/` a partir de una lista explícita de archivos web. API, documentos internos, pruebas, migraciones, configuraciones y dependencias permanecen fuera de la carpeta pública.
+
+La agenda recibe la derivación confirmada en el chat y permite corregirla volviendo al paso anterior. La conexión de demostración con Gestión guarda únicamente una solicitud sintética de horario; nunca el historial, contactos ni documentos. Véase `move-demo-experience.md`.
 
 Fuentes técnicas y orientación urgente:
 - https://ai.google.dev/gemini-api/docs/api-key

@@ -1,0 +1,37 @@
+.hero-help{border:0;background:none;color:white;text-decoration:underline;text-underline-offset:6px;padding:15px 0;font:700 14px "DM Sans",sans-serif;cursor:pointer}
+.hero-help span{margin-left:8px;color:var(--lime)}
+.hero-ctas{column-gap:16px}
+.menu{gap:24px}.menu .menu-ai{white-space:nowrap}
+.story-card{cursor:default}.story-content{padding-bottom:6px}
+.move-story-action{border:0;background:none;color:var(--lime);font:700 13px/1.5 "DM Sans",sans-serif;padding:16px 0 3px;text-align:left;text-decoration:underline;text-underline-offset:5px;cursor:pointer}
+.service-card.light .move-story-action{color:#20351d}
+.shipping-goal small{display:block;margin-top:8px;line-height:1.5}
+.shipping-goal{padding-bottom:16px}
+.quick-actions:has(#quickCompare){grid-template-columns:1fr!important}
+.move-compare-button,.move-compare-primary{font:600 13px/1.4 "DM Sans",sans-serif;padding:11px 14px;min-height:44px;cursor:pointer;border-radius:9px;border:1px solid #c9cdbf;background:transparent;color:#1d281a}
+.move-compare-button[aria-pressed=true],.wish[aria-pressed=true]{background:var(--lime);color:#14220e;border-color:#8aab26}
+.catalog-card-body>.move-compare-button{margin:4px 0 12px;width:100%}
+.move-compare-primary{background:var(--lime);border-color:#9eb735}
+.move-compare-primary:disabled{opacity:.5;cursor:default}
+.move-compare-tray{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:115;display:flex;align-items:center;gap:16px;width:max-content;max-width:calc(100% - 30px);padding:12px 16px;border:1px solid #b9c4ad;border-radius:16px;background:#fbf9f4;box-shadow:0 10px 35px #08110830;color:#1d281a;font-size:14px}
+.move-compare-tray[hidden]{display:none}
+body.move-has-comparison .floating-help{bottom:112px}
+body:is(.ms-locked,.agenda-locked,.locked) .move-compare-tray{display:none}
+body.move-comparing{overflow:hidden}
+.move-compare-dialog{width:min(1120px,calc(100vw - 36px));max-height:90dvh;padding:28px;border:1px solid #bac3b0;border-radius:24px;background:#f8f6ee;color:#192014;overflow-y:auto}
+.move-compare-dialog::backdrop{background:#070d0ae0;backdrop-filter:blur(5px)}
+.move-compare-head{display:flex;gap:20px;justify-content:space-between;align-items:start}
+.move-compare-head h2{font:700 clamp(26px,3vw,38px)/1.08 "Manrope",sans-serif;letter-spacing:-.045em;max-width:660px;margin:0}
+.move-compare-note{color:#5a6552;font-size:14px;line-height:1.5;max-width:760px;margin:20px 0}
+.move-compare-scroll{overflow-x:auto;overscroll-behavior:contain}
+.move-compare-table{width:100%;border-collapse:collapse;table-layout:fixed}
+.move-compare-table th,.move-compare-table td{text-align:left;vertical-align:top;padding:18px 14px;border-bottom:1px solid #cdd3c4;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.move-compare-table th:first-child{width:145px;color:#526147;font-weight:500}
+.move-compare-table thead th:not(:first-child){font:700 18px/1.25 "Manrope",sans-serif}
+.move-compare-table img{width:100%;height:155px;object-fit:contain;border-radius:14px;background:#ecebe2;margin-bottom:16px}
+.move-compare-footer{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;background:none;padding:22px 0 0;border:0}
+.move-compare-dialog :is(button,a):focus-visible,.move-compare-tray button:focus-visible,.move-compare-button:focus-visible,.hero-help:focus-visible,.move-story-action:focus-visible{outline:3px solid #567a22;outline-offset:4px}
+.move-demo-receipt{margin-top:22px}.move-demo-receipt p{font-size:14px;line-height:1.5}.move-demo-receipt a{text-decoration:none}
+@media(max-width:1180px){.nav{grid-template-columns:130px 1fr auto;gap:16px}.menu{gap:12px}.menu .menu-ai{display:inline-flex;font-size:12px}}
+@media(max-width:900px){.nav{grid-template-columns:1fr auto}.menu{display:none}}
+@media(max-width:620px){.hero-grid{padding-top:160px}.hero-ctas>.btn{flex:1;white-space:nowrap;padding:0 15px}.hero-help{width:100%;text-align:left}.move-compare-tray{gap:8px;flex-wrap:wrap;justify-content:center;bottom:10px;padding:10px;width:calc(100% - 24px)}.move-compare-tray>span{width:100%;font-size:12px;text-align:center}.move-compare-dialog{width:calc(100vw - 16px);padding:20px 12px;border-radius:16px}.move-compare-table{min-width:620px}.move-compare-table th:first-child{width:110px}.move-compare-table img{height:100px}.move-compare-table th,.move-compare-table td{padding:12px;font-size:13px}.move-compare-head h2{font-size:27px}.move-compare-footer{justify-content:stretch}.move-compare-footer button{flex:1}.hero-ctas{gap:10px}}

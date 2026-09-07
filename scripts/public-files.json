@@ -196,5 +196,9 @@
   "styles.css",
   "terminos/index.html",
   "prototipos/move/move-ai.css",
-  "prototipos/move/move-ai.js"
+  "prototipos/move/move-ai.js",
+  "prototipos/move/move-demo.js",
+  "prototipos/move/move-experience.js",
+  "prototipos/move/move-experience.css",
+  "prototipos/move/gestion/move-requests.js"
 ]

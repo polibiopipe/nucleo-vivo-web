@@ -47,7 +47,7 @@
     msState = msDefaults(); msSetMode('demo'); msRenderIntro();
     status('Preguntas guiadas · sin IA');
   }
-  function openAgenda() { window.closeMoveSelect(); agendaOpen(); }
+  function openAgenda() { window.closeMoveSelect(); agendaOpen({ referral: 'yes' }); }
   function present(data) {
     const item = message('assistant', data.message);
     const cards = el('div','move-ai-products');

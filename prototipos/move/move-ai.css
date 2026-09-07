@@ -1,8 +1,16 @@
 .move-ai-open .ms-panel{min-height:0;display:flex;flex-direction:column;height:100%}
+.move-ai-open .ms-shell{grid-template-columns:minmax(250px,28%) minmax(0,1fr)}
+.move-ai-open .ms-visual{padding:28px 24px;background:linear-gradient(165deg,#151e16,#0b100c)}
+.move-ai-open .ms-visual-top{flex-wrap:wrap;gap:14px}
+.move-ai-open .ms-visual-copy{margin-top:6vh;max-width:100%}
+.move-ai-open .ms-visual-copy p{font-size:14px;line-height:1.6}
+.move-ai-open .ms-object-wrap{width:100%;height:43%;right:0;bottom:10%;opacity:.8}
+.move-ai-open .ms-object-label{display:none}
+.move-ai-open .ms-visual-foot{font-size:11px;line-height:1.5;flex-wrap:wrap;gap:8px}
 .move-ai-open .ms-top{flex-shrink:0}
 .move-ai-open .ms-stage{padding:0;display:flex;flex-direction:column;overflow:hidden;min-height:0;flex:1}
 .move-ai-open .ms-progress,.move-ai-open .ms-bottom{display:none}
-.move-ai-open .ms-visual-copy h2{font-size:clamp(38px,4.4vw,62px);line-height:1.05;letter-spacing:-.045em}
+.move-ai-open .ms-visual-copy h2{font-size:clamp(29px,3vw,44px);line-height:1.08;letter-spacing:-.045em;color:#f4f6ef;text-shadow:0 2px 16px #081009}
 .move-ai-heading{padding:24px 32px 18px;border-bottom:1px solid var(--line);flex-shrink:0}
 .move-ai-heading h2{font-family:Manrope,sans-serif;font-size:clamp(22px,2.2vw,30px);letter-spacing:-.035em;line-height:1.15;margin:0 0 8px}
 .move-ai-heading>p{font-size:16px;color:#5b625b;line-height:1.45;margin:0}
@@ -46,6 +54,8 @@
 .move-ai-error p{width:100%;font-size:15px;line-height:1.5;margin:0 0 4px}
 .move-ai-service-button{border:0;background:none;color:var(--lime);text-align:left;padding:16px 0 0;font:600 14px/1.4 'DM Sans',sans-serif;cursor:pointer}
 .move-ai-open :is(button,a,input,textarea):focus-visible{outline:3px solid #536f1d;outline-offset:3px}
+@media(min-width:781px) and (max-width:1050px){.move-ai-open .ms-shell{grid-template-columns:1fr}.move-ai-open .ms-visual{display:none}}
+@media(min-width:781px) and (max-height:760px){.move-ai-heading{padding:14px 26px}.move-ai-heading>p{display:none}.move-ai-heading h2{font-size:25px}.move-ai-tools{margin-top:7px}.move-ai-form{padding:12px 26px}.move-ai-open .ms-visual-copy{margin-top:24px}.move-ai-open .ms-object-wrap{bottom:4%;height:38%}}
 @media(max-width:780px){
  .move-ai-open .ms-shell{height:100dvh;min-height:0;overflow:hidden}
  .move-ai-open .ms-visual{display:none}
