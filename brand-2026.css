@@ -208,7 +208,9 @@
 .nv-public .service-card > span { color: #647d8b; font-size: 14px; margin: 4px 0 0; }
 .nv-public .service-card h3 { font: 500 25px/1.25 var(--nv-sans); letter-spacing: -.02em; margin: 0; }
 .nv-public .service-card p { margin: 0; color: var(--nv-muted); font-size: 17px; }
-.nv-public .lineas-cta { background: var(--nv-silver); }
+.nv-public .lineas-cta { background: var(--nv-silver); color: var(--nv-ink); }
+.nv-public .lineas-cta h2 { color: var(--nv-ink); }
+.nv-public .lineas-cta p { color: var(--nv-muted); }
 .nv-public .ecosystem-directory { display: block; }
 .nv-public .ecosystem-directory a { border-radius: 0; box-shadow: none; }
 .nv-public .contact-route-grid { display: grid; grid-template-columns: 1fr 1fr; }
