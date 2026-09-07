@@ -499,3 +499,12 @@
   .nv-public .page-hero-consultoria h1 { font-size: clamp(1.75rem,6.8vw,2.125rem); }
   .nv-public .page-hero-consultoria .subpage-lead { font-size: 1rem; }
 }
+
+/* Núcleo Vivo Lab — Kinesiología prototype, alongside existing projects. */
+.nv-prototype-feature--kine{margin-top:72px;padding-top:72px;border-top:1px solid rgba(24,28,35,.14)}
+.nv-kine-visual{position:relative;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:16px;min-height:430px;padding:38px 32px 94px;background:#2945e8;color:white;border-top:7px solid #d9ff46;overflow:hidden}
+.nv-kine-label{position:relative;font-size:16px;font-weight:700;letter-spacing:.6px;display:flex;align-items:center;gap:10px;line-height:1.4;flex-wrap:wrap}.nv-kine-label b{background:#d9ff46;color:#20204e;padding:5px 9px;border-radius:3px;font-size:14px;letter-spacing:1px}
+.nv-kine-title{font-size:clamp(32px,4.7vw,66px);font-weight:650;letter-spacing:-.04em;line-height:1.15;max-width:100%;overflow-wrap:break-word}
+.nv-kine-subtitle{font-size:clamp(18px,2vw,25px);color:#f1eeff;line-height:1.4}.nv-kine-cases{display:inline-block;background:#7138d5;color:#fff;font-size:14px;padding:9px 13px;border:1px solid #a889ec;margin-top:3px;line-height:1.5}
+.nv-kine-visual .nv-prototype-caption{background:#20204e;padding:17px 32px;color:#ecedff;font-size:14px}.nv-kine-visual:hover{background:#233acc}.nv-kine-case{scroll-margin-top:90px}.nv-kine-case .nv-kicker{color:#4d35b0}
+@media(max-width:700px){.nv-prototype-feature--kine{margin-top:46px;padding-top:46px}.nv-kine-visual{min-height:340px;padding:26px 22px 86px;gap:15px}.nv-kine-title{font-size:clamp(30px,8vw,48px)}.nv-kine-visual .nv-prototype-caption{padding:16px 22px}.nv-kine-label{font-size:14px}.nv-kine-subtitle{font-size:19px}}

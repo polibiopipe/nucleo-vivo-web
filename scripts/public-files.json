@@ -215,5 +215,10 @@
   "prototipos/move/assets/ergonomia/brazo-monitor.webp",
   "prototipos/move/assets/ergonomia/alfombra-antifatiga.webp",
   "prototipos/move/assets/ergonomia/teclado-compacto.webp",
-  "prototipos/move/assets/ergonomia/atril.webp"
+  "prototipos/move/assets/ergonomia/atril.webp",
+  "prototipos/kinesiologia/index.html",
+  "prototipos/kinesiologia/styles.css",
+  "prototipos/kinesiologia/app.js",
+  "prototipos/kinesiologia/cases.js",
+  "prototipos/kinesiologia/core.js"
 ]
