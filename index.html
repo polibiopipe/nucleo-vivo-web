@@ -19,7 +19,8 @@
     <link rel="stylesheet" href="styles.css?v=20260906" />
 
   <link rel="preload" href="/assets/fonts/commissioner/Commissioner-variable.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="/brand-2026.css?v=20260907-imagenes" />
+  <link rel="stylesheet" href="/brand-2026.css?v=20260907-contraste" />
+  <link rel="stylesheet" href="/nv-curiosity.css?v=20260907-portada" />
     <noscript><style>.nv-public .nv-header .header-inner{flex-wrap:wrap}.nv-public .nv-header .header-nav{display:flex;position:static;max-height:none;flex-wrap:wrap}.nv-public .nv-header .menu-toggle{display:none}</style></noscript>
   </head>
   <body class="nv-public nv-home">
@@ -53,26 +54,44 @@
     </header>
 
     <main id="inicio">
-  <section class="nv-cover nv-cover--integrated" aria-labelledby="hero-title">
-    <div class="nv-shell">
-      <div class="nv-integrated-grid">
-        <div class="nv-integrated-copy">
-          <p class="nv-kicker">Consultoría e inteligencia artificial aplicada</p>
-          <h1 id="hero-title">Conectamos estrategia,<br />personas y tecnología.</h1>
-          <p class="nv-integrated-lead">Ayudamos a empresas e instituciones educativas a mejorar cómo trabajan, enseñan y crecen. Integramos <strong>consultoría tecnológica, comercial y organizacional, inteligencia artificial y aprendizaje</strong> en una propuesta diseñada para cada realidad.</p>
-          <div class="nv-actions"><a class="nv-button nv-button--light" href="/contacto/">Conversemos sobre tu desafío</a><a class="nv-text-link" href="/lineas/">Conocer Núcleo Vivo <span aria-hidden="true">↗</span></a></div>
-          <p class="nv-integrated-audience">Empresas · Universidades · Colegios · Organizaciones</p>
-        </div>
-        <figure class="nv-integrated-photo">
-          <img src="/assets/editorial-2026/nv-tecnologia-en-el-taller.webp" width="1536" height="1024" alt="Trabajo y conversación sobre pedidos en un taller de cerámica, con apoyo de una tableta" fetchpriority="high" data-image-origin="ai-illustration" />
-          <figcaption><strong>Personas al centro.</strong><span>La tecnología cobra sentido cuando responde a lo que necesitamos hacer.</span></figcaption>
-        </figure>
+  <section class="nv-curiosity" aria-labelledby="hero-title" data-nv-curiosity>
+    <nav class="nv-curiosity-choices nv-shell" aria-label="Elige por dónde explorar Núcleo Vivo">
+      <p class="nv-curiosity-prompt">¿Qué te da<br />curiosidad?</p>
+      <a id="curiosity-tab-work" class="nv-curiosity-choice is-active" href="/consultoria/" data-curiosity-choice="work"><span class="nv-curiosity-number">01</span><span><strong>Trabajar mejor</strong><small>Personas, organización e IA</small></span><span class="nv-curiosity-plus" aria-hidden="true">+</span></a>
+      <a id="curiosity-tab-learn" class="nv-curiosity-choice" href="/sembrar/" data-curiosity-choice="learn"><span class="nv-curiosity-number">02</span><span><strong>Aprender distinto</strong><small>Educación y experiencias</small></span><span class="nv-curiosity-plus" aria-hidden="true">+</span></a>
+      <a id="curiosity-tab-grow" class="nv-curiosity-choice" href="/prototipos/" data-curiosity-choice="grow"><span class="nv-curiosity-number">03</span><span><strong>Hacer crecer una idea</strong><small>Estrategia y tecnología</small></span><span class="nv-curiosity-plus" aria-hidden="true">+</span></a>
+    </nav>
+    <div class="nv-curiosity-stage">
+      <div class="nv-curiosity-scenes" aria-hidden="true">
+        <img class="nv-curiosity-scene is-active" data-curiosity-scene="work" src="/assets/editorial-2026/nv-tecnologia-en-el-taller.webp" width="1536" height="1024" alt="" fetchpriority="high" data-image-origin="ai-illustration" />
+        <img class="nv-curiosity-scene" data-curiosity-scene="learn" src="/assets/editorial-2026/nv-aprendizaje-en-terreno.webp" width="1536" height="1024" alt="" decoding="async" data-image-origin="ai-illustration" />
+        <img class="nv-curiosity-scene" data-curiosity-scene="grow" src="/assets/editorial-2026/nv-consultoria-mercado-local.webp" width="1536" height="1024" alt="" decoding="async" data-image-origin="ai-illustration" />
       </div>
-      <nav id="ecosistema" class="nv-service-index" aria-label="Explorar la propuesta de Núcleo Vivo">
-        <a href="#organizaciones">Qué podemos resolver</a>
-        <a href="#metodo">Cómo trabajamos</a>
-        <a href="#prototipos">Proyectos y herramientas</a>
-      </nav>
+      <div class="nv-shell nv-curiosity-content">
+        <p class="nv-curiosity-eyebrow">Núcleo Vivo <span aria-hidden="true">/</span> Estrategia + personas + tecnología</p>
+        <h1 id="hero-title" class="nv-curiosity-if">¿Y si<span>…</span></h1>
+        <div class="nv-curiosity-panels">
+          <div id="curiosity-panel-work" class="nv-curiosity-panel" data-curiosity-panel="work">
+            <h2>tu equipo encontrara<br />otra forma de trabajar?</h2>
+            <p>Conectamos consultoría organizacional, tecnología e inteligencia artificial para mejorar procesos y dar más espacio a las personas.</p>
+            <a class="nv-curiosity-link" href="/consultoria/">Descubre qué podemos cambiar <span aria-hidden="true">↗</span></a>
+          </div>
+          <div id="curiosity-panel-learn" class="nv-curiosity-panel" data-curiosity-panel="learn" hidden>
+            <h2>aprender también fuera<br />atreverse a probar?</h2>
+            <p>Creamos formación, experiencias y simuladores para que docentes, estudiantes y equipos puedan explorar nuevas posibilidades.</p>
+            <a class="nv-curiosity-link" href="/sembrar/">Explora otras formas de aprender <span aria-hidden="true">↗</span></a>
+          </div>
+          <div id="curiosity-panel-grow" class="nv-curiosity-panel" data-curiosity-panel="grow" hidden>
+            <h2>esa idea que tienes<br />encontrara cómo crecer?</h2>
+            <p>Unimos consultoría comercial, desarrollo tecnológico y experiencia de cliente para llevar una idea a la práctica.</p>
+            <a class="nv-curiosity-link" href="/prototipos/">Entra a un proyecto y pruébalo <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <span class="nv-curiosity-note" aria-hidden="true">El cambio empieza<br />donde están las personas.</span>
+      </div>
+    </div>
+    <div id="ecosistema" class="nv-curiosity-intro">
+      <div class="nv-shell"><p><strong>Una propuesta que conecta.</strong> Consultoría, IA aplicada y aprendizaje para empresas, universidades, colegios y organizaciones.</p><a href="#organizaciones">Recorrer Núcleo Vivo <span aria-hidden="true">↓</span></a></div>
     </div>
   </section>
   <section id="organizaciones" class="nv-section nv-work" aria-labelledby="nv-work-title">
@@ -131,5 +150,6 @@
       </div>
     </footer>
     <script src="/brand-2026.js?v=20260906-prototipos" defer></script>
+    <script src="/nv-curiosity.js?v=20260907-portada" defer></script>
   </body>
 </html>

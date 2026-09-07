@@ -1,0 +1,96 @@
+/* A photographic opening, explored through three connected questions. */
+.nv-curiosity { display: flex; flex-direction: column; background: #041f32; color: #fff; }
+.nv-curiosity-stage { position: relative; order: 1; isolation: isolate; overflow: hidden; }
+.nv-curiosity-scenes { position: absolute; z-index: -2; inset: 0 0 0 25%; background: #173747; }
+.nv-curiosity-scene { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: 56% 44%; opacity: 0; transition: opacity .65s ease; }
+.nv-curiosity-scene.is-active { opacity: 1; }
+.nv-curiosity-stage::before { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, #041f32 0%, #041f32f7 25%, #041f32d9 41%, #041f3266 63%, #041f3200 85%), linear-gradient(0deg, #041f32b3, #041f3200 38%); }
+.nv-curiosity-content { position: relative; min-height: 620px; min-height: clamp(520px, calc(100svh - 202px), 820px); padding-block: 32px 44px; }
+.nv-curiosity .nv-curiosity-eyebrow { display: flex; align-items: center; gap: 14px; color: #d5e3e9; font-size: .875rem; font-weight: 450; line-height: 1.5; margin: 0 0 28px; }
+.nv-curiosity-eyebrow > span { color: #e9bd79; }
+.nv-public .nv-curiosity-if { width: fit-content; margin: 0 0 12px; color: #fff; font: 430 clamp(6.25rem, 11.7vw, 11rem)/.98 var(--nv-sans); letter-spacing: -.065em; text-wrap: nowrap; }
+.nv-curiosity-if > span { color: #e9bd79; font-weight: 350; }
+.nv-curiosity-panels { max-width: 690px; min-height: 256px; }
+.nv-curiosity-panel[hidden] { display: none; }
+.nv-public .nv-curiosity-panel h2 { max-width: 660px; margin: 0 0 20px; color: #fff; font-size: clamp(1.875rem, 3.05vw, 3rem); font-weight: 440; line-height: 1.14; letter-spacing: -.025em; text-wrap: initial; }
+.nv-curiosity-panel > p { max-width: 455px; margin: 0 0 18px; color: #dbe7ec; font-size: 1rem; line-height: 1.6; }
+.nv-curiosity-link { display: inline-flex; align-items: center; gap: 30px; min-height: 48px; padding-block: 8px; color: #fff; font-size: 1rem; font-weight: 560; text-decoration: none; border-bottom: 1px solid #a0b6c2; }
+.nv-curiosity-link > span { display: inline-block; font-size: 1.5rem; font-weight: 400; transition: transform .2s; }
+.nv-curiosity-link:hover { color: #e9bd79; border-color: #e9bd79; }
+.nv-curiosity-link:hover > span { transform: translate(3px,-3px); }
+.nv-curiosity-note { position: absolute; right: 0; bottom: 48px; max-width: 260px; padding-left: 20px; color: #fff; border-left: 2px solid #e9bd79; font-size: .9375rem; line-height: 1.5; text-shadow: 0 1px 10px #041f32; }
+.nv-curiosity-choices { order: 2; display: grid; grid-template-columns: .7fr 1fr 1fr 1.2fr; border-top: 1px solid #45616f; }
+.nv-curiosity-prompt { align-self: center; margin: 0; color: #c8d9e2; font-size: 1rem; line-height: 1.35; }
+.nv-curiosity-choice { position: relative; display: flex; align-items: center; gap: 16px; min-width: 0; min-height: 108px; padding: 22px 18px; color: #fff; border-left: 1px solid #45616f; text-decoration: none; transition: background .25s ease; }
+.nv-curiosity-choice::after { content: ""; position: absolute; inset: auto 18px 0; height: 3px; background: #e9bd79; transform: scaleX(0); transform-origin: left; transition: transform .3s ease; }
+.nv-curiosity-choice:hover, .nv-curiosity-choice.is-active { background: #123448; color: #fff; }
+.nv-curiosity-choice.is-active::after { transform: scaleX(1); }
+.nv-curiosity-number { color: #b1c8d4; align-self: flex-start; padding-top: 4px; font-size: .875rem; font-variant-numeric: tabular-nums; }
+.nv-curiosity-choice strong { display: block; font-size: clamp(1rem, 1.25vw, 1.1875rem); font-weight: 560; line-height: 1.3; }
+.nv-curiosity-choice small { display: block; margin-top: 6px; color: #c1d3de; font-size: .875rem; line-height: 1.4; }
+.nv-curiosity-plus { margin-left: auto; color: #e9bd79; font-size: 1.75rem; font-weight: 350; transition: transform .25s ease; }
+.nv-curiosity[data-enhanced] .nv-curiosity-choice.is-active .nv-curiosity-number { color: #e9bd79; }
+.nv-curiosity-intro { order: 3; background: #fff; color: #092d41; }
+.nv-curiosity-intro > div { display: flex; align-items: center; justify-content: space-between; gap: 50px; padding-block: 25px; border-bottom: 1px solid #cbd6dc; }
+.nv-curiosity-intro p { max-width: 850px; margin: 0; color: #526571; font-size: .9375rem; line-height: 1.6; }
+.nv-curiosity-intro strong { color: #092d41; font-weight: 600; }
+.nv-curiosity-intro a { display: inline-flex; align-items: center; gap: 18px; flex-shrink: 0; min-height: 44px; color: #092d41; font-size: .9375rem; font-weight: 550; text-underline-offset: 5px; }
+.nv-curiosity :focus-visible { outline: 2px solid #e9bd79; outline-offset: 5px; }
+.nv-curiosity-choice:focus-visible { z-index: 1; outline-offset: -6px; }
+.nv-curiosity-intro :focus-visible { outline-color: #0d6370; }
+.nv-curiosity[data-enhanced] .nv-curiosity-panel:not([hidden]) { animation: nv-question-arrive .5s ease both; }
+.nv-curiosity[data-enhanced] .nv-curiosity-scene.is-active { animation: nv-scene-arrive .85s cubic-bezier(.22,.65,.2,1) both; }
+@keyframes nv-question-arrive { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes nv-scene-arrive { from { clip-path: inset(0 0 0 12%); transform: scale(1.045); } to { clip-path: inset(0); transform: scale(1); } }
+@media (min-width: 1600px) {
+  .nv-curiosity-content { padding-top: 42px; }
+  .nv-curiosity .nv-curiosity-eyebrow { margin-bottom: 40px; }
+  .nv-public .nv-curiosity-if { margin-bottom: 20px; }
+}
+@media (max-width: 1100px) {
+  .nv-curiosity-content { padding-bottom: 34px; }
+  .nv-curiosity-scenes { left: 15%; }
+  .nv-curiosity-stage::before { background: linear-gradient(90deg, #041f32fa 0%, #041f32d9 36%, #041f3280 64%, #041f321a), linear-gradient(0deg, #041f32b3, transparent 50%); }
+  .nv-curiosity-note { right: 0; bottom: 30px; font-size: .875rem; }
+  .nv-curiosity-panels { max-width: 600px; }
+  .nv-curiosity-choices { grid-template-columns: repeat(3,1fr); }
+  .nv-curiosity-prompt { grid-column: 1/-1; padding-block: 16px 8px; font-size: .875rem; }
+  .nv-curiosity-prompt br { display: none; }
+  .nv-curiosity-choice { min-height: 100px; }
+  .nv-curiosity-choice:first-of-type { border-left: 0; padding-left: 0; }
+  .nv-curiosity-choice:first-of-type::after { left: 0; }
+  .nv-curiosity-intro > div { gap: 30px; }
+}
+@media (min-width: 721px) and (max-height: 850px) {
+  .nv-curiosity-content { padding-block: 22px 24px; }
+  .nv-curiosity .nv-curiosity-eyebrow { margin-bottom: 16px; }
+  .nv-public .nv-curiosity-if { font-size: 6rem; margin-bottom: 10px; }
+  .nv-public .nv-curiosity-panel h2 { font-size: 2.25rem; margin-bottom: 14px; }
+  .nv-curiosity-panel > p { margin-bottom: 12px; }
+  .nv-curiosity-panels { min-height: 0; }
+}
+@media (max-width: 720px) {
+  .nv-curiosity-content { min-height: 620px; padding-block: 26px 30px; }
+  .nv-curiosity .nv-curiosity-eyebrow { display: block; max-width: 280px; margin-bottom: 40px; font-size: .875rem; }
+  .nv-curiosity-eyebrow > span { margin-inline: 6px; }
+  .nv-public .nv-curiosity-if { font-size: clamp(5.5rem,21vw,8rem); margin-bottom: 22px; }
+  .nv-public .nv-curiosity-panel h2 { font-size: clamp(1.75rem,5.5vw,2.5rem); max-width: 500px; line-height: 1.2; }
+  .nv-curiosity-panel > p { max-width: 390px; font-size: 1rem; }
+  .nv-curiosity-scenes { left: 0; }
+  .nv-curiosity-scene { object-position: 55% center; }
+  .nv-curiosity-stage::before { background: linear-gradient(90deg, #041f32e6, #041f32bf 65%, #041f3280), linear-gradient(0deg, #041f32 0%, transparent 45%); }
+  .nv-curiosity-note { position: static; display: block; margin-top: 30px; padding-left: 14px; font-size: .875rem; }
+  .nv-curiosity-note br { display: none; }
+  .nv-curiosity-choices { order: 0; width: calc(100% - 40px); }
+  .nv-curiosity-prompt { display: none; }
+  .nv-curiosity-choice { align-items: flex-start; flex-direction: column; gap: 10px; min-height: 128px; padding: 14px 12px 20px; }
+  .nv-curiosity-number { padding: 0; }
+  .nv-curiosity-choice strong { font-size: .9375rem; }
+  .nv-curiosity-choice small { display: none; }
+  .nv-curiosity-plus { display: none; }
+  .nv-curiosity-choice::after { right: 12px; left: 12px; }
+  .nv-curiosity-intro > div { align-items: flex-start; flex-direction: column; gap: 10px; padding-block: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nv-curiosity *, .nv-curiosity *::after { animation: none !important; transition: none !important; }
+}
