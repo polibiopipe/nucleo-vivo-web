@@ -4,7 +4,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 const html=readFileSync(new URL('../prototipos/move/index.html',import.meta.url),'utf8');
 const addons=['move-demo.js','move-ai.js','move-experience.js'].map(file=>readFileSync(new URL('../prototipos/move/'+file,import.meta.url),'utf8'));
-const tick=()=>new Promise(r=>setTimeout(r,20));
+const tick=(ms=20)=>new Promise(r=>setTimeout(r,ms));
 function setup(fetch){
   const errors=[];const virtualConsole=new VirtualConsole();virtualConsole.on('jsdomError',e=>errors.push(e.message));
   const dom=new JSDOM(html,{url:'https://www.nucleovivo.net/prototipos/move/',runScripts:'dangerously',pretendToBeVisual:true,virtualConsole,beforeParse(w){
@@ -30,6 +30,60 @@ test('chat preserves history, renders model text safely and adds real catalog it
     [...d.querySelectorAll('.move-ai-choice')].find(b=>b.textContent==='Comparar otra alternativa').click();await tick();
     assert.equal(calls[1].messages.length,3);assert.equal(calls[1].messages[1].role,'assistant');
     w.closeMoveSelect();assert.equal(d.querySelector('#moveSelectOverlay').getAttribute('aria-hidden'),'true');
+    assert.deepEqual(errors,[]);
+  }finally{w.close();}
+});
+
+test('Gym ball and every catalog product immediately request their own characteristics',async()=>{
+  const calls=[];
+  const {w,d,errors}=setup(async(url,options)=>{
+    const body=JSON.parse(options.body);calls.push(body);
+    return {ok:true,json:async()=>({source:'ai',intent:'question',referral:'unknown',message:`Características del producto ${body.productRank}.`,products:[],followUp:[]})};
+  });
+  try{
+    const gym=d.querySelector('#featuredProducts [data-ai-product="32"]');
+    assert.ok(gym);gym.click();await tick();
+    assert.equal(calls.length,1);assert.equal(calls[0].productRank,32);
+    assert.match(calls[0].messages[0].content,/Gym ball 65 cm \+ inflador/);
+    assert.match(d.querySelector('#msTitle').textContent,/Gym ball/);
+    assert.match(d.querySelector('#moveAIConversation').textContent,/Características del producto 32/);
+    assert.equal(d.querySelector('#moveAIInput').value,'');
+    d.querySelector('#moveAIInput').value='¿Qué debería verificar?';d.querySelector('#moveAISend').click();await tick();
+    assert.equal(calls[1].productRank,32);assert.equal(calls[1].messages.length,3);
+
+    w.closeMoveSelect();w.openCatalog();
+    const catalogButtons=[...d.querySelectorAll('#catalogGrid [data-ai-product]')];
+    assert.equal(catalogButtons.length,50);
+    for(const button of catalogButtons){
+      const before=calls.length;button.click();await tick();
+      assert.equal(calls.length,before+1);
+      assert.equal(calls.at(-1).productRank,Number(button.dataset.aiProduct));
+      assert.ok(calls.at(-1).messages[0].content.includes(d.querySelector('#msTitle').textContent));
+      w.closeMoveSelect();
+    }
+    const before=calls.length;w.openQuick(32);d.querySelector('#quickAsk').click();await tick(240);
+    assert.equal(calls.length,before+1);assert.equal(calls.at(-1).productRank,32);
+    w.closeMoveSelect();
+    const afterProduct=calls.length;w.openMoveSelect();await tick();
+    assert.equal(calls.length,afterProduct,'generic chat must wait for a user question');
+    assert.equal(d.querySelector('.move-ai-context'),null);
+    assert.deepEqual(errors,[]);
+  }finally{w.close();}
+});
+
+test('a selected question sends once, and closing a product consultation discards its late answer',async()=>{
+  let finish;const calls=[];
+  const {w,d,errors}=setup((url,options)=>{
+    calls.push(JSON.parse(options.body));
+    return new Promise(resolve=>{finish=()=>resolve({ok:true,json:async()=>({source:'ai',intent:'question',referral:'unknown',message:'Late product answer',products:[],followUp:[]})});});
+  });
+  try{
+    w.openMoveSelect({text:'Compara bandas y mancuernas'});
+    assert.equal(calls.length,1);assert.equal(calls[0].messages[0].content,'Compara bandas y mancuernas');
+    assert.equal(d.querySelector('#moveAISend').disabled,true);
+    w.closeMoveSelect();w.openMoveSelect();finish();await tick();
+    assert.doesNotMatch(d.querySelector('#moveAIConversation').textContent,/Late product answer/);
+    assert.equal(d.querySelector('#moveAISend').disabled,false);
     assert.deepEqual(errors,[]);
   }finally{w.close();}
 });
