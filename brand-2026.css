@@ -448,3 +448,27 @@
   .nv-integrated-photo img { aspect-ratio: 3/2; }
   .nv-cover--integrated .nv-service-index { grid-template-columns: 1fr; gap: 0; }
 }
+
+/* Original editorial scenes, preserving faces and the context of each place. */
+.nv-context-photo { margin: 1.75rem 0 1rem; }
+.nv-context-photo img { display: block; width: 100%; height: auto; aspect-ratio: 3/2; object-fit: cover; }
+.nv-method-photo--editorial { min-height: 0; display: flex; flex-direction: column; justify-content: center; padding-block: 3.5rem; }
+.nv-method-photo--editorial img { display: block; width: 100%; height: auto; aspect-ratio: 3/2; object-fit: contain; }
+.nv-method-photo--editorial figcaption { margin-top: 1rem; padding-right: 1.5rem; color: #c5d5de; font-size: .875rem; line-height: 1.5; }
+@media (max-width: 1024px) {
+  .nv-context-photo { max-width: 32rem; }
+  .nv-method-grid:has(.nv-method-photo--editorial) { grid-template-columns: 1fr; }
+  .nv-method-photo--editorial { padding-block: 2.75rem 0; }
+  .nv-method-photo--editorial img { max-height: 24rem; object-fit: contain; }
+  .nv-method-photo--editorial + .nv-method-copy { padding: 2rem 0 3rem; }
+}
+@media (max-width: 640px) {
+  .nv-method-photo--editorial { height: auto; margin-inline: 0; padding-top: 2rem; }
+  .nv-method-photo--editorial img { max-height: none; }
+  .nv-method-photo--editorial figcaption { padding-right: 0; }
+}
+.nv-public .subpage-photo.nv-editorial-photo { aspect-ratio: 3/2; max-height: none; }
+.nv-public .nv-editorial-photo img { height: auto; aspect-ratio: 3/2; object-fit: contain; }
+@media (min-width: 641px) and (max-width: 1024px) {
+  .nv-integrated-photo img[data-image-origin="ai-illustration"] { aspect-ratio: 3/2; max-height: 30rem; object-fit: contain; }
+}

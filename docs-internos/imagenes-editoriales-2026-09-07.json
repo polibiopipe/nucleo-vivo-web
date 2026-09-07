@@ -1,0 +1,35 @@
+{
+  "mode": "built-in image_gen__imagegen",
+  "fictionalIllustrativeImages": true,
+  "variantsOrRetries": 0,
+  "dimensions": {
+    "width": 1536,
+    "height": 1024
+  },
+  "images": [
+    {
+      "id": "hero",
+      "alt": "Dueña de un taller cerámico conversa con una consultora mientras un profesional revisa una tablet.",
+      "finalPrompt": "Use case: photorealistic-natural.\nAsset type: original fictional illustrative editorial photograph for a consulting website; one image only, landscape 3:2, approximately 1536x1024.\nScene: A small contemporary working ceramic workshop in southern Chile, textured timber walls, well-used shelves of handmade functional cups and bowls, a few kraft shipping boxes, cloudy natural light from broad open double doors. A productive small business, not a luxury showroom or product advertisement.\nSubjects and action: A Chilean woman workshop owner around 55, with true skin texture and a clay-dusted indigo apron, shows a finished ceramic object while discussing an order with a visiting woman professional around 40 in ordinary charcoal and muted teal clothing. A third man in his late 40s stands to the side reviewing a tablet naturally at waist height; the display is mostly angled away. Exactly three people. Engaged listening, specific candid gestures and believable hands and tools. Integrating technology into everyday productive work.\nFraming: 35mm environmental portrait, eye-level slightly oblique documentary framing. Preserve the important people and actions inside the central area, safe for 5:4 and 3:2 crops. Natural asymmetry, no central conference table.\nLight and palette: Soft southern Chile overcast daylight, restrained deep navy and teal, timber and stone, rich but plausible colors, ordinary imperfect people with natural skin.\nConstraints: Fictional illustrative brand image, no real identities, logos, overlays, text, watermark, UI mockup or readable screen content. No suits, handshakes, posed team meeting, everyone grinning at camera, CGI glow, robots, neon circuits, generic corporate stock scene. High quality photorealistic editorial documentary image.",
+      "originalFile": "nv-hero-workshop-original.png",
+      "publishedFile": "assets/editorial-2026/nv-tecnologia-en-el-taller.webp"
+    },
+    {
+      "id": "method",
+      "alt": "Tres profesionales prueban un prototipo de aprendizaje en un pabellón de madera rodeado de vegetación.",
+      "finalPrompt": "Use case: photorealistic-natural.\nAsset type: original fictional illustrative editorial photograph for a consulting website; one image only, landscape 3:2, approximately 1536x1024.\nScene: An open-sided timber educational pavilion on a university or community learning campus in southern Chile. A rain-dark garden and tall native trees beyond the pavilion, without a mountain postcard view. Worn wood and modest materials in an everyday learning environment.\nSubjects and action: Two adult educators or working professionals, a man in his 60s and a woman in her 40s, stand beside a small movable workbench testing a modest physical learning prototype made of wooden pieces and illustrated sheets without readable text. A third adult in their early 40s observes slightly behind, holding a folded field notebook. Exactly three people. Their hands perform a meaningful test and there is engaged eye contact. A single paper sketch and one small tablet lie flat on the bench, no projected UI.\nFraming: Candid documentary photography with natural asymmetrical composition. Keep the three people tightly enough grouped and the important hands and prototype inside a roughly square central area, preserving them for a center square or 5:4 crop. Do not spread faces across the edges. Landscape environmental composition with central action.\nLight and palette: Soft natural morning light, restrained deep navy and teal, worn timber and stone; a dark navy sweater and burgundy scarf among ordinary practical clothes. True skin texture and imperfect adults, believable hands and objects.\nConstraints: Fictional illustrative brand image, no real identities, logos, overlays, text, watermark, UI mockup or invented readable screen content. No suits, handshakes, posed seminar, traditional classroom rows, staged stock group, generic landscaped laptop scene, corporate office, everyone grinning at camera, CGI glow, robots or neon circuits. Photorealistic high quality documentary editorial photography.",
+      "originalFile": "nv-method-learning-original.png",
+      "publishedFile": "assets/editorial-2026/nv-aprendizaje-en-terreno.webp"
+    },
+    {
+      "id": "consulting",
+      "alt": "Comerciante y consultor revisan un cuaderno de inventario junto a un puesto de frutas y verduras.",
+      "finalPrompt": "Use case: photorealistic-natural.\nAsset type: original fictional illustrative editorial photograph for a consulting website; one image only, landscape 3:2, approximately 1536x1024.\nScene: A working neighborhood produce market at opening time in a town of southern Chile. An uncluttered stand, boxes of seasonal produce, blurred unreadable practical price tags in the background, corrugated canopy and weathered timber. Wet pavement from overnight rain. Ordinary local identity, not a tourist setting.\nSubjects and action: A woman shopkeeper around 60 and a visiting professional man around 45 in an ordinary rain jacket walk slowly along the edge of the stand while discussing a simple inventory notebook naturally held between them. Exactly two people, neither looking at the camera. Warm ordinary human interaction, subtle attentive gestures, true skin texture, realistic imperfect people and believable hands.\nFraming: Documentary editorial landscape 3:2 photograph with subjects and notebook action inside the central area for safe alternative 5:4 and 3:2 crops. Capture the slow walk naturally with environmental context. Visually distinct from indoor workshops and educational pavilions.\nLight and palette: Natural cool blue-green morning light, restrained deep navy and muted teal clothing, warm weathered wood, realistic fresh produce colors, no heavy stylized grading.\nConstraints: Fictional illustrative brand image, no real identities or logos. No overlays, text, watermarks, UI mockups, prominent signage or readable price tags. No office, suits, handshakes, staged corporate stock poses, everyone grinning at camera, tourist folkloric costumes, picturesque excess, lavish brands, CGI glow, robots or neon circuits. High quality photorealistic documentary photography.",
+      "originalFile": "nv-consulting-market-original.png",
+      "publishedFile": "assets/editorial-2026/nv-consultoria-mercado-local.webp"
+    }
+  ],
+  "createdFor": "Núcleo Vivo",
+  "date": "2026-09-07",
+  "webEncoding": "WebP quality 88, original dimensions; no creative retouching"
+}
