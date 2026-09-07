@@ -420,3 +420,31 @@
   .nv-cover-product strong { font-size: 1.125rem; }
   .nv-cover--focus .nv-service-index { grid-template-columns: 1fr; gap: 0; }
 }
+
+/* An integrated consulting practice; individual products appear as applications. */
+.nv-cover--integrated { padding-top: 3rem; }
+.nv-integrated-grid { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); gap: clamp(2rem,4.5vw,4.5rem); align-items: center; padding-bottom: 2.75rem; }
+.nv-cover--integrated h1 { max-width: 41rem; font-size: clamp(2.125rem,3.65vw,3.375rem); line-height: 1.16; }
+.nv-integrated-lead { max-width: 41rem; margin: 1.5rem 0; color: #dce5ec; font-size: 1.125rem; line-height: 1.65; }
+.nv-integrated-lead strong { color: #fff; font-weight: 550; }
+.nv-integrated-audience { margin: 1.25rem 0 0; color: #b5cbd5; font-size: .875rem; }
+.nv-cover--integrated .nv-text-link:hover { color: var(--nv-gold); }
+.nv-integrated-photo { margin: 0; }
+.nv-integrated-photo img { display: block; width: 100%; height: auto; aspect-ratio: 5/4; object-fit: cover; object-position: center; }
+.nv-integrated-photo figcaption { display: grid; gap: .375rem; padding-top: 1rem; color: #c6d8e1; font-size: .875rem; line-height: 1.5; }
+.nv-integrated-photo figcaption strong { color: #fff; font-size: 1rem; font-weight: 550; }
+.nv-cover--integrated .nv-service-index { border-top: 1px solid #416071; }
+.nv-cover--integrated .nv-service-index a { font-size: .9375rem; }
+@media (max-width: 1024px) {
+  .nv-integrated-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .nv-integrated-copy { max-width: 48rem; }
+  .nv-integrated-photo img { aspect-ratio: 2/1; }
+}
+@media (max-width: 640px) {
+  .nv-cover--integrated { padding-top: 2rem; }
+  .nv-integrated-grid { padding-bottom: 1.5rem; }
+  .nv-cover--integrated h1 { font-size: clamp(2rem,7.6vw,2.75rem); }
+  .nv-integrated-lead { font-size: 1.0625rem; }
+  .nv-integrated-photo img { aspect-ratio: 3/2; }
+  .nv-cover--integrated .nv-service-index { grid-template-columns: 1fr; gap: 0; }
+}
