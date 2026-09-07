@@ -121,6 +121,50 @@
 .move-request-row button,.move-request-empty a{border:1px solid #a9b99a;background:#e5f2d8;color:#243b17;padding:12px 15px;border-radius:9px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;min-height:44px}.move-request-row button:disabled{background:#f1f4ed;color:#596650;cursor:default}.move-request-empty{padding:0 24px 28px}.move-request-empty a{display:inline-block;text-decoration:none}
 @media(max-width:620px){.move-request-row{gap:12px;padding:18px}.move-request-row>div{width:100%}.move-demo-requests .panel-head{align-items:start;gap:12px}.move-demo-requests .panel-head button{font-size:12px}.move-request-note{padding:0 18px}}
 
+
+/* Responsive panel: preserve named navigation, readable content and reachable dialogs. */
+body>nav[aria-label="Volver a la propuesta"]{padding-top:12px!important}
+.access-page,.dashboard-page{padding-top:0}
+.demo-ribbon{position:relative;min-height:30px;height:auto;padding:6px 12px;line-height:1.4;letter-spacing:.06em;text-align:center;font-size:12px}
+.sidebar{top:0;height:100dvh}.topbar{top:0}
+.access-nav{gap:14px;flex-wrap:wrap;height:auto;min-height:84px;padding-block:14px}
+.access-story h1,.welcome h1{line-height:1.05;overflow-wrap:anywhere}
+.role-copy,.role-copy span,.action-card>div,.task>div{min-width:0;overflow-wrap:anywhere}
+.role-copy>span,.appointment p,.task p,.action-card span,.panel-head p{font-size:14px;line-height:1.45}
+.side-nav button{min-height:44px;font-size:14px}
+.side-nav button:before{flex-shrink:0}
+.workspace{overflow:clip}
+.topbar{gap:12px;flex-wrap:wrap;height:auto;min-height:78px;padding-block:12px}
+.crumb{font-size:14px;line-height:1.5;min-width:0}
+.top-actions{flex-wrap:wrap;min-width:0}.top-actions select{font-size:16px;max-width:100%}
+.modal{overflow-y:auto;padding:max(16px,env(safe-area-inset-top)) 16px}
+.modal-card{max-height:calc(100dvh - 32px);overflow-y:auto;overscroll-behavior:contain;min-width:0}
+.modal-head{position:sticky;top:-24px;z-index:1;background:#f8f6f1;padding-block:10px}
+.modal-head button{flex-shrink:0;min-width:44px;min-height:44px}
+.modal-actions{flex-wrap:wrap}.modal-field b{overflow-wrap:anywhere;font-size:14px}
+.permission-table{font-size:14px}.permission-table th{font-size:12px}
+.panel-head{flex-wrap:wrap}.panel-head button{font-size:14px;min-height:44px}
+.move-request-row>div{min-width:0}.move-request-row p{overflow-wrap:anywhere}
+@media(min-width:761px) and (max-width:1100px){
+ .dashboard-layout{grid-template-columns:190px minmax(0,1fr)}
+ .side-nav button span{display:block}.side-nav button{justify-content:flex-start;padding:12px 8px;gap:8px}
+ .side-nav button span{overflow-wrap:anywhere}
+ .workspace-main{padding:24px 18px 50px}
+}
+@media(max-width:760px){
+ .sidebar{top:auto;height:auto;padding:8px 12px max(8px,env(safe-area-inset-bottom));overflow:visible}
+ .side-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ .side-nav button{justify-content:center;padding:8px 5px;font-size:14px;line-height:1.25;min-height:44px;white-space:normal;text-align:center;overflow-wrap:anywhere}
+ .side-nav button span{display:block}.side-nav button:before{display:none}
+ .workspace-main{padding-bottom:calc(140px + env(safe-area-inset-bottom))}
+ .topbar{padding:12px 14px;gap:8px}.top-actions{margin-left:auto}
+ .access-nav .nav-actions{flex-wrap:wrap}.access-story h1{font-size:clamp(36px,10vw,54px)}
+ .modal-card{padding:20px}.modal-head{top:-20px}.modal-grid{grid-template-columns:1fr}
+ .permission-table{table-layout:fixed}.permission-table th,.permission-table td{padding:10px 5px;overflow-wrap:anywhere}
+ .funnel-step:nth-child(n){margin-left:0}.task{grid-template-columns:24px minmax(0,1fr)}.task time{grid-column:2;justify-self:start}
+ .toast{left:14px;right:14px;bottom:calc(124px + env(safe-area-inset-bottom))}
+}
+
 </style>
 <meta name="robots" content="noindex, nofollow" /></head>
 <body><nav aria-label="Volver a la propuesta" style="padding:12px 24px;background:#092d41;color:white;font:14px/1.4 system-ui,sans-serif"><a href="/prototipos/" style="color:inherit;text-decoration:underline">Volver a Prototipos de Núcleo Vivo</a></nav>

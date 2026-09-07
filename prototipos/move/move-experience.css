@@ -32,6 +32,43 @@ body.move-comparing{overflow:hidden}
 .move-compare-footer{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;background:none;padding:22px 0 0;border:0}
 .move-compare-dialog :is(button,a):focus-visible,.move-compare-tray button:focus-visible,.move-compare-button:focus-visible,.hero-help:focus-visible,.move-story-action:focus-visible{outline:3px solid #567a22;outline-offset:4px}
 .move-demo-receipt{margin-top:22px}.move-demo-receipt p{font-size:14px;line-height:1.5}.move-demo-receipt a{text-decoration:none}
+/* Keep every catalog item and modal action reachable on small screens. */
+.header{top:var(--move-header-offset,77px)}
+.header.scrolled{top:0}
+.nv-demo-bar nav{flex-wrap:wrap;row-gap:8px}
+.catalog-grid.open{max-height:none;overflow:visible}
+.catalog-card p,.product-card p{font-size:14px;line-height:1.5}
+.catalog-card .cat,.footer-bottom,.shipping-goal small{font-size:12px}
+.catalog-card h4{line-height:1.25}
+.catalog-card-bottom button,.wish,.nav-btn{min-width:44px;min-height:44px}
+.catalog-controls,.catalog-search,.catalog-controls input{min-width:0}
+.filters{flex-wrap:wrap}
+.quickview{overflow:hidden;max-height:90dvh}
+.quickview-grid{max-height:90dvh;overflow-y:auto;overscroll-behavior:contain}
+.quickview>.close{position:absolute;right:12px;top:12px;z-index:5;background:var(--paper);box-shadow:0 2px 12px #08110820}
+.quickview-body{padding-top:60px;min-width:0}
+.quickview-media{min-width:0;min-height:0}
+.quickview-media img{height:100%;max-height:620px;object-fit:contain}
+.quickview-body h2,.cart-item b{overflow-wrap:anywhere}
+.quickview>.close{min-width:44px;min-height:44px}
+.drawer{height:100dvh;bottom:auto;padding-bottom:max(20px,env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain}
+.drawer-head,.cart-total,.shipping-goal{flex-shrink:0}
+.cart-items{min-height:80px}
+.cart-item{grid-template-columns:64px minmax(0,1fr) 44px}
+.cart-item img{width:64px;height:64px}.cart-item .remove{width:44px;height:44px}
+.agenda-shell,.agenda-panel{height:100dvh;min-height:0}
+.agenda-top,.agenda-bottom{flex-shrink:0}
+.agenda-field input,.agenda-field select,.agenda-field textarea{font-size:16px;min-width:0;max-width:100%}
+.floating-help{bottom:max(12px,env(safe-area-inset-bottom))}
+@media(max-width:620px){.hero h1{font-size:clamp(40px,12vw,54px);line-height:1.02}.catalog-search input{font-size:16px}}
 @media(max-width:1180px){.nav{grid-template-columns:130px 1fr auto;gap:16px}.menu{gap:12px}.menu .menu-ai{display:inline-flex;font-size:12px}}
-@media(max-width:900px){.nav{grid-template-columns:1fr auto}.menu{display:none}}
+@media(max-width:900px){
+ .header{height:124px}.nav{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:70px 54px;gap:0 12px}
+ .nav>.logo{grid-column:1;grid-row:1}.nav-actions{grid-column:2;grid-row:1}
+ .menu{display:grid;grid-column:1/-1;grid-row:2;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;align-items:stretch}
+ .menu .menu-ai{display:flex;justify-content:center;text-align:center;align-items:center;white-space:normal;font-size:14px;line-height:1.2;min-height:44px;padding:6px;border:1px solid currentColor;border-radius:12px;background:#101713b8;min-width:0}
+ .header.scrolled .menu-ai{background:#ffffffb0}.menu-ai i{display:none}
+ .hero-grid{padding-top:168px}.quickview-media{height:clamp(180px,30dvh,320px)}
+ .quickview-media img{height:100%}.quickview-body{padding-top:26px}
+}
 @media(max-width:620px){.hero-grid{padding-top:160px}.hero-ctas>.btn{flex:1;white-space:nowrap;padding:0 15px}.hero-help{width:100%;text-align:left}.move-compare-tray{gap:8px;flex-wrap:wrap;justify-content:center;bottom:10px;padding:10px;width:calc(100% - 24px)}.move-compare-tray>span{width:100%;font-size:12px;text-align:center}.move-compare-dialog{width:calc(100vw - 16px);padding:20px 12px;border-radius:16px}.move-compare-table{min-width:620px}.move-compare-table th:first-child{width:110px}.move-compare-table img{height:100px}.move-compare-table th,.move-compare-table td{padding:12px;font-size:13px}.move-compare-head h2{font-size:27px}.move-compare-footer{justify-content:stretch}.move-compare-footer button{flex:1}.hero-ctas{gap:10px}}

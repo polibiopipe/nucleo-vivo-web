@@ -1,5 +1,15 @@
 (() => {
   'use strict';
+  // The demo notice wraps at narrow widths and when text is enlarged.
+  const updateHeaderOffset = () => {
+    const height = ['.nv-demo-bar', '.utility'].reduce((sum, selector) => sum + (document.querySelector(selector)?.getBoundingClientRect().height || 0), 0);
+    document.documentElement.style.setProperty('--move-header-offset', `${height}px`);
+  };
+  updateHeaderOffset();
+  if (typeof ResizeObserver !== 'undefined') {
+    const headerObserver = new ResizeObserver(updateHeaderOffset);
+    document.querySelectorAll('.nv-demo-bar,.utility').forEach(element => headerObserver.observe(element));
+  }
   const selected = new Set();
   const make = (tag, className, text) => {
     const node = document.createElement(tag);
