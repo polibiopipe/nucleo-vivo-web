@@ -192,7 +192,7 @@
     originalOpen(options); render(options);
     const product = byRank(selectedRank);
     const initialQuestion = options.text?.trim() || (product
-      ? `Explícame las características de ${product.name}, para qué se utiliza en general y qué conviene verificar antes de elegirlo. Distingue los datos que figuran en el catálogo de los que están por confirmar. No inventes materiales, resistencia, carga máxima ni beneficios clínicos.`
+      ? `Cuéntame las características de ${product.name}, para qué se usa en general y qué debo revisar antes de elegirlo.`
       : '');
     if (initialQuestion) void send(initialQuestion);
   };
