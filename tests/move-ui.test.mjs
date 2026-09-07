@@ -53,7 +53,7 @@ test('Gym ball and every catalog product immediately request their own character
 
     w.closeMoveSelect();w.openCatalog();
     const catalogButtons=[...d.querySelectorAll('#catalogGrid [data-ai-product]')];
-    assert.equal(catalogButtons.length,50);
+    assert.equal(catalogButtons.length,58);
     for(const button of catalogButtons){
       const before=calls.length;button.click();await tick();
       assert.equal(calls.length,before+1);
@@ -67,6 +67,33 @@ test('Gym ball and every catalog product immediately request their own character
     const afterProduct=calls.length;w.openMoveSelect();await tick();
     assert.equal(calls.length,afterProduct,'generic chat must wait for a user question');
     assert.equal(d.querySelector('.move-ai-context'),null);
+    assert.deepEqual(errors,[]);
+  }finally{w.close();}
+});
+
+test('ergonomic discovery, product sheets and mixed-price packs retain honest totals',()=>{
+  const {w,d,errors}=setup(async()=>{throw new Error('No inference needed');});
+  try{
+    d.querySelector('.menu [data-category="Ergonomía"]').click();
+    assert.equal(d.querySelectorAll('#catalogGrid .catalog-card').length,8);
+    const search=d.querySelector('#catalogSearch');search.value='ergonomia';search.dispatchEvent(new w.Event('input'));
+    assert.equal(d.querySelectorAll('#catalogGrid .catalog-card').length,8);
+    search.value='inexistente';search.dispatchEvent(new w.Event('input'));
+    assert.match(d.querySelector('#catalogResults').textContent,/0 productos/);
+    d.querySelector('.menu [data-category="Ergonomía"]').click();
+    assert.equal(search.value,'');
+    d.querySelector('#catalogGrid h4 [data-quick-rank="51"]').click();
+    assert.match(d.querySelector('.quick-benefits').textContent,/inclinación/);
+    assert.match(d.querySelector('#quickPrice').textContent,/Consultar precio/);
+    d.querySelector('#quickAdd').click();
+    assert.equal(d.querySelector('#cartTotal').textContent,'1 artículo por cotizar');
+    w.closeOverlays();d.querySelector('[data-ergo-pack="estudio"]').click();
+    assert.equal(d.querySelectorAll('.cart-item').length,4);
+    assert.equal(d.querySelector('#cartTotal').textContent,'4 artículos por cotizar');
+    w.closeOverlays();d.querySelector('#featuredProducts [data-add-rank="1"]').click();
+    assert.equal(d.querySelector('#cartTotal').textContent,'$5.990 + 4 por cotizar');
+    d.querySelector('.checkout').click();
+    assert.match(d.querySelector('#demoReceipt').textContent,/5\.990 \+ 4 por cotizar/);
     assert.deepEqual(errors,[]);
   }finally{w.close();}
 });

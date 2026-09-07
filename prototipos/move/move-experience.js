@@ -23,6 +23,7 @@
   };
   const category = product => ({ Ortopedia: 'Ortopedia', Recupera: 'Recuperación', Entrena: 'Entrenamiento' }[product.category] || product.category);
   function checkBeforeChoosing(product) {
+    if (product.check) return product.check;
     if (/banda/i.test(product.name)) return 'Rango de resistencia, medidas y material indicados por el fabricante.';
     if (/foam|roller/i.test(product.name)) return 'Longitud, diámetro, textura y firmeza indicados por el fabricante.';
     if (product.category === 'Ortopedia') return 'Talla, medidas y tipo de soporte. Si hay lesión, consulta su indicación con un profesional.';

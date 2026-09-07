@@ -68,7 +68,7 @@
       const copy = el('div','move-ai-product-copy');
       copy.append(el('h3','',actual.name), el('p','',product.reason));
       const price = el('div','move-ai-price');
-      price.append(el('strong','',product.price), el('small','','Precio referencial'));
+      price.append(el('strong','',product.price), el('small','',actual.quoteOnly?'Precio y disponibilidad por confirmar':'Precio referencial'));
       copy.append(price);
       const actions = el('div','move-ai-product-actions');
       actions.append(button('Agregar a la bolsa', () => {
@@ -173,7 +173,7 @@
       const context = el('div','move-ai-context');
       const img = el('img'); img.src = imageFor(product); img.alt = '';
       const copy = el('div');
-      copy.append(title, el('p','',`${product.price} · Precio referencial`));
+      copy.append(title, el('p','',product.quoteOnly?'Consultar precio y disponibilidad':`${product.price} · Precio referencial`));
       context.append(img, copy); heading.append(context);
     } else heading.append(title);
     overlay.querySelector('.move-ai-tools')?.remove();

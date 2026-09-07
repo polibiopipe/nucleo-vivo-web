@@ -398,5 +398,93 @@
     "price": "$29.990",
     "value": 29990,
     "why": "Entrenamiento funcional de alto valor"
+  },
+  {
+    "rank": 51,
+    "category": "Ergonomía",
+    "name": "Reposapiés regulable",
+    "why": "Apoyo para los pies con altura e inclinación por ajustar a tu puesto.",
+    "price": "Por cotizar",
+    "value": null,
+    "quoteOnly": true,
+    "image": "assets/ergonomia/reposapies.webp",
+    "check": "Altura e inclinación disponibles, superficie de apoyo y base antideslizante."
+  },
+  {
+    "rank": 52,
+    "category": "Ergonomía",
+    "name": "Soporte regulable para notebook",
+    "why": "Eleva la pantalla y organiza tu espacio. Combínalo con teclado y mouse externos.",
+    "price": "Por cotizar",
+    "value": null,
+    "quoteOnly": true,
+    "image": "assets/ergonomia/soporte-notebook.webp",
+    "check": "Tamaño y peso del notebook, rango de altura, estabilidad y ventilación."
+  },
+  {
+    "rank": 53,
+    "category": "Ergonomía",
+    "name": "Cojín lumbar con sujeción",
+    "why": "Un apoyo para el respaldo que puedes ubicar según tu silla y comodidad.",
+    "price": "Por cotizar",
+    "value": null,
+    "quoteOnly": true,
+    "image": "assets/ergonomia/cojin-lumbar.webp",
+    "check": "Medidas del cojín, firmeza, sistema de sujeción y profundidad libre del asiento."
+  },
+  {
+    "rank": 54,
+    "category": "Ergonomía",
+    "name": "Mouse vertical",
+    "why": "Una alternativa de agarre para el trabajo diario frente al computador.",
+    "price": "Por cotizar",
+    "value": null,
+    "quoteOnly": true,
+    "image": "assets/ergonomia/mouse-vertical.webp",
+    "check": "Tamaño de mano, versión diestra o zurda, conexión y compatibilidad del equipo."
+  },
+  {
+    "rank": 55,
+    "category": "Ergonomía",
+    "name": "Brazo regulable para monitor",
+    "why": "Ubica la pantalla a la altura y distancia que necesitas y libera espacio.",
+    "price": "Por cotizar",
+    "value": null,
+    "quoteOnly": true,
+    "image": "assets/ergonomia/brazo-monitor.webp",
+    "check": "Peso y tamaño del monitor, anclaje VESA, espesor del escritorio y recorrido del brazo."
+  },
+  {
+    "rank": 56,
+    "category": "Ergonomía",
+    "name": "Alfombra antifatiga antideslizante",
+    "why": "Superficie acolchada para puestos donde se permanece de pie.",
+    "price": "Por cotizar",
+    "value": null,
+    "quoteOnly": true,
+    "image": "assets/ergonomia/alfombra-antifatiga.webp",
+    "check": "Dimensiones, bordes, adherencia al suelo, limpieza y condiciones del lugar de trabajo."
+  },
+  {
+    "rank": 57,
+    "category": "Ergonomía",
+    "name": "Teclado externo compacto",
+    "why": "Separa la posición del teclado de la pantalla y acerca el mouse a tu zona de trabajo.",
+    "price": "Por cotizar",
+    "value": null,
+    "quoteOnly": true,
+    "image": "assets/ergonomia/teclado-compacto.webp",
+    "check": "Distribución de teclas, idioma, conexión, compatibilidad y necesidad de teclado numérico."
+  },
+  {
+    "rank": 58,
+    "category": "Ergonomía",
+    "name": "Atril para documentos",
+    "why": "Mantén tu lectura elevada y ajusta la inclinación del material de estudio.",
+    "price": "Por cotizar",
+    "value": null,
+    "quoteOnly": true,
+    "image": "assets/ergonomia/atril.webp",
+    "check": "Peso y tamaño admitidos, inclinación, estabilidad y sujeción de los documentos."
   }
 ]

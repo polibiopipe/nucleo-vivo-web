@@ -1,0 +1,90 @@
+[
+  {
+    "id": "reposapies",
+    "category": "Reposapiés regulable",
+    "pictured_product": "Digitador AP-423",
+    "filename": "reposapies.jpg",
+    "source_page": "https://digitador.cl/producto/apoya-pies-ap-423/",
+    "image_url": "https://digitador.cl/wp-content/uploads/2025/08/ap-423-apoya-pies.jpg",
+    "recommended_object_fit": "contain",
+    "rights": "Imagen de catálogo publicada por fabricante o distribuidor. No se encontró licencia abierta ni autorización expresa de reutilización; mantener fuente y tratar como referencia para prototipo.",
+    "public_path": "prototipos/move/assets/ergonomia/reposapies.webp"
+  },
+  {
+    "id": "soporte-notebook",
+    "category": "Soporte notebook regulable",
+    "pictured_product": "Digitador SN-1263",
+    "filename": "soporte-notebook.png",
+    "source_page": "https://digitador.cl/producto/soporte-de-notebook-sn-1263/",
+    "image_url": "https://digitador.cl/wp-content/uploads/2015/04/Soporte-de-Notebook-SN-1263-2.png",
+    "recommended_object_fit": "contain",
+    "rights": "Imagen de catálogo publicada por fabricante o distribuidor. No se encontró licencia abierta ni autorización expresa de reutilización; mantener fuente y tratar como referencia para prototipo.",
+    "public_path": "prototipos/move/assets/ergonomia/soporte-notebook.webp"
+  },
+  {
+    "id": "cojin-lumbar",
+    "category": "Cojín lumbar con sujeción",
+    "pictured_product": "Digitador PL-003",
+    "filename": "cojin-lumbar.jpg",
+    "source_page": "https://digitador.cl/producto/cojin-lumbar-pl-003/",
+    "image_url": "https://digitador.cl/wp-content/uploads/2018/06/pl-003-cojiin-lumbar.jpg",
+    "recommended_object_fit": "contain",
+    "rights": "Imagen de catálogo publicada por fabricante o distribuidor. No se encontró licencia abierta ni autorización expresa de reutilización; mantener fuente y tratar como referencia para prototipo.",
+    "public_path": "prototipos/move/assets/ergonomia/cojin-lumbar.webp"
+  },
+  {
+    "id": "mouse-vertical",
+    "category": "Mouse vertical",
+    "pictured_product": "Logitech Lift Off-white",
+    "filename": "mouse.png",
+    "source_page": "https://www.logitech.com/en-us/shop/p/lift-vertical-ergonomic-mouse",
+    "image_url": "https://resource.logitech.com/content/dam/logitech/en/products/mice/lift-vertical-ergonomic-mouse/2026-update/gallery/off-white/lift-mouse-top-angle-offwhite-gallery-1.png",
+    "recommended_object_fit": "contain",
+    "rights": "Imagen de catálogo publicada por fabricante o distribuidor. No se encontró licencia abierta ni autorización expresa de reutilización; mantener fuente y tratar como referencia para prototipo.",
+    "public_path": "prototipos/move/assets/ergonomia/mouse-vertical.webp"
+  },
+  {
+    "id": "brazo-monitor",
+    "category": "Brazo para monitor",
+    "pictured_product": "Uplift Soporte de Pantalla Black",
+    "filename": "brazo-monitor.png",
+    "source_page": "https://uplift.cl/products/soporte-de-pantalla-1",
+    "image_url": "https://uplift.cl/cdn/shop/files/2_496458fe-7eac-4c70-b946-a80521493216.png?width=1000&v=1744732716",
+    "recommended_object_fit": "cover",
+    "rights": "Imagen de catálogo publicada por fabricante o distribuidor. No se encontró licencia abierta ni autorización expresa de reutilización; mantener fuente y tratar como referencia para prototipo.",
+    "public_path": "prototipos/move/assets/ergonomia/brazo-monitor.webp"
+  },
+  {
+    "id": "alfombra-antifatiga",
+    "category": "Alfombra antifatiga",
+    "pictured_product": "Digitador TE-472",
+    "filename": "alfombra-antifatiga.png",
+    "source_page": "https://digitador.cl/producto/alfombra-antifatiga-te-472/",
+    "image_url": "https://digitador.cl/wp-content/uploads/2015/04/ALFOMBRA-ANTIFATIGA-TE-472.png",
+    "recommended_object_fit": "contain",
+    "rights": "Imagen de catálogo publicada por fabricante o distribuidor. No se encontró licencia abierta ni autorización expresa de reutilización; mantener fuente y tratar como referencia para prototipo.",
+    "public_path": "prototipos/move/assets/ergonomia/alfombra-antifatiga.webp"
+  },
+  {
+    "id": "teclado-compacto",
+    "category": "Teclado externo compacto",
+    "pictured_product": "Logitech MX Keys Mini Graphite",
+    "filename": "teclado.png",
+    "source_page": "https://www.logitech.com/en-us/shop/p/mx-keys-mini",
+    "image_url": "https://resource.logitech.com/content/dam/logitech/en/products/keyboards/mx-keys-mini/gallery/us/mx-keys-mini-top-graphite-us.png",
+    "recommended_object_fit": "contain",
+    "rights": "Imagen de catálogo publicada por fabricante o distribuidor. No se encontró licencia abierta ni autorización expresa de reutilización; mantener fuente y tratar como referencia para prototipo.",
+    "public_path": "prototipos/move/assets/ergonomia/teclado-compacto.webp"
+  },
+  {
+    "id": "atril",
+    "category": "Soporte de documentos",
+    "pictured_product": "Digitador ST-401",
+    "filename": "atril.png",
+    "source_page": "https://digitador.cl/producto/soporte-de-texto-st-401/",
+    "image_url": "https://digitador.cl/wp-content/uploads/2015/04/SOPORTE-DE-TEXTO-ST-401-1.png",
+    "recommended_object_fit": "contain",
+    "rights": "Imagen de catálogo publicada por fabricante o distribuidor. No se encontró licencia abierta ni autorización expresa de reutilización; mantener fuente y tratar como referencia para prototipo.",
+    "public_path": "prototipos/move/assets/ergonomia/atril.webp"
+  }
+]

@@ -28,6 +28,14 @@ test('medical and urgent outputs never include product cards',()=>{
     assert.deepEqual(out.products,[]); if(intent==='appointment')assert.equal(out.intent,'question');
   }
 });
+test('ergonomic quotes are valid products but never treated as a known budget match',()=>{
+  assert.equal(validateInput({messages:[{role:'user',content:'Quiero conocer el reposapiés'}],productRank:51}).productRank,51);
+  const response={message:'Revisa los ajustes disponibles.',intent:'products',referral:'unknown',products:[{rank:51,price:'$0',reason:'Apoyo regulable para los pies'}],followUp:[]};
+  const quote=sanitizeOutput(response);
+  assert.equal(quote.products[0].price,'Por cotizar');
+  assert.equal(quote.products[0].value,null);
+  assert.deepEqual(sanitizeOutput(response,20000).products,[]);
+});
 test('origin matching never trusts arbitrary subdomains or URL suffixes',()=>{
   assert.ok(isAllowedOrigin('https://www.nucleovivo.net'));
   assert.ok(!isAllowedOrigin('https://nucleovivo.net.evil.test'));
