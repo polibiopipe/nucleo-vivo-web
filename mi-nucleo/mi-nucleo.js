@@ -64,7 +64,7 @@
       imageAlt: "Presentación oficial de Umbral Docente",
       presentation: true,
       description: "Práctica pedagógica en Primera Infancia. Requiere una cuenta habilitada para este simulador.",
-      href: "https://umbral-docente-primera-infancia.pofelipso.chatgpt.site",
+      href: "https://psicoldp.org/umbral/",
       external: true
     },
     {
