@@ -11,6 +11,11 @@
   },
   "redirects": [
     {
+      "source": "/lab/umbral-docente/app/",
+      "destination": "https://umbral-docente-primera-infancia.pofelipso.chatgpt.site",
+      "permanent": false
+    },
+    {
       "source": "/lab/umbral-docente/app/:path*",
       "destination": "https://umbral-docente-primera-infancia.pofelipso.chatgpt.site",
       "permanent": false
