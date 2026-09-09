@@ -4,6 +4,16 @@
   "installCommand": "npm ci",
   "outputDirectory": "public",
   "functions": {
-    "api/move-assistant.mjs": { "maxDuration": 30, "includeFiles": "server/**" }
-  }
+    "api/move-assistant.mjs": {
+      "maxDuration": 30,
+      "includeFiles": "server/**"
+    }
+  },
+  "redirects": [
+    {
+      "source": "/lab/umbral-docente/app/:path*",
+      "destination": "https://umbral-docente-primera-infancia.pofelipso.chatgpt.site",
+      "permanent": false
+    }
+  ]
 }
