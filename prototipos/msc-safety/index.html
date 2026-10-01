@@ -4,427 +4,213 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>MSC Safety | Seguridad industrial y minera</title>
-<meta name="description" content="MSC Safety: venta consultiva de insumos de seguridad para minería e industria, con selección guiada y portafolio basado en proveedores reales." />
-<meta name="theme-color" content="#0c0c0c" />
+<meta name="description" content="MSC Safety abastece soluciones de seguridad industrial y minera para faena, mantenimiento y contratistas: protección visual, trabajo en altura y bloqueo LOTO." />
+<meta name="theme-color" content="#0b0d0f" />
+<link rel="canonical" href="https://nucleovivo.net/prototipos/msc-safety/" />
 <style>
 :root{
-  --bg:#090909; --bg2:#111111; --panel:#151515; --soft:#1d1d1d; --line:#2d2d2d;
-  --paper:#f4f0e8; --text:#f6f4ef; --muted:#b8b0a0; --dim:#8f8778;
-  --gold:#c9a24b; --gold2:#f1d487; --accent:#e8dac0; --shadow:0 24px 80px rgba(0,0,0,.35);
-  --max:1260px; --radius:24px;
+  --ink:#0b0d0f;--ink2:#111417;--panel:#15191d;--panel2:#1b2025;--line:#2a3036;
+  --paper:#f3f1ec;--white:#f8f7f3;--muted:#b8b5ad;--dim:#85827a;
+  --gold:#b99245;--gold2:#d8b96f;--steel:#cfd4d8;--warning:#d6a63f;--max:1240px;
+  --shadow:0 28px 80px rgba(0,0,0,.34)
 }
-*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
-a{color:inherit;text-decoration:none} button,input,textarea,select{font:inherit}
-img{max-width:100%;display:block}
-.shell{width:min(var(--max),calc(100% - 36px));margin:auto}
-.skip{position:absolute;left:-9999px}.skip:focus{left:18px;top:18px;background:#fff;color:#111;padding:10px 12px;border-radius:10px;z-index:100}
-.topbar{position:sticky;top:0;z-index:40;background:rgba(7,7,7,.82);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07)}
-.topbar .shell{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:62px}
-.brandline{display:flex;align-items:center;gap:14px;font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:#d0cabf}.brandline b{color:#fff}
-.mini-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.mini-actions a,.mini-actions button{border:1px solid #38342c;background:transparent;color:#f5f1e8;padding:10px 14px;border-radius:999px;cursor:pointer}
-.mini-actions .primary{background:var(--gold);color:#111;border-color:var(--gold);font-weight:700}
-
-.hero{position:relative;overflow:hidden;background:radial-gradient(circle at 82% 12%,rgba(201,162,75,.24),transparent 30%),linear-gradient(135deg,#060606 0%,#111 58%,#15120c 100%);border-bottom:1px solid var(--line)}
-.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:52px 52px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.85),transparent 86%)}
-.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.08fr .92fr;gap:42px;padding:72px 0 44px;align-items:end}
-.eyebrow{display:flex;align-items:center;gap:10px;color:var(--gold2);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}.eyebrow:before{content:"";width:34px;height:1px;background:var(--gold)}
-.hero h1{font-size:clamp(40px,6vw,74px);line-height:.96;letter-spacing:-.05em;margin:18px 0 18px;max-width:760px}
-.hero h1 span{color:var(--gold2)}
-.lead{max-width:640px;font-size:clamp(16px,1.8vw,20px);color:#d3ccbf;margin:0 0 28px}
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 18px;border-radius:999px;border:1px solid var(--gold);background:var(--gold);color:#111;font-weight:750;cursor:pointer;transition:.2s}
-.btn:hover{transform:translateY(-2px)} .btn.alt{background:transparent;color:#fff;border-color:#474132}.btn.alt:hover{border-color:var(--gold);color:var(--gold2);background:rgba(201,162,75,.08)}
-.hero-mosaic{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;align-self:stretch}
-.card,.panel{background:rgba(18,18,18,.78);border:1px solid rgba(255,255,255,.08);border-radius:24px;box-shadow:var(--shadow)}
-.hero-logo{padding:24px;display:flex;flex-direction:column;justify-content:space-between;min-height:260px}
-.logo-box{width:134px;height:134px;border-radius:22px;background:#000;border:1px solid #342f26;padding:10px;display:grid;place-items:center}
-.logo-box img{width:100%;height:100%;object-fit:contain}
-.hero-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}.hero-metrics div{padding-top:12px;border-top:1px solid #312d25}.hero-metrics strong{display:block;font-size:12px}.hero-metrics span{display:block;font-size:12px;color:var(--dim);margin-top:4px}
-.hero-product{padding:0;overflow:hidden;min-height:260px;display:grid;grid-template-rows:1fr auto}
-.hero-product figure{margin:0;background:#d9d9d9;display:grid;place-items:center;padding:16px;min-height:220px}
-.hero-product img{max-height:250px;object-fit:contain}
-.hero-product .caption{padding:16px 18px;display:flex;justify-content:space-between;gap:14px;align-items:flex-start;background:rgba(9,9,9,.9)}
-.hero-product .caption strong{display:block;font-size:15px}.hero-product .caption span{font-size:12px;color:var(--muted)}
-.goal-strip{padding:0 0 22px;display:flex;gap:10px;flex-wrap:wrap;position:relative;z-index:2}.goal{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);padding:10px 14px;border-radius:999px;color:#e8e0d0;font-size:13px}
-
-.section{padding:86px 0;border-bottom:1px solid var(--line)} .section.light{background:var(--paper);color:#121212} .section.light .muted{color:#5d574e}
-.section-head{display:grid;grid-template-columns:.85fr 1.15fr;gap:38px;align-items:end;margin-bottom:32px}
-.kicker{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--gold);font-weight:800}
-.section h2{font-size:clamp(34px,4.8vw,62px);line-height:.98;letter-spacing:-.045em;margin:10px 0 0}
-.section p{margin:0}.muted{color:var(--muted);font-size:18px;max-width:720px}
-
-.editorial{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
-.editorial-main,.editorial-side{display:grid;gap:18px}
-.feature{background:linear-gradient(160deg,#141414,#0e0e0e);border:1px solid #2b2b2b;border-radius:28px;overflow:hidden}
-.feature img{background:#ddd;aspect-ratio:16/10;object-fit:contain;padding:18px}
-.feature-copy{padding:20px 22px}
-.tagline{font-size:12px;color:var(--gold2);text-transform:uppercase;letter-spacing:.14em}
-.feature-copy h3{font-size:28px;line-height:1.05;letter-spacing:-.03em;margin:10px 0 10px}.feature-copy p{color:#beb7aa;font-size:15px}
-.feature-copy .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.pill{border:1px solid #433a2b;border-radius:999px;padding:7px 10px;font-size:11px;color:#efe0bc}
-.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.mini-card{background:#131313;border:1px solid #2b2b2b;border-radius:24px;overflow:hidden}
-.mini-card img{background:#ddd;aspect-ratio:1/1;object-fit:contain;padding:14px}
-.mini-card .copy{padding:16px 16px 18px}.mini-card h4{margin:8px 0 10px;font-size:20px;line-height:1.06}.mini-card p{font-size:14px;color:#aca698}.mini-card small{color:var(--gold2);text-transform:uppercase;letter-spacing:.1em}
-
-.select-wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
-.select-panel{padding:24px;background:linear-gradient(180deg,#151515,#0c0c0c)}
-.select-panel h3{font-size:32px;line-height:1.02;letter-spacing:-.04em;margin:10px 0 12px}.select-panel p{color:#c8c0b4}
-.route-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 18px}.route-tabs button{border:1px solid #3f392e;background:#120f0a;color:#f4e7c3;padding:10px 13px;border-radius:999px;cursor:pointer}.route-tabs button.active{background:var(--gold);color:#111;border-color:var(--gold)}
-.route-result{border:1px solid #302a20;background:#0d0d0d;border-radius:20px;padding:18px;min-height:220px;display:flex;flex-direction:column;justify-content:space-between}
-.route-result strong{font-size:14px;color:var(--gold2);text-transform:uppercase;letter-spacing:.12em}.route-result h4{font-size:28px;line-height:1.02;margin:8px 0 12px;letter-spacing:-.04em}.route-result p{font-size:15px;color:#c8c1b4}
-.bullets{margin:14px 0 0;padding-left:18px;color:#b7af9f}.bullets li{margin:8px 0}
-.select-side{padding:24px;background:#f6f2e9;color:#151515}
-.select-side .kicker{color:#7e6122}.select-side h3{font-size:30px;line-height:1.02;letter-spacing:-.04em;margin:10px 0 14px}.steps{display:grid;gap:14px}.step{padding:16px;border:1px solid #ddd1ba;border-radius:18px;background:#fff}.step b{font-size:12px;color:#8a6a28;letter-spacing:.14em}.step h4{margin:8px 0 8px;font-size:21px;line-height:1.06}.step p{font-size:14px;color:#564f44}
-
-.catalog-tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.chip{padding:10px 14px;border-radius:999px;border:1px solid #d8cfbf;background:transparent;color:#2a261f;cursor:pointer}.chip.active{background:#161616;color:#fff;border-color:#161616}
-.catalog{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.product{background:#fff;border:1px solid #ddd4c5;border-radius:22px;overflow:hidden;display:flex;flex-direction:column}
-.product figure{margin:0;background:#ecebe8;aspect-ratio:1/1;display:grid;place-items:center;padding:12px}.product img{max-height:220px;object-fit:contain}
-.product .copy{padding:16px 16px 18px;display:flex;flex-direction:column;gap:10px;height:100%}
-.product .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.badge{font-size:10px;text-transform:uppercase;letter-spacing:.1em;border:1px solid #e2d7c1;border-radius:999px;padding:6px 8px;color:#6d675d}
-.product h3{font-size:22px;line-height:1.04;letter-spacing:-.03em;margin:0}.product p{font-size:14px;color:#675f52}.product small{color:#847a6b}.product .actions{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap}.product button{border:0;border-radius:999px;padding:10px 12px;cursor:pointer}.add{background:#151515;color:#fff}.ask{background:#f3ede1;color:#222}
-
-.suppliers{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.supplier{padding:18px;border:1px solid #2d2d2d;border-radius:20px;background:#121212}.supplier b{display:block;font-size:18px}.supplier span{display:block;color:#bcb5a8;font-size:14px;margin-top:8px}
-
-.quote-grid{display:grid;grid-template-columns:.88fr 1.12fr;gap:28px}.quote-copy{position:sticky;top:92px;align-self:start}.quote-box{background:#101010;border:1px solid #2a2a2a;border-radius:26px;padding:24px}.selected{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}.selected span{border:1px solid #4e4128;background:#18140d;color:#f1d58d;padding:7px 10px;border-radius:999px;font-size:12px}.selected .empty{color:#797979;border-color:#303030;background:transparent}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#aaa}.field input,.field textarea{border:1px solid #343434;background:#090909;color:#fff;border-radius:14px;padding:13px 14px;outline:none}.field textarea{min-height:118px;resize:vertical}.field input:focus,.field textarea:focus{border-color:var(--gold)}
-.summary{display:none;white-space:pre-wrap;margin-top:16px;border:1px dashed #5b4a2a;border-radius:18px;padding:16px;background:#0a0a0a;color:#ded8cc;font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}.summary.show{display:block}
-.note{color:#8f887b;font-size:12px;margin-top:14px}
-
-.final{padding:86px 0 100px;background:radial-gradient(circle at 80% 30%,rgba(201,162,75,.15),transparent 26%),#080808}.final-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:end}.final h2{font-size:clamp(38px,5vw,70px);letter-spacing:-.05em;line-height:.95;margin:0}.final p{font-size:18px;color:#c2bbaf}
-.footer{border-top:1px solid #212121;padding:24px 0;color:#8c8478;font-size:12px}.footer .shell{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
-.floating{position:fixed;right:18px;bottom:18px;z-index:35;display:inline-flex;align-items:center;gap:10px;border:1px solid #54472e;background:#0f0f0f;color:#fff;padding:12px 15px;border-radius:999px;box-shadow:var(--shadow)}.floating b{display:inline-grid;place-items:center;min-width:24px;height:24px;border-radius:999px;background:var(--gold);color:#111;padding:0 6px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.56);display:none;z-index:60;padding:18px}.modal.show{display:grid;place-items:end center}.modal-box{width:min(560px,100%);background:#121212;border:1px solid #2c2c2c;border-radius:28px;padding:22px;box-shadow:var(--shadow)}
-.modal-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.modal-head h3{margin:8px 0 0;font-size:30px;line-height:1.02;letter-spacing:-.04em}.modal-head p{margin:8px 0 0;color:#c2baad}.close{border:1px solid #3b352a;background:transparent;color:#fff;border-radius:999px;padding:9px 12px;cursor:pointer}
-.question{margin:18px 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:#f1d487}.answers{display:flex;gap:10px;flex-wrap:wrap}.answers button{border:1px solid #3a3327;background:#0f0f0f;color:#f2ebdf;padding:10px 13px;border-radius:999px;cursor:pointer}
-.answers button.active{background:var(--gold);border-color:var(--gold);color:#111}
-.modal-route{margin-top:18px;border:1px solid #3a3427;border-radius:20px;padding:18px;background:#0c0c0c}
-.modal-route h4{margin:0 0 10px;font-size:24px;letter-spacing:-.03em}.modal-route p{margin:0;color:#c7bfaf}.modal-route ul{margin:12px 0 0;padding-left:18px;color:#b9b1a1}
-
-.ai-chat{width:min(760px,100%);max-height:min(88dvh,820px);display:flex;flex-direction:column}
-.ai-context{margin-top:14px;padding:12px 14px;border:1px solid #3a3427;background:#0b0b0b;border-radius:16px;color:#d8d0c1;font-size:13px}
-.ai-log{margin-top:16px;min-height:220px;max-height:48dvh;overflow:auto;padding:4px 2px 12px;scrollbar-width:thin}
-.ai-msg{max-width:88%;padding:12px 14px;border-radius:16px;margin:0 0 12px;font-size:15px;line-height:1.55}
-.ai-msg.assistant{background:#1a1a1a;border:1px solid #2f2f2f;color:#eee8dc}
-.ai-msg.user{margin-left:auto;background:#e8dfcc;color:#16130e}
-.ai-msg small{display:block;margin-bottom:5px;font-size:10px;text-transform:uppercase;letter-spacing:.1em;opacity:.7}
-.ai-product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
-.ai-product-card{border:1px solid #3c362b;background:#0d0d0d;border-radius:14px;padding:12px}
-.ai-product-card strong{display:block;font-size:14px;color:#f2dfad}.ai-product-card span{display:block;font-size:12px;color:#aaa294;margin-top:5px}
-.ai-product-card button{margin-top:10px;border:0;border-radius:999px;padding:8px 10px;background:#c9a24b;color:#111;cursor:pointer}
-.ai-suggestions{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}.ai-suggestions button{border:1px solid #3a3327;background:#0e0e0e;color:#eee6d7;border-radius:999px;padding:8px 11px;cursor:pointer}
-.ai-form{display:grid;grid-template-columns:1fr auto;gap:10px;border-top:1px solid #2d2d2d;padding-top:12px}.ai-form textarea{min-height:54px;max-height:120px;resize:vertical;border:1px solid #3a3a3a;background:#090909;color:#fff;border-radius:14px;padding:12px;outline:none}.ai-form textarea:focus{border-color:#c9a24b}
-@media(max-width:620px){.ai-product-grid{grid-template-columns:1fr}.ai-form{grid-template-columns:1fr}.ai-chat{max-height:92dvh}}
-
-@media(max-width:1040px){.hero-grid,.section-head,.editorial,.select-wrap,.quote-grid,.final-grid{grid-template-columns:1fr}.hero-mosaic{grid-template-columns:1fr 1fr}.catalog{grid-template-columns:repeat(2,1fr)}.suppliers{grid-template-columns:repeat(2,1fr)}.quote-copy{position:static}}
-@media(max-width:720px){.shell{width:min(var(--max),calc(100% - 24px))}.hero-grid{padding:54px 0 34px}.hero-mosaic,.hero-metrics,.catalog,.mini-grid,.suppliers,.form-grid{grid-template-columns:1fr}.section{padding:68px 0}.feature-copy h3{font-size:24px}.section h2{font-size:42px}.product h3{font-size:20px}.modal.show{place-items:end stretch}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--white);font-family:Arial,Helvetica,sans-serif;line-height:1.5}a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}img{display:block;max-width:100%}.shell{width:min(var(--max),calc(100% - 44px));margin:auto}
+.skip{position:absolute;left:-9999px}.skip:focus{left:16px;top:16px;background:#fff;color:#111;padding:10px 12px;border-radius:8px;z-index:100}
+.site-head{position:sticky;top:0;z-index:50;background:rgba(9,11,13,.94);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.08)}
+.head-inner{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:26px}.brand{display:flex;align-items:center;gap:16px}.brand img{width:88px;height:56px;object-fit:contain;background:#000;border-radius:4px}.brand-copy{display:flex;flex-direction:column;line-height:1}.brand-copy strong{font-size:18px;letter-spacing:.06em}.brand-copy span{margin-top:6px;color:#9f9a91;font-size:10px;text-transform:uppercase;letter-spacing:.16em}
+.main-nav{display:flex;gap:24px;align-items:center;font-size:13px;color:#c6c2ba}.main-nav a:hover{color:#fff}.head-cta{border:1px solid var(--gold);color:#111;background:var(--gold);padding:11px 16px;font-weight:700}
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line);background:linear-gradient(120deg,#090b0d 0%,#101317 62%,#1b1914 100%)}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:62px 62px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.92),transparent 88%)}
+.hero:after{content:"";position:absolute;right:-12vw;top:-22vw;width:58vw;height:58vw;border:1px solid rgba(216,185,111,.15);border-radius:50%;box-shadow:0 0 0 80px rgba(216,185,111,.025),0 0 0 160px rgba(216,185,111,.015)}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.02fr .98fr;gap:54px;align-items:center;padding:88px 0 64px}.micro{display:flex;align-items:center;gap:12px;color:var(--gold2);font-size:11px;text-transform:uppercase;letter-spacing:.16em;font-weight:700}.micro:before{content:"";width:42px;height:1px;background:var(--gold)}
+.hero h1{font-size:clamp(42px,5.6vw,74px);line-height:.98;letter-spacing:-.04em;margin:18px 0 22px;max-width:760px;font-weight:700}.hero h1 span{color:var(--gold2)}.hero .lead{max-width:690px;color:#cfcbc2;font-size:clamp(17px,1.7vw,21px);margin:0 0 28px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1px solid var(--gold);background:var(--gold);color:#111;padding:13px 18px;font-weight:700;cursor:pointer;transition:.18s}.btn:hover{transform:translateY(-2px)}.btn.alt{background:transparent;color:#fff;border-color:#4a4640}.btn.alt:hover{border-color:var(--gold);color:var(--gold2)}
+.hero-visual{display:grid;grid-template-columns:1.08fr .92fr;grid-template-rows:1fr 1fr;gap:12px;min-height:470px}.hero-shot{position:relative;overflow:hidden;background:#e7e7e4;border:1px solid #33383c}.hero-shot.main{grid-row:1/3}.hero-shot img{width:100%;height:100%;object-fit:contain;padding:18px}.hero-shot.main img{padding:32px}.hero-shot figcaption{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(4,5,6,.92));padding:36px 16px 14px;color:#fff}.hero-shot figcaption b{display:block;font-size:13px}.hero-shot figcaption span{font-size:11px;color:#c6c0b5}
+.signal-strip{position:relative;z-index:2;border-top:1px solid rgba(255,255,255,.07);display:grid;grid-template-columns:repeat(4,1fr)}.signal{padding:18px 0;border-right:1px solid rgba(255,255,255,.08);font-size:12px;color:#aca79f}.signal:last-child{border-right:0}.signal b{display:block;color:#fff;font-size:13px;margin-bottom:4px}
+.section{padding:86px 0;border-bottom:1px solid var(--line)}.section.light{background:var(--paper);color:#17191b}.section-head{display:grid;grid-template-columns:.82fr 1.18fr;gap:48px;align-items:end;margin-bottom:36px}.kicker{font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:var(--gold);font-weight:800}.section h2{font-size:clamp(34px,4.4vw,58px);line-height:1.02;letter-spacing:-.035em;margin:8px 0 0}.intro{font-size:18px;color:#bbb6ae;max-width:720px}.light .intro{color:#5b5852}
+.promise-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #34393e;border-bottom:1px solid #34393e}.promise{padding:30px 28px;min-height:210px;border-right:1px solid #34393e}.promise:last-child{border-right:0}.promise .num{color:var(--gold2);font-size:11px;letter-spacing:.12em}.promise h3{font-size:25px;margin:28px 0 10px}.promise p{color:#aaa59b;font-size:14px;margin:0}.promise strong{color:#fff}
+.family-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:14px}.family{position:relative;min-height:360px;background:#13171a;border:1px solid #292f34;overflow:hidden;padding:26px;display:flex;flex-direction:column;justify-content:flex-end}.family:first-child{min-height:520px}.family .ghost{position:absolute;right:-8px;top:-38px;font-size:150px;font-weight:800;color:rgba(255,255,255,.025)}.family b{color:var(--gold2);font-size:11px;text-transform:uppercase;letter-spacing:.14em}.family h3{font-size:30px;line-height:1.05;margin:10px 0}.family p{color:#aaa49a;font-size:14px;max-width:34ch}.family .line{width:52px;height:2px;background:var(--gold);margin-bottom:18px}
+.catalog-tools{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:20px}.chip{border:1px solid #d4cec2;background:transparent;color:#25231f;padding:9px 13px;cursor:pointer}.chip.active{background:#16191c;color:#fff;border-color:#16191c}
+.catalog{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.product{background:#fff;border:1px solid #dcd6cb;display:flex;flex-direction:column;min-height:100%}.product figure{margin:0;background:#ececea;aspect-ratio:4/3;display:grid;place-items:center;overflow:hidden}.product figure img{width:100%;height:100%;object-fit:contain;padding:16px}.product .copy{padding:18px;display:flex;flex-direction:column;gap:10px;flex:1}.product .top{display:flex;justify-content:space-between;gap:12px;align-items:center}.badge{font-size:9px;text-transform:uppercase;letter-spacing:.12em;border:1px solid #d6d0c4;padding:6px 8px;color:#6b665e}.product small{font-size:11px;color:#80796f}.product h3{font-size:23px;line-height:1.05;margin:0;letter-spacing:-.025em}.product p{font-size:14px;color:#5d5850;margin:0}.product .spec{font-size:12px;color:#7b7468;border-top:1px solid #e6e1d8;padding-top:10px}.product .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:4px}.product button{border:0;padding:10px 11px;cursor:pointer;font-weight:700}.add{background:#15181b;color:#fff}.ask{background:#eee9df;color:#222}
+.advisor{display:grid;grid-template-columns:.9fr 1.1fr;gap:18px}.advisor-main{background:#121518;border:1px solid #2c3237;padding:28px;min-height:420px;display:flex;flex-direction:column;justify-content:space-between}.advisor-main h3{font-size:38px;line-height:1.02;letter-spacing:-.04em;margin:12px 0 14px}.advisor-main p{color:#bdb7ad;max-width:58ch}.route-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.route-tabs button{border:1px solid #413b31;background:#0d0f11;color:#eee7da;padding:10px 12px;cursor:pointer}.route-tabs button.active{background:var(--gold);border-color:var(--gold);color:#111}.route-result{border-top:1px solid #34383c;padding-top:18px}.route-result strong{color:var(--gold2);font-size:10px;text-transform:uppercase;letter-spacing:.14em}.route-result h4{font-size:27px;line-height:1.05;margin:8px 0 10px}.route-result p{font-size:14px}.bullets{margin:12px 0 18px;padding-left:18px;color:#b8b2a8;font-size:14px}.bullets li{margin:6px 0}.advisor-side{background:#ece8df;color:#17191b;padding:28px;display:flex;flex-direction:column;justify-content:space-between}.advisor-side .kicker{color:#7f6329}.advisor-side h3{font-size:31px;line-height:1.05;margin:10px 0 18px}.advisor-side .step{padding:16px 0;border-top:1px solid #cfc7b8}.advisor-side .step b{font-size:10px;letter-spacing:.14em;color:#8a6c30}.advisor-side .step strong{display:block;font-size:19px;margin:4px 0}.advisor-side .step p{font-size:13px;color:#625d54}
+.brands{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #34383c;border-left:1px solid #34383c}.brand-card{padding:26px;border-right:1px solid #34383c;border-bottom:1px solid #34383c;min-height:160px}.brand-card strong{display:block;font-size:21px}.brand-card span{display:block;margin-top:12px;color:#aaa39a;font-size:13px}
+.quote{display:grid;grid-template-columns:.88fr 1.12fr;gap:34px}.quote-copy{align-self:start}.quote-copy h2{font-size:clamp(36px,4.5vw,58px)}.quote-copy p{margin-top:16px;color:#b8b1a7;font-size:17px}.quote-box{background:#111417;border:1px solid #2b3136;padding:24px}.selected{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}.selected span{border:1px solid #4d422e;background:#17130d;color:#ecd79e;padding:7px 9px;font-size:12px}.selected .empty{color:#7e7e7e;border-color:#343434;background:transparent}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#a8a8a8}.field input,.field select,.field textarea{border:1px solid #373d42;background:#090b0d;color:#fff;padding:13px 14px;outline:none}.field textarea{min-height:118px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold)}.summary{display:none;white-space:pre-wrap;margin-top:16px;border:1px dashed #5a4a2d;padding:15px;background:#0a0c0e;color:#ddd5c7;font:13px/1.55 ui-monospace,Consolas,monospace}.summary.show{display:block}
+.final{padding:78px 0 90px;background:linear-gradient(110deg,#0b0d0f,#15130f);border-bottom:1px solid #252a2f}.final-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:end}.final h2{font-size:clamp(38px,5vw,66px);line-height:.98;letter-spacing:-.04em;margin:0}.final p{color:#bdb6aa;font-size:17px}.footer{padding:26px 0;color:#8f8a82;font-size:12px}.footer .shell{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.floating{position:fixed;right:18px;bottom:18px;z-index:35;border:1px solid #51452f;background:#111417;color:#fff;padding:11px 14px;box-shadow:var(--shadow)}.floating b{display:inline-grid;place-items:center;min-width:22px;height:22px;background:var(--gold);color:#111;margin-left:8px;padding:0 5px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;z-index:80;padding:18px}.modal.show{display:grid;place-items:end center}.modal-box{width:min(760px,100%);max-height:88dvh;background:#121518;border:1px solid #31363b;padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column}.modal-head{display:flex;justify-content:space-between;gap:16px}.modal-head h3{font-size:28px;line-height:1.05;margin:8px 0}.modal-head p{margin:0;color:#aaa49a;font-size:14px}.close{border:1px solid #494137;background:transparent;color:#fff;padding:8px 11px;cursor:pointer;height:max-content}.ai-context{margin-top:14px;padding:11px 12px;border:1px solid #3a3427;background:#0c0e10;color:#d9d2c5;font-size:12px}.ai-log{margin-top:14px;min-height:220px;max-height:45dvh;overflow:auto;padding:4px 0 10px}.ai-msg{max-width:88%;padding:11px 13px;margin:0 0 10px;font-size:14px}.ai-msg.assistant{background:#1a1e22;border:1px solid #30363b}.ai-msg.user{margin-left:auto;background:#e7dfcf;color:#17130e}.ai-msg small{display:block;margin-bottom:5px;font-size:9px;text-transform:uppercase;letter-spacing:.12em;opacity:.7}.ai-product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.ai-product-card{border:1px solid #3b352c;background:#0d0f11;padding:11px}.ai-product-card strong{display:block;font-size:13px;color:#efda9f}.ai-product-card span{display:block;font-size:11px;color:#a7a095;margin-top:4px}.ai-product-card button{margin-top:9px;border:0;padding:8px 9px;background:var(--gold);color:#111;cursor:pointer}.ai-suggestions{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:9px}.ai-suggestions button{border:1px solid #3b352c;background:#0d0f11;color:#ece4d7;padding:8px 10px;cursor:pointer}.ai-form{display:grid;grid-template-columns:1fr auto;gap:9px;border-top:1px solid #2d3237;padding-top:11px}.ai-form textarea{min-height:52px;max-height:110px;resize:vertical;border:1px solid #393f45;background:#090b0d;color:#fff;padding:11px;outline:none}.note{font-size:11px;color:#858078;margin-top:10px}
+@media(max-width:1000px){.hero-grid,.section-head,.advisor,.quote,.final-grid{grid-template-columns:1fr}.hero-visual{min-height:400px}.promise-grid{grid-template-columns:1fr}.promise{border-right:0;border-bottom:1px solid #34393e}.promise:last-child{border-bottom:0}.family-grid{grid-template-columns:1fr 1fr}.family:first-child{grid-column:1/-1;min-height:360px}.catalog{grid-template-columns:repeat(2,1fr)}.brands{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){.shell{width:min(var(--max),calc(100% - 24px))}.head-inner{min-height:66px}.brand-copy,.main-nav a:not(.head-cta){display:none}.hero-grid{padding:58px 0 40px}.hero-visual{grid-template-columns:1fr 1fr;grid-template-rows:auto}.hero-shot.main{grid-column:1/-1;grid-row:auto}.signal-strip{grid-template-columns:1fr 1fr}.signal:nth-child(2){border-right:0}.section{padding:64px 0}.family-grid,.catalog,.brands,.form-grid{grid-template-columns:1fr}.family:first-child{grid-column:auto}.field.full{grid-column:auto}.ai-product-grid,.ai-form{grid-template-columns:1fr}.modal.show{place-items:end stretch}}
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
-<header class="topbar">
-  <div class="shell">
-    <div class="brandline"><b>Núcleo Vivo</b><span>/ Proyectos / MSC Safety</span></div>
-    <div class="mini-actions">
-      <a href="#catalogo">Ver catálogo</a>
-      <button class="primary" type="button" data-open-ai>Ayúdame a elegir IA</button>
-    </div>
+<header class="site-head">
+  <div class="shell head-inner">
+    <a class="brand" href="#inicio" aria-label="MSC Safety · Inicio">
+      <img src="/assets/prototipos/msc-safety-logo.webp" alt="MSC Safety" />
+      <span class="brand-copy"><strong>MSC SAFETY</strong><span>Seguridad industrial y minera</span></span>
+    </a>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <a href="#soluciones">Soluciones</a>
+      <a href="#catalogo">Productos</a>
+      <a href="#marcas">Marcas</a>
+      <a href="#asesor">Asesor MSC</a>
+      <a class="head-cta" href="#cotizar">Solicitar cotización</a>
+    </nav>
   </div>
 </header>
 
 <main id="main">
-  <section class="hero">
-    <div class="shell hero-grid">
-      <div>
-        <div class="eyebrow">MSC Safety · minería e industria · venta consultiva</div>
-        <h1>Menos vitrina genérica. <span>Más criterio para comprar seguridad.</span></h1>
-        <p class="lead">Una propuesta comercial construida desde proveedores reales: protección visual, trabajo en altura y seguridad operacional para operaciones que necesitan respuesta rápida, especificación clara y continuidad.</p>
-        <div class="hero-actions">
-          <a class="btn" href="#msc-select">Probar MSC Select</a>
-          <a class="btn alt" href="#catalogo">Explorar productos</a>
+<section class="hero" id="inicio">
+  <div class="shell hero-grid">
+    <div>
+      <div class="micro">Seguridad industrial · minería · abastecimiento B2B</div>
+      <h1>Protección que responde a <span>la operación.</span></h1>
+      <p class="lead">Equipamiento de seguridad para faena, mantenimiento y contratistas. MSC Safety reúne protección visual, trabajo en altura y bloqueo LOTO con una atención orientada a especificar, cotizar y dar continuidad al requerimiento.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#cotizar">Solicitar cotización</a>
+        <button class="btn alt" type="button" data-open-ai>Orientar requerimiento</button>
+      </div>
+    </div>
+    <div class="hero-visual" aria-label="Productos de seguridad industrial">
+      <figure class="hero-shot main"><img src="https://chilesin.cl/wp-content/uploads/2025/06/FOTO-APA4A-P2XB0B00.jpg" alt="Arnés de seguridad Chilesin 4 argollas en X" /><figcaption><b>Trabajo en altura</b><span>Arnés profesional · Chilesin</span></figcaption></figure>
+      <figure class="hero-shot"><img src="https://www.lioi.cl/cdn/shop/files/combate_blue_PRINCIPAL.jpg?v=1755697643&width=600" alt="Lente de seguridad Combate" /><figcaption><b>Protección visual</b><span>Lente Combate · LIOI</span></figcaption></figure>
+      <figure class="hero-shot"><img src="https://www.lioi.cl/cdn/shop/files/053201676_2.jpg?v=1755697281&width=900" alt="Candado dieléctrico LOTO" /><figcaption><b>Bloqueo LOTO</b><span>Candado dieléctrico · LIOI</span></figcaption></figure>
+    </div>
+  </div>
+  <div class="shell signal-strip">
+    <div class="signal"><b>Respuesta comercial</b>Requerimientos claros y trazables</div>
+    <div class="signal"><b>Documentación técnica</b>Fichas y antecedentes por referencia</div>
+    <div class="signal"><b>Abastecimiento</b>Alternativas por familia y proveedor</div>
+    <div class="signal"><b>Continuidad</b>Seguimiento de reposición y nuevas necesidades</div>
+  </div>
+</section>
+
+<section class="section" id="soluciones">
+  <div class="shell">
+    <div class="section-head">
+      <div><div class="kicker">Lo que importa en operación</div><h2>Un proveedor de seguridad se mide cuando hay que responder.</h2></div>
+      <p class="intro">En minería e industria la compra no termina en el precio. Importan la especificación correcta, la documentación disponible, el plazo y la capacidad de volver a abastecer sin empezar de cero.</p>
+    </div>
+    <div class="promise-grid">
+      <article class="promise"><span class="num">01 / RESPONDER</span><h3>Entender antes de cotizar.</h3><p>Marca requerida, aplicación, cantidad, faena, fecha y documentación disponible. <strong>Menos ida y vuelta, más claridad desde el inicio.</strong></p></article>
+      <article class="promise"><span class="num">02 / DOCUMENTAR</span><h3>Respaldar la elección.</h3><p>La propuesta comercial debe conversar con fichas técnicas, normas declaradas por el fabricante y requisitos del cliente. <strong>Lo técnico acompaña la venta.</strong></p></article>
+      <article class="promise"><span class="num">03 / CONTINUAR</span><h3>Convertir una compra en abastecimiento.</h3><p>Registrar consumo, frecuencia y familias compradas permite anticipar reposición y detectar nuevas necesidades. <strong>La continuidad también es seguridad.</strong></p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+    <div class="section-head">
+      <div><div class="kicker">Líneas de trabajo</div><h2>Entrar por el riesgo. Resolver con la familia adecuada.</h2></div>
+      <p class="intro">MSC Safety organiza la conversación por necesidad operacional, no por una lista interminable de SKU.</p>
+    </div>
+    <div class="family-grid">
+      <article class="family"><span class="ghost">01</span><div><div class="line"></div><b>Protección personal</b><h3>Protección visual</h3><p>Lentes y antiparras para exposición a partículas, polvo, impacto, radiación UV y otras condiciones declaradas por cada fabricante.</p></div></article>
+      <article class="family"><span class="ghost">02</span><div><div class="line"></div><b>Trabajo seguro</b><h3>Altura y detención de caídas</h3><p>Arneses, retráctiles y componentes que deben revisarse como sistema, considerando tarea, anclaje y compatibilidad.</p></div></article>
+      <article class="family"><span class="ghost">03</span><div><div class="line"></div><b>Control operacional</b><h3>Bloqueo LOTO</h3><p>Candados y dispositivos para procedimientos de control de energías, mantención y segregación de equipos.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="section light" id="catalogo">
+  <div class="shell">
+    <div class="section-head">
+      <div><div class="kicker">Productos seleccionados</div><h2>Referencias reales de proveedores de MSC Safety.</h2></div>
+      <p class="intro">Una muestra inicial del portafolio. Cada cotización debe confirmar disponibilidad, especificación vigente y condiciones comerciales.</p>
+    </div>
+    <div class="catalog-tools"><button class="chip active" data-filter="all">Todos</button><button class="chip" data-filter="visual">Visual</button><button class="chip" data-filter="altura">Altura</button><button class="chip" data-filter="operacional">LOTO</button></div>
+    <div class="catalog">
+      <article class="product" data-cat="visual"><figure><img src="https://www.lioi.cl/cdn/shop/files/combate_blue_PRINCIPAL.jpg?v=1755697643&width=900" alt="Lente Combate LIOI" /></figure><div class="copy"><div class="top"><span class="badge">Visual</span><small>LIOI · Kbeen</small></div><h3>Lente Combate</h3><p>Referencia de protección visual con correa de sujeción y configuración para mayor cobertura.</p><div class="spec">Código 053201808 · revisar ficha y variante antes de cotizar.</div><div class="actions"><button class="add" data-item="Lente Combate">Agregar</button><button class="ask" type="button" data-open-ai data-ai-product="lioi-combate">Consultar</button></div></div></article>
+      <article class="product" data-cat="visual"><figure><img src="https://www.acetogen.cl/cdn/shop/files/LENTE_BLACKBULL_B600_8822a254-2be0-4eec-a7a5-8ec11adac741.jpg?v=1777304240" alt="Lente Black Bull B600" /></figure><div class="copy"><div class="top"><span class="badge">Visual</span><small>Acetogen · Black Bull</small></div><h3>Black Bull B600</h3><p>Lente para uso industrial con montura ergonómica y protección lateral declarada por proveedor.</p><div class="spec">SKU 441010780031 · variantes según disponibilidad.</div><div class="actions"><button class="add" data-item="Lente Black Bull B600">Agregar</button><button class="ask" type="button" data-open-ai data-ai-product="acetogen-b600">Consultar</button></div></div></article>
+      <article class="product" data-cat="visual"><figure><img src="https://libus.cl/media/catalog/product/cache/8c8d34078b36c1ef38bfd913031288cb/a/n/antiparra-seguridad-new-classic-transparente-001_2.jpg" alt="Antiparra Libus New Classic" /></figure><div class="copy"><div class="top"><span class="badge">Visual</span><small>Libus</small></div><h3>Antiparra New Classic</h3><p>Protección frontal y lateral con lente envolvente y correa regulable.</p><div class="spec">Referencia transparente AF · ANSI Z87.1 / IRAM EN166 declaradas por proveedor.</div><div class="actions"><button class="add" data-item="Antiparra Libus New Classic">Agregar</button><button class="ask" type="button" data-open-ai data-ai-product="libus-newclassic">Consultar</button></div></div></article>
+      <article class="product" data-cat="visual"><figure><img src="https://libus.cl/media/catalog/product/cache/8c8d34078b36c1ef38bfd913031288cb/a/n/antiparra-seguridad-aviator-gris-gris-01-_1__2.jpg" alt="Antiparra Libus Aviator" /></figure><div class="copy"><div class="top"><span class="badge">Visual</span><small>Libus</small></div><h3>Antiparra Aviator</h3><p>Antiparra flexible de uso general con protección frontal y lateral.</p><div class="spec">ANSI Z87.1 · IRAM EN166 declaradas por proveedor.</div><div class="actions"><button class="add" data-item="Antiparra Aviator">Agregar</button><button class="ask" type="button" data-open-ai data-ai-product="libus-aviator">Consultar</button></div></div></article>
+      <article class="product" data-cat="altura"><figure><img src="https://chilesin.cl/wp-content/uploads/2025/06/FOTO-APA4A-P2XB0B00.jpg" alt="Arnés Chilesin 4 argollas profesional" /></figure><div class="copy"><div class="top"><span class="badge">Altura</span><small>Chilesin</small></div><h3>Arnés 4 Argollas en X Profesional</h3><p>Arnés profesional con diseño ergonómico de tres regulaciones y cuatro argollas metálicas.</p><div class="spec">Modelo APA4A-P2XB0B00 · ANSI/ASSP Z359.11 declarada por proveedor.</div><div class="actions"><button class="add" data-item="Arnés 4 Argollas en X Profesional">Agregar</button><button class="ask" type="button" data-open-ai data-ai-product="chilesin-harness4x">Consultar</button></div></div></article>
+      <article class="product" data-cat="altura"><figure><img src="https://chilesin.cl/wp-content/uploads/2024/08/RETRACTIL-CABLE-DE-ACERO-10-METROS-600x600.jpg" alt="Retráctil Chilesin RETA-710" /></figure><div class="copy"><div class="top"><span class="badge">Altura</span><small>Chilesin</small></div><h3>Retráctil RETA-710 · 10 m</h3><p>Sistema personal contra caídas con línea retráctil de cable galvanizado.</p><div class="spec">EN 360:2002 · validar punto de anclaje y compatibilidad del sistema.</div><div class="actions"><button class="add" data-item="Retráctil Chilesin RETA-710">Agregar</button><button class="ask" type="button" data-open-ai data-ai-product="chilesin-reta710">Consultar</button></div></div></article>
+      <article class="product" data-cat="operacional"><figure><img src="https://www.lioi.cl/cdn/shop/files/053201676_2.jpg?v=1755697281&width=900" alt="Candado dieléctrico LIOI" /></figure><div class="copy"><div class="top"><span class="badge">LOTO</span><small>LIOI · Kbeen</small></div><h3>Candado dieléctrico</h3><p>Referencia para procedimientos de bloqueo y control de energías peligrosas.</p><div class="spec">Código 053201676 · validar procedimiento y aplicación.</div><div class="actions"><button class="add" data-item="Candado dieléctrico">Agregar</button><button class="ask" type="button" data-open-ai data-ai-product="lioi-candado">Consultar</button></div></div></article>
+      <article class="product" data-cat="visual"><figure><img src="https://www.acetogen.cl/cdn/shop/files/Black_Bull_B300_gris_web_428cce49-7b2a-4d92-88ba-d5d0f1f21e43.jpg?v=1777304079" alt="Lente Black Bull B300" /></figure><div class="copy"><div class="top"><span class="badge">Visual</span><small>Acetogen · Black Bull</small></div><h3>Black Bull B300</h3><p>Lente de seguridad diseñado para protección ocular con resistencia a impactos declarada por proveedor.</p><div class="spec">SKU 441010790031 · disponible en variantes claro y gris según proveedor.</div><div class="actions"><button class="add" data-item="Lente Black Bull B300">Agregar</button><button class="ask" type="button" data-open-ai data-ai-product="acetogen-b300">Consultar</button></div></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="asesor">
+  <div class="shell">
+    <div class="section-head">
+      <div><div class="kicker">Asesor MSC · asistencia inteligente</div><h2>La tecnología acompaña la decisión, no la reemplaza.</h2></div>
+      <p class="intro">El asistente ayuda a ordenar la consulta, comparar referencias del catálogo y detectar qué dato técnico falta antes de cotizar. En productos críticos, la validación final sigue siendo técnica y humana.</p>
+    </div>
+    <div class="advisor">
+      <div class="advisor-main">
+        <div>
+          <div class="micro">Orientación de requerimientos</div>
+          <h3>Partimos por la necesidad. Después miramos el producto.</h3>
+          <p>Selecciona una familia o abre directamente el asistente para comparar productos reales del portafolio.</p>
+          <div class="route-tabs"><button class="active" data-route="visual">Protección visual</button><button data-route="altura">Trabajo en altura</button><button data-route="loto">Bloqueo LOTO</button></div>
+          <div class="route-result" id="routeResult"><div><strong>Ruta MSC</strong><h4>Protección visual de alta rotación.</h4><p>Empieza por el ambiente de trabajo y el nivel de cobertura antes de comparar modelos.</p><ul class="bullets"><li>Lente L-300 para reposición simple.</li><li>Lente Combate para mayor cobertura.</li><li>Black Bull y Libus amplían alternativas por proveedor.</li></ul></div><button class="btn" type="button" data-open-ai>Hablar con Asesor MSC</button></div>
         </div>
       </div>
-      <div class="hero-mosaic">
-        <article class="card hero-logo">
-          <div>
-            <div class="logo-box"><img src="data:image/webp;base64,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" alt="Logo MSC Safety" /></div>
-            <p style="margin:18px 0 0;color:#cdc5b8;max-width:28ch">MSC Safety conecta necesidad técnica, portafolio real y seguimiento comercial.</p>
-          </div>
-          <div class="hero-metrics">
-            <div><strong>FOCO</strong><span>Seguridad industrial y minería</span></div>
-            <div><strong>RUTA</strong><span>Explorar → orientar → cotizar</span></div>
-            <div><strong>RECURSO IA</strong><span>MSC Select, estilo MOVE</span></div>
-          </div>
-        </article>
-        <article class="card hero-product">
-          <figure><img src="https://www.lioi.cl/cdn/shop/files/combate_blue_PRINCIPAL.jpg?v=1755697643&width=1200" alt="Lente Combate de seguridad" /></figure>
-          <div class="caption"><div><strong>Lente Combate</strong><span>Proveedor LIOI · protección visual</span></div><span class="badge">Producto real</span></div>
-        </article>
-      </div>
-    </div>
-    <div class="shell goal-strip">
-      <span class="goal">Protección visual</span>
-      <span class="goal">Trabajo en altura</span>
-      <span class="goal">Bloqueo LOTO</span>
-      <span class="goal">Reposición y continuidad operacional</span>
-    </div>
-  </section>
-
-  <section class="section" id="portafolio">
-    <div class="shell">
-      <div class="section-head">
-        <div><div class="kicker">01 · Portafolio base</div><h2>Productos reales, organizados para vender mejor.</h2></div>
-        <p class="muted">En vez de llenar la página de cajas iguales, el portafolio entra por objetivo de compra. Cada bloque abre una conversación distinta: visual, altura u operacional.</p>
-      </div>
-      <div class="editorial">
-        <div class="editorial-main">
-          <article class="feature">
-            <img src="https://www.lioi.cl/cdn/shop/files/053100415RETRACTILDOBLEENCINTAKL-9300TWIN.jpg?v=1755697620&width=800" alt="Retráctil doble en cinta" />
-            <div class="feature-copy">
-              <div class="tagline">Trabajo en altura · LIOI</div>
-              <h3>Retráctil doble en cinta KL-9300 TWIN</h3>
-              <p>Una entrada potente para proyectos que requieren detención de caídas y especificación más fina. Ideal para abrir venta técnica y luego ampliar hacia anclajes, amortiguadores y accesorios.</p>
-              <div class="meta"><span class="pill">Ruta de compra técnica</span><span class="pill">Validar longitud y uso</span><span class="pill">Producto real del proveedor</span></div>
-            </div>
-          </article>
+      <aside class="advisor-side">
+        <div><div class="kicker">Cómo piensa la compra</div><h3>Tres preguntas antes de cotizar.</h3></div>
+        <div>
+          <div class="step"><b>01 / RIESGO</b><strong>¿Qué condición debe cubrir?</strong><p>Polvo, partículas, altura, bloqueo, mantenimiento u otra necesidad operacional.</p></div>
+          <div class="step"><b>02 / REQUISITO</b><strong>¿Hay marca, norma o sistema definido?</strong><p>Eso cambia la comparación y evita proponer una alternativa que no corresponde.</p></div>
+          <div class="step"><b>03 / COMPRA</b><strong>¿Es reposición o un requerimiento nuevo?</strong><p>La frecuencia de consumo y la urgencia definen la respuesta comercial.</p></div>
         </div>
-        <div class="editorial-side">
-          <div class="mini-grid">
-            <article class="mini-card">
-              <img src="https://www.lioi.cl/cdn/shop/files/053201214_L-300_GRIS.jpg?v=1755697651&width=800" alt="Lente L-300" />
-              <div class="copy"><small>Visual · LIOI</small><h4>Lente L-300</h4><p>Alternativa simple para reposición recurrente y compras por volumen.</p></div>
-            </article>
-            <article class="mini-card">
-              <img src="https://www.lioi.cl/cdn/shop/files/053201676_2.jpg?v=1755697281&width=800" alt="Candado dieléctrico" />
-              <div class="copy"><small>Operacional · LOTO</small><h4>Candado dieléctrico</h4><p>Producto de entrada para control de energías y continuidad de mantenimiento.</p></div>
-            </article>
-          </div>
-          <article class="feature" style="display:grid;grid-template-columns:1fr;min-height:100%">
-            <div class="feature-copy">
-              <div class="tagline">Mirada comercial</div>
-              <h3>MSC no vende “todo”. Vende mejor cuando orienta.</h3>
-              <p>La página prioriza criterio comercial: problema, contexto de uso y familia sugerida. Así la cotización no parte en cero y el cliente siente acompañamiento, no solo despacho de precios.</p>
-              <div class="meta"><span class="pill">Más original</span><span class="pill">Menor peso tipográfico</span><span class="pill">Más fotografía real</span></div>
-            </div>
-          </article>
-        </div>
-      </div>
+      </aside>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="section" id="msc-select">
-    <div class="shell">
-      <div class="section-head">
-        <div><div class="kicker">02 · MSC Select</div><h2>La IA comercial, con el mismo recurso de MOVE.</h2></div>
-        <p class="muted">No parte por el SKU. Parte por la necesidad. La idea es ordenar la compra y reducir la duda antes de pedir la cotización.</p>
-      </div>
-      <div class="select-wrap">
-        <article class="panel select-panel">
-          <div class="eyebrow">MSC Select · orientación guiada</div>
-          <h3>No empieces por el producto. Empieza por el riesgo.</h3>
-          <p>Selecciona una ruta y revisa una propuesta breve. La lógica replica el recurso usado en MOVE: ayuda a elegir, reduce alternativas y prepara la siguiente acción.</p>
-          <div class="route-tabs">
-            <button class="active" data-route="visual">Protección visual</button>
-            <button data-route="altura">Trabajo en altura</button>
-            <button data-route="loto">Bloqueo LOTO</button>
-          </div>
-          <div class="route-result" id="routeResult">
-            <div>
-              <strong>Ruta MSC 01</strong>
-              <h4>Protección visual de alta rotación.</h4>
-              <p>Una selección para faenas que buscan cobertura rápida, reposición frecuente o primer levantamiento de protección ocular.</p>
-              <ul class="bullets">
-                <li>Lente Combate para usos más exigentes.</li>
-                <li>Lente L-300 para reposición simple y volumen.</li>
-                <li>Posibilidad de ampliar hacia antiparras y variantes por color.</li>
-              </ul>
-            </div>
-            <button class="btn" type="button" data-open-ai>Continuar con MSC Select</button>
-          </div>
-        </article>
-        <article class="panel select-side">
-          <div class="kicker">Cómo se usa</div>
-          <h3>Primero orientar. Después cotizar.</h3>
-          <div class="steps">
-            <div class="step"><b>01 / CONTEXTO</b><h4>¿Qué riesgo quieres cubrir?</h4><p>Visual, altura o bloqueo LOTO. La conversación parte por el uso, no por una lista infinita.</p></div>
-            <div class="step"><b>02 / RECORTE</b><h4>Menos opciones, mejor foco.</h4><p>MSC Select reduce el surtido y propone una ruta inicial coherente con la necesidad.</p></div>
-            <div class="step"><b>03 / SIGUIENTE ACCIÓN</b><h4>Dejar lista la solicitud.</h4><p>Cuando ya hay claridad, el cliente pasa directo a la mesa de requerimiento con una selección base.</p></div>
-          </div>
-        </article>
-      </div>
+<section class="section" id="marcas">
+  <div class="shell">
+    <div class="section-head">
+      <div><div class="kicker">Red de proveedores</div><h2>Portafolio construido sobre marcas y proveedores reales.</h2></div>
+      <p class="intro">MSC Safety integra distintas fuentes de abastecimiento para ampliar alternativas y responder a necesidades específicas de seguridad industrial.</p>
     </div>
-  </section>
-
-  <section class="section light" id="catalogo">
-    <div class="shell">
-      <div class="section-head">
-        <div><div class="kicker">03 · Catálogo editado</div><h2>Menos estándar. Más editorial y comercial.</h2></div>
-        <p class="muted">El catálogo usa fotografías reales levantadas desde páginas de proveedores y organiza la consulta por familia.</p>
-      </div>
-      <div class="catalog-tools" role="group" aria-label="Filtrar catálogo">
-        <button class="chip active" data-filter="all">Todo</button>
-        <button class="chip" data-filter="visual">Visual</button>
-        <button class="chip" data-filter="altura">Altura</button>
-        <button class="chip" data-filter="operacional">Operacional</button>
-      </div>
-      <div class="catalog" id="catalog">
-        <article class="product" data-cat="visual">
-          <figure><img src="https://www.lioi.cl/cdn/shop/files/combate_blue_PRINCIPAL.jpg?v=1755697643&width=1200" alt="Lente Combate" /></figure>
-          <div class="copy">
-            <div class="top"><span class="badge">Visual</span><small>LIOI · Kbeen</small></div>
-            <h3>Lente Combate</h3>
-            <p>Lente de seguridad con correa de sujeción para antiparra y protección de sellado al rostro.</p>
-            <small>Buen producto para una venta con más argumento técnico.</small>
-            <div class="actions"><button class="add" data-item="Lente Combate">Agregar</button><button class="ask" type="button" data-open-ai data-ai-product="lioi-combate">Consultar con IA</button></div>
-          </div>
-        </article>
-        <article class="product" data-cat="visual">
-          <figure><img src="https://www.lioi.cl/cdn/shop/files/053201214_L-300_GRIS.jpg?v=1755697651&width=800" alt="Lente L-300" /></figure>
-          <div class="copy">
-            <div class="top"><span class="badge">Visual</span><small>LIOI · Kbeen</small></div>
-            <h3>Lente L-300</h3>
-            <p>Alternativa simple de seguridad visual para reposiciones frecuentes y compras de volumen.</p>
-            <small>Sirve para abrir cuentas que después pueden ampliar su mix.</small>
-            <div class="actions"><button class="add" data-item="Lente L-300">Agregar</button><button class="ask" type="button" data-open-ai data-ai-product="lioi-l300">Consultar con IA</button></div>
-          </div>
-        </article>
-        <article class="product" data-cat="operacional">
-          <figure><img src="https://www.lioi.cl/cdn/shop/files/053201676_2.jpg?v=1755697281&width=800" alt="Candado dieléctrico" /></figure>
-          <div class="copy">
-            <div class="top"><span class="badge">LOTO</span><small>LIOI · Kbeen</small></div>
-            <h3>Candado dieléctrico</h3>
-            <p>Elemento de bloqueo para control de energías peligrosas y procedimientos de mantención.</p>
-            <small>Entrada concreta para construir venta de seguridad operacional.</small>
-            <div class="actions"><button class="add" data-item="Candado dieléctrico">Agregar</button><button class="ask" type="button" data-open-ai data-ai-product="lioi-candado">Consultar con IA</button></div>
-          </div>
-        </article>
-        <article class="product" data-cat="altura">
-          <figure><img src="https://www.lioi.cl/cdn/shop/files/053100415RETRACTILDOBLEENCINTAKL-9300TWIN.jpg?v=1755697620&width=800" alt="Retráctil doble en cinta KL-9300 TWIN" /></figure>
-          <div class="copy">
-            <div class="top"><span class="badge">Altura</span><small>LIOI · Kbeen</small></div>
-            <h3>Retráctil doble KL-9300 TWIN</h3>
-            <p>Sistema retráctil para protección en altura, útil para requerimientos técnicos con más especificación.</p>
-            <small>Permite ampliar a una línea completa de altura.</small>
-            <div class="actions"><button class="add" data-item="Retráctil doble KL-9300 TWIN">Agregar</button><button class="ask" type="button" data-open-ai data-ai-product="lioi-retractil">Consultar con IA</button></div>
-          </div>
-        </article>
-
-        <article class="product" data-cat="visual">
-          <figure><img src="https://www.acetogen.cl/cdn/shop/files/LENTE_BLACKBULL_B600_8822a254-2be0-4eec-a7a5-8ec11adac741.jpg?v=1777304240&width=900" alt="Lente Black Bull B600" loading="lazy" /></figure>
-          <div class="copy">
-            <div class="top"><span class="badge">Visual</span><small>Acetogen · Black Bull</small></div>
-            <h3>Lente Black Bull B600</h3>
-            <p>Protección ocular para industria y construcción, con montura ergonómica y protección lateral.</p>
-            <small>SKU 441010780031 · colores y disponibilidad según proveedor.</small>
-            <div class="actions"><button class="add" data-item="Lente Black Bull B600">Agregar</button><button class="ask" type="button" data-open-ai data-ai-product="acetogen-b600">Consultar con IA</button></div>
-          </div>
-        </article>
-        <article class="product" data-cat="visual">
-          <figure><img src="https://libus.cl/media/catalog/product/cache/8c8d34078b36c1ef38bfd913031288cb/a/n/antiparra-seguridad-new-classic-transparente-001_2.jpg" alt="Antiparra de seguridad Libus New Classic transparente" loading="lazy" /></figure>
-          <div class="copy">
-            <div class="top"><span class="badge">Visual</span><small>Libus</small></div>
-            <h3>Antiparra New Classic</h3>
-            <p>Protección frontal y lateral con lente de policarbonato, filtro UV y correa elástica regulable.</p>
-            <small>Referencia transparente AF · consultar disponibilidad.</small>
-            <div class="actions"><button class="add" data-item="Antiparra Libus New Classic">Agregar</button><button class="ask" type="button" data-open-ai data-ai-product="libus-newclassic">Consultar con IA</button></div>
-          </div>
-        </article>
-        <article class="product" data-cat="altura">
-          <figure><img src="https://chilesin.cl/wp-content/uploads/2024/08/RETRACTIL-CABLE-DE-ACERO-10%20METROS-600x600.jpg" alt="Retráctil de cable de acero 10 metros Chilesin" loading="lazy" /></figure>
-          <div class="copy">
-            <div class="top"><span class="badge">Altura</span><small>Chilesin</small></div>
-            <h3>Retráctil RETA-710 · 10 m</h3>
-            <p>Sistema personal contra caídas con cable galvanizado de hasta 10 metros y freno interno de bloqueo.</p>
-            <small>EN 360:2002 · validar aplicación y punto de anclaje antes de cotizar.</small>
-            <div class="actions"><button class="add" data-item="Retráctil Chilesin RETA-710">Agregar</button><button class="ask" type="button" data-open-ai data-ai-product="chilesin-reta710">Consultar con IA</button></div>
-          </div>
-        </article>
-      </div>
+    <div class="brands">
+      <div class="brand-card"><strong>LIOI / Kbeen</strong><span>Protección visual, trabajo en altura, bloqueo LOTO y otras líneas de seguridad industrial.</span></div>
+      <div class="brand-card"><strong>Acetogen / Black Bull</strong><span>Referencias de protección visual y equipamiento industrial.</span></div>
+      <div class="brand-card"><strong>Libus</strong><span>Protección ocular y familias de EPP con documentación técnica del fabricante.</span></div>
+      <div class="brand-card"><strong>Chilesin</strong><span>Trabajo en altura, arneses, retráctiles y sistemas de protección contra caídas.</span></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="section">
-    <div class="shell">
-      <div class="section-head">
-        <div><div class="kicker">04 · Proveedores base</div><h2>La red que sostiene el catálogo.</h2></div>
-        <p class="muted">La página reconoce a los proveedores como base del portafolio. No se ocultan: se integran como sustento comercial del proyecto.</p>
+<section class="section" id="cotizar">
+  <div class="shell quote">
+    <div class="quote-copy"><div class="kicker">Solicitud comercial</div><h2>Cuéntanos qué necesita tu operación.</h2><p>Selecciona productos o describe el requerimiento. La información se ordena para que la conversación comercial parta con contexto y no desde cero.</p></div>
+    <div class="quote-box">
+      <div class="selected" id="selected"><span class="empty">Aún no has agregado productos</span></div>
+      <div class="form-grid">
+        <div class="field"><label for="empresa">Empresa</label><input id="empresa" placeholder="Nombre de la empresa" /></div>
+        <div class="field"><label for="contacto">Área / contacto</label><input id="contacto" placeholder="Abastecimiento, Prevención, Mantención..." /></div>
+        <div class="field"><label for="faena">Faena / proyecto</label><input id="faena" placeholder="Faena, planta o proyecto" /></div>
+        <div class="field"><label for="cantidad">Cantidad referencial</label><input id="cantidad" placeholder="Ej. 50 unidades" /></div>
+        <div class="field full"><label for="detalle">Detalle del requerimiento</label><textarea id="detalle" placeholder="Marca exigida, aplicación, norma requerida, fecha necesaria, talla, color de lente, punto de anclaje u otro antecedente relevante."></textarea></div>
       </div>
-      <div class="suppliers">
-        <article class="supplier"><b>Acetogen</b><span>Referencia para protección visual y levantamiento de surtido del área seguridad.</span></article>
-        <article class="supplier"><b>LIOI</b><span>Base visible para visual, altura y LOTO. De aquí salen los productos reales ya integrados.</span></article>
-        <article class="supplier"><b>Libus</b><span>Proveedor relevante para ocular y antiparras; deja abierta una expansión futura del surtido.</span></article>
-        <article class="supplier"><b>Chilesin</b><span>Referencia para profundizar líneas de altura, anclaje y detención de caídas.</span></article>
-      </div>
+      <div class="hero-actions" style="margin-top:16px"><button class="btn" id="prepare" type="button">Preparar solicitud</button><button class="btn alt" id="copy" type="button">Copiar resumen</button></div>
+      <div class="summary" id="summary"></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="section" id="cotizar">
-    <div class="shell quote-grid">
-      <div class="quote-copy">
-        <div class="kicker">05 · Mesa de requerimiento</div>
-        <h2>De la selección a la solicitud.</h2>
-        <p class="muted">Esta parte transforma la exploración en un resumen comercial claro. Sigue siendo demostrativa, pero ya conversa mejor con una operación real.</p>
-      </div>
-      <div class="quote-box">
-        <div class="selected" id="selected"><span class="empty">Aún no has agregado productos</span></div>
-        <div class="form-grid">
-          <div class="field"><label for="empresa">Empresa</label><input id="empresa" placeholder="Nombre de la empresa" /></div>
-          <div class="field"><label for="contacto">Contacto</label><input id="contacto" placeholder="Nombre y cargo" /></div>
-          <div class="field"><label for="faena">Faena / proyecto</label><input id="faena" placeholder="Proyecto, planta o faena" /></div>
-          <div class="field"><label for="cantidad">Cantidad referencial</label><input id="cantidad" placeholder="Ej. 20 unidades" /></div>
-          <div class="field full"><label for="detalle">Detalle técnico</label><textarea id="detalle" placeholder="Marca solicitada, aplicación, fecha requerida, color de lente, punto de anclaje, procedimiento LOTO u otro dato importante."></textarea></div>
-        </div>
-        <div class="hero-actions" style="margin-top:18px">
-          <button class="btn" id="prepare" type="button">Preparar solicitud</button>
-          <button class="btn alt" id="copy" type="button">Copiar resumen</button>
-        </div>
-        <div class="summary" id="summary"></div>
-        <p class="note">Prototipo navegable. Antes de publicar de forma operativa conviene conectar correo, WhatsApp, fichas técnicas y seguimiento de cotizaciones.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="final">
-    <div class="shell final-grid">
-      <div>
-        <div class="eyebrow">MSC Safety · Quality Service</div>
-        <h2>Explorar, orientar, cotizar y volver a responder.</h2>
-      </div>
-      <div>
-        <p>Esta versión baja el tono “plantilla”, sube la presencia de fotografía real y recupera el recurso de IA de MOVE para darle más carácter propio al proyecto.</p>
-        <div class="hero-actions"><a class="btn" href="#catalogo">Ver catálogo</a><button class="btn alt" type="button" data-open-ai>Probar MSC Select</button></div>
-      </div>
-    </div>
-  </section>
+<section class="final"><div class="shell final-grid"><div><div class="micro">MSC Safety · Quality Service</div><h2>Seguridad que acompaña la operación.</h2></div><div><p>Protección visual, trabajo en altura y seguridad operacional con foco en respuesta comercial, documentación y continuidad.</p><div class="hero-actions"><a class="btn" href="#cotizar">Solicitar cotización</a><button class="btn alt" type="button" data-open-ai>Orientar requerimiento</button></div></div></div></section>
 </main>
 
 <a class="floating" href="#cotizar">Solicitud <b id="count">0</b></a>
 
-
 <div class="modal" id="aiModal" aria-hidden="true">
-  <div class="modal-box ai-chat" role="dialog" aria-modal="true" aria-labelledby="aiTitle">
-    <div class="modal-head">
-      <div>
-        <div class="eyebrow">MSC Select · IA</div>
-        <h3 id="aiTitle">¿Qué necesitas resolver?</h3>
-        <p>Compara productos, aclara diferencias y prepara una ruta de cotización usando el mismo recurso de IA que MOVE.</p>
-      </div>
-      <button class="close" type="button" data-close-ai>×</button>
-    </div>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="aiTitle">
+    <div class="modal-head"><div><div class="micro">Asesor MSC · asistencia inteligente</div><h3 id="aiTitle">Ordenemos el requerimiento.</h3><p>Compara referencias, aclara diferencias y detecta qué dato técnico conviene validar antes de cotizar.</p></div><button class="close" type="button" data-close-ai>×</button></div>
     <div class="ai-context" id="aiContext" hidden></div>
-    <div class="ai-log" id="aiLog" role="log" aria-live="polite" aria-label="Conversación con MSC Select"></div>
+    <div class="ai-log" id="aiLog" role="log" aria-live="polite"></div>
     <div class="ai-suggestions" id="aiSuggestions"></div>
-    <form class="ai-form" id="aiForm">
-      <textarea id="aiInput" rows="2" maxlength="1000" placeholder="Ej.: necesito comparar lentes para una faena con polvo y trabajo exterior"></textarea>
-      <button class="btn" id="aiSend" type="submit">Enviar</button>
-    </form>
-    <p class="note">MSC Select orienta la compra con información del catálogo. La selección final debe validar ficha técnica, certificación, compatibilidad, stock y condiciones del proveedor.</p>
+    <form class="ai-form" id="aiForm"><textarea id="aiInput" maxlength="1000" placeholder="Ej.: necesito comparar antiparras para una faena con polvo y trabajo exterior"></textarea><button class="btn" id="aiSend" type="submit">Enviar</button></form>
+    <p class="note">La orientación no sustituye la revisión de ficha técnica, normativa aplicable, compatibilidad del sistema ni validación profesional de seguridad.</p>
   </div>
 </div>
 
-<footer class="footer"><div class="shell"><span>MSC Safety · propuesta comercial 2026</span><span>Desarrollado como prototipo por Núcleo Vivo</span></div></footer>
-
+<footer class="footer"><div class="shell"><span>© 2026 MSC Safety · Seguridad industrial y minera</span><span>Chile · Atención comercial B2B</span></div></footer>
 <script>
 (()=>{
   const chosen=[], selected=document.getElementById('selected'), count=document.getElementById('count'), summary=document.getElementById('summary');
@@ -434,7 +220,7 @@ img{max-width:100%;display:block}
     'lioi-combate':{name:'Lente Combate',vendor:'LIOI · Kbeen'},'lioi-l300':{name:'Lente L-300',vendor:'LIOI · Kbeen'},
     'lioi-candado':{name:'Candado dieléctrico',vendor:'LIOI · Kbeen'},'lioi-retractil':{name:'Retráctil doble KL-9300 TWIN',vendor:'LIOI · Kbeen'},
     'acetogen-b600':{name:'Lente Black Bull B600',vendor:'Acetogen · Black Bull'},'libus-newclassic':{name:'Antiparra New Classic',vendor:'Libus'},
-    'chilesin-reta710':{name:'Retráctil RETA-710 · 10 m',vendor:'Chilesin'}
+    'chilesin-reta710':{name:'Retráctil RETA-710 · 10 m',vendor:'Chilesin'},'acetogen-b300':{name:'Lente Black Bull B300',vendor:'Acetogen · Black Bull'},'libus-aviator':{name:'Antiparra Aviator',vendor:'Libus'},'chilesin-harness4x':{name:'Arnés 4 Argollas en X Profesional',vendor:'Chilesin'}
   };
   const routeData={
     visual:{title:'Protección visual de alta rotación.',text:'Empieza por el ambiente de trabajo y el nivel de cobertura antes de comparar modelos.',bullets:['Lente L-300 para una ruta simple de reposición.','Lente Combate cuando interesa mayor cobertura y sellado.','Black Bull B600 y New Classic amplían la comparación entre proveedores.']},
