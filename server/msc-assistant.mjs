@@ -87,6 +87,42 @@ export const catalog = [
       'El proveedor publica norma EN 360:2002 y certificación SGS Reino Unido Limited.'
     ],
     source: 'https://chilesin.cl/producto/retractil-cable-de-acero-10-metros/'
+  },
+  {
+    id: 'acetogen-b300',
+    name: 'Lente Black Bull B300',
+    vendor: 'Acetogen · Black Bull',
+    category: 'Protección visual',
+    facts: [
+      'El proveedor lo describe como un lente de seguridad con lentes resistentes a impactos.',
+      'SKU publicado: 441010790031.',
+      'El proveedor publica variantes claro y gris y disponibilidad variable.'
+    ],
+    source: 'https://www.acetogen.cl/products/lente-black-bull-b300'
+  },
+  {
+    id: 'libus-aviator',
+    name: 'Antiparra de seguridad Aviator',
+    vendor: 'Libus',
+    category: 'Protección visual',
+    facts: [
+      'Antiparra flexible de uso general con protección frontal y lateral.',
+      'El proveedor declara lente de policarbonato y filtro UV.',
+      'El proveedor publica ANSI Z87.1 e IRAM EN166 para esta referencia.'
+    ],
+    source: 'https://libus.cl/ocular/antiparra-de-seguridad-aviator.html'
+  },
+  {
+    id: 'chilesin-harness4x',
+    name: 'Arnés 4 Argollas en X Profesional',
+    vendor: 'Chilesin',
+    category: 'Trabajo en altura',
+    facts: [
+      'Modelo APA4A-P2XB0B00 para trabajos en altura.',
+      'El proveedor describe diseño ergonómico de tres regulaciones, cinta plana bicolor de poliéster de 45 mm y cuatro argollas metálicas.',
+      'El proveedor publica certificación ANSI/ASSP Z359.11.'
+    ],
+    source: 'https://chilesin.cl/producto/arnes-4-argollas-en-x-profesional/'
   }
 ];
 
@@ -130,11 +166,11 @@ const schema = {
   required: ['message', 'intent', 'products', 'followUp']
 };
 
-export const systemPrompt = `Eres MSC Select, asistente comercial de MSC Safety dentro de un prototipo de Núcleo Vivo. Hablas en español claro, breve y profesional. Tu función es ayudar a comparar productos del catálogo, ordenar un requerimiento y preparar una conversación de cotización. La respuesta debe ser JSON según el esquema; message es texto plano sin Markdown ni HTML.
+export const systemPrompt = `Eres Asesor MSC, asistente comercial inteligente de MSC Safety. Hablas en español claro, breve y profesional. Tu función es ayudar a comparar productos del catálogo, ordenar un requerimiento y preparar una conversación de cotización. La respuesta debe ser JSON según el esquema; message es texto plano sin Markdown ni HTML.
 
 REGLAS:
 - Usa sólo los productos y hechos incluidos en el catálogo de referencia. Nunca inventes stock, precio, plazo, ficha técnica, certificación, marca, material, norma, compatibilidad, garantía o representación comercial.
-- MSC Safety trabaja con los proveedores mostrados como base del portafolio, pero este prototipo no debe afirmar distribución exclusiva ni representación oficial.
+- MSC Safety trabaja con los proveedores mostrados como base del portafolio. No afirmes distribución exclusiva, representación oficial ni condiciones comerciales que no estén explícitamente confirmadas.
 - Para protección en altura, LOTO u otros elementos críticos de seguridad, no determines por chat que un equipo es apto para una tarea específica. Puedes explicar diferencias publicadas, pero debes pedir o recomendar validar la ficha técnica, el sistema completo, el procedimiento y la compatibilidad antes de cerrar una compra.
 - Si faltan datos esenciales para una comparación técnica, haz una sola pregunta útil. Ejemplos: ambiente de trabajo, riesgo, tipo de tarea, sistema existente, norma requerida, cantidad o marca obligatoria.
 - Si la persona busca comparar, puedes proponer hasta 3 referencias. No priorices por precio porque no hay precios confirmados en este prototipo.
