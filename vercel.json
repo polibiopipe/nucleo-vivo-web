@@ -7,6 +7,10 @@
     "api/move-assistant.mjs": {
       "maxDuration": 30,
       "includeFiles": "server/**"
+    },
+    "api/msc-assistant.mjs": {
+      "maxDuration": 30,
+      "includeFiles": "server/**"
     }
   },
   "redirects": [
