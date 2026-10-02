@@ -112,6 +112,34 @@ url('https://plus.unsplash.com/premium_photo-1682141670000-1504b9eda6c3?auto=for
 
 .catalog-modal{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.76);display:none;padding:20px}.catalog-modal.show{display:grid;place-items:center}.catalog-modal-box{width:min(640px,100%);max-height:90vh;overflow:auto;background:#101519;border:1px solid #3a4147;border-radius:8px;padding:24px;box-shadow:0 28px 90px rgba(0,0,0,.5)}.catalog-modal-head{display:flex;justify-content:space-between;gap:15px;align-items:start;margin-bottom:15px}.catalog-modal-head h3{margin:4px 0;font-size:24px}.catalog-modal-head p{margin:0;color:#8f979e;font-size:12px}.catalog-modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:15px}.portal-status{display:inline-flex;align-items:center;gap:6px}.portal-status:before{content:"";width:7px;height:7px;border-radius:50%;background:#7b858d}.portal-status.on:before{background:#4ec980;box-shadow:0 0 10px rgba(78,201,128,.35)}
 
+
+/* ===== Corrección de ancho y composición módulos v3 ===== */
+html,body{max-width:100%;overflow-x:hidden}
+.app{width:100%;max-width:100vw;overflow-x:hidden}
+.main,.content,.view,.panel,.formbox,.viz-card,.split-2>*,.split-3>*,.report-grid>*{min-width:0}
+.content{max-width:100%;overflow-x:hidden}
+.split-2{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.split-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.report-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)}
+.table-wrap{width:100%;max-width:100%;overflow-x:auto}
+table{max-width:100%}
+#view-proveedores .module-hero{margin-bottom:12px}
+#view-proveedores .module-kpis{margin-bottom:12px}
+.provider-stack{display:grid;grid-template-columns:1fr;gap:12px}
+.provider-formbox{padding:18px 20px}
+.provider-formbox .panel-intro{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:14px}
+.provider-formbox .panel-intro h2{margin:0 0 4px;font-size:19px}
+.provider-formbox .panel-intro p{margin:0;color:#8f979e;font-size:12px}
+.provider-formgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 14px}
+.provider-formgrid .field{margin:0}
+.provider-formgrid .field input,.provider-formgrid .field select{min-height:42px;padding:10px 11px}
+.provider-formgrid .provider-action{grid-column:1/-1;display:flex;justify-content:flex-end;align-items:center;gap:10px;padding-top:2px}
+.provider-directory{margin-top:0!important}
+.provider-directory table{min-width:720px}
+#view-proveedores .module-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1250px){.provider-formgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.provider-formgrid{grid-template-columns:1fr}.provider-formgrid .provider-action{justify-content:stretch}.provider-formgrid .provider-action .btn{width:100%}#view-proveedores .module-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 </style>
 </head>
 <body>
@@ -359,10 +387,32 @@ url('https://plus.unsplash.com/premium_photo-1682141670000-1504b9eda6c3?auto=for
       
       <section class="view" id="view-proveedores">
         <div class="module-hero"><div><div class="module-tag">Abastecimiento</div><h1>Proveedores</h1><p>Precios, plazos, calidad y desempeño de suministro.</p></div></div>
-        <div class="module-kpis"><div class="module-kpi"><span>Proveedores activos</span><strong id="kSuppliers">0</strong></div><div class="module-kpi"><span>OC abiertas</span><strong id="kOpenPO">0</strong></div><div class="module-kpi"><span>OC atrasadas</span><strong id="kLatePO">0</strong></div><div class="module-kpi"><span>Evaluación promedio</span><strong id="kSupplierScore">—</strong></div></div>
-        <div class="split-2">
-          <div class="formbox"><h2>Nuevo proveedor</h2><form id="supplierForm" class="formgrid"><div class="field"><label>RUT</label><input name="rut"></div><div class="field"><label>Razón social</label><input name="name" required></div><div class="field"><label>Contacto</label><input name="contact_name"></div><div class="field"><label>Email</label><input name="email" type="email"></div><div class="field"><label>Teléfono</label><input name="phone"></div><div class="field"><label>Lead time días</label><input name="lead_time_days" type="number" min="0"></div><div class="field"><label>Calidad 1–5</label><input name="quality_rating" type="number" min="1" max="5" step=".1"></div><div class="field"><label>Entrega 1–5</label><input name="delivery_rating" type="number" min="1" max="5" step=".1"></div><div class="field"><label>Precio 1–5</label><input name="price_rating" type="number" min="1" max="5" step=".1"></div><div class="full"><button class="btn" type="submit">Guardar proveedor</button></div></form></div>
-          <div class="panel" style="margin-top:0"><div class="panel-head"><h2>Directorio</h2></div><div class="table-wrap"><table><thead><tr><th>Proveedor</th><th>RUT</th><th>Plazo</th><th>Score</th><th>Estado</th></tr></thead><tbody id="supplierRows"></tbody></table></div></div>
+        <div class="module-kpis">
+          <div class="module-kpi"><span>Proveedores activos</span><strong id="kSuppliers">0</strong></div>
+          <div class="module-kpi"><span>OC abiertas</span><strong id="kOpenPO">0</strong></div>
+          <div class="module-kpi"><span>OC atrasadas</span><strong id="kLatePO">0</strong></div>
+          <div class="module-kpi"><span>Evaluación promedio</span><strong id="kSupplierScore">—</strong></div>
+        </div>
+        <div class="provider-stack">
+          <div class="formbox provider-formbox">
+            <div class="panel-intro"><div><h2>Nuevo proveedor</h2><p>Registra los datos comerciales y una evaluación simple para comparar alternativas de abastecimiento.</p></div><span class="module-tag">Ficha de proveedor</span></div>
+            <form id="supplierForm" class="provider-formgrid">
+              <div class="field"><label>RUT</label><input name="rut" placeholder="76.123.456-7"></div>
+              <div class="field"><label>Razón social</label><input name="name" placeholder="Nombre o razón social" required></div>
+              <div class="field"><label>Contacto</label><input name="contact_name" placeholder="Nombre contacto"></div>
+              <div class="field"><label>Email</label><input name="email" type="email" placeholder="contacto@proveedor.cl"></div>
+              <div class="field"><label>Teléfono</label><input name="phone" placeholder="+56 9 ..."></div>
+              <div class="field"><label>Lead time · días</label><input name="lead_time_days" type="number" min="0" placeholder="Ej. 5"></div>
+              <div class="field"><label>Calidad · 1 a 5</label><input name="quality_rating" type="number" min="1" max="5" step=".1" placeholder="5.0"></div>
+              <div class="field"><label>Cumplimiento entrega · 1 a 5</label><input name="delivery_rating" type="number" min="1" max="5" step=".1" placeholder="5.0"></div>
+              <div class="field"><label>Competitividad precio · 1 a 5</label><input name="price_rating" type="number" min="1" max="5" step=".1" placeholder="5.0"></div>
+              <div class="provider-action"><button class="btn" type="submit">Guardar proveedor</button></div>
+            </form>
+          </div>
+          <div class="panel provider-directory">
+            <div class="panel-head"><div><h2>Directorio de proveedores</h2><span class="muted">Comparación rápida por plazo y desempeño</span></div></div>
+            <div class="table-wrap"><table><thead><tr><th>Proveedor</th><th>RUT</th><th>Plazo</th><th>Score</th><th>Estado</th></tr></thead><tbody id="supplierRows"></tbody></table></div>
+          </div>
         </div>
       </section>
 
