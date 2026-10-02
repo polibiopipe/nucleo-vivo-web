@@ -11,18 +11,24 @@
           var params=new URLSearchParams(hash.replace(/^#/,''));
           var type=params.get('type')||'';
           var token=params.get('access_token')||'';
-          var isMsc=type==='recovery';
-          if(token&&!isMsc){
+          var target='';
+          if(token){
             try{
               var payload=JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
-              isMsc=Boolean(payload&&(
+              if(payload&&payload.user_metadata&&payload.user_metadata.msc_customer_portal===true){
+                target='/prototipos/msc-safety/';
+              }else if(type==='recovery'||payload&&(
                 payload.app_metadata&&payload.app_metadata.msc_role ||
                 payload.user_metadata&&payload.user_metadata.msc_access===true
-              ));
-            }catch(_){}
+              )){
+                target='/prototipos/msc-safety/gestion/';
+              }
+            }catch(_){
+              if(type==='recovery')target='/prototipos/msc-safety/gestion/';
+            }
           }
-          if(isMsc){
-            window.location.replace('/prototipos/msc-safety/gestion/'+hash);
+          if(target){
+            window.location.replace(target+hash);
           }
         }catch(_){}
       })();
