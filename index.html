@@ -3,6 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function(){
+        try{
+          var hash=window.location.hash||'';
+          if(!hash||hash.indexOf('access_token=')===-1)return;
+          var params=new URLSearchParams(hash.replace(/^#/,''));
+          var type=params.get('type')||'';
+          var token=params.get('access_token')||'';
+          var isMsc=type==='recovery';
+          if(token&&!isMsc){
+            try{
+              var payload=JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+              isMsc=Boolean(payload&&(
+                payload.app_metadata&&payload.app_metadata.msc_role ||
+                payload.user_metadata&&payload.user_metadata.msc_access===true
+              ));
+            }catch(_){}
+          }
+          if(isMsc){
+            window.location.replace('/prototipos/msc-safety/gestion/'+hash);
+          }
+        }catch(_){}
+      })();
+    </script>
     <meta
       name="description"
       content="Consultoría tecnológica, comercial y organizacional, inteligencia artificial aplicada y aprendizaje para empresas, universidades, colegios y otras organizaciones. Personas al centro."
