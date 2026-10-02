@@ -98,6 +98,17 @@ url('https://plus.unsplash.com/premium_photo-1682141670000-1504b9eda6c3?auto=for
 @media(max-width:1180px){.premium-kpis{grid-template-columns:repeat(3,1fr)}}
 @media(max-height:760px) and (min-width:1051px){.side-foot{display:none}.side:after{height:120px;opacity:.12}}
 
+
+/* ===== Módulos de gestión MSC Safety ===== */
+.nav{overflow-y:auto;scrollbar-width:thin;scrollbar-color:#4d3b18 transparent}
+.module-hero{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding:22px 24px;margin-bottom:14px;border:1px solid rgba(226,191,109,.18);border-radius:8px;background:linear-gradient(110deg,rgba(201,155,61,.10),transparent 48%),#0e1419}
+.module-hero h1{margin:0 0 5px;font-size:26px}.module-hero p{margin:0;color:#969fa6}.module-tag{color:var(--gold2);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.module-kpis{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:10px;margin-bottom:14px}.module-kpi{border:1px solid rgba(255,255,255,.08);background:#0f151a;border-radius:8px;padding:15px}.module-kpi span{display:block;color:#8e969d;font-size:9px;text-transform:uppercase;letter-spacing:.09em}.module-kpi strong{display:block;font-size:24px;margin-top:4px}
+.split-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.split-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.status-light{display:inline-flex;align-items:center;gap:6px;font-size:10px}.status-light:before{content:"";width:8px;height:8px;border-radius:50%;background:#77818a}.status-light.green:before{background:#4cca80;box-shadow:0 0 12px rgba(76,202,128,.35)}.status-light.yellow:before{background:#e1ae45;box-shadow:0 0 12px rgba(225,174,69,.28)}.status-light.red:before{background:#e56f63;box-shadow:0 0 12px rgba(229,111,99,.28)}
+.report-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}.risk-list{display:grid;gap:8px}.risk-row{display:grid;grid-template-columns:1fr auto;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}.risk-row small{display:block;color:#79828a}
+@media(max-width:1100px){.split-3,.split-2,.report-grid{grid-template-columns:1fr}.module-kpis{grid-template-columns:repeat(2,1fr)}}
+
 </style>
 </head>
 <body>
@@ -154,6 +165,11 @@ url('https://plus.unsplash.com/premium_photo-1682141670000-1504b9eda6c3?auto=for
       <button data-view="documentos"><span class="nav-ico">▤</span><span>Facturas</span></button>
       <button data-view="movimientos"><span class="nav-ico">⇄</span><span>Movimientos</span></button>
       <button data-view="ubicaciones"><span class="nav-ico">⌂</span><span>Bodega</span></button>
+      <button data-view="proveedores"><span class="nav-ico">◉</span><span>Proveedores</span></button>
+      <button data-view="compras"><span class="nav-ico">⇣</span><span>Compras / OC</span></button>
+      <button data-view="cumplimiento"><span class="nav-ico">✓</span><span>Cumplimiento</span></button>
+      <button data-view="clientes"><span class="nav-ico">◎</span><span>Clientes / pedidos</span></button>
+      <button data-view="reportes"><span class="nav-ico">▥</span><span>Reportes</span></button>
     </nav>
     <div class="side-foot"><b>SEGURIDAD · INVENTARIO · CONFIANZA</b>MSC Safety · Quality Service<br><span style="opacity:.65">Gestión operativa</span></div>
   </aside>
@@ -331,8 +347,64 @@ url('https://plus.unsplash.com/premium_photo-1682141670000-1504b9eda6c3?auto=for
 
       <section class="view" id="view-movimientos"><div class="panel"><div class="panel-head"><h2>Kardex de movimientos</h2></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>SKU</th><th>Producto</th><th>Tipo</th><th>Cantidad</th><th>Documento</th></tr></thead><tbody id="movementRows"></tbody></table></div></div></section>
 
-      <section class="view" id="view-ubicaciones">
-        <div class="grid2"><div class="formbox"><h2>Nueva ubicación</h2><form id="locationForm"><div class="field"><label>Código</label><input name="code" placeholder="A-02-03-04" required></div><div class="field"><label>Descripción</label><input name="label" placeholder="Pasillo A · Rack 02 · Nivel 03 · Posición 04"></div><button class="btn" type="submit">Crear ubicación</button><span id="locationMsg" class="msg"></span></form></div><div class="formbox"><h2>Lógica sugerida</h2><p class="sku">PASILLO-RACK-NIVEL-POSICIÓN</p><p class="muted">Ejemplo: A-02-03-04. El SKU identifica el producto; este código identifica dónde está.</p></div></div>
+      
+      <section class="view" id="view-proveedores">
+        <div class="module-hero"><div><div class="module-tag">Abastecimiento</div><h1>Proveedores</h1><p>Precios, plazos, calidad y desempeño de suministro.</p></div></div>
+        <div class="module-kpis"><div class="module-kpi"><span>Proveedores activos</span><strong id="kSuppliers">0</strong></div><div class="module-kpi"><span>OC abiertas</span><strong id="kOpenPO">0</strong></div><div class="module-kpi"><span>OC atrasadas</span><strong id="kLatePO">0</strong></div><div class="module-kpi"><span>Evaluación promedio</span><strong id="kSupplierScore">—</strong></div></div>
+        <div class="split-2">
+          <div class="formbox"><h2>Nuevo proveedor</h2><form id="supplierForm" class="formgrid"><div class="field"><label>RUT</label><input name="rut"></div><div class="field"><label>Razón social</label><input name="name" required></div><div class="field"><label>Contacto</label><input name="contact_name"></div><div class="field"><label>Email</label><input name="email" type="email"></div><div class="field"><label>Teléfono</label><input name="phone"></div><div class="field"><label>Lead time días</label><input name="lead_time_days" type="number" min="0"></div><div class="field"><label>Calidad 1–5</label><input name="quality_rating" type="number" min="1" max="5" step=".1"></div><div class="field"><label>Entrega 1–5</label><input name="delivery_rating" type="number" min="1" max="5" step=".1"></div><div class="field"><label>Precio 1–5</label><input name="price_rating" type="number" min="1" max="5" step=".1"></div><div class="full"><button class="btn" type="submit">Guardar proveedor</button></div></form></div>
+          <div class="panel" style="margin-top:0"><div class="panel-head"><h2>Directorio</h2></div><div class="table-wrap"><table><thead><tr><th>Proveedor</th><th>RUT</th><th>Plazo</th><th>Score</th><th>Estado</th></tr></thead><tbody id="supplierRows"></tbody></table></div></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-compras">
+        <div class="module-hero"><div><div class="module-tag">Reposición</div><h1>Compras y órdenes</h1><p>Convierte sugerencias de reposición en órdenes trazables.</p></div></div>
+        <div class="split-2">
+          <div class="formbox"><h2>Nueva orden de compra</h2><form id="purchaseOrderForm"><div class="field"><label>Proveedor</label><select name="supplier_id" id="poSupplier" required></select></div><div class="field"><label>Producto</label><select name="product_id" id="poProduct" required></select></div><div class="field"><label>Cantidad</label><input name="quantity" type="number" min=".001" step=".001" required></div><div class="field"><label>Costo unitario neto</label><input name="unit_cost" type="number" min="0" step=".01" required></div><div class="field"><label>Fecha esperada</label><input name="expected_date" type="date"></div><button class="btn" type="submit">Crear OC</button></form></div>
+          <div class="panel" style="margin-top:0"><div class="panel-head"><h2>Órdenes recientes</h2></div><div class="table-wrap"><table><thead><tr><th>OC</th><th>Proveedor</th><th>Fecha</th><th>Esperada</th><th>Total neto</th><th>Estado</th></tr></thead><tbody id="poRows"></tbody></table></div></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-cumplimiento">
+        <div class="module-hero"><div><div class="module-tag">Seguridad y trazabilidad</div><h1>Cumplimiento</h1><p>Certificados, lotes, vencimientos e inspecciones de EPP.</p></div></div>
+        <div class="module-kpis"><div class="module-kpi"><span>Certificados por vencer</span><strong id="kCertExpiring">0</strong></div><div class="module-kpi"><span>Certificados vencidos</span><strong id="kCertExpired">0</strong></div><div class="module-kpi"><span>Lotes por vencer</span><strong id="kLotsExpiring">0</strong></div><div class="module-kpi"><span>Inspecciones pendientes</span><strong id="kInspectionDue">0</strong></div></div>
+        <div class="split-3">
+          <div class="formbox"><h2>Certificación</h2><form id="certForm"><div class="field"><label>Producto</label><select name="product_id" id="certProduct" required></select></div><div class="field"><label>Tipo / norma</label><input name="certification_type" placeholder="Ej. certificación EPP" required></div><div class="field"><label>Norma</label><input name="standard_name"></div><div class="field"><label>Nº certificado</label><input name="certificate_number"></div><div class="field"><label>Emisor</label><input name="issuer"></div><div class="field"><label>Vencimiento</label><input name="expiry_date" type="date"></div><button class="btn" type="submit">Guardar certificado</button></form></div>
+          <div class="formbox"><h2>Lote / serie</h2><form id="lotForm"><div class="field"><label>Producto</label><select name="product_id" id="lotProduct" required></select></div><div class="field"><label>Lote</label><input name="lot_code"></div><div class="field"><label>Serie</label><input name="serial_number"></div><div class="field"><label>Cantidad</label><input name="quantity" type="number" min="0" step=".001" required></div><div class="field"><label>Vencimiento</label><input name="expiry_date" type="date"></div><div class="field"><label>Estado</label><select name="status"><option value="disponible">Disponible</option><option value="cuarentena">Cuarentena</option><option value="bloqueado">Bloqueado</option></select></div><button class="btn" type="submit">Guardar lote</button></form></div>
+          <div class="formbox"><h2>Inspección</h2><form id="inspectionForm"><div class="field"><label>Producto</label><select name="product_id" id="inspectionProduct" required></select></div><div class="field"><label>Resultado</label><select name="result"><option value="aprobado">Aprobado</option><option value="observacion">Observación</option><option value="rechazado">Rechazado</option></select></div><div class="field"><label>Inspector</label><input name="inspector_name"></div><div class="field"><label>Próxima inspección</label><input name="next_inspection_date" type="date"></div><div class="field"><label>Observaciones</label><textarea name="checklist_notes"></textarea></div><button class="btn" type="submit">Registrar inspección</button></form></div>
+        </div>
+        <div class="panel"><div class="panel-head"><h2>Estado documental</h2></div><div class="table-wrap"><table><thead><tr><th>SKU</th><th>Producto</th><th>Certificación</th><th>Vence</th><th>Lotes</th><th>Aptitud</th></tr></thead><tbody id="complianceRows"></tbody></table></div></div>
+      </section>
+
+      <section class="view" id="view-clientes">
+        <div class="module-hero"><div><div class="module-tag">Comercial</div><h1>Clientes, pedidos y devoluciones</h1><p>Desde el pedido hasta el compromiso de stock y postventa.</p></div></div>
+        <div class="split-3">
+          <div class="formbox"><h2>Nuevo cliente</h2><form id="customerForm"><div class="field"><label>RUT</label><input name="rut"></div><div class="field"><label>Razón social</label><input name="name" required></div><div class="field"><label>Contacto</label><input name="contact_name"></div><div class="field"><label>Email</label><input name="email" type="email"></div><div class="field"><label>Condición de pago</label><input name="payment_terms"></div><div class="field"><label>Descuento base %</label><input name="default_discount_percent" type="number" min="0" step=".01" value="0"></div><button class="btn" type="submit">Guardar cliente</button></form></div>
+          <div class="formbox"><h2>Nuevo pedido</h2><form id="salesOrderForm"><div class="field"><label>Cliente</label><select name="customer_id" id="soCustomer" required></select></div><div class="field"><label>Producto</label><select name="product_id" id="soProduct" required></select></div><div class="field"><label>Cantidad</label><input name="quantity" type="number" min=".001" step=".001" required></div><div class="field"><label>Precio neto unitario</label><input name="unit_price" type="number" min="0" step=".01" required></div><div class="field"><label>Descuento %</label><input name="discount_percent" type="number" min="0" step=".01" value="0"></div><button class="btn" type="submit">Confirmar pedido</button></form></div>
+          <div class="formbox"><h2>Devolución / garantía</h2><form id="returnForm"><div class="field"><label>Cliente</label><select name="customer_id" id="returnCustomer"></select></div><div class="field"><label>Producto</label><select name="product_id" id="returnProduct" required></select></div><div class="field"><label>Cantidad</label><input name="quantity" type="number" min=".001" step=".001" required></div><div class="field"><label>Destino</label><select name="disposition"><option value="revision">Revisión</option><option value="reingreso">Reingreso</option><option value="cuarentena">Cuarentena</option><option value="garantia">Garantía</option><option value="descarte">Descarte</option></select></div><div class="field"><label>Motivo</label><input name="reason"></div><button class="btn" type="submit">Registrar devolución</button></form></div>
+        </div>
+        <div class="panel"><div class="panel-head"><h2>Pedidos recientes</h2></div><div class="table-wrap"><table><thead><tr><th>Pedido</th><th>Cliente</th><th>Fecha</th><th>Total neto</th><th>Estado</th></tr></thead><tbody id="salesOrderRows"></tbody></table></div></div>
+      </section>
+
+      <section class="view" id="view-reportes">
+        <div class="module-hero"><div><div class="module-tag">Gestión</div><h1>Reportes y riesgo</h1><p>Aptitud para vender, rentabilidad, rotación ABC y capital inmovilizado.</p></div></div>
+        <div class="module-kpis"><div class="module-kpi"><span>Aptos para vender</span><strong id="kSellable">0</strong></div><div class="module-kpi"><span>Requieren revisión</span><strong id="kReview">0</strong></div><div class="module-kpi"><span>No despachar</span><strong id="kBlocked">0</strong></div><div class="module-kpi"><span>Capital inmovilizado</span><strong id="kFrozenCapital">$0</strong></div></div>
+        <div class="report-grid">
+          <div class="panel" style="margin-top:0"><div class="panel-head"><h2>Aptitud para vender</h2><span class="muted">Semáforo operativo</span></div><div class="table-wrap"><table><thead><tr><th>SKU</th><th>Producto</th><th>ABC</th><th>Disponible</th><th>Margen</th><th>Estado</th><th>Motivo</th></tr></thead><tbody id="readinessRows"></tbody></table></div></div>
+          <div class="viz-card"><div class="viz-head"><h3>Riesgos próximos</h3><span>60 días</span></div><div class="risk-list" id="riskRows"></div></div>
+        </div>
+        <div class="split-2" style="margin-top:12px">
+          <div class="panel" style="margin-top:0"><div class="panel-head"><h2>Rotación ABC</h2></div><div class="table-wrap"><table><thead><tr><th>Clase</th><th>SKU</th><th>Producto</th><th>Valor movimiento</th></tr></thead><tbody id="abcRows"></tbody></table></div></div>
+          <div class="panel" style="margin-top:0"><div class="panel-head"><h2>Auditoría reciente</h2></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Usuario</th><th>Módulo</th><th>Acción</th></tr></thead><tbody id="auditRows"></tbody></table></div></div>
+        </div>
+      </section>
+
+<section class="view" id="view-ubicaciones">
+        <div class="module-hero"><div><div class="module-tag">Operación física</div><h1>Bodegas y ubicaciones</h1><p>Control por bodega, pasillo, rack, nivel y posición.</p></div></div>
+        <div class="split-2">
+          <div class="formbox"><h2>Nueva bodega</h2><form id="warehouseForm"><div class="field"><label>Código</label><input name="code" placeholder="PRINCIPAL" required></div><div class="field"><label>Nombre</label><input name="name" placeholder="Bodega Principal" required></div><div class="field"><label>Dirección</label><input name="address"></div><button class="btn" type="submit">Crear bodega</button></form></div>
+          <div class="formbox"><h2>Nueva ubicación</h2><form id="locationForm"><div class="field"><label>Bodega</label><select name="warehouse_id" id="locationWarehouse"></select></div><div class="field"><label>Código</label><input name="code" placeholder="A-02-03-04" required></div><div class="field"><label>Descripción</label><input name="label" placeholder="Pasillo A · Rack 02 · Nivel 03 · Posición 04"></div><button class="btn" type="submit">Crear ubicación</button><span id="locationMsg" class="msg"></span></form></div>
+        </div>
         <div class="panel"><div class="panel-head"><h2>Ubicaciones</h2></div><div class="table-wrap"><table><thead><tr><th>Código</th><th>Descripción</th><th>Bodega</th><th>Estado</th></tr></thead><tbody id="locationRows"></tbody></table></div></div>
       </section>
     </div>
