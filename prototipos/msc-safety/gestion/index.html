@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MSC Safety · Gestión interna</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+:root{--bg:#090b0d;--panel:#11151a;--panel2:#171c22;--paper:#f3efe6;--ink:#17191b;--muted:#9b958c;--line:rgba(255,255,255,.11);--gold:#c99b3d;--gold2:#e2bf6d;--ok:#7ec99a;--warn:#e5bd62;--bad:#e5877f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f7f4ed;font:14px/1.5 Arial,sans-serif}button,input,select,textarea{font:inherit}.hidden{display:none!important}
+.login{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 70% 20%,rgba(201,155,61,.15),transparent 30%),#090b0d}
+.login-card{width:min(460px,100%);border:1px solid var(--line);background:linear-gradient(145deg,#14181c,#0c0f11);padding:32px;box-shadow:0 25px 80px rgba(0,0,0,.35)}
+.logo{font-weight:800;letter-spacing:.08em;color:var(--gold2);font-size:12px;text-transform:uppercase}.login h1{font-size:34px;margin:10px 0 8px}.login p{color:#aaa49b;margin:0 0 24px}.field{display:grid;gap:7px;margin:12px 0}.field label{font-size:11px;color:#b7b0a6;text-transform:uppercase;letter-spacing:.1em}.field input,.field select,.field textarea{width:100%;border:1px solid #343a40;background:#0a0c0e;color:#fff;padding:12px}.btn{border:1px solid var(--gold);background:var(--gold);color:#111;padding:11px 14px;font-weight:800;cursor:pointer}.btn.alt{background:transparent;color:#fff;border-color:#3b4147}.btn.danger{border-color:#6f3535;background:#341919;color:#ffd8d8}.msg{margin-top:12px;color:#cfc7bb;font-size:13px}
+.app{min-height:100vh;display:grid;grid-template-columns:245px 1fr}.side{border-right:1px solid var(--line);background:#0d1013;padding:22px 16px;position:sticky;top:0;height:100vh}.brand{padding:4px 8px 22px;border-bottom:1px solid var(--line);margin-bottom:16px}.brand strong{display:block;font-size:20px}.brand span{color:var(--gold2);font-size:11px;text-transform:uppercase;letter-spacing:.12em}.nav button{display:block;width:100%;text-align:left;border:0;background:transparent;color:#bdb7ad;padding:11px 10px;cursor:pointer}.nav button.active{background:#1b2025;color:#fff;border-left:3px solid var(--gold)}.side-foot{position:absolute;bottom:18px;left:16px;right:16px;border-top:1px solid var(--line);padding-top:14px;color:#8e887f;font-size:11px}
+.main{min-width:0}.top{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;border-bottom:1px solid var(--line);background:rgba(9,11,13,.95);position:sticky;top:0;z-index:5}.top b{font-size:17px}.top small{color:#99938a}.content{padding:26px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card{border:1px solid var(--line);background:var(--panel);padding:18px}.card span{color:#9e988f;font-size:11px;text-transform:uppercase;letter-spacing:.08em}.card strong{display:block;font-size:29px;margin-top:7px}.panel{margin-top:16px;border:1px solid var(--line);background:var(--panel)}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line)}.panel-head h2{font-size:17px;margin:0}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.search{border:1px solid #333940;background:#090b0d;color:#fff;padding:9px 11px;min-width:240px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:880px}th,td{text-align:left;padding:11px 12px;border-bottom:1px solid #252a2f}th{color:#aaa49b;font-size:10px;text-transform:uppercase;letter-spacing:.08em;background:#0d1013}td{font-size:12.5px}.sku{font-family:ui-monospace,monospace;color:var(--gold2)}.pill{display:inline-block;padding:4px 7px;border:1px solid #3b4147;font-size:10px}.pill.ok{color:var(--ok);border-color:#31533d}.pill.warn{color:var(--warn);border-color:#5b4b26}.pill.bad{color:var(--bad);border-color:#633331}
+.view{display:none}.view.active{display:block}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.formbox{border:1px solid var(--line);background:var(--panel);padding:18px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}.upload{border:1px dashed #5a4e35;padding:22px;text-align:center;background:#0e1114}.upload input{margin:12px auto;display:block}.review{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}.line{display:grid;grid-template-columns:1fr 90px 150px;gap:8px;padding:9px 0;border-bottom:1px solid #252a2f}.muted{color:#9e988f}.notice{padding:12px 14px;border:1px solid #5a4e35;background:#17130e;color:#e7d5aa;margin-bottom:14px}
+@media(max-width:1000px){.app{grid-template-columns:1fr}.side{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}.side-foot{display:none}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.cards{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}
+@media(max-width:640px){.content{padding:15px}.cards{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.top{padding:0 15px}.line{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<section id="login" class="login">
+  <form id="loginForm" class="login-card">
+    <div class="logo">MSC Safety · Área restringida</div>
+    <h1>Gestión de inventario</h1>
+    <p>Acceso exclusivo para personal autorizado. Los permisos dependen del rol asignado al usuario.</p>
+    <div class="field"><label>Correo</label><input id="email" type="email" required autocomplete="username"></div>
+    <div class="field"><label>Contraseña</label><input id="password" type="password" required autocomplete="current-password"></div>
+    <button class="btn" type="submit">Ingresar</button>
+    <div id="loginMsg" class="msg"></div>
+  </form>
+</section>
+
+<section id="app" class="app hidden">
+  <aside class="side">
+    <div class="brand"><span>MSC Safety</span><strong>Control interno</strong></div>
+    <nav class="nav">
+      <button class="active" data-view="dashboard">Resumen</button>
+      <button data-view="productos">Productos / SKU</button>
+      <button data-view="documentos">Facturas</button>
+      <button data-view="movimientos">Movimientos</button>
+      <button data-view="ubicaciones">Bodega</button>
+    </nav>
+    <div class="side-foot">Prototipo operativo · datos protegidos por Supabase RLS</div>
+  </aside>
+  <main class="main">
+    <header class="top"><div><b id="pageTitle">Resumen</b><br><small id="roleLabel"></small></div><button id="logout" class="btn alt">Salir</button></header>
+    <div class="content">
+      <section class="view active" id="view-dashboard">
+        <div class="cards">
+          <div class="card"><span>Productos activos</span><strong id="kProducts">0</strong></div>
+          <div class="card"><span>Existencias totales</span><strong id="kStock">0</strong></div>
+          <div class="card"><span>Documentos pendientes</span><strong id="kPending">0</strong></div>
+          <div class="card"><span>Movimientos</span><strong id="kMoves">0</strong></div>
+        </div>
+        <div class="panel"><div class="panel-head"><h2>Stock por producto</h2><span class="muted">Calculado desde movimientos</span></div><div class="table-wrap"><table><thead><tr><th>SKU</th><th>Producto</th><th>Marca</th><th>Stock</th><th>Unidad</th></tr></thead><tbody id="stockRows"></tbody></table></div></div>
+      </section>
+
+      <section class="view" id="view-productos">
+        <div class="grid2">
+          <div class="formbox">
+            <h2>Nuevo producto</h2>
+            <p class="muted">El SKU se genera automáticamente al guardar.</p>
+            <form id="productForm" class="formgrid">
+              <div class="field full"><label>Nombre comercial</label><input name="name" required></div>
+              <div class="field full"><label>Descripción</label><textarea name="description"></textarea></div>
+              <div class="field"><label>Familia</label><input name="family_code" placeholder="EPP" maxlength="8" required></div>
+              <div class="field"><label>Subfamilia</label><input name="subfamily_code" placeholder="MAN" maxlength="8" required></div>
+              <div class="field"><label>Tipo</label><input name="type_code" placeholder="GUA" maxlength="8" required></div>
+              <div class="field"><label>Variante</label><input name="variant_code" placeholder="L" maxlength="8" value="UNI" required></div>
+              <div class="field"><label>Marca</label><input name="brand"></div>
+              <div class="field"><label>Modelo</label><input name="model"></div>
+              <div class="field"><label>Código fabricante</label><input name="manufacturer_code"></div>
+              <div class="field"><label>EAN / GTIN</label><input name="ean_gtin"></div>
+              <div class="field"><label>Unidad</label><input name="unit" value="Unidad"></div>
+              <div class="field"><label>Proveedor</label><input name="supplier"></div>
+              <div class="full"><button class="btn" type="submit">Crear producto y SKU</button> <span id="productMsg" class="msg"></span></div>
+            </form>
+          </div>
+          <div class="formbox"><h2>Criterio de identificación</h2><div class="notice">SKU MSC identifica internamente. EAN/GTIN y código fabricante se conservan como identificadores externos.</div><p>Formato: <span class="sku">MSC-FAM-SUB-TIPO-VAR-000</span></p><p class="muted">El correlativo nunca se reutiliza. Las variantes inventariables deben tener SKU propio.</p></div>
+        </div>
+        <div class="panel"><div class="panel-head"><h2>Maestro de productos</h2><input id="productSearch" class="search" placeholder="Buscar SKU, producto, marca..."></div><div class="table-wrap"><table><thead><tr><th>SKU</th><th>Producto</th><th>Marca</th><th>Modelo</th><th>Cód. fabricante</th><th>EAN/GTIN</th><th>Estado</th></tr></thead><tbody id="productRows"></tbody></table></div></div>
+      </section>
+
+      <section class="view" id="view-documentos">
+        <div class="grid2">
+          <div class="formbox">
+            <h2>Procesar factura PDF</h2>
+            <div class="field"><label>Tipo</label><select id="docType"><option value="compra">Factura de compra · aumenta stock</option><option value="venta">Factura de venta · disminuye stock</option></select></div>
+            <div class="upload"><strong>Subir factura</strong><div class="muted">PDF de hasta 3 MB. Primero se analiza; el stock solo cambia después de aprobar.</div><input id="invoiceFile" type="file" accept="application/pdf"><button id="analyzeInvoice" class="btn" type="button">Analizar factura</button><div id="invoiceMsg" class="msg"></div></div>
+            <div id="invoiceReview" class="review hidden"></div>
+          </div>
+          <div class="formbox"><h2>Reglas del flujo</h2><ol class="muted"><li>El PDF se interpreta y extrae folio, contraparte y líneas.</li><li>Se intenta relacionar cada línea con un SKU existente.</li><li>Los productos desconocidos quedan marcados para revisión.</li><li>Solo al aprobar se crea el documento y el movimiento de stock.</li><li>Una misma factura no debe procesarse dos veces.</li></ol></div>
+        </div>
+        <div class="panel"><div class="panel-head"><h2>Documentos</h2></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Folio</th><th>Emisor</th><th>Estado</th></tr></thead><tbody id="documentRows"></tbody></table></div></div>
+      </section>
+
+      <section class="view" id="view-movimientos"><div class="panel"><div class="panel-head"><h2>Kardex de movimientos</h2></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>SKU</th><th>Producto</th><th>Tipo</th><th>Cantidad</th><th>Documento</th></tr></thead><tbody id="movementRows"></tbody></table></div></div></section>
+
+      <section class="view" id="view-ubicaciones">
+        <div class="grid2"><div class="formbox"><h2>Nueva ubicación</h2><form id="locationForm"><div class="field"><label>Código</label><input name="code" placeholder="A-02-03-04" required></div><div class="field"><label>Descripción</label><input name="label" placeholder="Pasillo A · Rack 02 · Nivel 03 · Posición 04"></div><button class="btn" type="submit">Crear ubicación</button><span id="locationMsg" class="msg"></span></form></div><div class="formbox"><h2>Lógica sugerida</h2><p class="sku">PASILLO-RACK-NIVEL-POSICIÓN</p><p class="muted">Ejemplo: A-02-03-04. El SKU identifica el producto; este código identifica dónde está.</p></div></div>
+        <div class="panel"><div class="panel-head"><h2>Ubicaciones</h2></div><div class="table-wrap"><table><thead><tr><th>Código</th><th>Descripción</th><th>Bodega</th><th>Estado</th></tr></thead><tbody id="locationRows"></tbody></table></div></div>
+      </section>
+    </div>
+  </main>
+</section>
+
+<script>
+(function(){
+var SUPABASE_URL='https://ygfmpwlpmaasooltjujb.supabase.co';
+var SUPABASE_KEY='sb_publishable_evFWgAwjv7xcNxo156NV0g_CFq0j5Ld';
+var token=sessionStorage.getItem('msc_token')||'';
+var role='';
+var products=[],locations=[],documents=[],movements=[];
+function el(id){return document.getElementById(id)}
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+async function authFetch(path,opt){
+  opt=opt||{};opt.headers=Object.assign({'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json'},opt.headers||{});
+  var r=await fetch(SUPABASE_URL+path,opt);var txt=await r.text();var data=txt?JSON.parse(txt):null;if(!r.ok)throw new Error((data&&data.message)||'Error '+r.status);return data
+}
+async function login(email,password){
+  var r=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:password})});
+  var d=await r.json();if(!r.ok)throw new Error('Credenciales no válidas o usuario no habilitado.');
+  token=d.access_token;role=(d.user&&d.user.app_metadata&&d.user.app_metadata.msc_role)||'';
+  if(['admin','bodega','ventas','supervisor','lectura'].indexOf(role)<0)throw new Error('Tu cuenta existe, pero no tiene autorización MSC.');
+  sessionStorage.setItem('msc_token',token);sessionStorage.setItem('msc_role',role);showApp()
+}
+function showApp(){role=role||sessionStorage.getItem('msc_role')||'';el('login').classList.add('hidden');el('app').classList.remove('hidden');el('roleLabel').textContent='Rol: '+role;loadAll()}
+async function loadAll(){
+  try{
+    var rs=await Promise.all([
+      authFetch('/rest/v1/msc_products?select=*&order=created_at.desc'),
+      authFetch('/rest/v1/msc_locations?select=*&order=code'),
+      authFetch('/rest/v1/msc_documents?select=*&order=created_at.desc&limit=100'),
+      authFetch('/rest/v1/msc_stock_movements?select=*,msc_products(sku,name,unit),msc_documents(folio)&order=created_at.desc&limit=500')
+    ]);
+    products=rs[0]||[];locations=rs[1]||[];documents=rs[2]||[];movements=rs[3]||[];render()
+  }catch(e){if(String(e.message).indexOf('JWT')>=0){logout()}else{console.error(e)}}
+}
+function render(){
+  el('kProducts').textContent=products.filter(function(p){return p.active}).length;
+  el('kPending').textContent=documents.filter(function(d){return d.status==='pendiente'||d.status==='revisado'}).length;
+  el('kMoves').textContent=movements.length;
+  var stock={};movements.forEach(function(m){stock[m.product_id]=(stock[m.product_id]||0)+Number(m.quantity||0)});
+  var total=Object.keys(stock).reduce(function(a,k){return a+stock[k]},0);el('kStock').textContent=total.toLocaleString('es-CL');
+  el('stockRows').innerHTML=products.map(function(p){return '<tr><td class="sku">'+esc(p.sku)+'</td><td>'+esc(p.name)+'</td><td>'+esc(p.brand)+'</td><td><b>'+Number(stock[p.id]||0).toLocaleString('es-CL')+'</b></td><td>'+esc(p.unit)+'</td></tr>'}).join('');
+  renderProducts(products);
+  el('locationRows').innerHTML=locations.map(function(x){return '<tr><td class="sku">'+esc(x.code)+'</td><td>'+esc(x.label)+'</td><td>'+esc(x.warehouse)+'</td><td><span class="pill '+(x.active?'ok':'bad')+'">'+(x.active?'Activa':'Inactiva')+'</span></td></tr>'}).join('');
+  el('documentRows').innerHTML=documents.map(function(d){return '<tr><td>'+esc(d.document_date||'')+'</td><td>'+esc(d.document_type)+'</td><td>'+esc(d.folio)+'</td><td>'+esc(d.issuer_name)+'</td><td><span class="pill '+(d.status==='procesado'?'ok':'warn')+'">'+esc(d.status)+'</span></td></tr>'}).join('');
+  el('movementRows').innerHTML=movements.map(function(m){var p=m.msc_products||{},d=m.msc_documents||{};return '<tr><td>'+new Date(m.created_at).toLocaleString('es-CL')+'</td><td class="sku">'+esc(p.sku)+'</td><td>'+esc(p.name)+'</td><td>'+esc(m.movement_type)+'</td><td><b>'+Number(m.quantity).toLocaleString('es-CL')+'</b></td><td>'+esc(d.folio||'')+'</td></tr>'}).join('')
+}
+function renderProducts(list){el('productRows').innerHTML=list.map(function(p){return '<tr><td class="sku">'+esc(p.sku)+'</td><td>'+esc(p.name)+'</td><td>'+esc(p.brand)+'</td><td>'+esc(p.model)+'</td><td>'+esc(p.manufacturer_code)+'</td><td>'+esc(p.ean_gtin)+'</td><td><span class="pill '+(p.active?'ok':'bad')+'">'+(p.active?'Activo':'Inactivo')+'</span></td></tr>'}).join('')}
+function logout(){sessionStorage.removeItem('msc_token');sessionStorage.removeItem('msc_role');token='';location.reload()}
+el('loginForm').addEventListener('submit',async function(e){e.preventDefault();el('loginMsg').textContent='Ingresando…';try{await login(el('email').value,el('password').value)}catch(err){el('loginMsg').textContent=err.message}})
+el('logout').onclick=logout;
+document.querySelectorAll('[data-view]').forEach(function(b){b.onclick=function(){document.querySelectorAll('[data-view]').forEach(function(x){x.classList.toggle('active',x===b)});document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active')});el('view-'+b.dataset.view).classList.add('active');el('pageTitle').textContent=b.textContent}})
+el('productSearch').oninput=function(){var q=this.value.toLowerCase();renderProducts(products.filter(function(p){return [p.sku,p.name,p.brand,p.model,p.manufacturer_code,p.ean_gtin].join(' ').toLowerCase().indexOf(q)>=0}))}
+el('productForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});['family_code','subfamily_code','type_code','variant_code'].forEach(function(k){body[k]=body[k].toUpperCase()});el('productMsg').textContent='Guardando…';try{var r=await authFetch('/rest/v1/msc_products?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)});el('productMsg').textContent='Creado: '+r[0].sku;e.target.reset();e.target.elements.variant_code.value='UNI';e.target.elements.unit.value='Unidad';await loadAll()}catch(err){el('productMsg').textContent=err.message}})
+el('locationForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});body.code=body.code.toUpperCase();el('locationMsg').textContent='Guardando…';try{await authFetch('/rest/v1/msc_locations',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});el('locationMsg').textContent='Ubicación creada';e.target.reset();await loadAll()}catch(err){el('locationMsg').textContent=err.message}})
+var parsedInvoice=null;
+el('analyzeInvoice').onclick=async function(){
+  var file=el('invoiceFile').files[0];if(!file){el('invoiceMsg').textContent='Selecciona un PDF.';return}if(file.size>3*1024*1024){el('invoiceMsg').textContent='El PDF supera 3 MB.';return}
+  el('invoiceMsg').textContent='Analizando factura…';
+  var base64=await new Promise(function(resolve,reject){var r=new FileReader();r.onload=function(){resolve(String(r.result).split(',')[1])};r.onerror=reject;r.readAsDataURL(file)});
+  try{
+    var rr=await fetch('/api/msc-invoice',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({pdfBase64:base64,documentType:el('docType').value})});
+    var data=await rr.json();if(!rr.ok)throw new Error(data.message||'No fue posible analizar el documento.');
+    parsedInvoice=data;renderInvoice(data)
+  }catch(err){el('invoiceMsg').textContent=err.message}
+};
+function findProduct(line){
+  var code=String(line.product_code||'').toLowerCase(),ean=String(line.ean_gtin||'').toLowerCase(),desc=String(line.description||'').toLowerCase();
+  return products.find(function(p){return (ean&&String(p.ean_gtin||'').toLowerCase()===ean)||(code&&String(p.manufacturer_code||'').toLowerCase()===code)}) ||
+         products.find(function(p){return desc&&desc.indexOf(String(p.name||'').toLowerCase())>=0})
+}
+function renderInvoice(data){
+  el('invoiceMsg').textContent='Documento analizado. Revisa antes de aprobar.';
+  var box=el('invoiceReview');box.classList.remove('hidden');
+  var html='<h3>'+esc(data.issuer_name||'Documento')+' · Folio '+esc(data.folio||'—')+'</h3><p class="muted">'+esc(data.document_date||'')+'</p>';
+  (data.lines||[]).forEach(function(line,i){var p=findProduct(line);line._product=p||null;html+='<div class="line"><div><b>'+esc(line.description)+'</b><div class="muted">'+(p?'SKU: '+esc(p.sku):'Producto no relacionado; requiere crear/revisar SKU')+'</div></div><div>Cant. '+esc(line.quantity)+'</div><div><span class="pill '+(p?'ok':'warn')+'">'+(p?'Coincidencia':'Revisar')+'</span></div></div>'});
+  html+='<div style="margin-top:14px"><button id="approveInvoice" class="btn" '+((data.lines||[]).some(function(x){return !x._product})?'disabled':'')+'>Aprobar y mover stock</button></div>';
+  box.innerHTML=html;var b=el('approveInvoice');if(b)b.onclick=approveInvoice
+}
+async function approveInvoice(){
+  if(!parsedInvoice)return;var unresolved=(parsedInvoice.lines||[]).some(function(x){return !x._product});if(unresolved){el('invoiceMsg').textContent='Primero crea o relaciona los productos sin SKU.';return}
+  el('invoiceMsg').textContent='Procesando…';
+  try{
+    var doc={document_type:el('docType').value,folio:parsedInvoice.folio||null,issuer_name:parsedInvoice.issuer_name||null,issuer_rut:parsedInvoice.issuer_rut||null,receiver_name:parsedInvoice.receiver_name||null,receiver_rut:parsedInvoice.receiver_rut||null,document_date:parsedInvoice.document_date||null,status:'procesado'};
+    var dr=await authFetch('/rest/v1/msc_documents?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(doc)});var docId=dr[0].id;
+    var lines=parsedInvoice.lines.map(function(x,i){return {document_id:docId,line_no:i+1,raw_description:x.description, supplier_code:x.product_code||null,quantity:Number(x.quantity),unit_price:x.unit_price==null?null:Number(x.unit_price),product_id:x._product.id,match_status:'coincidencia'}});
+    await authFetch('/rest/v1/msc_document_lines',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(lines)});
+    var sign=el('docType').value==='venta'?-1:1;var moves=parsedInvoice.lines.map(function(x){return {product_id:x._product.id,document_id:docId,movement_type:el('docType').value,quantity:sign*Math.abs(Number(x.quantity)),notes:'Movimiento generado desde factura '+(parsedInvoice.folio||'')}});
+    await authFetch('/rest/v1/msc_stock_movements',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(moves)});
+    el('invoiceMsg').textContent='Factura procesada y stock actualizado.';el('invoiceReview').classList.add('hidden');parsedInvoice=null;el('invoiceFile').value='';await loadAll()
+  }catch(err){el('invoiceMsg').textContent=err.message}
+}
+if(token){role=sessionStorage.getItem('msc_role')||'';if(role)showApp()}
+})();
+</script>
+</body></html>
