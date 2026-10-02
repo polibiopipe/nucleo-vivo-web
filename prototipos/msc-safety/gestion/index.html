@@ -121,10 +121,10 @@
           <div class="formbox">
             <h2>Procesar factura PDF</h2>
             <div class="field"><label>Tipo</label><select id="docType"><option value="compra">Factura de compra · aumenta stock</option><option value="venta">Factura de venta · disminuye stock</option></select></div>
-            <div class="upload"><strong>Subir factura</strong><div class="muted">PDF de hasta 3 MB. Primero se analiza; el stock solo cambia después de aprobar.</div><input id="invoiceFile" type="file" accept="application/pdf"><button id="analyzeInvoice" class="btn" type="button">Analizar factura</button><div id="invoiceMsg" class="msg"></div></div>
+            <div class="upload"><strong>Subir factura</strong><div class="muted">PDF de hasta 3 MB. En compras, el sistema relaciona SKU existentes y crea automáticamente los faltantes. El stock cambia solo después de aprobar.</div><input id="invoiceFile" type="file" accept="application/pdf"><button id="analyzeInvoice" class="btn" type="button">Analizar factura</button><div id="invoiceMsg" class="msg"></div></div>
             <div id="invoiceReview" class="review hidden"></div>
           </div>
-          <div class="formbox"><h2>Reglas del flujo</h2><ol class="muted"><li>El PDF se interpreta y extrae folio, contraparte y líneas.</li><li>Se intenta relacionar cada línea con un SKU existente.</li><li>Los productos desconocidos quedan marcados para revisión.</li><li>Solo al aprobar se crea el documento y el movimiento de stock.</li><li>Una misma factura no debe procesarse dos veces.</li></ol></div>
+          <div class="formbox"><h2>Reglas del flujo</h2><ol class="muted"><li>El PDF se interpreta y extrae folio, proveedor, productos y cantidades.</li><li>Se busca cada artículo por EAN/GTIN, equivalencia del proveedor, código y descripción normalizada.</li><li>En compras, si no existe un producto, el sistema crea automáticamente su SKU interno.</li><li>La equivalencia proveedor → SKU queda guardada para reconocerlo mejor en futuras facturas.</li><li>Solo al aprobar se registra el documento y se mueve el stock.</li><li>Una misma factura no debe procesarse dos veces.</li></ol></div>
         </div>
         <div class="panel"><div class="panel-head"><h2>Documentos</h2></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Folio</th><th>Emisor</th><th>Estado</th></tr></thead><tbody id="documentRows"></tbody></table></div></div>
       </section>
@@ -145,7 +145,7 @@ var SUPABASE_URL='https://ygfmpwlpmaasooltjujb.supabase.co';
 var SUPABASE_KEY='sb_publishable_evFWgAwjv7xcNxo156NV0g_CFq0j5Ld';
 var token=sessionStorage.getItem('msc_token')||'';
 var role='';
-var products=[],locations=[],documents=[],movements=[];
+var products=[],locations=[],documents=[],movements=[],aliases=[];
 function el(id){return document.getElementById(id)}
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function authRedirectUrl(){return window.location.origin+'/prototipos/msc-safety/gestion/'}
@@ -191,9 +191,10 @@ async function loadAll(){
       authFetch('/rest/v1/msc_products?select=*&order=created_at.desc'),
       authFetch('/rest/v1/msc_locations?select=*&order=code'),
       authFetch('/rest/v1/msc_documents?select=*&order=created_at.desc&limit=100'),
-      authFetch('/rest/v1/msc_stock_movements?select=*,msc_products(sku,name,unit),msc_documents(folio)&order=created_at.desc&limit=500')
+      authFetch('/rest/v1/msc_stock_movements?select=*,msc_products(sku,name,unit),msc_documents(folio)&order=created_at.desc&limit=500'),
+      authFetch('/rest/v1/msc_supplier_aliases?select=*&order=created_at.desc&limit=1000')
     ]);
-    products=rs[0]||[];locations=rs[1]||[];documents=rs[2]||[];movements=rs[3]||[];render()
+    products=rs[0]||[];locations=rs[1]||[];documents=rs[2]||[];movements=rs[3]||[];aliases=rs[4]||[];render()
   }catch(e){if(String(e.message).indexOf('JWT')>=0){logout()}else{console.error(e)}}
 }
 function render(){
@@ -260,19 +261,93 @@ el('analyzeInvoice').onclick=async function(){
   try{
     var rr=await fetch('/api/msc-invoice',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({pdfBase64:base64,documentType:el('docType').value})});
     var data=await rr.json();if(!rr.ok)throw new Error(data.message||'No fue posible analizar el documento.');
-    parsedInvoice=data;renderInvoice(data)
+    parsedInvoice=data;
+    if(el('docType').value==='compra'){
+      await autoResolvePurchaseLines(data);
+    }else{
+      renderInvoice(data);
+    }
   }catch(err){el('invoiceMsg').textContent=err.message}
 };
-function findProduct(line){
-  var code=String(line.product_code||'').toLowerCase(),ean=String(line.ean_gtin||'').toLowerCase(),desc=String(line.description||'').toLowerCase();
-  return products.find(function(p){return (ean&&String(p.ean_gtin||'').toLowerCase()===ean)||(code&&String(p.manufacturer_code||'').toLowerCase()===code)}) ||
-         products.find(function(p){return desc&&desc.indexOf(String(p.name||'').toLowerCase())>=0})
+function norm(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
+function findProduct(line,issuerName){
+  var code=norm(line.product_code),ean=String(line.ean_gtin||'').replace(/\D/g,''),desc=norm(line.description),name=norm(line.name),supplier=norm(issuerName);
+  if(ean){
+    var byEan=products.find(function(p){return String(p.ean_gtin||'').replace(/\D/g,'')===ean});
+    if(byEan)return byEan;
+  }
+  if(code&&supplier){
+    var alias=aliases.find(function(a){return norm(a.supplier_name)===supplier&&norm(a.supplier_product_code)===code});
+    if(alias){
+      var byAlias=products.find(function(p){return p.id===alias.product_id});
+      if(byAlias)return byAlias;
+    }
+  }
+  if(code){
+    var byCode=products.find(function(p){return norm(p.manufacturer_code)===code});
+    if(byCode)return byCode;
+  }
+  var exact=products.find(function(p){var pn=norm(p.name);return pn&&(pn===name||pn===desc)});
+  if(exact)return exact;
+  return products.find(function(p){var pn=norm(p.name);return pn&&desc&&pn.length>=8&&(desc.indexOf(pn)>=0||pn.indexOf(desc)>=0)})
+}
+async function rememberAlias(issuerName,line,product){
+  var code=String(line.product_code||'').trim();
+  if(!issuerName||!code||!product)return;
+  var exists=aliases.some(function(a){return norm(a.supplier_name)===norm(issuerName)&&norm(a.supplier_product_code)===norm(code)});
+  if(exists)return;
+  try{
+    var body={supplier_name:issuerName,supplier_product_code:code,raw_description:line.description||null,product_id:product.id};
+    var r=await authFetch('/rest/v1/msc_supplier_aliases?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)});
+    if(r&&r[0])aliases.unshift(r[0]);
+  }catch(_){}
+}
+async function autoResolvePurchaseLines(data){
+  var created=0,matched=0,failed=0;
+  el('invoiceMsg').textContent='Analizando productos y verificando SKU existentes…';
+  for(var i=0;i<(data.lines||[]).length;i++){
+    var line=data.lines[i],p=findProduct(line,data.issuer_name);
+    if(p){
+      line._product=p;line._autoCreated=false;matched++;
+      await rememberAlias(data.issuer_name,line,p);
+      continue;
+    }
+    try{
+      var body={
+        name:line.name||line.description,
+        description:line.description,
+        family_code:String(line.family_code||'EPP').toUpperCase(),
+        subfamily_code:String(line.subfamily_code||'GEN').toUpperCase(),
+        type_code:String(line.type_code||'PRO').toUpperCase(),
+        variant_code:String(line.variant_code||'UNI').toUpperCase(),
+        brand:line.brand||null,
+        model:line.model||null,
+        manufacturer_code:line.product_code||null,
+        ean_gtin:line.ean_gtin||null,
+        unit:'Unidad',
+        supplier:data.issuer_name||null
+      };
+      var r=await authFetch('/rest/v1/msc_products?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)});
+      p=r&&r[0];
+      if(!p)throw new Error('No se pudo crear el SKU');
+      line._product=p;line._autoCreated=true;products.unshift(p);created++;
+      await rememberAlias(data.issuer_name,line,p);
+    }catch(err){
+      line._product=null;line._autoError=err.message;failed++;
+    }
+  }
+  renderInvoice(data);
+  var parts=[];
+  if(matched)parts.push(matched+' producto'+(matched===1?'':'s')+' reconocido'+(matched===1?'':'s'));
+  if(created)parts.push(created+' SKU nuevo'+(created===1?' creado':'s creados')+' automáticamente');
+  if(failed)parts.push(failed+' línea'+(failed===1?'':'s')+' requiere'+(failed===1?'':'n')+' revisión');
+  el('invoiceMsg').textContent=(parts.join(' · ')||'Factura analizada')+'. Revisa antes de aprobar el movimiento de stock.';
 }
 function renderInvoice(data){
   el('invoiceMsg').textContent='Documento analizado. Revisa antes de aprobar.';
   var box=el('invoiceReview');box.classList.remove('hidden');
   var html='<h3>'+esc(data.issuer_name||'Documento')+' · Folio '+esc(data.folio||'—')+'</h3><p class="muted">'+esc(data.document_date||'')+'</p>';
-  (data.lines||[]).forEach(function(line,i){var p=findProduct(line);line._product=p||null;html+='<div class="line"><div><b>'+esc(line.description)+'</b><div class="muted">'+(p?'SKU: '+esc(p.sku):'Producto nuevo; propuesta '+esc(line.family_code)+'-'+esc(line.subfamily_code)+'-'+esc(line.type_code)+'-'+esc(line.variant_code))+'</div></div><div>Cant. '+esc(line.quantity)+'</div><div><span class="pill '+(p?'ok':'warn')+'">'+(p?'Coincidencia':'Revisar')+'</span>'+(p?'':'<button class="btn alt createSuggested" data-line="'+i+'" type="button" style="margin-top:6px;padding:6px 8px">Crear SKU</button>')+'</div></div>'});
+  (data.lines||[]).forEach(function(line,i){var p=line._product||findProduct(line,data.issuer_name);line._product=p||null;var detail=p?(line._autoCreated?'SKU nuevo creado automáticamente: ':'SKU existente: ')+esc(p.sku):'Sin coincidencia automática; requiere revisión';var label=p?(line._autoCreated?'SKU creado':'Coincidencia'):'Revisar';html+='<div class="line"><div><b>'+esc(line.description)+'</b><div class="muted">'+detail+'</div></div><div>Cant. '+esc(line.quantity)+'</div><div><span class="pill '+(p?'ok':'warn')+'">'+label+'</span>'+(p?'':'<button class="btn alt createSuggested" data-line="'+i+'" type="button" style="margin-top:6px;padding:6px 8px">Crear SKU</button>')+'</div></div>'});
   html+='<div style="margin-top:14px"><button id="approveInvoice" class="btn" '+((data.lines||[]).some(function(x){return !x._product})?'disabled':'')+'>Aprobar y mover stock</button></div>';
   box.innerHTML=html;box.querySelectorAll('.createSuggested').forEach(function(btn){btn.onclick=function(){createSuggestedProduct(Number(btn.dataset.line))}});var b=el('approveInvoice');if(b)b.onclick=approveInvoice
 }
