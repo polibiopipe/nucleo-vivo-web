@@ -30,7 +30,12 @@
     <div class="divider"><span>o</span></div>
     <button id="googleLogin" class="btn google" type="button">Ingresar con Google</button><div class="msg" style="margin-top:8px">¿Primera vez? Usa Google para activar tu acceso autorizado.</div>
     <div class="login-actions">
-      <button id="resetPassword" class="link-btn" type="button">Restablecer contraseña</button><span class="muted" style="font-size:11px">Solo para cuentas ya activadas</span>
+      <button id="activateAccess" class="link-btn" type="button">Activar acceso</button>
+      <span class="muted" style="font-size:11px">Primera vez con correo + contraseña</span>
+    </div>
+    <div class="login-actions">
+      <button id="resetPassword" class="link-btn" type="button">Restablecer contraseña</button>
+      <span class="muted" style="font-size:11px">Solo para cuentas ya activadas</span>
     </div>
     <div id="recoveryBox" class="hidden" style="margin-top:14px;border-top:1px solid #2e3338;padding-top:14px">
       <div class="field"><label>Nueva contraseña</label><input id="newPassword" type="password" minlength="8" autocomplete="new-password"></div>
@@ -189,6 +194,23 @@ el('loginForm').addEventListener('submit',async function(e){e.preventDefault();e
 el('googleLogin').onclick=function(){
   var redirect=encodeURIComponent(authRedirectUrl());
   window.location.href=SUPABASE_URL+'/auth/v1/authorize?provider=google&redirect_to='+redirect;
+};
+el('activateAccess').onclick=async function(){
+  var email=el('email').value.trim(),password=el('password').value;
+  if(!email){el('loginMsg').textContent='Escribe primero el correo autorizado.';el('email').focus();return}
+  if(password.length<8){el('loginMsg').textContent='Define una contraseña de al menos 8 caracteres antes de activar.';el('password').focus();return}
+  el('loginMsg').textContent='Activando acceso…';
+  try{
+    var allowed=await fetch(SUPABASE_URL+'/rest/v1/msc_allowed_users?select=email,active&email=eq.'+encodeURIComponent(email),{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
+    });
+    var allowedData=await allowed.json();
+    if(!allowed.ok||!Array.isArray(allowedData)||!allowedData.length||allowedData[0].active!==true)throw new Error('Este correo no está autorizado para MSC Safety.');
+    var r=await fetch(SUPABASE_URL+'/auth/v1/signup',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:password,data:{msc_access:true},gotrue_meta_security:{captcha_token:null}})});
+    var d=await r.json();
+    if(!r.ok)throw new Error(d&&d.msg?d.msg:(d&&d.message?d.message:'No fue posible activar la cuenta.'));
+    el('loginMsg').textContent='Cuenta creada. Revisa el correo recibido en ese alias y confirma el acceso. Luego podrás ingresar con esta contraseña.';
+  }catch(err){el('loginMsg').textContent=err.message}
 };
 el('resetPassword').onclick=async function(){
   var email=el('email').value.trim();
