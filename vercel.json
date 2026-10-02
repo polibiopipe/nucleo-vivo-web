@@ -11,6 +11,10 @@
     "api/msc-assistant.mjs": {
       "maxDuration": 30,
       "includeFiles": "server/**"
+    },
+    "api/msc-invoice.mjs": {
+      "maxDuration": 30,
+      "includeFiles": "server/**"
     }
   },
   "redirects": [
