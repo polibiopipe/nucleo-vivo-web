@@ -20,6 +20,63 @@
 @media(max-width:1000px){.app{grid-template-columns:1fr}.side{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}.side-foot{display:none}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.cards{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}
 @media(max-width:900px){.login-shell{grid-template-columns:1fr;max-width:560px}.login-story{display:none}.login{padding:22px 14px}.login:before{background-position:62% center}}
 @media(max-width:640px){.content{padding:15px}.cards{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.top{padding:0 15px}.line{grid-template-columns:1fr}.login-card{padding:24px 20px 28px}.login-brand{min-height:116px}.login h1{font-size:29px}}
+
+/* ===== MSC Safety · Centro de control premium ===== */
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:
+radial-gradient(circle at 78% 8%,rgba(203,151,53,.08),transparent 24%),#07090b}
+.app{grid-template-columns:264px 1fr;background:#07090b}
+.side{padding:0;overflow:hidden;background:
+linear-gradient(180deg,rgba(8,11,14,.97) 0%,rgba(8,11,14,.98) 56%,rgba(8,11,14,.88) 100%);border-right:1px solid rgba(226,191,109,.16)}
+.side:after{content:"";position:absolute;z-index:-1;left:0;right:0;bottom:0;height:43%;background:
+linear-gradient(180deg,#0a0d10 0%,rgba(8,10,12,.58) 34%,rgba(8,10,12,.8) 100%),
+url('https://images.unsplash.com/photo-1593854519602-687eae339d57?auto=format&fit=crop&w=900&q=85') center/cover;opacity:.52}
+.side-logo{height:112px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(255,255,255,.08);position:relative}
+.side-logo:after{content:"";position:absolute;inset:auto 20px 0;height:1px;background:linear-gradient(90deg,transparent,rgba(226,191,109,.55),transparent)}
+.side-logo img{width:195px;max-height:74px;object-fit:contain;filter:drop-shadow(0 5px 18px rgba(0,0,0,.45))}
+.brand{padding:20px 24px 15px;margin:0;border:0}.brand span{font-size:10px;letter-spacing:.22em}.brand strong{font-size:19px;margin-top:4px}
+.nav{padding:4px 12px}.nav button{display:flex;align-items:center;gap:12px;border:1px solid transparent;border-radius:7px;margin:5px 0;padding:13px 14px;color:#c5c3bf;transition:.2s ease}
+.nav button:hover{background:rgba(255,255,255,.035);color:#fff}
+.nav button.active{border:1px solid rgba(226,191,109,.58);background:linear-gradient(90deg,rgba(203,151,53,.24),rgba(203,151,53,.08));color:#fff;box-shadow:inset 3px 0 0 var(--gold2),0 8px 30px rgba(0,0,0,.18)}
+.nav-ico{width:22px;text-align:center;color:var(--gold2);font-size:17px;opacity:.95}
+.side-foot{bottom:20px;left:22px;right:22px;color:#aaa49a;border-top-color:rgba(255,255,255,.09);line-height:1.65}
+.side-foot b{display:block;color:#e5e0d6;font-size:10px;letter-spacing:.20em;margin-bottom:5px}
+.main{background:linear-gradient(180deg,#090c0f,#07090b 50%,#090b0d)}
+.top{height:66px;padding:0 24px;background:rgba(8,11,14,.94);backdrop-filter:blur(16px);border-bottom-color:rgba(255,255,255,.08);gap:18px}
+.top-search{flex:1;max-width:650px;display:flex;align-items:center;gap:10px;border:1px solid #303840;background:#0d1217;padding:0 13px;height:40px;border-radius:7px;box-shadow:inset 0 1px rgba(255,255,255,.02)}
+.top-search span{font-size:20px;color:#8d969e}.top-search input{border:0;outline:0;background:transparent;color:#e9e9e7;width:100%;font-size:13px}.top-search input::placeholder{color:#737b83}
+.top-user{margin-left:auto;display:flex;align-items:center;gap:12px}.user-orb{width:34px;height:34px;border-radius:50%;border:1px solid rgba(226,191,109,.45);background:radial-gradient(circle at 35% 30%,#d8a942,#3c2a12 75%);display:grid;place-items:center;color:#111;font-weight:900;box-shadow:0 0 24px rgba(201,155,61,.14)}
+.user-copy b{display:block;font-size:12px}.user-copy small{display:block;color:#8e969d;font-size:10px;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top .btn.alt{padding:8px 11px;border-radius:5px}
+.content{padding:22px 24px 34px}
+.control-hero{height:150px;border:1px solid rgba(255,255,255,.09);border-radius:9px;position:relative;overflow:hidden;margin-bottom:14px;background:
+linear-gradient(90deg,rgba(8,11,14,.94) 0%,rgba(8,11,14,.66) 45%,rgba(8,11,14,.28) 72%,rgba(8,11,14,.54) 100%),
+url('https://images.unsplash.com/photo-1586864387789-628af9feed72?auto=format&fit=crop&w=2200&q=88') center 58%/cover;box-shadow:0 20px 60px rgba(0,0,0,.28)}
+.control-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(5,7,9,.68))}
+.hero-copy{position:relative;z-index:2;padding:24px 27px}.hero-kicker{font-size:10px;color:var(--gold2);letter-spacing:.22em;text-transform:uppercase;font-weight:800}.hero-copy h1{font-size:33px;line-height:1;margin:9px 0 7px;letter-spacing:-.025em}.hero-copy p{margin:0;color:#b7b3ac;font-size:14px}.hero-mark{position:absolute;z-index:2;right:27px;top:29px;text-align:right;color:#ddd7cb;font-size:9px;letter-spacing:.28em;line-height:1.9;text-transform:uppercase}.hero-mark:after{content:"";display:block;width:68px;height:2px;margin:8px 0 0 auto;background:linear-gradient(90deg,transparent,var(--gold2))}
+.premium-kpis{display:grid;grid-template-columns:repeat(6,minmax(145px,1fr));gap:10px;margin-bottom:12px}
+.metric-card{min-height:112px;border:1px solid rgba(255,255,255,.09);border-radius:8px;padding:15px;background:linear-gradient(145deg,#11171d,#0c1116);position:relative;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.14)}
+.metric-card:before{content:"";position:absolute;inset:0 auto auto 0;width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(226,191,109,.45),transparent);opacity:.45}
+.metric-card .metric-icon{width:36px;height:36px;border-radius:9px;background:rgba(201,155,61,.12);display:grid;place-items:center;color:var(--gold2);font-size:18px;margin-bottom:9px}
+.metric-card small{color:#9ea5ab;font-size:10px;text-transform:uppercase;letter-spacing:.08em}.metric-card strong{display:block;font-size:23px;line-height:1.1;margin-top:3px}.metric-card em{display:block;font-style:normal;color:#747d85;font-size:9px;margin-top:5px}
+.metric-card.warn-card{border-color:rgba(229,189,98,.22)}.metric-card.bad-card{border-color:rgba(229,104,93,.24)}.metric-card.good-card{border-color:rgba(79,190,129,.20)}
+.control-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(320px,.85fr) minmax(300px,.78fr);gap:12px;margin-bottom:12px}
+.viz-card{border:1px solid rgba(255,255,255,.09);border-radius:8px;background:linear-gradient(145deg,#10161b,#0b1014);padding:15px 16px;min-height:318px;box-shadow:0 12px 35px rgba(0,0,0,.16)}
+.viz-head{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.07);padding-bottom:10px;margin-bottom:12px}.viz-head h3{margin:0;font-size:14px}.viz-head span{color:#7f878e;font-size:10px}
+.chart-wrap{height:238px;position:relative}.chart-wrap canvas{width:100%;height:100%;display:block}
+.donut-wrap{height:210px;position:relative;display:grid;place-items:center}.donut-wrap canvas{width:210px;height:210px}.donut-center{position:absolute;text-align:center;pointer-events:none}.donut-center strong{font-size:24px;display:block}.donut-center span{font-size:9px;color:#8f979e;text-transform:uppercase;letter-spacing:.12em}
+.state-legend{display:grid;gap:8px;margin-top:7px}.state-item{display:flex;align-items:center;gap:8px;font-size:11px;color:#bbc0c4}.state-dot{width:8px;height:8px;border-radius:50%}.state-item b{margin-left:auto;color:#fff}
+.low-list{display:grid;gap:10px}.low-row{display:grid;grid-template-columns:1fr 80px 32px;gap:8px;align-items:center}.low-name{min-width:0}.low-name b{display:block;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.low-name small{display:block;color:#747d84;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.low-track{height:7px;border-radius:99px;background:#1b232a;overflow:hidden}.low-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#d38c2c,#f2c15c)}.low-value{text-align:right;font-weight:800;color:#e5bd62;font-size:11px}
+.control-grid.secondary{grid-template-columns:minmax(0,1.15fr) minmax(420px,.95fr);margin-top:0}
+.recent-list{width:100%;border-collapse:collapse;min-width:0}.recent-list th,.recent-list td{padding:9px 8px;font-size:10px}.recent-list th{background:transparent}.movement-chip{display:inline-block;border-radius:99px;padding:3px 8px;font-size:9px;border:1px solid rgba(255,255,255,.08)}.movement-chip.in{color:#77d79d;background:rgba(42,155,90,.12)}.movement-chip.out{color:#f19086;background:rgba(189,61,52,.12)}
+.price-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}.price-mini{border:1px solid rgba(255,255,255,.07);border-radius:7px;background:#0e1419;padding:10px}.price-mini span{display:block;color:#858d94;font-size:9px;text-transform:uppercase}.price-mini strong{font-size:16px;margin-top:3px;display:block}
+.premium-panel{border-radius:8px;overflow:hidden}.premium-panel .panel-head{background:linear-gradient(90deg,rgba(201,155,61,.06),transparent)}
+.formbox,.panel{border-radius:8px;box-shadow:0 12px 35px rgba(0,0,0,.12)}
+table tbody tr:hover{background:rgba(255,255,255,.018)}
+input,select,textarea{border-radius:5px}.btn{border-radius:5px}
+@media(max-width:1380px){.premium-kpis{grid-template-columns:repeat(3,1fr)}.control-grid{grid-template-columns:1fr 1fr}.control-grid .viz-card:first-child{grid-column:1/-1}}
+@media(max-width:1050px){.premium-kpis{grid-template-columns:repeat(2,1fr)}.control-grid,.control-grid.secondary{grid-template-columns:1fr}.app{grid-template-columns:1fr}.side{height:auto;position:static}.side-logo{height:88px}.side:after{display:none}.nav{display:flex;overflow:auto}.side-foot{display:none}.top{top:0}.top-search{max-width:none}.user-copy{display:none}}
+@media(max-width:640px){.premium-kpis{grid-template-columns:1fr 1fr}.control-hero{height:175px}.hero-mark{display:none}.hero-copy h1{font-size:27px}.top-search{display:none}.content{padding:14px}.viz-card{min-height:290px}.control-grid.secondary{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -67,18 +124,27 @@
 
 <section id="app" class="app hidden">
   <aside class="side">
+    <div class="side-logo"><img src="https://img77.uenicdn.com/image/upload/v1776113071/business/ed85e871-e23a-4fa2-94db-9fe7bc04d03c.jpg" alt="MSC Safety"></div>
     <div class="brand"><span>MSC Safety</span><strong>Control interno</strong></div>
     <nav class="nav">
-      <button class="active" data-view="dashboard">Resumen</button><button data-view="control">Centro de control</button>
-      <button data-view="productos">Productos / SKU</button>
-      <button data-view="documentos">Facturas</button>
-      <button data-view="movimientos">Movimientos</button>
-      <button data-view="ubicaciones">Bodega</button>
+      <button class="active" data-view="dashboard"><span class="nav-ico">⌂</span><span>Resumen</span></button>
+      <button data-view="control"><span class="nav-ico">▥</span><span>Centro de control</span></button>
+      <button data-view="productos"><span class="nav-ico">◇</span><span>Productos / SKU</span></button>
+      <button data-view="documentos"><span class="nav-ico">▤</span><span>Facturas</span></button>
+      <button data-view="movimientos"><span class="nav-ico">⇄</span><span>Movimientos</span></button>
+      <button data-view="ubicaciones"><span class="nav-ico">⌂</span><span>Bodega</span></button>
     </nav>
-    <div class="side-foot">Prototipo operativo · datos protegidos por Supabase RLS</div>
+    <div class="side-foot"><b>SEGURIDAD · INVENTARIO · CONFIANZA</b>MSC Safety · Quality Service<br><span style="opacity:.65">Gestión operativa</span></div>
   </aside>
   <main class="main">
-    <header class="top"><div><b id="pageTitle">Resumen</b><br><small id="roleLabel"></small></div><button id="logout" class="btn alt">Salir</button></header>
+    <header class="top">
+      <div class="top-search"><span>⌕</span><input id="globalSearch" type="search" placeholder="Buscar productos, SKU, marca, código fabricante…"></div>
+      <div class="top-user">
+        <div class="user-orb">M</div>
+        <div class="user-copy"><b id="pageTitle">Resumen</b><small id="roleLabel"></small></div>
+        <button id="logout" class="btn alt">Salir</button>
+      </div>
+    </header>
     <div class="content">
       <section class="view active" id="view-dashboard">
         <div class="cards">
@@ -94,14 +160,58 @@
 
       
       <section class="view" id="view-control">
-        <div class="cards">
-          <div class="card"><span>Stock comprometido</span><strong id="kCommitted">0</strong></div>
-          <div class="card"><span>En tránsito</span><strong id="kInbound">0</strong></div>
-          <div class="card"><span>Comprar sugerido</span><strong id="kSuggested">0</strong></div>
-          <div class="card"><span>Diferencias inventario</span><strong id="kDifferences">0</strong></div>
+        <div class="control-hero">
+          <div class="hero-copy">
+            <div class="hero-kicker">MSC Safety · Operación</div>
+            <h1>Centro de control</h1>
+            <p>Stock, disponibilidad, precios y decisiones de reposición en una sola vista.</p>
+          </div>
+          <div class="hero-mark">SEGURIDAD<br>INVENTARIO<br>TRAZABILIDAD</div>
         </div>
 
-        <div class="panel">
+        <div class="premium-kpis">
+          <div class="metric-card"><div class="metric-icon">◇</div><small>Stock físico</small><strong id="kPhysical">0</strong><em>unidades registradas</em></div>
+          <div class="metric-card warn-card"><div class="metric-icon">▣</div><small>Comprometido</small><strong id="kCommitted">0</strong><em>reservado para pedidos</em></div>
+          <div class="metric-card good-card"><div class="metric-icon">✓</div><small>Disponible</small><strong id="kAvailable">0</strong><em>físico − comprometido</em></div>
+          <div class="metric-card"><div class="metric-icon">⇢</div><small>En tránsito</small><strong id="kInbound">0</strong><em>compras por recibir</em></div>
+          <div class="metric-card bad-card"><div class="metric-icon">!</div><small>Productos en alerta</small><strong id="kControlAlerts">0</strong><em>requieren atención</em></div>
+          <div class="metric-card"><div class="metric-icon">▤</div><small>Facturas</small><strong id="kControlDocs">0</strong><em>documentos registrados</em></div>
+        </div>
+
+        <div class="control-grid">
+          <div class="viz-card">
+            <div class="viz-head"><h3>Movimientos de inventario</h3><span>Últimos 6 meses · datos reales</span></div>
+            <div class="chart-wrap"><canvas id="inventoryChart"></canvas></div>
+          </div>
+          <div class="viz-card">
+            <div class="viz-head"><h3>Estado de productos</h3><span>Cobertura actual</span></div>
+            <div class="donut-wrap"><canvas id="stateChart"></canvas><div class="donut-center"><strong id="stateTotal">0</strong><span>SKU activos</span></div></div>
+            <div class="state-legend" id="stateLegend"></div>
+          </div>
+          <div class="viz-card">
+            <div class="viz-head"><h3>Productos con bajo stock</h3><span>Prioridad</span></div>
+            <div class="low-list" id="lowStockList"></div>
+          </div>
+        </div>
+
+        <div class="control-grid secondary">
+          <div class="viz-card">
+            <div class="viz-head"><h3>Movimientos recientes</h3><span>Últimas operaciones</span></div>
+            <div class="table-wrap"><table class="recent-list"><thead><tr><th>Fecha</th><th>Tipo</th><th>Producto</th><th>Cantidad</th></tr></thead><tbody id="recentMovementRows"></tbody></table></div>
+          </div>
+          <div class="viz-card">
+            <div class="viz-head"><h3>Análisis de precios y margen</h3><span>Productos con precio definido</span></div>
+            <div class="price-summary">
+              <div class="price-mini"><span>Costo promedio</span><strong id="avgCost">$0</strong></div>
+              <div class="price-mini"><span>Venta promedio</span><strong id="avgSale">$0</strong></div>
+              <div class="price-mini"><span>Markup promedio</span><strong id="avgMarkup">0%</strong></div>
+            </div>
+            <div class="chart-wrap" style="height:190px"><canvas id="priceChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="panel premium-panel">
+
           <div class="panel-head"><h2>Necesitan atención</h2><span class="muted">Disponible = físico − comprometido</span></div>
           <div class="table-wrap">
             <table>
@@ -279,9 +389,11 @@ function inventoryState(){
   return {physical:physical,committed:committed,incoming:incoming}
 }
 function renderControl(){
-  var st=inventoryState(),totalCommitted=0,totalInbound=0,totalSuggested=0;
+  var st=inventoryState(),totalCommitted=0,totalInbound=0,totalSuggested=0,totalPhysical=0,totalAvailable=0,alertCount=0;
   Object.values(st.committed).forEach(function(v){totalCommitted+=Number(v||0)});
   Object.values(st.incoming).forEach(function(v){totalInbound+=Number(v||0)});
+  Object.values(st.physical).forEach(function(v){totalPhysical+=Number(v||0)});
+  products.forEach(function(p){totalAvailable+=Number(st.physical[p.id]||0)-Number(st.committed[p.id]||0)});
   var options=products.map(function(p){return '<option value="'+p.id+'">'+esc(p.sku)+' · '+esc(p.name)+'</option>'}).join('');
   ['commitmentProduct','inboundProduct','countProduct'].forEach(function(id){if(el(id))el(id).innerHTML='<option value="">Seleccionar…</option>'+options});
   var rows=products.map(function(p){
@@ -291,20 +403,79 @@ function renderControl(){
     var lastMove=movements.find(function(m){return m.product_id===p.id});
     var dormant=lastMove ? ((Date.now()-new Date(lastMove.created_at).getTime())>90*86400000) : false;
     var status;
-    if(available<=0)status='<span class="pill bad">Sin disponible</span>';
-    else if(week==null||target==null||p.lead_time_days==null)status='<span class="pill warn">Pendiente Marsella</span>';
-    else if(available<=week)status='<span class="pill warn">1 semana o menos</span>';
-    else if(week>0&&physical>week*Number(p.overstock_weeks||8))status='<span class="pill warn">Sobrestock</span>';
-    else if(dormant)status='<span class="pill">Sin movimiento 90d</span>';
+    if(available<=0){status='<span class="pill bad">Sin disponible</span>';alertCount++}
+    else if(week==null||target==null||p.lead_time_days==null){status='<span class="pill warn">Pendiente Marsella</span>';alertCount++}
+    else if(available<=week){status='<span class="pill warn">1 semana o menos</span>';alertCount++}
+    else if(week>0&&physical>week*Number(p.overstock_weeks||8)){status='<span class="pill warn">Sobrestock</span>';alertCount++}
+    else if(dormant){status='<span class="pill">Sin movimiento 90d</span>';alertCount++}
     else status='<span class="pill ok">Normal</span>';
     return '<tr><td class="sku">'+esc(p.sku)+'</td><td>'+esc(p.name)+'</td><td>'+physical.toLocaleString('es-CL')+'</td><td>'+comm.toLocaleString('es-CL')+'</td><td><b>'+available.toLocaleString('es-CL')+'</b></td><td>'+inc.toLocaleString('es-CL')+'</td><td>'+(week==null?'—':week.toLocaleString('es-CL'))+'</td><td>'+(target==null?'—':target.toLocaleString('es-CL'))+'</td><td><b>'+(buy==null?'—':buy.toLocaleString('es-CL'))+'</b></td><td>'+(p.lead_time_days==null?'—':esc(p.lead_time_days)+' días')+'</td><td>'+status+'</td></tr>'
   }).join('');
   el('controlRows').innerHTML=rows;
+  if(el('kPhysical'))el('kPhysical').textContent=totalPhysical.toLocaleString('es-CL');
   el('kCommitted').textContent=totalCommitted.toLocaleString('es-CL');
+  if(el('kAvailable'))el('kAvailable').textContent=totalAvailable.toLocaleString('es-CL');
   el('kInbound').textContent=totalInbound.toLocaleString('es-CL');
-  el('kSuggested').textContent=totalSuggested.toLocaleString('es-CL');
-  el('kDifferences').textContent=counts.filter(function(c){return Number(c.difference)!==0}).length;
+  if(el('kControlAlerts'))el('kControlAlerts').textContent=alertCount.toLocaleString('es-CL');
+  if(el('kControlDocs'))el('kControlDocs').textContent=documents.length.toLocaleString('es-CL');
+  if(el('kSuggested'))el('kSuggested').textContent=totalSuggested.toLocaleString('es-CL');
+  if(el('kDifferences'))el('kDifferences').textContent=counts.filter(function(c){return Number(c.difference)!==0}).length;
+  renderPremiumAnalytics(st);
 }
+
+function canvasSetup(id){
+  var c=el(id);if(!c)return null;var rect=c.getBoundingClientRect();var dpr=Math.max(1,window.devicePixelRatio||1);
+  var w=Math.max(280,Math.floor(rect.width||c.parentElement.clientWidth||500)),h=Math.max(150,Math.floor(rect.height||c.parentElement.clientHeight||220));
+  c.width=w*dpr;c.height=h*dpr;var ctx=c.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);return {c:c,ctx:ctx,w:w,h:h}
+}
+function lastSixMonths(){
+  var now=new Date(),out=[];for(var i=5;i>=0;i--){var d=new Date(now.getFullYear(),now.getMonth()-i,1);out.push({year:d.getFullYear(),month:d.getMonth(),label:d.toLocaleDateString('es-CL',{month:'short'}).replace('.','')})}return out
+}
+function drawInventoryChart(){
+  var s=canvasSetup('inventoryChart');if(!s)return;var ctx=s.ctx,w=s.w,h=s.h,months=lastSixMonths(),vals=months.map(function(m){return movements.filter(function(x){var d=new Date(x.created_at);return d.getFullYear()===m.year&&d.getMonth()===m.month}).reduce(function(a,x){return a+Number(x.quantity||0)},0)});
+  var max=Math.max(1,...vals.map(function(v){return Math.abs(v)})),left=42,right=14,top=18,bottom=30,cw=w-left-right,ch=h-top-bottom,zero=top+ch/2;
+  ctx.clearRect(0,0,w,h);ctx.strokeStyle='rgba(255,255,255,.075)';ctx.lineWidth=1;ctx.font='10px system-ui';ctx.fillStyle='#747e86';
+  for(var g=0;g<5;g++){var y=top+ch*g/4;ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-right,y);ctx.stroke()}
+  ctx.strokeStyle='rgba(226,191,109,.22)';ctx.beginPath();ctx.moveTo(left,zero);ctx.lineTo(w-right,zero);ctx.stroke();
+  var pts=[];
+  vals.forEach(function(v,i){var x=left+(cw*(i/(months.length-1||1))),y=zero-(v/max)*(ch*.42);pts.push([x,y]);ctx.fillStyle='#89939b';ctx.textAlign='center';ctx.fillText(months[i].label,x,h-8)});
+  if(pts.length){var grad=ctx.createLinearGradient(0,top,0,h-bottom);grad.addColorStop(0,'rgba(226,191,109,.26)');grad.addColorStop(1,'rgba(226,191,109,0)');ctx.beginPath();ctx.moveTo(pts[0][0],zero);pts.forEach(function(p){ctx.lineTo(p[0],p[1])});ctx.lineTo(pts[pts.length-1][0],zero);ctx.closePath();ctx.fillStyle=grad;ctx.fill();ctx.beginPath();pts.forEach(function(p,i){if(i===0)ctx.moveTo(p[0],p[1]);else ctx.lineTo(p[0],p[1])});ctx.strokeStyle='#e0ad43';ctx.lineWidth=2.2;ctx.shadowColor='rgba(224,173,67,.35)';ctx.shadowBlur=8;ctx.stroke();ctx.shadowBlur=0;pts.forEach(function(p,i){ctx.beginPath();ctx.arc(p[0],p[1],3.2,0,Math.PI*2);ctx.fillStyle=vals[i]>=0?'#e5b34c':'#e77d72';ctx.fill()})}
+}
+function controlStates(st){
+  var normal=0,low=0,out=0,pending=0;
+  products.filter(function(p){return p.active}).forEach(function(p){var available=Number(st.physical[p.id]||0)-Number(st.committed[p.id]||0);if(available<=0)out++;else if(p.week_stock_units==null)pending++;else if(p.stock_alert_enabled!==false&&available<=Number(p.week_stock_units))low++;else normal++});
+  return {normal:normal,low:low,out:out,pending:pending}
+}
+function drawStateChart(st){
+  var s=canvasSetup('stateChart');if(!s)return;var ctx=s.ctx,w=s.w,h=s.h,state=controlStates(st),vals=[state.normal,state.low,state.out,state.pending],cols=['#42c77b','#e0a93a','#e56f63','#78838c'],sum=vals.reduce(function(a,b){return a+b},0)||1,cx=w/2,cy=h/2,r=Math.min(w,h)*.39,inner=r*.62,start=-Math.PI/2;
+  ctx.clearRect(0,0,w,h);vals.forEach(function(v,i){var a=v/sum*Math.PI*2;ctx.beginPath();ctx.arc(cx,cy,r,start,start+a);ctx.arc(cx,cy,inner,start+a,start,true);ctx.closePath();ctx.fillStyle=cols[i];ctx.fill();start+=a});
+  if(el('stateTotal'))el('stateTotal').textContent=products.filter(function(p){return p.active}).length;
+  if(el('stateLegend'))el('stateLegend').innerHTML=[['Disponibles',state.normal,cols[0]],['Stock bajo',state.low,cols[1]],['Sin stock',state.out,cols[2]],['Sin umbral',state.pending,cols[3]]].map(function(x){return '<div class="state-item"><span class="state-dot" style="background:'+x[2]+'"></span><span>'+x[0]+'</span><b>'+x[1]+'</b></div>'}).join('')
+}
+function renderLowStock(st){
+  var list=products.map(function(p){var available=Number(st.physical[p.id]||0)-Number(st.committed[p.id]||0),week=p.week_stock_units==null?null:Number(p.week_stock_units),ratio=week&&week>0?available/week:(available<=0?0:99);return {p:p,available:available,week:week,ratio:ratio}}).filter(function(x){return x.available<=0||(x.week!=null&&x.available<=x.week)}).sort(function(a,b){return a.ratio-b.ratio}).slice(0,7);
+  if(!el('lowStockList'))return;
+  if(!list.length){el('lowStockList').innerHTML='<div class="muted" style="padding:30px 6px;text-align:center">Sin productos bajo el umbral definido.</div>';return}
+  el('lowStockList').innerHTML=list.map(function(x){var pct=x.week&&x.week>0?Math.max(4,Math.min(100,(x.available/x.week)*100)):4;return '<div class="low-row"><div class="low-name"><b>'+esc(x.p.name)+'</b><small>'+esc(x.p.sku)+'</small></div><div class="low-track"><div class="low-fill" style="width:'+pct+'%"></div></div><div class="low-value">'+x.available.toLocaleString('es-CL')+'</div></div>'}).join('')
+}
+function renderRecentMovements(){
+  if(!el('recentMovementRows'))return;el('recentMovementRows').innerHTML=movements.slice(0,6).map(function(m){var p=m.msc_products||{},incoming=Number(m.quantity)>0;return '<tr><td>'+new Date(m.created_at).toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit'})+' '+new Date(m.created_at).toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})+'</td><td><span class="movement-chip '+(incoming?'in':'out')+'">'+esc(m.movement_type)+'</span></td><td><b>'+esc(p.name||'Producto')+'</b><div class="sku" style="font-size:9px">'+esc(p.sku||'')+'</div></td><td style="font-weight:800;color:'+(incoming?'#75d89b':'#ef8379')+'">'+(incoming?'+':'')+Number(m.quantity).toLocaleString('es-CL')+'</td></tr>'}).join('')
+}
+function drawPriceChart(){
+  var priced=products.filter(function(p){return p.cost_price!=null&&p.sale_price!=null}).slice(0,6),s=canvasSetup('priceChart');if(!s)return;var ctx=s.ctx,w=s.w,h=s.h,left=35,right=10,top=10,bottom=34,cw=w-left-right,ch=h-top-bottom,max=Math.max(1,...priced.map(function(p){return Math.max(Number(p.cost_price||0),Number(p.sale_price||0))}));
+  ctx.clearRect(0,0,w,h);ctx.font='9px system-ui';ctx.fillStyle='#79838a';ctx.textAlign='center';for(var g=0;g<4;g++){var y=top+ch*g/3;ctx.strokeStyle='rgba(255,255,255,.065)';ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-right,y);ctx.stroke()}
+  if(!priced.length){ctx.fillStyle='#7d858c';ctx.font='11px system-ui';ctx.fillText('Aún no hay productos con costo y precio definidos',w/2,h/2);return}
+  var slot=cw/priced.length,bw=Math.min(20,slot*.24);
+  priced.forEach(function(p,i){var x=left+slot*i+slot/2,cost=Number(p.cost_price),sale=Number(p.sale_price),hc=cost/max*ch,hs=sale/max*ch;ctx.fillStyle='#7f8990';ctx.fillRect(x-bw-2,top+ch-hc,bw,hc);var grad=ctx.createLinearGradient(0,top,0,h-bottom);grad.addColorStop(0,'#efbd58');grad.addColorStop(1,'#a77019');ctx.fillStyle=grad;ctx.fillRect(x+2,top+ch-hs,bw,hs);ctx.fillStyle='#899198';ctx.fillText(String(p.sku||'').split('-').slice(-2).join('-'),x,h-9)})
+}
+function renderPriceSummary(){
+  var priced=products.filter(function(p){return p.cost_price!=null&&p.sale_price!=null}),avg=function(k){return priced.length?priced.reduce(function(a,p){return a+Number(p[k]||0)},0)/priced.length:0},markup=products.filter(function(p){return p.markup_percent!=null});
+  if(el('avgCost'))el('avgCost').textContent=money(avg('cost_price'));if(el('avgSale'))el('avgSale').textContent=money(avg('sale_price'));if(el('avgMarkup'))el('avgMarkup').textContent=(markup.length?(markup.reduce(function(a,p){return a+Number(p.markup_percent||0)},0)/markup.length).toFixed(1):'0')+'%'
+}
+function renderPremiumAnalytics(st){
+  requestAnimationFrame(function(){drawInventoryChart();drawStateChart(st);renderLowStock(st);renderRecentMovements();drawPriceChart();renderPriceSummary()})
+}
+window.addEventListener('resize',function(){if(!el('view-control')||!el('view-control').classList.contains('active'))return;var st=inventoryState();clearTimeout(window.__mscResize);window.__mscResize=setTimeout(function(){renderPremiumAnalytics(st)},120)});
 function render(){
   el('kProducts').textContent=products.filter(function(p){return p.active}).length;
   el('kPending').textContent=documents.filter(function(d){return d.status==='pendiente'||d.status==='revisado'}).length;
@@ -397,6 +568,7 @@ el('saveNewPassword').onclick=async function(){
 };
 el('logout').onclick=logout;
 document.querySelectorAll('[data-view]').forEach(function(b){b.onclick=function(){document.querySelectorAll('[data-view]').forEach(function(x){x.classList.toggle('active',x===b)});document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active')});el('view-'+b.dataset.view).classList.add('active');el('pageTitle').textContent=b.textContent}})
+el('globalSearch').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var q=this.value.trim();if(!q)return;var target=document.querySelector('[data-view="productos"]');if(target)target.click();el('productSearch').value=q;el('productSearch').dispatchEvent(new Event('input'));setTimeout(function(){el('productSearch').focus()},50)});
 el('productSearch').oninput=function(){var q=this.value.toLowerCase();renderProducts(products.filter(function(p){return [p.sku,p.name,p.brand,p.model,p.manufacturer_code,p.ean_gtin].join(' ').toLowerCase().indexOf(q)>=0}))}
 el('productForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});if(body.week_stock_units==='')delete body.week_stock_units;else if(body.week_stock_units!=null)body.week_stock_units=Number(body.week_stock_units);['family_code','subfamily_code','type_code','variant_code'].forEach(function(k){body[k]=body[k].toUpperCase()});el('productMsg').textContent='Guardando…';try{var r=await authFetch('/rest/v1/msc_products?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)});el('productMsg').textContent='Creado: '+r[0].sku;e.target.reset();e.target.elements.variant_code.value='UNI';e.target.elements.unit.value='Unidad';await loadAll()}catch(err){el('productMsg').textContent=err.message}})
 el('locationForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});body.code=body.code.toUpperCase();el('locationMsg').textContent='Guardando…';try{await authFetch('/rest/v1/msc_locations',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});el('locationMsg').textContent='Ubicación creada';e.target.reset();await loadAll()}catch(err){el('locationMsg').textContent=err.message}})
