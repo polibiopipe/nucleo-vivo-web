@@ -109,6 +109,9 @@ url('https://plus.unsplash.com/premium_photo-1682141670000-1504b9eda6c3?auto=for
 .report-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}.risk-list{display:grid;gap:8px}.risk-row{display:grid;grid-template-columns:1fr auto;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}.risk-row small{display:block;color:#79828a}
 @media(max-width:1100px){.split-3,.split-2,.report-grid{grid-template-columns:1fr}.module-kpis{grid-template-columns:repeat(2,1fr)}}
 
+
+.catalog-modal{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.76);display:none;padding:20px}.catalog-modal.show{display:grid;place-items:center}.catalog-modal-box{width:min(640px,100%);max-height:90vh;overflow:auto;background:#101519;border:1px solid #3a4147;border-radius:8px;padding:24px;box-shadow:0 28px 90px rgba(0,0,0,.5)}.catalog-modal-head{display:flex;justify-content:space-between;gap:15px;align-items:start;margin-bottom:15px}.catalog-modal-head h3{margin:4px 0;font-size:24px}.catalog-modal-head p{margin:0;color:#8f979e;font-size:12px}.catalog-modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:15px}.portal-status{display:inline-flex;align-items:center;gap:6px}.portal-status:before{content:"";width:7px;height:7px;border-radius:50%;background:#7b858d}.portal-status.on:before{background:#4ec980;box-shadow:0 0 10px rgba(78,201,128,.35)}
+
 </style>
 </head>
 <body>
@@ -334,7 +337,7 @@ url('https://plus.unsplash.com/premium_photo-1682141670000-1504b9eda6c3?auto=for
           </div>
           <div class="formbox"><h2>Criterio de identificación</h2><div class="notice">SKU MSC identifica internamente. EAN/GTIN y código fabricante se conservan como identificadores externos.</div><p>Formato: <span class="sku">MSC-FAM-SUB-TIPO-VAR-000</span></p><p class="muted">El correlativo nunca se reutiliza. Las variantes inventariables deben tener SKU propio.</p></div>
         </div>
-        <div class="panel"><div class="panel-head"><h2>Maestro de productos</h2><input id="productSearch" class="search" placeholder="Buscar SKU, producto, marca..."></div><div class="table-wrap"><table><thead><tr><th>SKU</th><th>Producto</th><th>Marca</th><th>Costo neto</th><th>Markup</th><th>Venta neta</th><th>Venta c/IVA</th><th>Utilidad</th><th>Parámetros stock</th><th>Alerta</th><th>Estado</th></tr></thead><tbody id="productRows"></tbody></table></div></div>
+        <div class="panel"><div class="panel-head"><h2>Maestro de productos</h2><input id="productSearch" class="search" placeholder="Buscar SKU, producto, marca..."></div><div class="table-wrap"><table><thead><tr><th>SKU</th><th>Producto</th><th>Marca</th><th>Costo neto</th><th>Markup</th><th>Venta neta</th><th>Venta c/IVA</th><th>Utilidad</th><th>Parámetros stock</th><th>Catálogo</th><th>Alerta</th><th>Estado</th></tr></thead><tbody id="productRows"></tbody></table></div></div>
       </section>
 
       <section class="view" id="view-documentos">
@@ -384,9 +387,13 @@ url('https://plus.unsplash.com/premium_photo-1682141670000-1504b9eda6c3?auto=for
       <section class="view" id="view-clientes">
         <div class="module-hero"><div><div class="module-tag">Comercial</div><h1>Clientes, pedidos y devoluciones</h1><p>Desde el pedido hasta el compromiso de stock y postventa.</p></div></div>
         <div class="split-3">
-          <div class="formbox"><h2>Nuevo cliente</h2><form id="customerForm"><div class="field"><label>RUT</label><input name="rut"></div><div class="field"><label>Razón social</label><input name="name" required></div><div class="field"><label>Contacto</label><input name="contact_name"></div><div class="field"><label>Email</label><input name="email" type="email"></div><div class="field"><label>Condición de pago</label><input name="payment_terms"></div><div class="field"><label>Descuento base %</label><input name="default_discount_percent" type="number" min="0" step=".01" value="0"></div><button class="btn" type="submit">Guardar cliente</button></form></div>
+          <div class="formbox"><h2>Nuevo cliente</h2><p class="muted">El correo será también su identidad de acceso al portal de cotización.</p><form id="customerForm"><div class="field"><label>RUT</label><input name="rut"></div><div class="field"><label>Razón social</label><input name="name" required></div><div class="field"><label>Contacto</label><input name="contact_name"></div><div class="field"><label>Email · acceso portal</label><input name="email" type="email"></div><div class="field"><label>Condición de pago</label><input name="payment_terms"></div><div class="field"><label>Descuento base %</label><input name="default_discount_percent" type="number" min="0" step=".01" value="0"></div><button class="btn" type="submit">Guardar cliente</button></form></div>
           <div class="formbox"><h2>Nuevo pedido</h2><form id="salesOrderForm"><div class="field"><label>Cliente</label><select name="customer_id" id="soCustomer" required></select></div><div class="field"><label>Producto</label><select name="product_id" id="soProduct" required></select></div><div class="field"><label>Cantidad</label><input name="quantity" type="number" min=".001" step=".001" required></div><div class="field"><label>Precio neto unitario</label><input name="unit_price" type="number" min="0" step=".01" required></div><div class="field"><label>Descuento %</label><input name="discount_percent" type="number" min="0" step=".01" value="0"></div><button class="btn" type="submit">Confirmar pedido</button></form></div>
           <div class="formbox"><h2>Devolución / garantía</h2><form id="returnForm"><div class="field"><label>Cliente</label><select name="customer_id" id="returnCustomer"></select></div><div class="field"><label>Producto</label><select name="product_id" id="returnProduct" required></select></div><div class="field"><label>Cantidad</label><input name="quantity" type="number" min=".001" step=".001" required></div><div class="field"><label>Destino</label><select name="disposition"><option value="revision">Revisión</option><option value="reingreso">Reingreso</option><option value="cuarentena">Cuarentena</option><option value="garantia">Garantía</option><option value="descarte">Descarte</option></select></div><div class="field"><label>Motivo</label><input name="reason"></div><button class="btn" type="submit">Registrar devolución</button></form></div>
+        </div>
+        <div class="split-2" style="margin-top:12px">
+          <div class="panel" style="margin-top:0"><div class="panel-head"><h2>Directorio de clientes</h2><span class="muted">Acceso portal</span></div><div class="table-wrap"><table><thead><tr><th>Cliente</th><th>RUT</th><th>Email</th><th>Portal</th></tr></thead><tbody id="customerRows"></tbody></table></div></div>
+          <div class="panel" style="margin-top:0"><div class="panel-head"><h2>Solicitudes de cotización</h2><span class="muted">Portal cliente</span></div><div class="table-wrap"><table><thead><tr><th>Solicitud</th><th>Cliente</th><th>Productos</th><th>Estado</th><th>Acción</th></tr></thead><tbody id="quoteRequestRows"></tbody></table></div></div>
         </div>
         <div class="panel"><div class="panel-head"><h2>Pedidos recientes</h2></div><div class="table-wrap"><table><thead><tr><th>Pedido</th><th>Cliente</th><th>Fecha</th><th>Total neto</th><th>Estado</th><th>Acción</th></tr></thead><tbody id="salesOrderRows"></tbody></table></div></div>
       </section>
@@ -416,6 +423,22 @@ url('https://plus.unsplash.com/premium_photo-1682141670000-1504b9eda6c3?auto=for
   </main>
 </section>
 
+<div id="catalogModal" class="catalog-modal">
+  <div class="catalog-modal-box">
+    <div class="catalog-modal-head"><div><div class="module-tag">Publicación cliente</div><h3 id="catalogModalTitle">Ficha catálogo</h3><p>Solo estos datos se exponen en la página de cotización.</p></div><button id="catalogModalClose" class="btn alt" type="button">Cerrar</button></div>
+    <form id="catalogForm">
+      <input type="hidden" name="product_id" id="catalogProductId">
+      <div class="field"><label>Visible en catálogo</label><select name="catalog_visible" id="catalogVisible"><option value="false">No · interno</option><option value="true">Sí · publicar</option></select></div>
+      <div class="field"><label>Grupo catálogo</label><input name="catalog_group_key" id="catalogGroup" placeholder="Ej. SH406CDK"></div>
+      <div class="field"><label>Categoría pública</label><input name="catalog_category" id="catalogCategory" placeholder="Ej. Calzado de seguridad"></div>
+      <div class="field"><label>Descripción comercial</label><textarea name="catalog_description" id="catalogDescription" placeholder="Descripción visible al cliente, sin costos ni notas internas."></textarea></div>
+      <div class="field"><label>URL imagen</label><input name="catalog_image_url" id="catalogImage" type="url" placeholder="https://..."></div>
+      <div class="catalog-modal-actions"><button class="btn" type="submit">Guardar ficha</button></div>
+      <div id="catalogMsg" class="msg"></div>
+    </form>
+  </div>
+</div>
+
 <script>
 (function(){
 var SUPABASE_URL='https://ygfmpwlpmaasooltjujb.supabase.co';
@@ -423,7 +446,7 @@ var SUPABASE_KEY='sb_publishable_evFWgAwjv7xcNxo156NV0g_CFq0j5Ld';
 var token=sessionStorage.getItem('msc_token')||'';
 var role='';
 var currentEmail='';
-var products=[],locations=[],documents=[],movements=[],aliases=[],commitments=[],inbound=[],counts=[],warehouses=[],suppliers=[],purchaseOrders=[],certifications=[],lots=[],inspections=[],customers=[],salesOrders=[],returnsData=[],auditLog=[],dispatches=[],notifications=[];
+var products=[],locations=[],documents=[],movements=[],aliases=[],commitments=[],inbound=[],counts=[],warehouses=[],suppliers=[],purchaseOrders=[],certifications=[],lots=[],inspections=[],customers=[],salesOrders=[],returnsData=[],auditLog=[],dispatches=[],notifications=[],customerUsers=[],quoteRequests=[];
 function el(id){return document.getElementById(id)}
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function authRedirectUrl(){return window.location.origin+'/prototipos/msc-safety/gestion/'}
@@ -487,10 +510,12 @@ async function loadAll(){
       authFetch('/rest/v1/msc_returns?select=*,msc_customers(name)&order=created_at.desc&limit=200'),
       authFetch('/rest/v1/msc_audit_log?select=*&order=created_at.desc&limit=100'),
       authFetch('/rest/v1/msc_dispatches?select=*,msc_dispatch_lines(*,msc_products(sku,name))&order=created_at.desc&limit=200'),
-      authFetch('/rest/v1/msc_notifications?select=*&resolved=eq.false&order=severity.desc,updated_at.desc&limit=100')
+      authFetch('/rest/v1/msc_notifications?select=*&resolved=eq.false&order=severity.desc,updated_at.desc&limit=100'),
+      authFetch('/rest/v1/msc_customer_users?select=*&order=created_at.desc&limit=500'),
+      authFetch('/rest/v1/msc_quote_requests?select=*,msc_customers(name,email),msc_quote_request_lines(quantity,notes,msc_products(sku,name,variant_code))&order=created_at.desc&limit=200')
     ]);
     products=rs[0]||[];locations=rs[1]||[];documents=rs[2]||[];movements=rs[3]||[];aliases=rs[4]||[];commitments=rs[5]||[];inbound=rs[6]||[];counts=rs[7]||[];
-    warehouses=rs[8]||[];suppliers=rs[9]||[];purchaseOrders=rs[10]||[];certifications=rs[11]||[];lots=rs[12]||[];inspections=rs[13]||[];customers=rs[14]||[];salesOrders=rs[15]||[];returnsData=rs[16]||[];auditLog=rs[17]||[];dispatches=rs[18]||[];notifications=rs[19]||[];
+    warehouses=rs[8]||[];suppliers=rs[9]||[];purchaseOrders=rs[10]||[];certifications=rs[11]||[];lots=rs[12]||[];inspections=rs[13]||[];customers=rs[14]||[];salesOrders=rs[15]||[];returnsData=rs[16]||[];auditLog=rs[17]||[];dispatches=rs[18]||[];notifications=rs[19]||[];customerUsers=rs[20]||[];quoteRequests=rs[21]||[];
     render()
   }catch(e){if(String(e.message).indexOf('JWT')>=0){logout()}else{console.error(e)}}
 }
@@ -642,6 +667,9 @@ function renderManagement(){
   if(el('kCertExpiring'))el('kCertExpiring').textContent=certExp.length;if(el('kCertExpired'))el('kCertExpired').textContent=certExpired.length;if(el('kLotsExpiring'))el('kLotsExpiring').textContent=lotExp.length;if(el('kInspectionDue'))el('kInspectionDue').textContent=inspDue.length;
   if(el('complianceRows'))el('complianceRows').innerHTML=products.map(function(p){var pc=certifications.filter(function(c){return c.product_id===p.id}),nearest=pc.filter(function(c){return c.expiry_date}).sort(function(a,b){return String(a.expiry_date).localeCompare(String(b.expiry_date))})[0],pl=lots.filter(function(l){return l.product_id===p.id}),ready=productReadiness(p,st);return '<tr><td class="sku">'+esc(p.sku)+'</td><td>'+esc(p.name)+'</td><td>'+pc.length+'</td><td>'+esc(nearest?nearest.expiry_date:'—')+'</td><td>'+pl.length+'</td><td><span class="status-light '+ready.level+'">'+ready.label+'</span></td></tr>'}).join('');
 
+  if(el('customerRows'))el('customerRows').innerHTML=customers.map(function(c){var linked=customerUsers.some(function(u){return u.customer_id===c.id&&u.active});return '<tr><td><b>'+esc(c.name)+'</b><div class="muted">'+esc(c.contact_name||'')+'</div></td><td>'+esc(c.rut||'')+'</td><td>'+esc(c.email||'—')+'</td><td><span class="portal-status '+(linked?'on':'')+'">'+(linked?'Activo':'Pendiente activación')+'</span></td></tr>'}).join('');
+  if(el('quoteRequestRows'))el('quoteRequestRows').innerHTML=quoteRequests.map(function(q){var lines=q.msc_quote_request_lines||[],names=lines.slice(0,2).map(function(l){return (l.msc_products&&l.msc_products.name)||'Producto'}).join(', ')+(lines.length>2?' +'+(lines.length-2):'');var action=q.status==='enviada'?'<button class="btn alt quoteStatus" data-id="'+q.id+'" data-status="en_revision" type="button" style="padding:5px 7px">Revisar</button>':q.status==='en_revision'?'<button class="btn alt quoteStatus" data-id="'+q.id+'" data-status="respondida" type="button" style="padding:5px 7px">Respondida</button>':'—';return '<tr><td class="sku">'+esc(q.request_no)+'</td><td>'+esc((q.msc_customers||{}).name||'')+'<div class="muted">'+new Date(q.created_at).toLocaleDateString('es-CL')+'</div></td><td>'+esc(names||'Sin productos')+'</td><td>'+esc(q.status.replaceAll('_',' '))+'</td><td>'+action+'</td></tr>'}).join('');
+  if(el('quoteRequestRows'))el('quoteRequestRows').querySelectorAll('.quoteStatus').forEach(function(b){b.onclick=function(){updateQuoteStatus(b.dataset.id,b.dataset.status)}});
   if(el('salesOrderRows'))el('salesOrderRows').innerHTML=salesOrders.map(function(o){var action=o.status==='confirmado'?'<button class="btn alt prepareDispatch" data-id="'+o.id+'" type="button" style="padding:6px 8px">Preparar</button>':o.status==='preparacion'?'<button class="btn alt dispatchOrder" data-id="'+o.id+'" type="button" style="padding:6px 8px">Despachar</button>':'—';return '<tr><td class="sku">'+esc(o.order_number)+'</td><td>'+esc((o.msc_customers||{}).name||'')+'</td><td>'+esc(o.order_date)+'</td><td>'+money(o.net_total)+'</td><td>'+esc(o.status)+'</td><td>'+action+'</td></tr>'}).join('');
   if(el('salesOrderRows')){el('salesOrderRows').querySelectorAll('.prepareDispatch').forEach(function(b){b.onclick=function(){prepareSalesDispatch(b.dataset.id)}});el('salesOrderRows').querySelectorAll('.dispatchOrder').forEach(function(b){b.onclick=function(){dispatchSalesOrder(b.dataset.id)}})}
 
@@ -689,11 +717,21 @@ function renderProducts(list){
     var pricing=canPrice?'<div style="display:grid;grid-template-columns:90px 75px auto;gap:6px;align-items:center"><input class="costInput" data-product="'+p.id+'" type="number" min="0" step="0.01" value="'+esc(cost)+'" placeholder="Costo" style="width:90px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><input class="markupInput" data-product="'+p.id+'" type="number" min="0" step="0.01" value="'+esc(markup)+'" placeholder="Markup %" style="width:75px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><button class="btn alt savePrice" data-product="'+p.id+'" type="button" style="padding:7px 9px">Guardar</button></div>':'';
     var controls=canControl?'<div style="display:grid;grid-template-columns:78px 78px 68px auto;gap:5px;align-items:center"><input class="weekInput" data-product="'+p.id+'" type="number" min="0" step="0.001" value="'+esc(p.week_stock_units==null?'':Number(p.week_stock_units))+'" placeholder="1 semana" title="Unidades para 1 semana" style="width:78px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><input class="targetInput" data-product="'+p.id+'" type="number" min="0" step="0.001" value="'+esc(p.target_stock_units==null?'':Number(p.target_stock_units))+'" placeholder="Objetivo" style="width:78px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><input class="leadInput" data-product="'+p.id+'" type="number" min="0" step="1" value="'+esc(p.lead_time_days==null?'':Number(p.lead_time_days))+'" placeholder="Días" style="width:68px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><button class="btn alt saveControls" data-product="'+p.id+'" type="button" style="padding:7px 9px">Guardar</button></div>':('<span class="muted">1 sem: '+(p.week_stock_units==null?'—':esc(p.week_stock_units))+' · obj: '+(p.target_stock_units==null?'—':esc(p.target_stock_units))+' · '+(p.lead_time_days==null?'—':esc(p.lead_time_days)+'d')+'</span>');
     var alert=p.week_stock_units==null?'<span class="pill warn">Sin definir</span>':(p.stock_alert_enabled===false?'<span class="pill">Desactivada</span>':'<span class="pill ok">Activa</span>');
-    return '<tr><td class="sku">'+esc(p.sku)+'<div><button class="btn alt printSku" data-product="'+p.id+'" type="button" style="padding:4px 6px;margin-top:5px;font-size:9px">Etiqueta</button></div></td><td><b>'+esc(p.name)+'</b><div class="muted">'+esc(p.brand||'')+' '+esc(p.model||'')+'</div></td><td>'+esc(p.brand)+'</td><td>'+money(p.cost_price)+(pricing?'<div style="margin-top:6px">'+pricing+'</div>':'')+'</td><td>'+(p.markup_percent==null?'—':esc(p.markup_percent)+'%')+'</td><td>'+money(sale)+'</td><td>'+money(gross)+'</td><td>'+money(profit)+'</td><td>'+controls+'</td><td>'+alert+'</td><td><span class="pill '+(p.active?'ok':'bad')+'">'+(p.active?'Activo':'Inactivo')+'</span></td></tr>'
+    var catalog='<span class="pill '+(p.catalog_visible?'ok':'')+'">'+(p.catalog_visible?'Publicado':'Interno')+'</span><div><button class="btn alt editCatalog" data-product="'+p.id+'" type="button" style="padding:5px 7px;margin-top:5px;font-size:9px">Ficha catálogo</button></div>';
+    return '<tr><td class="sku">'+esc(p.sku)+'<div><button class="btn alt printSku" data-product="'+p.id+'" type="button" style="padding:4px 6px;margin-top:5px;font-size:9px">Etiqueta</button></div></td><td><b>'+esc(p.name)+'</b><div class="muted">'+esc(p.brand||'')+' '+esc(p.model||'')+'</div></td><td>'+esc(p.brand)+'</td><td>'+money(p.cost_price)+(pricing?'<div style="margin-top:6px">'+pricing+'</div>':'')+'</td><td>'+(p.markup_percent==null?'—':esc(p.markup_percent)+'%')+'</td><td>'+money(sale)+'</td><td>'+money(gross)+'</td><td>'+money(profit)+'</td><td>'+controls+'</td><td>'+catalog+'</td><td>'+alert+'</td><td><span class="pill '+(p.active?'ok':'bad')+'">'+(p.active?'Activo':'Inactivo')+'</span></td></tr>'
   }).join('');
   el('productRows').querySelectorAll('.saveControls').forEach(function(btn){btn.onclick=function(){saveProductControls(btn.dataset.product)}});
-  el('productRows').querySelectorAll('.savePrice').forEach(function(btn){btn.onclick=function(){saveProductPricing(btn.dataset.product)}});el('productRows').querySelectorAll('.printSku').forEach(function(btn){btn.onclick=function(){printSkuLabel(btn.dataset.product)}});
+  el('productRows').querySelectorAll('.savePrice').forEach(function(btn){btn.onclick=function(){saveProductPricing(btn.dataset.product)}});el('productRows').querySelectorAll('.printSku').forEach(function(btn){btn.onclick=function(){printSkuLabel(btn.dataset.product)}});el('productRows').querySelectorAll('.editCatalog').forEach(function(btn){btn.onclick=function(){openCatalogEditor(btn.dataset.product)}});
 }
+function openCatalogEditor(productId){
+  var p=products.find(function(x){return x.id===productId});if(!p)return;
+  el('catalogProductId').value=p.id;el('catalogVisible').value=String(Boolean(p.catalog_visible));el('catalogGroup').value=p.catalog_group_key||p.manufacturer_code||p.model||'';el('catalogCategory').value=p.catalog_category||'';el('catalogDescription').value=p.catalog_description||'';el('catalogImage').value=p.catalog_image_url||'';el('catalogModalTitle').textContent=p.name;el('catalogMsg').textContent='';el('catalogModal').classList.add('show')
+}
+el('catalogModalClose').onclick=function(){el('catalogModal').classList.remove('show')};
+el('catalogModal').addEventListener('click',function(e){if(e.target===el('catalogModal'))el('catalogModal').classList.remove('show')});
+el('catalogForm').addEventListener('submit',async function(e){e.preventDefault();var id=el('catalogProductId').value,body={catalog_visible:el('catalogVisible').value==='true',catalog_group_key:el('catalogGroup').value.trim()||null,catalog_category:el('catalogCategory').value.trim()||null,catalog_description:el('catalogDescription').value.trim()||null,catalog_image_url:el('catalogImage').value.trim()||null};if(body.catalog_visible&&!body.catalog_description){el('catalogMsg').textContent='Agrega una descripción comercial antes de publicar.';return}el('catalogMsg').textContent='Guardando…';try{await authFetch('/rest/v1/msc_products?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});el('catalogMsg').textContent='Ficha actualizada.';await loadAll();setTimeout(function(){el('catalogModal').classList.remove('show')},500)}catch(err){el('catalogMsg').textContent=err.message}});
+async function updateQuoteStatus(id,status){try{await authFetch('/rest/v1/msc_quote_requests?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:status,updated_at:new Date().toISOString()})});await loadAll()}catch(err){alert(err.message)}}
+
 async function saveProductControls(productId){
   if(currentEmail!=='marsella.solis@nucleovivo.net'){alert('Solo Marsella puede definir los parámetros operativos.');return}
   var root=el('productRows'),week=Number(root.querySelector('.weekInput[data-product="'+productId+'"]').value),target=Number(root.querySelector('.targetInput[data-product="'+productId+'"]').value),lead=Number(root.querySelector('.leadInput[data-product="'+productId+'"]').value);
