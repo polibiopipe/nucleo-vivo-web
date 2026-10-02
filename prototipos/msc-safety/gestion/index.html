@@ -69,7 +69,7 @@
   <aside class="side">
     <div class="brand"><span>MSC Safety</span><strong>Control interno</strong></div>
     <nav class="nav">
-      <button class="active" data-view="dashboard">Resumen</button>
+      <button class="active" data-view="dashboard">Resumen</button><button data-view="control">Centro de control</button>
       <button data-view="productos">Productos / SKU</button>
       <button data-view="documentos">Facturas</button>
       <button data-view="movimientos">Movimientos</button>
@@ -90,6 +90,72 @@
           <div class="card"><span>Sin umbral definido</span><strong id="kUndefined">0</strong></div>
         </div>
         <div class="panel"><div class="panel-head"><h2>Stock por producto</h2><span class="muted">Calculado desde movimientos</span></div><div class="table-wrap"><table><thead><tr><th>SKU</th><th>Producto</th><th>Marca</th><th>Stock</th><th>1 semana</th><th>Estado</th><th>Unidad</th></tr></thead><tbody id="stockRows"></tbody></table></div></div>
+      </section>
+
+      
+      <section class="view" id="view-control">
+        <div class="cards">
+          <div class="card"><span>Stock comprometido</span><strong id="kCommitted">0</strong></div>
+          <div class="card"><span>En tránsito</span><strong id="kInbound">0</strong></div>
+          <div class="card"><span>Comprar sugerido</span><strong id="kSuggested">0</strong></div>
+          <div class="card"><span>Diferencias inventario</span><strong id="kDifferences">0</strong></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h2>Necesitan atención</h2><span class="muted">Disponible = físico − comprometido</span></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>SKU</th><th>Producto</th><th>Físico</th><th>Comprometido</th><th>Disponible</th><th>En tránsito</th><th>1 semana</th><th>Objetivo</th><th>Comprar</th><th>Reposición</th><th>Estado</th></tr></thead>
+              <tbody id="controlRows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="formbox">
+            <h2>Comprometer stock</h2>
+            <p class="muted">Reserva unidades para un cliente o pedido sin descontarlas físicamente de bodega.</p>
+            <form id="commitmentForm">
+              <div class="field"><label>Producto</label><select name="product_id" id="commitmentProduct" required></select></div>
+              <div class="field"><label>Cantidad</label><input name="quantity" type="number" min="0.001" step="0.001" required></div>
+              <div class="field"><label>Cliente</label><input name="customer_name"></div>
+              <div class="field"><label>Referencia / pedido</label><input name="reference"></div>
+              <button class="btn" type="submit">Registrar compromiso</button>
+            </form>
+          </div>
+
+          <div class="formbox">
+            <h2>Compra en tránsito</h2>
+            <p class="muted">Registra unidades ya compradas que todavía no ingresan físicamente.</p>
+            <form id="inboundForm">
+              <div class="field"><label>Producto</label><select name="product_id" id="inboundProduct" required></select></div>
+              <div class="field"><label>Cantidad</label><input name="quantity" type="number" min="0.001" step="0.001" required></div>
+              <div class="field"><label>Proveedor</label><input name="supplier_name"></div>
+              <div class="field"><label>Fecha estimada</label><input name="expected_date" type="date"></div>
+              <div class="field"><label>OC / referencia</label><input name="purchase_reference"></div>
+              <button class="btn" type="submit">Registrar en tránsito</button>
+            </form>
+          </div>
+
+          <div class="formbox">
+            <h2>Conteo físico</h2>
+            <p class="muted">Compara el sistema con lo encontrado realmente en bodega.</p>
+            <form id="countForm">
+              <div class="field"><label>Producto</label><select name="product_id" id="countProduct" required></select></div>
+              <div class="field"><label>Cantidad contada</label><input name="counted_quantity" type="number" min="0" step="0.001" required></div>
+              <div class="field"><label>Motivo / observación</label><input name="reason" placeholder="Ej. diferencia por conteo, merma, revisión"></div>
+              <button class="btn" type="submit">Registrar conteo</button>
+            </form>
+          </div>
+
+          <div class="formbox">
+            <h2>Cómo leer el control</h2>
+            <div class="notice">El sistema propone compras, pero Marsella mantiene el criterio operativo: cobertura semanal, stock objetivo y plazo de reposición por producto.</div>
+            <p><b>Disponible</b> = físico − comprometido.</p>
+            <p><b>Comprar sugerido</b> = objetivo − (disponible + en tránsito).</p>
+            <p class="muted">Nunca se genera una compra automáticamente: solo una recomendación de cantidad.</p>
+          </div>
+        </div>
       </section>
 
       <section class="view" id="view-productos">
@@ -116,7 +182,7 @@
           </div>
           <div class="formbox"><h2>Criterio de identificación</h2><div class="notice">SKU MSC identifica internamente. EAN/GTIN y código fabricante se conservan como identificadores externos.</div><p>Formato: <span class="sku">MSC-FAM-SUB-TIPO-VAR-000</span></p><p class="muted">El correlativo nunca se reutiliza. Las variantes inventariables deben tener SKU propio.</p></div>
         </div>
-        <div class="panel"><div class="panel-head"><h2>Maestro de productos</h2><input id="productSearch" class="search" placeholder="Buscar SKU, producto, marca..."></div><div class="table-wrap"><table><thead><tr><th>SKU</th><th>Producto</th><th>Marca</th><th>Modelo</th><th>Cód. fabricante</th><th>EAN/GTIN</th><th>1 semana</th><th>Alerta</th><th>Estado</th></tr></thead><tbody id="productRows"></tbody></table></div></div>
+        <div class="panel"><div class="panel-head"><h2>Maestro de productos</h2><input id="productSearch" class="search" placeholder="Buscar SKU, producto, marca..."></div><div class="table-wrap"><table><thead><tr><th>SKU</th><th>Producto</th><th>Marca</th><th>Costo neto</th><th>Markup</th><th>Venta neta</th><th>Venta c/IVA</th><th>Utilidad</th><th>Parámetros stock</th><th>Alerta</th><th>Estado</th></tr></thead><tbody id="productRows"></tbody></table></div></div>
       </section>
 
       <section class="view" id="view-documentos">
@@ -149,7 +215,7 @@ var SUPABASE_KEY='sb_publishable_evFWgAwjv7xcNxo156NV0g_CFq0j5Ld';
 var token=sessionStorage.getItem('msc_token')||'';
 var role='';
 var currentEmail='';
-var products=[],locations=[],documents=[],movements=[],aliases=[];
+var products=[],locations=[],documents=[],movements=[],aliases=[],commitments=[],inbound=[],counts=[];
 function el(id){return document.getElementById(id)}
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function authRedirectUrl(){return window.location.origin+'/prototipos/msc-safety/gestion/'}
@@ -197,10 +263,47 @@ async function loadAll(){
       authFetch('/rest/v1/msc_locations?select=*&order=code'),
       authFetch('/rest/v1/msc_documents?select=*&order=created_at.desc&limit=100'),
       authFetch('/rest/v1/msc_stock_movements?select=*,msc_products(sku,name,unit),msc_documents(folio)&order=created_at.desc&limit=500'),
-      authFetch('/rest/v1/msc_supplier_aliases?select=*&order=created_at.desc&limit=1000')
+      authFetch('/rest/v1/msc_supplier_aliases?select=*&order=created_at.desc&limit=1000'),
+      authFetch('/rest/v1/msc_stock_commitments?select=*&order=created_at.desc&limit=1000'),
+      authFetch('/rest/v1/msc_inbound_stock?select=*&order=created_at.desc&limit=1000'),
+      authFetch('/rest/v1/msc_inventory_counts?select=*&order=counted_at.desc&limit=500')
     ]);
-    products=rs[0]||[];locations=rs[1]||[];documents=rs[2]||[];movements=rs[3]||[];aliases=rs[4]||[];render()
+    products=rs[0]||[];locations=rs[1]||[];documents=rs[2]||[];movements=rs[3]||[];aliases=rs[4]||[];commitments=rs[5]||[];inbound=rs[6]||[];counts=rs[7]||[];render()
   }catch(e){if(String(e.message).indexOf('JWT')>=0){logout()}else{console.error(e)}}
+}
+function inventoryState(){
+  var physical={},committed={},incoming={};
+  movements.forEach(function(m){physical[m.product_id]=(physical[m.product_id]||0)+Number(m.quantity||0)});
+  commitments.filter(function(x){return x.status==='activo'}).forEach(function(x){committed[x.product_id]=(committed[x.product_id]||0)+Number(x.quantity||0)});
+  inbound.filter(function(x){return x.status==='en_transito'}).forEach(function(x){incoming[x.product_id]=(incoming[x.product_id]||0)+Number(x.quantity||0)});
+  return {physical:physical,committed:committed,incoming:incoming}
+}
+function renderControl(){
+  var st=inventoryState(),totalCommitted=0,totalInbound=0,totalSuggested=0;
+  Object.values(st.committed).forEach(function(v){totalCommitted+=Number(v||0)});
+  Object.values(st.incoming).forEach(function(v){totalInbound+=Number(v||0)});
+  var options=products.map(function(p){return '<option value="'+p.id+'">'+esc(p.sku)+' · '+esc(p.name)+'</option>'}).join('');
+  ['commitmentProduct','inboundProduct','countProduct'].forEach(function(id){if(el(id))el(id).innerHTML='<option value="">Seleccionar…</option>'+options});
+  var rows=products.map(function(p){
+    var physical=Number(st.physical[p.id]||0),comm=Number(st.committed[p.id]||0),available=physical-comm,inc=Number(st.incoming[p.id]||0);
+    var week=p.week_stock_units==null?null:Number(p.week_stock_units),target=p.target_stock_units==null?null:Number(p.target_stock_units);
+    var buy=target==null?null:Math.max(0,target-(available+inc));if(buy)totalSuggested+=buy;
+    var lastMove=movements.find(function(m){return m.product_id===p.id});
+    var dormant=lastMove ? ((Date.now()-new Date(lastMove.created_at).getTime())>90*86400000) : false;
+    var status;
+    if(available<=0)status='<span class="pill bad">Sin disponible</span>';
+    else if(week==null||target==null||p.lead_time_days==null)status='<span class="pill warn">Pendiente Marsella</span>';
+    else if(available<=week)status='<span class="pill warn">1 semana o menos</span>';
+    else if(week>0&&physical>week*Number(p.overstock_weeks||8))status='<span class="pill warn">Sobrestock</span>';
+    else if(dormant)status='<span class="pill">Sin movimiento 90d</span>';
+    else status='<span class="pill ok">Normal</span>';
+    return '<tr><td class="sku">'+esc(p.sku)+'</td><td>'+esc(p.name)+'</td><td>'+physical.toLocaleString('es-CL')+'</td><td>'+comm.toLocaleString('es-CL')+'</td><td><b>'+available.toLocaleString('es-CL')+'</b></td><td>'+inc.toLocaleString('es-CL')+'</td><td>'+(week==null?'—':week.toLocaleString('es-CL'))+'</td><td>'+(target==null?'—':target.toLocaleString('es-CL'))+'</td><td><b>'+(buy==null?'—':buy.toLocaleString('es-CL'))+'</b></td><td>'+(p.lead_time_days==null?'—':esc(p.lead_time_days)+' días')+'</td><td>'+status+'</td></tr>'
+  }).join('');
+  el('controlRows').innerHTML=rows;
+  el('kCommitted').textContent=totalCommitted.toLocaleString('es-CL');
+  el('kInbound').textContent=totalInbound.toLocaleString('es-CL');
+  el('kSuggested').textContent=totalSuggested.toLocaleString('es-CL');
+  el('kDifferences').textContent=counts.filter(function(c){return Number(c.difference)!==0}).length;
 }
 function render(){
   el('kProducts').textContent=products.filter(function(p){return p.active}).length;
@@ -217,34 +320,41 @@ function render(){
     var status=!defined?'<span class="pill warn">Pendiente Marsella</span>':(s<=0?'<span class="pill bad">Sin stock</span>':(p.stock_alert_enabled!==false&&s<=threshold?'<span class="pill warn">1 semana o menos</span>':'<span class="pill ok">Normal</span>'));
     return '<tr><td class="sku">'+esc(p.sku)+'</td><td>'+esc(p.name)+'</td><td>'+esc(p.brand)+'</td><td><b>'+s.toLocaleString('es-CL')+'</b></td><td>'+(defined?threshold.toLocaleString('es-CL'):'—')+'</td><td>'+status+'</td><td>'+esc(p.unit)+'</td></tr>'
   }).join('');
-  renderProducts(products);
+  renderProducts(products);renderControl();
   el('locationRows').innerHTML=locations.map(function(x){return '<tr><td class="sku">'+esc(x.code)+'</td><td>'+esc(x.label)+'</td><td>'+esc(x.warehouse)+'</td><td><span class="pill '+(x.active?'ok':'bad')+'">'+(x.active?'Activa':'Inactiva')+'</span></td></tr>'}).join('');
   el('documentRows').innerHTML=documents.map(function(d){return '<tr><td>'+esc(d.document_date||'')+'</td><td>'+esc(d.document_type)+'</td><td>'+esc(d.folio)+'</td><td>'+esc(d.issuer_name)+'</td><td><span class="pill '+(d.status==='procesado'?'ok':'warn')+'">'+esc(d.status)+'</span></td></tr>'}).join('');
   el('movementRows').innerHTML=movements.map(function(m){var p=m.msc_products||{},d=m.msc_documents||{};return '<tr><td>'+new Date(m.created_at).toLocaleString('es-CL')+'</td><td class="sku">'+esc(p.sku)+'</td><td>'+esc(p.name)+'</td><td>'+esc(m.movement_type)+'</td><td><b>'+Number(m.quantity).toLocaleString('es-CL')+'</b></td><td>'+esc(d.folio||'')+'</td></tr>'}).join('')
 }
+function money(v){return v==null||v===''?'—':'$'+Math.round(Number(v)).toLocaleString('es-CL')}
 function renderProducts(list){
-  var canSet=currentEmail==='marsella.solis@nucleovivo.net';
+  var canControl=currentEmail==='marsella.solis@nucleovivo.net';
+  var canPrice=['admin','bodega'].indexOf(role)>=0;
   el('productRows').innerHTML=list.map(function(p){
-    var week=p.week_stock_units!=null?Number(p.week_stock_units):'';
-    var weekCell=canSet?'<div style="display:flex;gap:6px;align-items:center"><input class="weekInput" data-product="'+p.id+'" type="number" min="0" step="0.001" value="'+esc(week)+'" placeholder="Unidades" style="width:92px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><button class="btn alt saveWeek" data-product="'+p.id+'" type="button" style="padding:7px 9px">Guardar</button></div>':(p.week_stock_units!=null?Number(p.week_stock_units).toLocaleString('es-CL'):'Pendiente Marsella');
+    var cost=p.cost_price==null?'':Number(p.cost_price),markup=p.markup_percent==null?'':Number(p.markup_percent);
+    var sale=p.sale_price==null?null:Number(p.sale_price),gross=sale==null?null:sale*1.19,profit=(sale!=null&&p.cost_price!=null)?sale-Number(p.cost_price):null;
+    var pricing=canPrice?'<div style="display:grid;grid-template-columns:90px 75px auto;gap:6px;align-items:center"><input class="costInput" data-product="'+p.id+'" type="number" min="0" step="0.01" value="'+esc(cost)+'" placeholder="Costo" style="width:90px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><input class="markupInput" data-product="'+p.id+'" type="number" min="0" step="0.01" value="'+esc(markup)+'" placeholder="Markup %" style="width:75px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><button class="btn alt savePrice" data-product="'+p.id+'" type="button" style="padding:7px 9px">Guardar</button></div>':'';
+    var controls=canControl?'<div style="display:grid;grid-template-columns:78px 78px 68px auto;gap:5px;align-items:center"><input class="weekInput" data-product="'+p.id+'" type="number" min="0" step="0.001" value="'+esc(p.week_stock_units==null?'':Number(p.week_stock_units))+'" placeholder="1 semana" title="Unidades para 1 semana" style="width:78px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><input class="targetInput" data-product="'+p.id+'" type="number" min="0" step="0.001" value="'+esc(p.target_stock_units==null?'':Number(p.target_stock_units))+'" placeholder="Objetivo" style="width:78px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><input class="leadInput" data-product="'+p.id+'" type="number" min="0" step="1" value="'+esc(p.lead_time_days==null?'':Number(p.lead_time_days))+'" placeholder="Días" style="width:68px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><button class="btn alt saveControls" data-product="'+p.id+'" type="button" style="padding:7px 9px">Guardar</button></div>':('<span class="muted">1 sem: '+(p.week_stock_units==null?'—':esc(p.week_stock_units))+' · obj: '+(p.target_stock_units==null?'—':esc(p.target_stock_units))+' · '+(p.lead_time_days==null?'—':esc(p.lead_time_days)+'d')+'</span>');
     var alert=p.week_stock_units==null?'<span class="pill warn">Sin definir</span>':(p.stock_alert_enabled===false?'<span class="pill">Desactivada</span>':'<span class="pill ok">Activa</span>');
-    return '<tr><td class="sku">'+esc(p.sku)+'</td><td>'+esc(p.name)+'</td><td>'+esc(p.brand)+'</td><td>'+esc(p.model)+'</td><td>'+esc(p.manufacturer_code)+'</td><td>'+esc(p.ean_gtin)+'</td><td>'+weekCell+'</td><td>'+alert+'</td><td><span class="pill '+(p.active?'ok':'bad')+'">'+(p.active?'Activo':'Inactivo')+'</span></td></tr>'
+    return '<tr><td class="sku">'+esc(p.sku)+'</td><td><b>'+esc(p.name)+'</b><div class="muted">'+esc(p.brand||'')+' '+esc(p.model||'')+'</div></td><td>'+esc(p.brand)+'</td><td>'+money(p.cost_price)+(pricing?'<div style="margin-top:6px">'+pricing+'</div>':'')+'</td><td>'+(p.markup_percent==null?'—':esc(p.markup_percent)+'%')+'</td><td>'+money(sale)+'</td><td>'+money(gross)+'</td><td>'+money(profit)+'</td><td>'+controls+'</td><td>'+alert+'</td><td><span class="pill '+(p.active?'ok':'bad')+'">'+(p.active?'Activo':'Inactivo')+'</span></td></tr>'
   }).join('');
-  el('productRows').querySelectorAll('.saveWeek').forEach(function(btn){btn.onclick=function(){saveWeekStock(btn.dataset.product)}});
+  el('productRows').querySelectorAll('.saveControls').forEach(function(btn){btn.onclick=function(){saveProductControls(btn.dataset.product)}});
+  el('productRows').querySelectorAll('.savePrice').forEach(function(btn){btn.onclick=function(){saveProductPricing(btn.dataset.product)}});
 }
-async function saveWeekStock(productId){
-  if(currentEmail!=='marsella.solis@nucleovivo.net'){alert('Solo Marsella puede definir el stock equivalente a una semana.');return}
-  var input=el('productRows').querySelector('.weekInput[data-product="'+productId+'"]');
-  var value=input?Number(input.value):NaN;
-  if(!Number.isFinite(value)||value<0){alert('Ingresa una cantidad válida.');return}
+async function saveProductControls(productId){
+  if(currentEmail!=='marsella.solis@nucleovivo.net'){alert('Solo Marsella puede definir los parámetros operativos.');return}
+  var root=el('productRows'),week=Number(root.querySelector('.weekInput[data-product="'+productId+'"]').value),target=Number(root.querySelector('.targetInput[data-product="'+productId+'"]').value),lead=Number(root.querySelector('.leadInput[data-product="'+productId+'"]').value);
+  if(!Number.isFinite(week)||week<0||!Number.isFinite(target)||target<0||!Number.isFinite(lead)||lead<0){alert('Completa semana, objetivo y días de reposición con valores válidos.');return}
   try{
-    var r=await authFetch('/rest/v1/rpc/msc_set_week_stock',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({p_product_id:productId,p_week_stock_units:value,p_alert_enabled:true})});
-    if(r){
-      var row=Array.isArray(r)?r[0]:r;
-      var idx=products.findIndex(function(p){return p.id===productId});
-      if(idx>=0&&row)products[idx]=row;
-    }
-    render();
+    var r=await authFetch('/rest/v1/rpc/msc_set_product_controls',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({p_product_id:productId,p_week_stock_units:week,p_target_stock_units:target,p_lead_time_days:Math.round(lead),p_alert_enabled:true})});
+    var row=Array.isArray(r)?r[0]:r,idx=products.findIndex(function(p){return p.id===productId});if(idx>=0&&row)products[idx]=row;render();
+  }catch(err){alert(err.message)}
+}
+async function saveProductPricing(productId){
+  var root=el('productRows'),cost=Number(root.querySelector('.costInput[data-product="'+productId+'"]').value),markup=Number(root.querySelector('.markupInput[data-product="'+productId+'"]').value);
+  if(!Number.isFinite(cost)||cost<0||!Number.isFinite(markup)||markup<0){alert('Ingresa costo y markup válidos.');return}
+  try{
+    var r=await authFetch('/rest/v1/rpc/msc_set_product_pricing',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({p_product_id:productId,p_cost_price:cost,p_markup_percent:markup})});
+    var row=Array.isArray(r)?r[0]:r,idx=products.findIndex(function(p){return p.id===productId});if(idx>=0&&row)products[idx]=row;render();
   }catch(err){alert(err.message)}
 }
 function logout(){sessionStorage.removeItem('msc_token');sessionStorage.removeItem('msc_refresh');sessionStorage.removeItem('msc_role');token='';location.reload()}
@@ -290,6 +400,9 @@ document.querySelectorAll('[data-view]').forEach(function(b){b.onclick=function(
 el('productSearch').oninput=function(){var q=this.value.toLowerCase();renderProducts(products.filter(function(p){return [p.sku,p.name,p.brand,p.model,p.manufacturer_code,p.ean_gtin].join(' ').toLowerCase().indexOf(q)>=0}))}
 el('productForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});if(body.week_stock_units==='')delete body.week_stock_units;else if(body.week_stock_units!=null)body.week_stock_units=Number(body.week_stock_units);['family_code','subfamily_code','type_code','variant_code'].forEach(function(k){body[k]=body[k].toUpperCase()});el('productMsg').textContent='Guardando…';try{var r=await authFetch('/rest/v1/msc_products?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)});el('productMsg').textContent='Creado: '+r[0].sku;e.target.reset();e.target.elements.variant_code.value='UNI';e.target.elements.unit.value='Unidad';await loadAll()}catch(err){el('productMsg').textContent=err.message}})
 el('locationForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});body.code=body.code.toUpperCase();el('locationMsg').textContent='Guardando…';try{await authFetch('/rest/v1/msc_locations',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});el('locationMsg').textContent='Ubicación creada';e.target.reset();await loadAll()}catch(err){el('locationMsg').textContent=err.message}})
+el('commitmentForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});body.quantity=Number(body.quantity);try{await authFetch('/rest/v1/msc_stock_commitments',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+el('inboundForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});body.quantity=Number(body.quantity);if(!body.expected_date)delete body.expected_date;try{await authFetch('/rest/v1/msc_inbound_stock',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+el('countForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});var st=inventoryState();body.system_quantity=Number(st.physical[body.product_id]||0);body.counted_quantity=Number(body.counted_quantity);try{await authFetch('/rest/v1/msc_inventory_counts',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
 var parsedInvoice=null;
 el('analyzeInvoice').onclick=async function(){
   var file=el('invoiceFile').files[0];if(!file){el('invoiceMsg').textContent='Selecciona un PDF.';return}if(file.size>3*1024*1024){el('invoiceMsg').textContent='El PDF supera 3 MB.';return}
@@ -399,7 +512,18 @@ async function approveInvoice(){
     await authFetch('/rest/v1/msc_document_lines',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(lines)});
     var sign=el('docType').value==='venta'?-1:1;var moves=parsedInvoice.lines.map(function(x){return {product_id:x._product.id,document_id:docId,movement_type:el('docType').value,quantity:sign*Math.abs(Number(x.quantity)),notes:'Movimiento generado desde factura '+(parsedInvoice.folio||'')}});
     await authFetch('/rest/v1/msc_stock_movements',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(moves)});
-    el('invoiceMsg').textContent='Factura procesada y stock actualizado.';el('invoiceReview').classList.add('hidden');parsedInvoice=null;el('invoiceFile').value='';await loadAll()
+    if(el('docType').value==='compra'){
+      for(var pi=0;pi<parsedInvoice.lines.length;pi++){
+        var pl=parsedInvoice.lines[pi];
+        if(pl._product&&pl.unit_price!=null&&Number(pl.unit_price)>=0){
+          try{
+            var pr=await authFetch('/rest/v1/rpc/msc_update_cost_from_purchase',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({p_product_id:pl._product.id,p_cost_price:Number(pl.unit_price)})});
+            var prow=Array.isArray(pr)?pr[0]:pr,pidx=products.findIndex(function(p){return p.id===pl._product.id});if(pidx>=0&&prow)products[pidx]=prow;
+          }catch(_){}
+        }
+      }
+    }
+    el('invoiceMsg').textContent='Factura procesada, stock actualizado y costos de referencia revisados.';el('invoiceReview').classList.add('hidden');parsedInvoice=null;el('invoiceFile').value='';await loadAll()
   }catch(err){el('invoiceMsg').textContent=err.message}
 }
 if(!parseAuthCallback()&&token){loadRoleAndEnter()}
