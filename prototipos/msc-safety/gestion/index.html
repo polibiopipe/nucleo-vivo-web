@@ -24,8 +24,23 @@
 </head>
 <body>
 <section id="login" class="login">
+  <div class="login-shell">
+    <div class="login-story" aria-hidden="true">
+      <div class="story-kicker">MSC Safety · Quality Service</div>
+      <div class="story-title">Seguridad que sostiene <span>la operación.</span></div>
+      <div class="story-copy">Inventario, trazabilidad y control documental conectados con la realidad de bodega y terreno.</div>
+      <div class="story-grid">
+        <div class="story-item">Equipos de protección</div>
+        <div class="story-item">Herramientas y suministros</div>
+        <div class="story-item">Gestión de inventario</div>
+        <div class="story-item">Control y trazabilidad</div>
+      </div>
+    </div>
   <form id="loginForm" class="login-card">
-    <div class="logo">MSC Safety · Área restringida</div>
+    <div class="login-brand">
+      <img class="login-logo" src="https://img77.uenicdn.com/image/upload/v1776113071/business/ed85e871-e23a-4fa2-94db-9fe7bc04d03c.jpg" alt="MSC Safety · Quality Service">
+    </div>
+    <div class="logo">Área restringida</div>
     <h1>Gestión de inventario</h1>
     <p>Acceso exclusivo para personal autorizado. Los permisos dependen del rol asignado al usuario.</p>
     <div class="field"><label>Correo</label><input id="email" type="email" required autocomplete="username"></div>
@@ -47,6 +62,7 @@
     </div>
     <div id="loginMsg" class="msg"></div>
   </form>
+  </div>
 </section>
 
 <section id="app" class="app hidden">
