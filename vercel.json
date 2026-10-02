@@ -15,6 +15,10 @@
     "api/msc-invoice.mjs": {
       "maxDuration": 30,
       "includeFiles": "server/**"
+    },
+    "api/msc-gestion.mjs": {
+      "maxDuration": 10,
+      "includeFiles": "prototipos/msc-safety/gestion/**"
     }
   },
   "redirects": [
@@ -27,6 +31,16 @@
       "source": "/lab/umbral-docente/app/:path*",
       "destination": "https://psicoldp.org/umbral/",
       "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/prototipos/msc-safety/gestion",
+      "destination": "/api/msc-gestion"
+    },
+    {
+      "source": "/prototipos/msc-safety/gestion/",
+      "destination": "/api/msc-gestion"
     }
   ]
 }
