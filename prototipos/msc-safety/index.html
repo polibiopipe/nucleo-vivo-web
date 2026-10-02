@@ -259,7 +259,7 @@
     const map=new Map();
     rows.forEach(r=>{
       const key=r.group_key||r.model||r.sku;
-      if(!map.has(key))map.set(key,{key,name:String(r.name||'Producto').replace(/\s+Talla\s+\d+$/i,''),brand:r.brand||'',model:r.model||r.manufacturer_code||'',description:r.description||'',image:r.image_url||'',category:r.category||'Productos',variants:[],certs:[]});
+      if(!map.has(key))map.set(key,{key,name:String(r.name||'Producto').replace(/\s+Talla\s+\d+$/i,''),brand:r.brand||'',model:r.model||r.manufacturer_code||'',color:r.product_color||'',description:r.description||'',image:r.image_url||'',category:r.category||'Productos',variants:[],certs:[]});
       const g=map.get(key);g.variants.push(r);
       (Array.isArray(r.certifications)?r.certifications:[]).forEach(c=>{const ck=[c.type,c.standard,c.certificate_number].join('|');if(!g.certs.some(x=>[x.type,x.standard,x.certificate_number].join('|')===ck))g.certs.push(c)});
     });
@@ -273,7 +273,7 @@
     catalogTools.querySelectorAll('.chip').forEach(btn=>btn.onclick=()=>{currentFilter=btn.dataset.filter;catalogTools.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x===btn));renderCatalog()});
   }
   function renderCatalog(){
-    const q=norm(catalogSearch.value), groups=liveGroups.filter(g=>(currentFilter==='all'||g.category===currentFilter)&&(!q||norm([g.name,g.brand,g.model,g.category].join(' ')).includes(q)));
+    const q=norm(catalogSearch.value), groups=liveGroups.filter(g=>(currentFilter==='all'||g.category===currentFilter)&&(!q||norm([g.name,g.brand,g.model,g.color,g.category].join(' ')).includes(q)));
     if(!groups.length){catalogGrid.innerHTML='<div class="catalog-loading">No hay productos publicados que coincidan con la búsqueda.</div>';return}
     catalogGrid.innerHTML=groups.map((g,idx)=>{
       const vars=g.variants.slice().sort((a,b)=>String(a.variant_code).localeCompare(String(b.variant_code),'es',{numeric:true}));
