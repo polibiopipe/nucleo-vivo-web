@@ -19,6 +19,59 @@ footer{border-top:1px solid #252b30;background:#07090b;padding:26px 0;color:#918
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;padding:18px}.modal.show{display:grid;place-items:center}.modal-box{width:min(520px,100%);max-height:90vh;overflow:auto;background:#101519;border:1px solid #3a4147;padding:24px;box-shadow:var(--shadow)}.modal-head{display:flex;justify-content:space-between;gap:14px;align-items:start}.modal-head h3{font-size:28px;margin:7px 0}.modal-head p{color:#99938b;font-size:12px}.tabs{display:flex;gap:8px;margin:14px 0}.tabs button{flex:1;border:1px solid #3b4247;background:#0a0d10;color:#ccc;padding:10px}.tabs button.active{background:var(--gold);border-color:var(--gold);color:#111;font-weight:800}.pane{display:none}.pane.active{display:block}.modal-message{font-size:12px;color:#d2c7af;min-height:18px;margin-top:12px}.history{border-top:1px solid #2b3136;margin-top:18px;padding-top:14px}.history-row{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #262c30;padding:9px 0;font-size:12px}.history-row small{display:block;color:#858078}.close{border:1px solid #3b4247;background:transparent;color:#fff;padding:8px 10px;cursor:pointer}
 @media(max-width:950px){.hero-grid,.quote-grid{grid-template-columns:1fr}.catalog{grid-template-columns:repeat(2,1fr)}.hero-proof{min-height:280px}.nav a{display:none}}
 @media(max-width:640px){.shell{width:min(100% - 24px,1220px)}.head{height:66px}.brand img{width:132px}.catalog{grid-template-columns:1fr}.section-head{display:block}.catalog-tools{flex-wrap:wrap}.search{width:100%;margin-left:0;min-width:0}.stats{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.foot{display:block}.hero{padding-top:34px}.hero h1{font-size:43px}}
+
+/* ===== MSC Safety · experiencia comercial v2 ===== */
+.hero{padding:58px 0 42px;overflow:hidden;background:
+radial-gradient(circle at 73% 38%,rgba(202,153,57,.17),transparent 24%),
+radial-gradient(circle at 90% 80%,rgba(255,255,255,.035),transparent 28%),
+linear-gradient(135deg,#090c0e 0%,#0c1114 55%,#080a0c 100%)}
+.hero-grid{grid-template-columns:1.02fr .98fr;gap:24px;min-height:520px}
+.hero-copy-main{position:relative;z-index:4}
+.hero h1{max-width:690px;font-size:clamp(44px,5.4vw,76px)}
+.hero p{max-width:650px}
+.hero-proof{min-height:500px;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible;isolation:isolate}
+.hero-proof:before{content:"";position:absolute;width:82%;height:68%;right:1%;top:12%;border-radius:50%;background:radial-gradient(circle,rgba(218,174,82,.23) 0%,rgba(175,127,38,.08) 38%,transparent 70%);filter:blur(2px);z-index:0}
+.hero-proof:after{content:"";position:absolute;right:-8%;bottom:3%;width:82%;height:24%;background:radial-gradient(ellipse,rgba(0,0,0,.58),transparent 68%);filter:blur(9px);z-index:0}
+.hero-model-word{position:absolute;right:-2%;top:7%;font-size:clamp(72px,9vw,132px);font-weight:950;letter-spacing:-.07em;color:rgba(226,191,109,.065);white-space:nowrap;z-index:0}
+.hero-proof img{position:absolute;z-index:1;inset:auto -7% 2% auto;width:112%;height:96%;padding:0;object-fit:contain;background:transparent;filter:drop-shadow(0 28px 28px rgba(0,0,0,.42));transform:rotate(-2deg) scale(1.04);transform-origin:center bottom;mix-blend-mode:multiply}
+.hero-proof-copy{z-index:3;left:3%;right:auto;bottom:5%;width:min(390px,78%);padding:15px 17px;background:linear-gradient(120deg,rgba(9,12,14,.94),rgba(15,19,21,.78));border:1px solid rgba(226,191,109,.26);box-shadow:0 15px 40px rgba(0,0,0,.34)}
+.hero-proof-copy b{font-size:18px}.hero-proof-copy span{display:block;margin-top:5px;line-height:1.45}
+.hero-doc-chip{display:inline-flex!important;width:auto;margin-top:9px!important;padding:5px 8px;border:1px solid rgba(226,191,109,.34);color:#ead29a!important;font-size:9px!important;text-transform:uppercase;letter-spacing:.08em}
+.stats{max-width:740px}
+.stat{background:linear-gradient(145deg,#10161a,#0c1114);border-color:rgba(255,255,255,.075)}
+
+.catalog-section{background:#e9e5dc;padding:58px 0 70px}
+.catalog{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.product{position:relative;overflow:hidden;border:1px solid #292c2e;background:#0e1215;color:#fff;box-shadow:0 18px 38px rgba(36,31,22,.10);border-radius:3px;transition:transform .2s ease,box-shadow .2s ease}
+.product:hover{transform:translateY(-3px);box-shadow:0 24px 52px rgba(36,31,22,.16)}
+.product figure{height:326px;position:relative;overflow:hidden;background:
+radial-gradient(circle at 68% 39%,rgba(223,188,113,.52),transparent 26%),
+linear-gradient(145deg,#e7dfcf 0%,#d2c3a7 58%,#ac9874 100%)}
+.product figure:before{content:attr(data-model);position:absolute;left:14px;top:7px;font-size:52px;font-weight:950;letter-spacing:-.06em;color:rgba(44,35,23,.09);z-index:0;white-space:nowrap}
+.product figure:after{content:"";position:absolute;left:13%;right:4%;bottom:5%;height:16%;background:radial-gradient(ellipse,rgba(31,24,17,.32),transparent 67%);filter:blur(7px)}
+.product figure img{position:absolute;z-index:1;width:112%;height:108%;right:-9%;bottom:-8%;padding:0;object-fit:contain;background:transparent;mix-blend-mode:multiply;filter:drop-shadow(0 20px 20px rgba(40,30,18,.24));transform:rotate(-2deg) scale(1.03);transform-origin:center bottom;transition:transform .25s ease}
+.product:hover figure img{transform:rotate(-1deg) scale(1.075)}
+.product-body{position:relative;z-index:2;padding:20px 18px 18px;background:linear-gradient(180deg,#11171b,#0c1013)}
+.product-meta{color:#9ba2a6}.product-meta span:first-child{color:var(--gold2)}
+.product h3{font-size:27px;letter-spacing:-.035em;margin:8px 0 7px}
+.product p{color:#b6b1a9;min-height:76px}
+.facts{margin:11px 0}.fact{border-color:#343a3f;background:#161c20;color:#d7d2ca}.cert{border-color:rgba(226,191,109,.42);background:rgba(201,155,61,.10);color:#ebcf8d}
+.specs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:12px 0}
+.spec{padding:7px 8px;border-left:2px solid #806328;background:#12181c;font-size:9px;color:#aeb4b7}
+.spec b{display:block;color:#f0eee8;font-size:10px;margin-bottom:2px}
+.docs{display:flex;gap:7px;flex-wrap:wrap;margin:11px 0 3px}
+.doc-link{display:inline-flex;align-items:center;gap:5px;padding:7px 9px;border:1px solid rgba(226,191,109,.34);color:#e6c982;text-decoration:none;font-size:10px;font-weight:800;background:rgba(201,155,61,.07)}
+.doc-link:hover{background:rgba(201,155,61,.16)}
+.variant select,.variant input{border-color:#343b40;background:#090d0f;color:#eee}
+.availability{color:#63d091}
+.product-actions .primary{width:100%;padding:11px 14px}
+.catalog-note{font-size:11px;color:#625d55}
+.quote-section{background:
+radial-gradient(circle at 12% 30%,rgba(201,155,61,.09),transparent 25%),
+linear-gradient(180deg,#0b0f12,#07090b)}
+@media(max-width:950px){.hero-grid{min-height:auto}.hero-proof{min-height:430px}.hero-proof img{right:-3%;width:104%}.catalog{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.hero-grid{gap:5px}.hero-proof{min-height:360px}.hero-proof img{width:108%;right:-4%;bottom:0}.hero-model-word{font-size:64px}.hero-proof-copy{width:92%;left:4%;bottom:3%}.catalog{grid-template-columns:1fr}.product figure{height:300px}.product p{min-height:0}}
+
 </style>
 </head>
 <body>
@@ -37,33 +90,33 @@ footer{border-top:1px solid #252b30;background:#07090b;padding:26px 0;color:#918
 <main>
 <section class="hero">
   <div class="shell hero-grid">
-    <div>
-      <div class="kicker">Catálogo conectado al inventario real</div>
-      <h1>Lo que ves aquí es lo que MSC Safety tiene cargado.</h1>
-      <p>Partimos con una base simple y confiable: únicamente productos registrados en Gestión MSC Safety y con existencia disponible. Sin precios publicados, sin referencias de muestra y sin fichas inventadas.</p>
-      <div class="hero-actions"><a class="primary" href="#catalogo">Ver productos disponibles</a><a class="secondary" href="#cotizar">Preparar cotización</a></div>
+    <div class="hero-copy-main">
+      <div class="kicker">Calzado de seguridad para operaciones exigentes</div>
+      <h1>Protección que acompaña cada jornada.</h1>
+      <p>Modelos Sherpa’s disponibles para cotizar, con tallas seleccionables y documentación técnica para respaldar una decisión informada.</p>
+      <div class="hero-actions"><a class="primary" href="#catalogo">Explorar modelos</a><a class="secondary" href="#cotizar">Solicitar cotización</a></div>
       <div class="stats">
-        <div class="stat"><span>Modelos disponibles</span><strong id="statModels">—</strong></div>
-        <div class="stat"><span>Variantes / tallas</span><strong id="statVariants">—</strong></div>
-        <div class="stat"><span>Familias reales</span><strong id="statCategories">—</strong></div>
+        <div class="stat"><span>Modelos para cotizar</span><strong id="statModels">—</strong></div>
+        <div class="stat"><span>Tallas disponibles</span><strong id="statVariants">—</strong></div>
+        <div class="stat"><span>Modelos con documentación</span><strong id="statCategories">—</strong></div>
       </div>
     </div>
-    <div class="hero-proof" id="heroProof"><div class="hero-proof-copy"><b>Inventario MSC Safety</b><span>La imagen y el modelo se cargan desde Gestión.</span></div></div>
+    <div class="hero-proof" id="heroProof"><div class="hero-model-word">SHERPA’S</div></div>
   </div>
 </section>
 
 <section class="catalog-section" id="catalogo">
   <div class="shell">
     <div class="section-head">
-      <div><div class="kicker" style="color:#8f6d28">Inventario vigente</div><h2>Productos disponibles para cotizar</h2></div>
-      <p>Las tarjetas se crean automáticamente desde el panel de Gestión. Cuando un producto deje de tener existencia disponible, no se ofrecerá como disponible en esta página.</p>
+      <div><div class="kicker" style="color:#8f6d28">Selección MSC Safety</div><h2>Encuentra el modelo adecuado para tu operación.</h2></div>
+      <p>Compara características, color, tallas y documentación disponible. Selecciona la variante que necesitas y agrégala directamente a tu solicitud de cotización.</p>
     </div>
     <div class="catalog-tools" id="catalogTools">
       <button class="chip active" data-filter="all" type="button">Todos</button>
       <input class="search" id="catalogSearch" type="search" placeholder="Buscar modelo, color o marca…">
     </div>
-    <div class="catalog" id="catalogGrid"><div class="loading">Cargando inventario real MSC Safety…</div></div>
-    <p class="catalog-note">No se publican precios. Las certificaciones solo aparecerán cuando hayan sido registradas y estén vigentes en Gestión MSC Safety.</p>
+    <div class="catalog" id="catalogGrid"><div class="loading">Preparando catálogo MSC Safety…</div></div>
+    <p class="catalog-note">Disponibilidad sujeta a confirmación al momento de cotizar. La documentación enlazada corresponde a las referencias verificadas para cada modelo.</p>
   </div>
 </section>
 
@@ -72,7 +125,7 @@ footer{border-top:1px solid #252b30;background:#07090b;padding:26px 0;color:#918
     <div class="quote-copy">
       <div class="kicker">Solicitud de cotización</div>
       <h2>Selecciona lo que realmente necesitas.</h2>
-      <p>Elige modelo, talla y cantidad desde el inventario disponible. Si tu empresa ya está registrada como cliente, ingresa con tu correo para enviar la solicitud y consultar su estado.</p>
+      <p>Elige modelo, talla y cantidad. Si tu empresa cuenta con acceso cliente, ingresa con tu correo para enviar la solicitud y consultar su estado.</p>
     </div>
     <div class="quote-box">
       <div class="client-state" id="clientState"><div><b>Cliente MSC Safety</b><span>Ingresa para enviar y guardar esta solicitud.</span></div><button class="secondary" id="quoteLogin" type="button">Ingresar</button></div>
@@ -91,11 +144,11 @@ footer{border-top:1px solid #252b30;background:#07090b;padding:26px 0;color:#918
 </section>
 </main>
 
-<footer><div class="shell foot"><div>MSC Safety · Quality Service</div><div>Catálogo alimentado desde Gestión MSC Safety · Sin precios publicados</div></div></footer>
+<footer><div class="shell foot"><div>MSC Safety · Quality Service</div><div>Calzado de seguridad · Documentación técnica · Cotización directa</div></div></footer>
 
 <div class="modal" id="clientModal" aria-hidden="true">
   <div class="modal-box">
-    <div class="modal-head"><div><div class="kicker">Portal cliente</div><h3>Acceso MSC Safety</h3><p>Tu correo debe estar registrado previamente como cliente en Gestión MSC Safety.</p></div><button class="close" id="closeClient" type="button">Cerrar</button></div>
+    <div class="modal-head"><div><div class="kicker">Portal cliente</div><h3>Acceso MSC Safety</h3><p>Ingresa con el correo asociado a tu cuenta cliente MSC Safety.</p></div><button class="close" id="closeClient" type="button">Cerrar</button></div>
     <div class="tabs"><button class="active" data-tab="login" type="button">Ingresar</button><button data-tab="activate" type="button">Activar acceso</button></div>
     <div class="pane active" id="pane-login">
       <div class="field"><label>Correo</label><input id="clientEmail" type="email" autocomplete="email"></div>
@@ -136,7 +189,7 @@ footer{border-top:1px solid #252b30;background:#07090b;padding:26px 0;color:#918
       var map=new Map();
       rows.forEach(function(r){
         var key=r.group_key||r.model||r.sku;
-        if(!map.has(key))map.set(key,{key:key,name:String(r.name||'Producto').replace(/\s+Talla\s+\d+$/i,''),brand:r.brand||'',model:r.model||r.manufacturer_code||'',color:r.product_color||'',description:r.description||'',image:r.image_url||'',category:r.category||'Productos',variants:[],certs:[]});
+        if(!map.has(key))map.set(key,{key:key,name:String(r.name||'Producto').replace(/\s+Talla\s+\d+$/i,''),brand:r.brand||'',model:r.model||r.manufacturer_code||'',color:r.product_color||'',description:r.description||'',image:r.image_url||'',datasheet:r.datasheet_url||'',specs:r.catalog_specs||{},category:r.category||'Productos',variants:[],certs:[]});
         var g=map.get(key);g.variants.push(r);
         (Array.isArray(r.certifications)?r.certifications:[]).forEach(function(c){var sig=[c.type,c.standard,c.certificate_number].join('|');if(!g.certs.some(function(x){return [x.type,x.standard,x.certificate_number].join('|')===sig}))g.certs.push(c)});
       });
@@ -145,12 +198,13 @@ footer{border-top:1px solid #252b30;background:#07090b;padding:26px 0;color:#918
     }catch(e){el('catalogGrid').innerHTML='<div class="loading">No fue posible cargar el inventario en este momento.</div>'}
   }
   function renderStats(){
-    var variants=groups.reduce(function(a,g){return a+g.variants.length},0),cats=new Set(groups.map(function(g){return g.category}));
-    el('statModels').textContent=groups.length;el('statVariants').textContent=variants;el('statCategories').textContent=cats.size;
+    var variants=groups.reduce(function(a,g){return a+g.variants.length},0),docs=groups.filter(function(g){return g.datasheet||g.certs.length}).length;
+    el('statModels').textContent=groups.length;el('statVariants').textContent=variants;el('statCategories').textContent=docs;
   }
   function renderHero(){
     var g=groups.find(function(x){return x.image})||groups[0];if(!g)return;
-    var box=el('heroProof');box.innerHTML=(g.image?'<img src="'+esc(g.image)+'" alt="'+esc(g.name)+'">':'')+'<div class="hero-proof-copy"><b>'+esc(g.brand+' '+g.model)+'</b><span>'+esc((g.color?'Color '+g.color+' · ':'')+g.variants.length+' tallas disponibles en inventario')+'</span></div>';
+    var box=el('heroProof'),doc=g.datasheet||g.certs.length;
+    box.innerHTML='<div class="hero-model-word">'+esc(g.model)+'</div>'+(g.image?'<img src="'+esc(g.image)+'" alt="'+esc(g.brand+' '+g.model)+'">':'')+'<div class="hero-proof-copy"><b>'+esc(g.brand+' '+g.model)+'</b><span>'+esc((g.color?'Color '+g.color+' · ':'')+g.variants.length+' tallas disponibles')+'</span>'+(doc?'<span class="hero-doc-chip">Documentación técnica disponible</span>':'')+'</div>';
   }
   function renderFilters(){
     var tools=el('catalogTools');tools.querySelectorAll('.chip').forEach(function(x){x.remove()});
@@ -160,14 +214,35 @@ footer{border-top:1px solid #252b30;background:#07090b;padding:26px 0;color:#918
   }
   function renderCatalog(){
     var q=norm(el('catalogSearch').value);
-    var list=groups.filter(function(g){return (currentFilter==='all'||g.category===currentFilter)&&(!q||norm([g.name,g.brand,g.model,g.color,g.category].join(' ')).includes(q))});
-    if(!list.length){el('catalogGrid').innerHTML='<div class="loading">No hay productos disponibles que coincidan con la búsqueda.</div>';return}
+    var list=groups.filter(function(g){
+      var specText=Object.keys(g.specs||{}).map(function(k){return k+' '+g.specs[k]}).join(' ');
+      return (currentFilter==='all'||g.category===currentFilter)&&(!q||norm([g.name,g.brand,g.model,g.color,g.category,specText].join(' ')).includes(q))
+    });
+    if(!list.length){el('catalogGrid').innerHTML='<div class="loading">No encontramos un modelo que coincida con la búsqueda.</div>';return}
     el('catalogGrid').innerHTML=list.map(function(g,idx){
       var vars=g.variants.slice().sort(function(a,b){return String(a.variant_code).localeCompare(String(b.variant_code),'es',{numeric:true})});
-      var certs=g.certs.map(function(c){return '<span class="fact cert">'+esc(c.standard||c.type||'Certificación vigente')+'</span>'}).join('');
-      return '<article class="product"><figure>'+(g.image?'<img src="'+esc(g.image)+'" alt="'+esc(g.name)+'" loading="lazy">':'')+'</figure><div class="product-body"><div class="product-meta"><span>'+esc(g.category)+'</span><span>'+esc(g.brand)+'</span></div><h3>'+esc(g.model)+'</h3><div class="facts"><span class="fact">Color '+esc(g.color||'por confirmar')+'</span><span class="fact">'+vars.length+' tallas disponibles</span>'+certs+'</div><p>'+esc(g.description||'Producto disponible en inventario MSC Safety.')+'</p><div class="variant"><select id="v-'+idx+'">'+vars.map(function(v){return '<option value="'+esc(v.product_id)+'" data-sku="'+esc(v.sku)+'" data-name="'+esc(g.model)+'" data-size="'+esc(v.variant_code)+'">Talla '+esc(v.variant_code)+'</option>'}).join('')+'</select><input id="q-'+idx+'" type="number" min="1" step="1" value="1"></div><div class="availability">Disponible para solicitud de cotización</div><div class="product-actions"><button class="primary add" data-i="'+idx+'" type="button">Agregar</button></div></div></article>';
+      var certs=g.certs.slice(0,2).map(function(c){
+        var label=(c.type||'Certificación')+(c.issuer?' · '+c.issuer:'');
+        return '<span class="fact cert">'+esc(label)+'</span>'
+      }).join('');
+      var specs=Object.keys(g.specs||{}).slice(0,4).map(function(k){return '<div class="spec"><b>'+esc(k)+'</b>'+esc(g.specs[k])+'</div>'}).join('');
+      var docLinks='';
+      if(g.datasheet)docLinks+='<a class="doc-link" href="'+esc(g.datasheet)+'" target="_blank" rel="noopener">Ficha técnica ↗</a>';
+      var certDoc=g.certs.find(function(c){return c.document_url});
+      if(certDoc)docLinks+='<a class="doc-link" href="'+esc(certDoc.document_url)+'" target="_blank" rel="noopener">Certificación ↗</a>';
+      return '<article class="product"><figure data-model="'+esc(g.model)+'">'+
+        (g.image?'<img src="'+esc(g.image)+'" alt="'+esc(g.brand+' '+g.model)+'" loading="lazy">':'')+
+        '</figure><div class="product-body"><div class="product-meta"><span>'+esc(g.category)+'</span><span>'+esc(g.brand)+'</span></div>'+
+        '<h3>'+esc(g.model)+'</h3>'+
+        '<div class="facts"><span class="fact">Color '+esc(g.color||'Consultar')+'</span><span class="fact">'+vars.length+' tallas disponibles</span>'+certs+'</div>'+
+        '<p>'+esc(g.description||'Consulta características y disponibilidad para tu operación.')+'</p>'+
+        (specs?'<div class="specs">'+specs+'</div>':'')+
+        (docLinks?'<div class="docs">'+docLinks+'</div>':'')+
+        '<div class="variant"><select id="v-'+idx+'">'+vars.map(function(v){return '<option value="'+esc(v.product_id)+'" data-sku="'+esc(v.sku)+'" data-name="'+esc(g.model)+'" data-size="'+esc(v.variant_code)+'">Talla '+esc(v.variant_code)+'</option>'}).join('')+'</select><input id="q-'+idx+'" type="number" min="1" step="1" value="1" aria-label="Cantidad"></div>'+
+        '<div class="availability">Disponible para cotizar</div>'+
+        '<div class="product-actions"><button class="primary add" data-i="'+idx+'" type="button">Agregar a cotización</button></div></div></article>';
     }).join('');
-    el('catalogGrid').querySelectorAll('.add').forEach(function(b){b.onclick=function(){var i=Number(b.dataset.i),sel=el('v-'+i),qty=Math.max(1,Number(el('q-'+i).value||1)),op=sel.options[sel.selectedIndex],pid=sel.value,existing=chosen.find(function(x){return x.product_id===pid});if(existing)existing.quantity+=qty;else chosen.push({product_id:pid,sku:op.dataset.sku,name:op.dataset.name,variant:op.dataset.size,quantity:qty});renderSelected();b.textContent='✓ Agregado';setTimeout(function(){b.textContent='Agregar'},800)}})
+    el('catalogGrid').querySelectorAll('.add').forEach(function(b){b.onclick=function(){var i=Number(b.dataset.i),sel=el('v-'+i),qty=Math.max(1,Number(el('q-'+i).value||1)),op=sel.options[sel.selectedIndex],pid=sel.value,existing=chosen.find(function(x){return x.product_id===pid});if(existing)existing.quantity+=qty;else chosen.push({product_id:pid,sku:op.dataset.sku,name:op.dataset.name,variant:op.dataset.size,quantity:qty});renderSelected();b.textContent='✓ Agregado';setTimeout(function(){b.textContent='Agregar a cotización'},800)}})
   }
   el('catalogSearch').oninput=renderCatalog;
 
@@ -192,7 +267,7 @@ footer{border-top:1px solid #252b30;background:#07090b;padding:26px 0;color:#918
     try{
       authUser=await authFetch('/auth/v1/user');
       var links=await authFetch('/rest/v1/msc_customer_users?select=customer_id,email,msc_customers(id,name,contact_name,email)&auth_user_id=eq.'+encodeURIComponent(authUser.id));
-      if(!Array.isArray(links)||!links.length||!links[0].msc_customers)throw new Error('Este correo no está vinculado a un cliente activo de MSC Safety.');
+      if(!Array.isArray(links)||!links.length||!links[0].msc_customers)throw new Error('No encontramos una cuenta cliente activa asociada a este correo.');
       customerProfile=links[0].msc_customers;el('empresa').value=customerProfile.name||'';updateClientState();await loadHistory();
     }catch(e){token='';sessionStorage.removeItem('msc_customer_token');customerProfile=null;authUser=null;updateClientState();message.textContent=e.message}
   }
@@ -206,7 +281,7 @@ footer{border-top:1px solid #252b30;background:#07090b;padding:26px 0;color:#918
   async function activate(){
     var email=el('activateEmail').value.trim(),password=el('activatePassword').value;if(password.length<8){message.textContent='La contraseña debe tener al menos 8 caracteres.';return}message.textContent='Validando correo…';
     try{
-      var check=await publicFetch('/rest/v1/rpc/msc_customer_email_is_registered',{method:'POST',body:JSON.stringify({candidate_email:email})}),ok=await check.json();if(!check.ok||ok!==true)throw new Error('Este correo aún no está registrado como cliente de MSC Safety.');
+      var check=await publicFetch('/rest/v1/rpc/msc_customer_email_is_registered',{method:'POST',body:JSON.stringify({candidate_email:email})}),ok=await check.json();if(!check.ok||ok!==true)throw new Error('Este correo aún no está habilitado para acceso cliente.');
       var r=await publicFetch('/auth/v1/signup?redirect_to='+encodeURIComponent(location.origin+location.pathname),{method:'POST',body:JSON.stringify({email:email,password:password,data:{msc_customer_portal:true}})}),d=await r.json();if(!r.ok)throw new Error(d.msg||d.error_description||'No fue posible activar el acceso.');message.textContent=d.access_token?'Acceso activado.':'Revisa tu correo para confirmar el acceso.';if(d.access_token){token=d.access_token;sessionStorage.setItem('msc_customer_token',token);await loadProfile()}
     }catch(e){message.textContent=e.message}
   }
@@ -220,7 +295,7 @@ footer{border-top:1px solid #252b30;background:#07090b;padding:26px 0;color:#918
     try{var rows=await authFetch('/rest/v1/msc_quote_requests?select=request_no,status,project_name,created_at&order=created_at.desc&limit=20');el('quoteHistory').hidden=false;el('quoteHistoryRows').innerHTML=(rows||[]).length?(rows||[]).map(function(r){return '<div class="history-row"><div><b>'+esc(r.request_no)+'</b><small>'+new Date(r.created_at).toLocaleDateString('es-CL')+(r.project_name?' · '+esc(r.project_name):'')+'</small></div><span>'+esc(r.status.replaceAll('_',' '))+'</span></div>'}).join(''):'<div style="color:#888;font-size:12px;padding:10px 0">Aún no tienes solicitudes.</div>'}catch(_){}
   }
   el('submitQuote').onclick=async function(){
-    if(!customerProfile||!authUser){openClient('Ingresa con el correo registrado como cliente para enviar la solicitud.');return}
+    if(!customerProfile||!authUser){openClient('Ingresa con tu cuenta cliente para enviar la solicitud.');return}
     if(!chosen.length){el('summary').textContent='Selecciona al menos un producto disponible.';el('summary').classList.add('show');return}
     var b=this,old=b.textContent;b.disabled=true;b.textContent='Enviando…';
     try{
