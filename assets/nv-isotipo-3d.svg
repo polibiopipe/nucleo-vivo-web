@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="50 -10 520 440" role="img" aria-label="Isotipo tridimensional de Núcleo Vivo">
+<defs>
+<linearGradient id="c" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD8C8"/><stop offset=".2" stop-color="#FA9C82"/><stop offset=".55" stop-color="#E87762"/><stop offset=".82" stop-color="#C95148"/><stop offset="1" stop-color="#7E2E37"/></linearGradient>
+<linearGradient id="p" x1=".08" y1="0" x2=".95" y2="1"><stop offset="0" stop-color="#A27398"/><stop offset=".2" stop-color="#714664"/><stop offset=".52" stop-color="#432947"/><stop offset=".8" stop-color="#29172F"/><stop offset="1" stop-color="#160D20"/></linearGradient>
+<radialGradient id="n" cx=".3" cy=".2" r=".9"><stop offset="0" stop-color="#FFE4D6"/><stop offset=".22" stop-color="#FA9D82"/><stop offset=".68" stop-color="#E87762"/><stop offset="1" stop-color="#A23D3B"/></radialGradient>
+<filter id="s" x="-30%" y="-30%" width="170%" height="180%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#25142D" flood-opacity=".32"/></filter>
+</defs>
+<g filter="url(#s)" transform="translate(0 20)">
+<path fill="url(#c)" d="M90 385V210C90 107 169 54 247 54c63 0 99 28 99 70-87 12-126 60-126 131v37c0 50-51 77-130 93Z"/>
+<path fill="url(#p)" d="M221 194c75 7 117 73 134 144 14-55 8-92-23-123-17-18-7-40 16-61 34-32 39-76 65-108 34-40 73-61 127-61v264c0 91-47 153-129 153-111 0-180-84-190-208Z"/>
+<circle fill="url(#n)" cx="374" cy="162" r="39"/>
+<path d="M106 374V211c0-84 62-130 135-142" fill="none" stroke="#FFE5DB" stroke-opacity=".72" stroke-width="7" stroke-linecap="round"/>
+<path d="M516 8v233c0 79-37 135-108 144" fill="none" stroke="#C48AB4" stroke-opacity=".43" stroke-width="7" stroke-linecap="round"/>
+<circle cx="362" cy="150" r="17" fill="#FFF2EC" opacity=".30"/>
+</g></svg>
