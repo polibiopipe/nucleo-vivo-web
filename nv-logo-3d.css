@@ -1,39 +1,40 @@
 /* Núcleo Vivo · logo 3D web */
 .nv-header .brand.nv-brand-3d{
-  width:300px;
-  min-width:300px;
-  min-height:104px;
-  margin-right:36px;
+  width:320px;
+  min-width:320px;
+  min-height:110px;
+  margin-right:28px;
   display:flex;
   align-items:center;
   justify-content:flex-start;
 }
 .nv-header .brand.nv-brand-3d .brand-logo{
-  width:300px;
-  max-width:300px;
+  width:320px;
+  max-width:320px;
   height:auto;
   max-height:112px;
   display:block;
   object-fit:contain;
-  filter:drop-shadow(0 10px 18px rgba(53,36,63,.10));
+  object-position:left center;
+  filter:drop-shadow(0 9px 16px rgba(53,36,63,.10));
   transform:translateZ(0);
   transition:transform .35s cubic-bezier(.2,.75,.25,1),filter .35s ease;
 }
 .nv-header .brand.nv-brand-3d:hover .brand-logo{
-  transform:perspective(800px) rotateX(2deg) rotateY(-3deg) translateY(-1px);
-  filter:drop-shadow(0 15px 24px rgba(53,36,63,.16));
+  transform:perspective(800px) rotateX(1.5deg) rotateY(-2.5deg) translateY(-1px);
+  filter:drop-shadow(0 13px 22px rgba(53,36,63,.15));
 }
 @media (max-width:1180px){
-  .nv-header .brand.nv-brand-3d{width:245px;min-width:245px;margin-right:18px}
-  .nv-header .brand.nv-brand-3d .brand-logo{width:245px;max-width:245px}
+  .nv-header .brand.nv-brand-3d{width:270px;min-width:270px;margin-right:16px}
+  .nv-header .brand.nv-brand-3d .brand-logo{width:270px;max-width:270px}
 }
 @media (max-width:920px){
-  .nv-header .brand.nv-brand-3d{width:205px;min-width:205px;min-height:82px;margin-right:auto}
-  .nv-header .brand.nv-brand-3d .brand-logo{width:205px;max-width:205px;max-height:86px}
+  .nv-header .brand.nv-brand-3d{width:220px;min-width:220px;min-height:84px;margin-right:auto}
+  .nv-header .brand.nv-brand-3d .brand-logo{width:220px;max-width:220px;max-height:88px}
 }
 @media (max-width:620px){
-  .nv-header .brand.nv-brand-3d{width:168px;min-width:168px;min-height:68px}
-  .nv-header .brand.nv-brand-3d .brand-logo{width:168px;max-width:168px;max-height:72px}
+  .nv-header .brand.nv-brand-3d{width:178px;min-width:178px;min-height:70px}
+  .nv-header .brand.nv-brand-3d .brand-logo{width:178px;max-width:178px;max-height:74px}
 }
 @media (prefers-reduced-motion:reduce){
   .nv-header .brand.nv-brand-3d .brand-logo{transition:none}
