@@ -510,4 +510,6 @@
 @media(max-width:700px){.nv-prototype-feature--kine{margin-top:46px;padding-top:46px}.nv-kine-visual{min-height:340px;padding:26px 22px 86px;gap:15px}.nv-kine-title{font-size:clamp(30px,8vw,48px)}.nv-kine-visual .nv-prototype-caption{padding:16px 22px}.nv-kine-label{font-size:14px}.nv-kine-subtitle{font-size:19px}}
 
 /* Identidad humanista · octubre 2026 */
-.nv-public{--nv-paper:#F5EFE4;--nv-ink:#241F29;--nv-deep:#35243F;--nv-accent:#A54134;--nv-gold:#E87762}.nv-public .nv-header{background:#F5EFE4}.nv-public .brand-logo{width:110px;height:98px;object-fit:contain}.nv-public .footer-logo{width:150px;height:134px;object-fit:contain}.nv-public .nv-footer-inner{grid-template-columns:170px 1.6fr 1fr}@media(max-width:700px){.nv-public .nv-footer-inner{grid-template-columns:1fr}.nv-public .brand-logo{width:90px;height:80px}}
+.nv-public{--nv-paper:#F5EFE4;--nv-ink:#241F29;--nv-deep:#35243F;--nv-accent:#A54134;--nv-gold:#E87762}.nv-public .nv-header{background:#F5EFE4}.nv-public .brand-logo{width:110px;height:98px;object-fit:contain}.nv-public .footer-logo{width:150px;height:134px;object-fit:contain}.nv-public .nv-footer-top{grid-template-columns:170px 1.6fr 1fr}@media(max-width:700px){.nv-public .nv-footer-top{grid-template-columns:1fr}.nv-public .brand-logo{width:90px;height:80px}}
+
+.nv-public .nv-footer{background:#F5EFE4}@media(max-width:700px){.nv-public .nv-footer-top{grid-template-columns:1fr}}
