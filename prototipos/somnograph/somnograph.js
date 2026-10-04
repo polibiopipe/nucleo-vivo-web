@@ -1,5 +1,19 @@
 (() => {
   'use strict';
+  function cleanTrackingParams(){
+    const url=new URL(window.location.href);
+    let changed=false;
+    for(const key of [...url.searchParams.keys()]){
+      if(key.toLowerCase().startsWith('utm_') || ['gclid','fbclid','msclkid'].includes(key.toLowerCase())){
+        url.searchParams.delete(key); changed=true;
+      }
+    }
+    if(changed){
+      const clean=url.pathname + (url.search ? url.search : '') + url.hash;
+      window.history.replaceState(window.history.state,'',clean);
+    }
+  }
+  cleanTrackingParams();
   const CONFIG = Object.freeze({
     supabaseUrl: 'https://ygfmpwlpmaasooltjujb.supabase.co',
     supabaseKey: 'sb_publishable_evFWgAwjv7xcNxo156NV0g_CFq0j5Ld',
