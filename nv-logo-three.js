@@ -1,7 +1,8 @@
-import * as THREE from 'https://esm.sh/three@0.180.0';
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
 
 const canvas = document.querySelector('[data-nv-logo-three]');
 if (canvas && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+try {
   const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true, powerPreference:'high-performance'});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -102,5 +103,10 @@ if (canvas && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     renderer.render(scene,camera);
     requestAnimationFrame(loop);
   };
+  renderer.render(scene,camera);
+  canvas.closest('.nv-brand-icon3d')?.classList.add('is-three-ready');
   loop();
+} catch (error) {
+  console.warn('Núcleo Vivo 3D logo fallback active.', error);
+}
 }
