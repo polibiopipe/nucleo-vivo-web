@@ -21,18 +21,18 @@
     api: '/api/somnograph-ai'
   });
   const $ = s => document.querySelector(s);
-  const state = { client:null,user:null,project:null,graph:null,sessions:[],busy:false,showAll:false };
+  const state = { client:null,user:null,project:null,graph:null,sessions:[],busy:false,showAll:true };
 
   const els = {
     loading:$('#sg-loading'), auth:$('#sg-auth'), app:$('#sg-app'), signout:$('#sg-signout'),
     authForm:$('#sg-auth-form'), email:$('#sg-email'), password:$('#sg-password'), authStatus:$('#sg-auth-status'),
     avatar:$('#sg-avatar'), userName:$('#sg-user-name'), userEmail:$('#sg-user-email'),
-    graph:$('#sg-graph'), empty:$('#sg-empty'), emptyStart:$('#sg-empty-start'), newSource:$('#sg-new-source'),
+    graph:$('#sg-graph'), empty:$('#sg-empty'), emptyStart:$('#sg-empty-start'), newSource:$('#sg-new-source'), deepen:$('#sg-deepen'),
     sourceDialog:$('#sg-source-dialog'), sourceForm:$('#sg-source-form'), sourceTitle:$('#sg-source-title'), sourceText:$('#sg-source-text'), sourceStatus:$('#sg-source-status'),
     sourceCancel:$('#sg-source-cancel'), analyze:$('#sg-analyze'), fit:$('#sg-fit'),
     insightsEmpty:$('#sg-insights-empty'), insights:$('#sg-insights'), leverTitle:$('#sg-lever-title'), leverReason:$('#sg-lever-reason'), leverScore:$('#sg-lever-score'), riskCopy:$('#sg-risk-copy'),
     metricEdges:$('#metric-edges'), metricLever:$('#metric-lever'), metricRisk:$('#metric-risk'), summary:$('#sg-project-summary'),
-    targetEdge:$('#sg-target-edge'), controlEdge:$('#sg-control-edge'), transferPrompt:$('#sg-transfer-prompt'), evidenceCount:$('#sg-evidence-count'),
+    targetEdge:$('#sg-target-edge'), controlEdge:$('#sg-control-edge'), transferPrompt:$('#sg-transfer-prompt'), evidenceCount:$('#sg-evidence-count'), routeCopy:$('#sg-route-copy'),
     microtest:$('#sg-microtest'), night:$('#sg-night'), testDialog:$('#sg-test-dialog'), testForm:$('#sg-test-form'), testQuestion:$('#sg-test-question'), testAnswer:$('#sg-test-answer'), confidence:$('#sg-confidence'), confidenceValue:$('#sg-confidence-value'), testCancel:$('#sg-test-cancel'), testStatus:$('#sg-test-status'),
     chat:$('#sg-chat'), chatForm:$('#sg-chat-form'), chatInput:$('#sg-chat-input'), toast:$('#sg-toast')
   };
@@ -98,6 +98,17 @@
   els.newSource.addEventListener('click',openSource); els.emptyStart.addEventListener('click',openSource); els.sourceCancel.addEventListener('click',()=>els.sourceDialog.close());
   $('#sg-show-all').addEventListener('click',()=>{state.showAll=!state.showAll;renderGraph();});
   els.fit.addEventListener('click',()=>renderGraph());
+  els.deepen?.addEventListener('click',async()=>{
+    if(state.busy||!state.project?.source_text)return;
+    state.busy=true; els.deepen.disabled=true; els.deepen.textContent='Profundizando…';
+    try{
+      const result=await callAI('analyze',{title:state.project.title||'Mapa',source:state.project.source_text});
+      await saveProject(result.graph,state.project.title||'Mapa',state.project.source_text);
+      await addSession('analysis',{mode:'deepen',lever:result.graph.lever,generatedAt:new Date().toISOString()});
+      render(); toast('Mapa profundizado: recuperamos más relaciones y rutas.');
+    }catch(err){toast(err.message||'No pudimos profundizar el mapa ahora.');}
+    finally{state.busy=false;els.deepen.disabled=false;els.deepen.textContent='Profundizar mapa';}
+  });
 
   els.sourceForm.addEventListener('submit',async e=>{
     e.preventDefault(); if(state.busy)return; const source=els.sourceText.value.trim(); const title=els.sourceTitle.value.trim()||'Mapa sin título'; if(source.length<120){els.sourceStatus.textContent='Necesito un poco más de contenido para construir relaciones útiles.';return;}
@@ -119,7 +130,7 @@
   function render(){
     const has=Boolean(state.graph?.nodes?.length); els.empty.hidden=has; els.graph.hidden=!has; els.insightsEmpty.hidden=has; els.insights.hidden=!has;
     els.chatInput.disabled=!has; els.chatForm.querySelector('button').disabled=!has;
-    if(!has){els.metricEdges.textContent='0';els.metricLever.textContent='—';els.metricRisk.textContent='—';els.summary.textContent='Explora a tu ritmo. Puedes volver cuando quieras.'; updateEvidenceCount(); return;}
+    if(!has){els.metricEdges.textContent='0';els.metricLever.textContent='—';els.metricRisk.textContent='—';els.summary.textContent='Observa la estructura completa, encuentra sus puntos frágiles y descubre qué conexión puede reorganizar más conocimiento.'; if(els.deepen)els.deepen.hidden=true; updateEvidenceCount(); return;}
     renderGraph(); renderInsights(); updateEvidenceCount();
   }
 
@@ -131,10 +142,19 @@
     const focusNodes=[...allNodes.filter(n=>priority.has(n.id)),...allNodes.filter(n=>!priority.has(n.id))].slice(0,4);
     const nodes=state.showAll?allNodes:focusNodes;
     const toggle=$('#sg-show-all'); toggle.hidden=allNodes.length<=4; toggle.textContent=state.showAll?'Ver una conexión a la vez':'Ver mapa completo'; toggle.setAttribute('aria-pressed',String(state.showAll)); const positions=new Map();
-    const cx=w/2,cy=h/2,rx=Math.min(w*.30,330),ry=Math.min(h*.30,170);
-    nodes.forEach((n,i)=>{ const angle=(Math.PI*2*i/nodes.length)-Math.PI/2; const ring=i%3===0?.76:1; positions.set(n.id,{x:cx+Math.cos(angle)*rx*ring,y:cy+Math.sin(angle)*ry*ring}); });
+    const cx=w/2,cy=h/2;
+    if(nodes.length<=8){
+      const rx=Math.min(w*.36,390),ry=Math.min(h*.34,215);
+      nodes.forEach((n,i)=>{const angle=(Math.PI*2*i/nodes.length)-Math.PI/2;positions.set(n.id,{x:cx+Math.cos(angle)*rx,y:cy+Math.sin(angle)*ry});});
+    }else{
+      const outerCount=Math.ceil(nodes.length*.62), outer=nodes.slice(0,outerCount), inner=nodes.slice(outerCount);
+      const rx1=Math.min(w*.41,440),ry1=Math.min(h*.38,245),rx2=Math.min(w*.23,250),ry2=Math.min(h*.21,140);
+      outer.forEach((n,i)=>{const angle=(Math.PI*2*i/outer.length)-Math.PI/2;positions.set(n.id,{x:cx+Math.cos(angle)*rx1,y:cy+Math.sin(angle)*ry1});});
+      inner.forEach((n,i)=>{const angle=(Math.PI*2*i/inner.length)-Math.PI/2+Math.PI/inner.length;positions.set(n.id,{x:cx+Math.cos(angle)*rx2,y:cy+Math.sin(angle)*ry2});});
+    }
     const lever=state.graph.lever?.edgeId; let svg=`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">`;
-    (state.graph.edges||[]).forEach(e=>{const a=positions.get(e.source),b=positions.get(e.target);if(!a||!b)return;const cls=['sg-edge',e.id===lever?'is-lever':'',Number(e.strength||e.confidence||.6)<.48?'is-weak':''].filter(Boolean).join(' ');svg+=`<line class="${cls}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>`;}); svg+='</svg>';
+    const visibleEdges=(state.graph.edges||[]).filter(e=>positions.has(e.source)&&positions.has(e.target));
+    visibleEdges.forEach((e,idx)=>{const a=positions.get(e.source),b=positions.get(e.target);const cls=['sg-edge',e.id===lever?'is-lever':'',Number(e.strength||e.confidence||.6)<.48?'is-weak':''].filter(Boolean).join(' ');const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;const showLabel=e.id===lever||Number(e.strategicWeight||0)>.74||idx<5;svg+=`<line class="${cls}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>`;if(showLabel)svg+=`<text class="sg-edge-label ${e.id===lever?'is-lever':''}" x="${mx}" y="${my-5}">${escapeHtml(e.relation||'relación')}</text>`;}); svg+='</svg>';
     els.graph.innerHTML=svg;
     const leverEdge=(state.graph.edges||[]).find(e=>e.id===lever); const leverNodes=new Set(leverEdge?[leverEdge.source,leverEdge.target]:[]);
     nodes.forEach(n=>{const p=positions.get(n.id);const btn=document.createElement('button');btn.type='button';btn.className=`sg-node ${leverNodes.has(n.id)?'is-lever':''} ${Number(n.importance||0)>.78?'is-core':''}`;btn.style.left=`${p.x}px`;btn.style.top=`${p.y}px`;btn.innerHTML=`<b>${escapeHtml(n.label)}</b><small>${escapeHtml(String(n.role||'concepto').replace(/_/g,' '))}</small>`;btn.title=n.summary||n.label;btn.addEventListener('click',()=>{els.leverTitle.textContent=n.label;els.leverReason.textContent=n.summary||'¿Cómo se relaciona esta idea con algo que ya conoces?';els.graph.querySelectorAll('.sg-node').forEach(node=>node.classList.remove('is-selected'));btn.classList.add('is-selected');});els.graph.appendChild(btn);});
@@ -147,6 +167,28 @@
     const risks=g.interferenceRisks||[]; els.riskCopy.textContent=risks[0]?.reason||'No se detectó una interferencia prioritaria en este mapa.';
     els.metricEdges.textContent=edges.length; els.metricLever.textContent=lever?`${score}%`:'—'; els.metricRisk.textContent=risks.length?`${Math.round(Number(risks[0].risk||.4)*100)}%`:'bajo';
     els.summary.textContent=state.project?.title?`Mapa activo: ${state.project.title}. ${g.summary||''}`:(g.summary||''); els.targetEdge.textContent=lever?edgeLabel(lever):'Sin seleccionar'; els.controlEdge.textContent=control?edgeLabel(control):'Sin seleccionar'; els.transferPrompt.textContent=g.transfer?.prompt||'Sin prueba';
+    if(els.routeCopy){
+      const route=buildKeyRoute(g,lever);
+      els.routeCopy.innerHTML=route.map((step,i)=>`<span><b>${i+1}</b>${escapeHtml(step)}</span>`).join('');
+    }
+    if(els.deepen) els.deepen.hidden=!state.project?.source_text;
+  }
+
+  function buildKeyRoute(g,lever){
+    if(!lever) return ['Aún no hay una ruta prioritaria'];
+    const nodes=new Map((g.nodes||[]).map(n=>[n.id,n.label]));
+    const edges=g.edges||[];
+    const chain=[nodes.get(lever.source),nodes.get(lever.target)].filter(Boolean);
+    const seen=new Set([lever.source,lever.target]);
+    let current=lever.target;
+    for(let i=0;i<2;i++){
+      const next=edges.filter(e=>e.source===current&&!seen.has(e.target)).sort((a,b)=>Number(b.strategicWeight||0)-Number(a.strategicWeight||0))[0]
+        || edges.filter(e=>e.target===current&&!seen.has(e.source)).sort((a,b)=>Number(b.strategicWeight||0)-Number(a.strategicWeight||0))[0];
+      if(!next) break;
+      const nid=next.source===current?next.target:next.source;
+      seen.add(nid); current=nid; if(nodes.get(nid)) chain.push(nodes.get(nid));
+    }
+    return chain.slice(0,4);
   }
   function updateEvidenceCount(){els.evidenceCount.textContent=`${state.sessions.length} ${state.sessions.length===1?'evento':'eventos'}`;}
 
