@@ -1,55 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" role="img" aria-labelledby="t d">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 260" role="img" aria-labelledby="t d">
   <title id="t">Núcleo Vivo</title>
   <desc id="d">Logotipo tridimensional de Núcleo Vivo en coral y ciruela.</desc>
   <defs>
     <linearGradient id="coral" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#FFD0BE"/>
-      <stop offset=".22" stop-color="#F9967D"/>
+      <stop offset="0" stop-color="#FFD8C8"/>
+      <stop offset=".2" stop-color="#FA9C82"/>
       <stop offset=".55" stop-color="#E87762"/>
-      <stop offset=".82" stop-color="#C94F45"/>
-      <stop offset="1" stop-color="#7D2C36"/>
+      <stop offset=".82" stop-color="#C95148"/>
+      <stop offset="1" stop-color="#7E2E37"/>
     </linearGradient>
     <linearGradient id="plum" x1=".08" y1="0" x2=".95" y2="1">
-      <stop offset="0" stop-color="#9A668F"/>
-      <stop offset=".18" stop-color="#704362"/>
-      <stop offset=".5" stop-color="#432947"/>
-      <stop offset=".78" stop-color="#2D1935"/>
+      <stop offset="0" stop-color="#A27398"/>
+      <stop offset=".2" stop-color="#714664"/>
+      <stop offset=".52" stop-color="#432947"/>
+      <stop offset=".8" stop-color="#29172F"/>
       <stop offset="1" stop-color="#160D20"/>
     </linearGradient>
-    <radialGradient id="nucleus" cx=".3" cy=".22" r=".9">
-      <stop offset="0" stop-color="#FFDCCB"/>
-      <stop offset=".2" stop-color="#FA9A80"/>
-      <stop offset=".65" stop-color="#E87762"/>
-      <stop offset="1" stop-color="#A63F3C"/>
+    <radialGradient id="nucleus" cx=".3" cy=".2" r=".9">
+      <stop offset="0" stop-color="#FFE4D6"/>
+      <stop offset=".22" stop-color="#FA9D82"/>
+      <stop offset=".68" stop-color="#E87762"/>
+      <stop offset="1" stop-color="#A23D3B"/>
     </radialGradient>
     <linearGradient id="type" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#5E3658"/>
+      <stop offset="0" stop-color="#6A3D61"/>
       <stop offset=".52" stop-color="#35243F"/>
-      <stop offset="1" stop-color="#1E1226"/>
+      <stop offset="1" stop-color="#1D1125"/>
     </linearGradient>
-    <filter id="shadow" x="-30%" y="-35%" width="170%" height="190%">
-      <feDropShadow dx="0" dy="12" stdDeviation="11" flood-color="#25142D" flood-opacity=".30"/>
-      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#FFFFFF" flood-opacity=".28"/>
+    <filter id="shadow" x="-35%" y="-35%" width="190%" height="200%">
+      <feDropShadow dx="0" dy="11" stdDeviation="10" flood-color="#25142D" flood-opacity=".28"/>
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#FFFFFF" flood-opacity=".25"/>
     </filter>
-    <filter id="textShadow" x="-20%" y="-40%" width="150%" height="190%">
-      <feDropShadow dx="0" dy="5" stdDeviation="4.5" flood-color="#25142D" flood-opacity=".22"/>
+    <filter id="textShadow" x="-20%" y="-45%" width="150%" height="200%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#25142D" flood-opacity=".18"/>
     </filter>
-    <clipPath id="iconClip"><rect x="0" y="0" width="300" height="300" rx="20"/></clipPath>
   </defs>
 
-  <g transform="translate(10 8) scale(.46)" filter="url(#shadow)" clip-path="url(#iconClip)">
+  <g transform="translate(-12 -2) scale(.56)" filter="url(#shadow)">
     <g transform="translate(0 20)">
       <path fill="url(#coral)" d="M90 385V210C90 107 169 54 247 54c63 0 99 28 99 70-87 12-126 60-126 131v37c0 50-51 77-130 93Z"/>
       <path fill="url(#plum)" d="M221 194c75 7 117 73 134 144 14-55 8-92-23-123-17-18-7-40 16-61 34-32 39-76 65-108 34-40 73-61 127-61v264c0 91-47 153-129 153-111 0-180-84-190-208Z"/>
       <circle fill="url(#nucleus)" cx="374" cy="162" r="39"/>
-      <path d="M105 374V211c0-86 63-132 136-143" fill="none" stroke="#FFE2D6" stroke-opacity=".66" stroke-width="7" stroke-linecap="round"/>
-      <path d="M516 8v233c0 80-37 137-108 145" fill="none" stroke="#B77AA7" stroke-opacity=".42" stroke-width="7" stroke-linecap="round"/>
-      <circle cx="362" cy="150" r="17" fill="#FFF0E8" opacity=".27"/>
+      <path d="M106 374V211c0-84 62-130 135-142" fill="none" stroke="#FFE5DB" stroke-opacity=".72" stroke-width="7" stroke-linecap="round"/>
+      <path d="M516 8v233c0 79-37 135-108 144" fill="none" stroke="#C48AB4" stroke-opacity=".43" stroke-width="7" stroke-linecap="round"/>
+      <circle cx="362" cy="150" r="17" fill="#FFF2EC" opacity=".30"/>
     </g>
   </g>
 
   <g filter="url(#textShadow)">
-    <text x="305" y="178" font-family="Commissioner,Arial Rounded MT Bold,Arial,sans-serif" font-size="86" font-weight="650" letter-spacing="-3" fill="url(#type)">núcleo vivo</text>
-    <text x="305" y="176" font-family="Commissioner,Arial Rounded MT Bold,Arial,sans-serif" font-size="86" font-weight="650" letter-spacing="-3" fill="none" stroke="#A56E95" stroke-opacity=".28" stroke-width="1.4">núcleo vivo</text>
+    <text x="315" y="158" font-family="Commissioner,Arial Rounded MT Bold,Arial,sans-serif" font-size="84" font-weight="650" letter-spacing="-3" fill="url(#type)">núcleo vivo</text>
+    <text x="315" y="156" font-family="Commissioner,Arial Rounded MT Bold,Arial,sans-serif" font-size="84" font-weight="650" letter-spacing="-3" fill="none" stroke="#B07AA3" stroke-opacity=".25" stroke-width="1.2">núcleo vivo</text>
   </g>
 </svg>
