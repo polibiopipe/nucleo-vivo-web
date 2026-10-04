@@ -226,7 +226,17 @@ REGLAS:
 - La microprueba debe evaluar la relación más estructuralmente importante sin pedir repetición literal.
 - La prueba de transferencia debe plantear una situación/pregunta NUEVA que exija usar al menos dos relaciones del mapa para inferir una respuesta.
 - No hagas afirmaciones clínicas, diagnósticas o neurofisiológicas. No digas que una relación está consolidada en el cerebro.
-- Devuelve sólo JSON conforme al esquema.`;
+- Devuelve SOLO JSON válido, sin Markdown ni texto fuera del objeto.
+- Usa exactamente esta estructura:
+{
+  "summary":"...",
+  "nodes":[{"id":"n1","label":"...","role":"...","summary":"...","importance":0.8}],
+  "edges":[{"id":"e1","source":"n1","target":"n2","relation":"...","strength":0.5,"strategicWeight":0.8,"rationale":"..."}],
+  "interferenceRisks":[{"edgeId":"e1","risk":0.4,"reason":"..."}],
+  "microtest":{"question":"...","expectedElements":["...","..."]},
+  "transfer":{"prompt":"...","rationale":"..."}
+}
+- Usa entre 4 y 12 nodos y entre 3 y 18 relaciones. Los IDs de aristas deben referir IDs de nodos existentes.`;
 
 const assessSystem = `Eres el evaluador de evidencia de SomnoGraph. Evalúa una respuesta humana a una microprueba usando únicamente el mapa y los elementos esperados entregados. No premies coincidencia de palabras: valora comprensión relacional, coherencia y capacidad de explicar el vínculo. relationStrength es una estimación conductual provisional de la relación específica tras esta evidencia, entre 0 y 1. No la presentes como medida neuronal. Devuelve sólo JSON.`;
 
@@ -237,7 +247,7 @@ async function runAnalyze(input) {
     model: MODEL,
     system: analysisSystem,
     messages: [{role:'user',content:`Título: ${input.title}\n\nFUENTE:\n${input.source}`}],
-    schema: analyzeSchema,
+    schema: null,
     maxOutputTokens: 5000,
     abortSignal: AbortSignal.timeout(28_000),
   });
@@ -313,8 +323,8 @@ export default async function handler(req, res) {
     const status = Number(error?.statusCode || error?.cause?.statusCode || 503);
     const code = String(error?.code || error?.message || 'AI_UNAVAILABLE');
     console.warn(JSON.stringify({event:'somnograph_ai_error',requestId,action,code:code.slice(0,80),status}));
-    if (status === 400) return res.status(400).json({error:'INVALID_INPUT',message:'Revisa el contenido e intenta nuevamente.'});
+    if (status === 400 && /^INVALID_/.test(code)) return res.status(400).json({error:'INVALID_INPUT',message:'Revisa el contenido e intenta nuevamente.'});
     if (status === 429) { res.setHeader('Retry-After','60'); return res.status(429).json({error:'AI_QUOTA_EXCEEDED',message:'La IA alcanzó temporalmente su límite de consultas.'}); }
-    return res.status(503).json({error:'AI_UNAVAILABLE',message:'SomnoGraph Intelligence no pudo completar el análisis ahora. Intenta nuevamente.'});
+    return res.status(503).json({error:'AI_UNAVAILABLE',message:'La IA no pudo completar este análisis. El contenido está bien; intenta nuevamente en unos segundos.'});
   }
 }
