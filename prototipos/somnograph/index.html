@@ -12,7 +12,7 @@
   <link rel="icon" href="/assets/nv-humanista-isotipo.svg" />
   <link rel="stylesheet" href="/styles.css" />
   <link rel="stylesheet" href="/brand-2026.css" />
-  <link rel="stylesheet" href="/prototipos/somnograph/somnograph.css?v=20261004-calm-2" />
+  <link rel="stylesheet" href="/prototipos/somnograph/somnograph.css?v=20261004-student-3" />
 </head>
 <body class="sg-page" data-state="loading">
   <a class="skip-link" href="#sg-main">Saltar al contenido</a>
@@ -78,9 +78,9 @@
         <div class="sg-workspace">
           <section class="sg-hero-panel">
             <div>
-              <p class="sg-kicker">Motor de consolidación · memoria viva</p>
-              <h1>Tu conocimiento es <em>una red que cambia.</em></h1>
-              <p id="sg-project-summary">Observa la estructura completa, encuentra sus puntos frágiles y descubre qué conexión puede reorganizar más conocimiento.</p>
+              <p class="sg-kicker">Tu espacio de aprendizaje</p>
+              <h1>Una idea a la vez</h1>
+              <p id="sg-project-summary">Explora a tu ritmo. Puedes volver cuando quieras.</p>
             </div>
             <div class="sg-hero-metrics">
               <article><span>Conexiones</span><strong id="metric-edges">0</strong><small>modeladas</small></article>
@@ -93,7 +93,7 @@
             <section class="sg-card sg-graph-card">
               <header>
                 <div><p class="sg-eyebrow">Conexiones de tu mapa</p><h2>Memoria viva</h2></div>
-                <div class="sg-card-actions"><button id="sg-show-all" class="sg-chip" type="button" aria-pressed="true">Foco estratégico</button><button id="sg-fit" class="sg-chip" type="button">Recentrar</button><button id="sg-deepen" class="sg-chip" type="button" hidden>Profundizar mapa</button><button id="sg-new-source" class="sg-chip sg-chip-accent" type="button">+ Fuente</button></div>
+                <div class="sg-card-actions"><button id="sg-show-all" class="sg-chip" type="button" aria-pressed="false">Ver mapa completo</button><button id="sg-fit" class="sg-chip" type="button">Recentrar</button><button id="sg-deepen" class="sg-chip" type="button" hidden>Profundizar mapa</button><button id="sg-new-source" class="sg-chip sg-chip-accent" type="button">+ Fuente</button></div>
               </header>
               <div id="sg-empty" class="sg-empty-state">
                 <div class="sg-empty-network" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div>
@@ -102,18 +102,18 @@
                 <button id="sg-empty-start" class="sg-primary" type="button">Crear primer mapa</button>
               </div>
               <div id="sg-graph" class="sg-graph" hidden aria-label="Mapa de conocimiento"></div>
-              <p class="sg-reassurance">La red completa es una hipótesis de trabajo: las micropruebas irán sustituyendo estimaciones de IA por evidencia de uso real.</p><footer class="sg-legend"><span><i class="is-strong"></i> estable</span><span><i class="is-medium"></i> inestable</span><span><i class="is-weak"></i> débil</span><span><i class="is-lever"></i> palanca</span></footer>
+              <p class="sg-reassurance">No necesitas resolver todo ahora.</p><footer class="sg-legend"><span><i class="is-strong"></i> estable</span><span><i class="is-medium"></i> inestable</span><span><i class="is-weak"></i> débil</span><span><i class="is-lever"></i> palanca</span></footer>
             </section>
 
             <aside class="sg-card sg-insight-card">
-              <header><div><p class="sg-eyebrow">IA · lectura estratégica</p><h2>Qué conviene fortalecer</h2></div><span class="sg-ai-dot">IA</span></header>
-              <div id="sg-insights-empty" class="sg-soft-empty">Cuando compartas un texto, aquí aparecerán la palanca, la ruta y las tensiones principales.</div>
+              <header><div><p class="sg-eyebrow">Un punto de partida</p><h2>Exploremos esta conexión</h2></div><span class="sg-ai-dot">IA</span></header>
+              <div id="sg-insights-empty" class="sg-soft-empty">Comparte tus apuntes. Aquí encontrarás una primera conexión para explorar.</div>
               <div id="sg-insights" hidden>
-                <div class="sg-lever"><span>Palanca cognitiva</span><h3 id="sg-lever-title">—</h3><p id="sg-lever-reason">—</p><div class="sg-score"><span>Oportunidad estructural</span><b id="sg-lever-score">0%</b></div></div>
-                <div class="sg-risk-box"><span>Interferencia o tensión</span><p id="sg-risk-copy">—</p></div>
+                <div class="sg-lever"><span>Conexión sugerida</span><h3 id="sg-lever-title">—</h3><p id="sg-lever-reason">—</p><div class="sg-score"><span>Oportunidad estructural</span><b id="sg-lever-score">0%</b></div></div>
+                <details class="sg-context"><summary>Ver contexto de la conexión</summary><div class="sg-risk-box"><span>Interferencia o tensión</span><p id="sg-risk-copy">—</p></div>
                 <div class="sg-route-box"><span>Ruta de reconstrucción</span><div id="sg-route-copy" class="sg-route-copy">—</div></div>
-                <button id="sg-microtest" class="sg-secondary" type="button">Probar esta conexión</button>
-                <details class="sg-experimental"><summary>Diseño experimental</summary><button id="sg-night" class="sg-ghost sg-full" type="button">Simular selección nocturna</button></details>
+                </details><p class="sg-student-prompt">¿Cómo se relaciona esta idea con algo que ya conoces?</p><button id="sg-microtest" class="sg-secondary" type="button">Explorar conexión</button>
+                <details class="sg-experimental"><summary>Diseño experimental</summary><button id="sg-night" class="sg-ghost sg-full" type="button">Simular selección nocturna</button></details><button id="sg-return-map" class="sg-return-map" type="button">Volver al mapa</button>
               </div>
             </aside>
           </div>
@@ -127,9 +127,9 @@
           <section class="sg-card sg-evidence-card">
             <header><div><p class="sg-eyebrow">Diseño experimental</p><h2>Objetivo · Control · Transferencia</h2></div><span id="sg-evidence-count">0 eventos</span></header>
             <div class="sg-evidence-grid">
-              <article><span>Objetivo</span><b id="sg-target-edge">Sin seleccionar</b><p>La relación que el motor prioriza para fortalecer.</p></article>
+              <article><span>Objetivo</span><b id="sg-target-edge">Sin seleccionar</b><p>Una conexión que puedes explorar.</p></article>
               <article><span>Control</span><b id="sg-control-edge">Sin seleccionar</b><p>Una relación comparable que se deja sin intervención.</p></article>
-              <article><span>Transferencia</span><b id="sg-transfer-prompt">Sin prueba</b><p>Una pregunta nueva que exige reconstruir, no repetir.</p></article>
+              <article><span>Transferencia</span><b id="sg-transfer-prompt">Sin prueba</b><p>Una oportunidad para usar tus ideas en otra situación.</p></article>
             </div>
           </section>
         </div>
@@ -166,6 +166,6 @@
   <div id="sg-toast" class="sg-toast" hidden></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.0"></script>
-  <script src="/prototipos/somnograph/somnograph.js?v=20261004-depth-1"></script>
+  <script src="/prototipos/somnograph/somnograph.js?v=20261004-student-3"></script>
 </body>
 </html>

@@ -21,7 +21,7 @@
     api: '/api/somnograph-ai'
   });
   const $ = s => document.querySelector(s);
-  const state = { client:null,user:null,project:null,graph:null,sessions:[],busy:false,showAll:true };
+  const state = { client:null,user:null,project:null,graph:null,sessions:[],busy:false,showAll:false };
 
   const els = {
     loading:$('#sg-loading'), auth:$('#sg-auth'), app:$('#sg-app'), signout:$('#sg-signout'),
@@ -97,6 +97,10 @@
   function openSource(){ els.sourceStatus.textContent=''; if(state.project){els.sourceTitle.value=state.project.title||'';els.sourceText.value=state.project.source_text||'';} els.sourceDialog.showModal(); }
   els.newSource.addEventListener('click',openSource); els.emptyStart.addEventListener('click',openSource); els.sourceCancel.addEventListener('click',()=>els.sourceDialog.close());
   $('#sg-show-all').addEventListener('click',()=>{state.showAll=!state.showAll;renderGraph();});
+  $('#sg-return-map').addEventListener('click',()=>{state.showAll=false;renderGraph();renderInsights();els.graph.scrollIntoView({block:'center',behavior:'auto'});});
+  document.querySelector('[data-view="source"]').addEventListener('click',openSource);
+  document.querySelector('[data-view="map"]').addEventListener('click',()=>els.graph.scrollIntoView({block:'center',behavior:'auto'}));
+  document.querySelector('[data-view="sessions"]').addEventListener('click',()=>document.querySelector('.sg-evidence-card').scrollIntoView({block:'start',behavior:'auto'}));
   els.fit.addEventListener('click',()=>renderGraph());
   els.deepen?.addEventListener('click',async()=>{
     if(state.busy||!state.project?.source_text)return;
@@ -130,7 +134,7 @@
   function render(){
     const has=Boolean(state.graph?.nodes?.length); els.empty.hidden=has; els.graph.hidden=!has; els.insightsEmpty.hidden=has; els.insights.hidden=!has;
     els.chatInput.disabled=!has; els.chatForm.querySelector('button').disabled=!has;
-    if(!has){els.metricEdges.textContent='0';els.metricLever.textContent='—';els.metricRisk.textContent='—';els.summary.textContent='Observa la estructura completa, encuentra sus puntos frágiles y descubre qué conexión puede reorganizar más conocimiento.'; if(els.deepen)els.deepen.hidden=true; updateEvidenceCount(); return;}
+    if(!has){els.metricEdges.textContent='0';els.metricLever.textContent='—';els.metricRisk.textContent='—';els.summary.textContent='Explora a tu ritmo. Puedes volver cuando quieras.'; if(els.deepen)els.deepen.hidden=true; updateEvidenceCount(); return;}
     renderGraph(); renderInsights(); updateEvidenceCount();
   }
 
@@ -141,10 +145,10 @@
     const priority=new Set(focusEdge?[focusEdge.source,focusEdge.target]:[]);
     const focusNodes=[...allNodes.filter(n=>priority.has(n.id)),...allNodes.filter(n=>!priority.has(n.id))].slice(0,4);
     const nodes=state.showAll?allNodes:focusNodes;
-    const toggle=$('#sg-show-all'); toggle.hidden=allNodes.length<=4; toggle.textContent=state.showAll?'Ver una conexión a la vez':'Ver mapa completo'; toggle.setAttribute('aria-pressed',String(state.showAll)); const positions=new Map();
+    const toggle=$('#sg-show-all'); toggle.hidden=allNodes.length<=4; els.graph.classList.toggle('is-full-map',state.showAll); toggle.textContent=state.showAll?'Ver una conexión a la vez':'Ver mapa completo'; toggle.setAttribute('aria-pressed',String(state.showAll)); const positions=new Map();
     const cx=w/2,cy=h/2;
     if(nodes.length<=8){
-      const rx=Math.min(w*.36,390),ry=Math.min(h*.34,215);
+      const rx=Math.min(w*.29,330),ry=Math.min(h*.28,160);
       nodes.forEach((n,i)=>{const angle=(Math.PI*2*i/nodes.length)-Math.PI/2;positions.set(n.id,{x:cx+Math.cos(angle)*rx,y:cy+Math.sin(angle)*ry});});
     }else{
       const outerCount=Math.ceil(nodes.length*.62), outer=nodes.slice(0,outerCount), inner=nodes.slice(outerCount);
@@ -166,7 +170,7 @@
     const score=Math.round(Number(g.lever?.opportunity||.65)*100); els.leverTitle.textContent=lever?edgeLabel(lever):'—'; els.leverReason.textContent=g.lever?.reason||'La IA no definió una justificación.'; els.leverScore.textContent=`${score}%`;
     const risks=g.interferenceRisks||[]; els.riskCopy.textContent=risks[0]?.reason||'No se detectó una interferencia prioritaria en este mapa.';
     els.metricEdges.textContent=edges.length; els.metricLever.textContent=lever?`${score}%`:'—'; els.metricRisk.textContent=risks.length?`${Math.round(Number(risks[0].risk||.4)*100)}%`:'bajo';
-    els.summary.textContent=state.project?.title?`Mapa activo: ${state.project.title}. ${g.summary||''}`:(g.summary||''); els.targetEdge.textContent=lever?edgeLabel(lever):'Sin seleccionar'; els.controlEdge.textContent=control?edgeLabel(control):'Sin seleccionar'; els.transferPrompt.textContent=g.transfer?.prompt||'Sin prueba';
+    els.summary.textContent='Explora a tu ritmo. Puedes volver cuando quieras.'; els.targetEdge.textContent=lever?edgeLabel(lever):'Sin seleccionar'; els.controlEdge.textContent=control?edgeLabel(control):'Sin seleccionar'; els.transferPrompt.textContent=g.transfer?.prompt||'Sin prueba';
     if(els.routeCopy){
       const route=buildKeyRoute(g,lever);
       els.routeCopy.innerHTML=route.map((step,i)=>`<span><b>${i+1}</b>${escapeHtml(step)}</span>`).join('');
