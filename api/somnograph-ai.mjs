@@ -125,7 +125,7 @@ const coachSchema = {
 };
 
 function sanitizeGraph(raw) {
-  const incomingNodes = Array.isArray(raw?.nodes) ? raw.nodes.slice(0, 14) : [];
+  const incomingNodes = Array.isArray(raw?.nodes) ? raw.nodes.slice(0, 18) : [];
   const used = new Set();
   const idMap = new Map();
   const nodes = incomingNodes.flatMap((node, i) => {
@@ -140,7 +140,7 @@ function sanitizeGraph(raw) {
   });
   const nodeIds = new Set(nodes.map(n => n.id));
   const edgeIds = new Set();
-  const edges = (Array.isArray(raw?.edges) ? raw.edges : []).slice(0,22).flatMap((edge, i) => {
+  const edges = (Array.isArray(raw?.edges) ? raw.edges : []).slice(0,30).flatMap((edge, i) => {
     const source = idMap.get(String(edge?.source)) || safeId(edge?.source,'');
     const target = idMap.get(String(edge?.target)) || safeId(edge?.target,'');
     if (!nodeIds.has(source) || !nodeIds.has(target) || source === target) return [];
@@ -219,7 +219,10 @@ const analysisSystem = `Eres el motor semántico de SomnoGraph, un prototipo de 
 REGLAS:
 - Trabaja únicamente con el contenido entregado. No agregues hechos externos ni completes vacíos con conocimiento general.
 - Los nodos deben ser conceptos centrales y distinguibles, no frases enteras.
-- Las aristas deben expresar relaciones semánticas explícitas o razonablemente inferibles desde la fuente: causa, condición, contraste, secuencia, función, dependencia, ejemplo, parte-todo, etc.
+- NO comprimas demasiado: para textos de más de 700 palabras intenta representar entre 9 y 16 conceptos si realmente existen en la fuente. Incluye no sólo el concepto central, sino mecanismos, etapas, fundamentos, límites, criterios, tensiones y consecuencias relevantes.
+- Las aristas deben expresar relaciones semánticas explícitas o razonablemente inferibles desde la fuente: causa, condición, contraste, secuencia, función, dependencia, ejemplo, parte-todo, justificación, límite, evidencia, riesgo, etc.
+- Busca varias rutas de explicación, no una sola cadena lineal. Un buen mapa debe permitir reconstruir el argumento desde distintos puntos.
+- Conserva las distinciones importantes: si dos ideas parecen parecidas pero cumplen funciones distintas, mantenlas separadas y vincúlalas con contraste o condición.
 - strength es una HIPÓTESIS INICIAL de claridad/estabilidad de la relación en el material, NO una lectura del cerebro ni una medida del usuario. Usa valores bajos cuando la relación sea compleja, implícita o propensa a confusión; altos cuando sea directa y reiterada.
 - strategicWeight estima cuánto conocimiento dependería de comprender bien esa relación.
 - interferenceRisks identifica relaciones que podrían confundirse entre sí por compartir conceptos, parecer contradictorias o requerir una distinción fina.
@@ -236,7 +239,7 @@ REGLAS:
   "microtest":{"question":"...","expectedElements":["...","..."]},
   "transfer":{"prompt":"...","rationale":"..."}
 }
-- Usa entre 4 y 12 nodos y entre 3 y 18 relaciones. Los IDs de aristas deben referir IDs de nodos existentes.`;
+- Usa entre 7 y 18 nodos y entre 8 y 30 relaciones cuando la fuente tenga suficiente riqueza. Los IDs de aristas deben referir IDs de nodos existentes.`;
 
 const assessSystem = `Eres el evaluador de evidencia de SomnoGraph. Evalúa una respuesta humana a una microprueba usando únicamente el mapa y los elementos esperados entregados. No premies coincidencia de palabras: valora comprensión relacional, coherencia y capacidad de explicar el vínculo. relationStrength es una estimación conductual provisional de la relación específica tras esta evidencia, entre 0 y 1. No la presentes como medida neuronal. Devuelve sólo JSON.`;
 
