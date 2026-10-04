@@ -60,3 +60,26 @@
 @media(max-width:1200px){.sg-app{grid-template-columns:190px minmax(0,1fr)}.sg-grid{grid-template-columns:1fr}.sg-sidebar nav button{justify-content:flex-start;font-size:15px}.sg-user-card div{display:none}.sg-sidebar-note{display:block}.sg-insight-card{min-height:0}}
 @media(max-width:720px){.sg-topbar{height:70px;padding:0 16px}.sg-app{display:block}.sg-sidebar{position:static;height:auto;background:#fff}.sg-sidebar-note{display:none}.sg-sidebar nav button{font-size:14px!important;padding:10px 8px;gap:5px}.sg-sidebar nav button span{display:none}.sg-brand b{font-size:21px}.sg-grid{gap:16px}.sg-card>header{flex-wrap:wrap}.sg-card-actions{justify-content:flex-start}.sg-node{width:112px;padding:10px;min-height:76px}.sg-node b{font-size:14px}.sg-node small{font-size:12px}.sg-graph{height:430px}.sg-hero-panel h1{font-size:32px}.sg-ai-studio header>span{display:none}}
 @media(prefers-reduced-motion:reduce){.sg-page *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+
+/* Depth restoration · SomnoGraph laboratory */
+.sg-hero-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:end}
+.sg-hero-panel h1{max-width:780px}
+.sg-hero-metrics{display:grid;grid-template-columns:repeat(3,112px);gap:10px}
+.sg-hero-metrics article{background:rgba(255,255,255,.72);border:1px solid var(--line)}
+.sg-score{display:flex}
+.sg-graph{height:590px}
+.sg-graph-card{min-height:670px}
+.sg-node{width:132px;min-height:68px;padding:12px}
+.sg-node b{font-size:14px}
+.sg-edge-label{font:500 9px Commissioner,system-ui,sans-serif;fill:#66818f;text-anchor:middle;paint-order:stroke;stroke:#f7f9fa;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
+.sg-edge-label.is-lever{fill:#1d747b;font-weight:700;stroke:#eef8f8;stroke-width:5px}
+.sg-route-box{margin:0 22px 18px;padding:15px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,rgba(36,139,145,.045),rgba(128,191,255,.035))}
+.sg-route-box>span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);margin-bottom:11px}
+.sg-route-copy{display:grid;gap:7px}
+.sg-route-copy span{display:flex;align-items:center;gap:9px;font-size:13px;line-height:1.35;color:var(--ink)}
+.sg-route-copy b{width:22px;height:22px;display:grid;place-items:center;flex:0 0 auto;border-radius:50%;background:#e3f3f3;color:#247f88;font-size:10px}
+.sg-risk-box{margin:0 22px 16px}
+.sg-insight-card .sg-secondary{margin-top:14px}
+@media(max-width:1200px){.sg-hero-panel{grid-template-columns:1fr}.sg-hero-metrics{grid-template-columns:repeat(3,minmax(0,1fr));max-width:520px}.sg-graph{height:560px}}
+@media(max-width:720px){.sg-hero-panel{display:block}.sg-hero-metrics{grid-template-columns:repeat(3,1fr);max-width:none;margin-top:18px}.sg-graph{height:520px}.sg-node{width:108px}.sg-edge-label{font-size:8px}}
