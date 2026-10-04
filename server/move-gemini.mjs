@@ -29,10 +29,12 @@ export async function generateGemini({ model = MODEL, system, messages, schema, 
   // Both attempts share one deadline, shorter than the Vercel function limit.
   const deadline = AbortSignal.timeout(25000);
   const signal = abortSignal ? AbortSignal.any([abortSignal, deadline]) : deadline;
+  const generationConfig = { maxOutputTokens, responseMimeType: 'application/json' };
+  if (schema) generationConfig.responseJsonSchema = schema;
   const body = JSON.stringify({
     systemInstruction: { parts: [{ text: system }] },
     contents: messages.map(({ role, content }) => ({ role: role === 'assistant' ? 'model' : 'user', parts: [{ text: content }] })),
-    generationConfig: { maxOutputTokens, responseMimeType: 'application/json', responseJsonSchema: schema },
+    generationConfig,
   });
 
   for (const [attempt, selectedModel] of models.entries()) {
