@@ -4,8 +4,8 @@
   display:flex;align-items:center;justify-content:flex-start;gap:12px;
 }
 .nv-brand-icon3d{position:relative;width:104px;height:92px;flex:0 0 104px;display:block}
-.nv-logo-three{position:absolute;inset:0;width:100%;height:100%;display:block}
-.nv-logo-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0}
+.nv-logo-three{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .18s ease}
+.nv-logo-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:1;transition:opacity .18s ease}.nv-brand-icon3d.is-three-ready .nv-logo-fallback{opacity:0}.nv-brand-icon3d.is-three-ready .nv-logo-three{opacity:1}
 .nv-brand-wordmark{
   font-family:Commissioner,Arial,sans-serif;font-size:38px;line-height:1;font-weight:650;
   letter-spacing:-1.5px;color:#35243f;white-space:nowrap;
