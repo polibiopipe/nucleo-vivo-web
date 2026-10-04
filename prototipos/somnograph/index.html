@@ -78,9 +78,9 @@
         <div class="sg-workspace">
           <section class="sg-hero-panel">
             <div>
-              <p class="sg-kicker">Tu espacio de aprendizaje</p>
-              <h1>Una idea a la vez</h1>
-              <p id="sg-project-summary">Explora a tu ritmo. Puedes volver cuando quieras.</p>
+              <p class="sg-kicker">Motor de consolidación · memoria viva</p>
+              <h1>Tu conocimiento es <em>una red que cambia.</em></h1>
+              <p id="sg-project-summary">Observa la estructura completa, encuentra sus puntos frágiles y descubre qué conexión puede reorganizar más conocimiento.</p>
             </div>
             <div class="sg-hero-metrics">
               <article><span>Conexiones</span><strong id="metric-edges">0</strong><small>modeladas</small></article>
@@ -93,7 +93,7 @@
             <section class="sg-card sg-graph-card">
               <header>
                 <div><p class="sg-eyebrow">Conexiones de tu mapa</p><h2>Memoria viva</h2></div>
-                <div class="sg-card-actions"><button id="sg-show-all" class="sg-chip" type="button" aria-pressed="false">Ver mapa completo</button><button id="sg-fit" class="sg-chip" type="button">Recentrar</button><button id="sg-new-source" class="sg-chip sg-chip-accent" type="button">+ Fuente</button></div>
+                <div class="sg-card-actions"><button id="sg-show-all" class="sg-chip" type="button" aria-pressed="true">Foco estratégico</button><button id="sg-fit" class="sg-chip" type="button">Recentrar</button><button id="sg-deepen" class="sg-chip" type="button" hidden>Profundizar mapa</button><button id="sg-new-source" class="sg-chip sg-chip-accent" type="button">+ Fuente</button></div>
               </header>
               <div id="sg-empty" class="sg-empty-state">
                 <div class="sg-empty-network" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div>
@@ -102,17 +102,18 @@
                 <button id="sg-empty-start" class="sg-primary" type="button">Crear primer mapa</button>
               </div>
               <div id="sg-graph" class="sg-graph" hidden aria-label="Mapa de conocimiento"></div>
-              <p class="sg-reassurance">No necesitas resolver todo ahora.</p><footer class="sg-legend"><span><i class="is-strong"></i> estable</span><span><i class="is-medium"></i> inestable</span><span><i class="is-weak"></i> débil</span><span><i class="is-lever"></i> palanca</span></footer>
+              <p class="sg-reassurance">La red completa es una hipótesis de trabajo: las micropruebas irán sustituyendo estimaciones de IA por evidencia de uso real.</p><footer class="sg-legend"><span><i class="is-strong"></i> estable</span><span><i class="is-medium"></i> inestable</span><span><i class="is-weak"></i> débil</span><span><i class="is-lever"></i> palanca</span></footer>
             </section>
 
             <aside class="sg-card sg-insight-card">
-              <header><div><p class="sg-eyebrow">Un punto de partida</p><h2>Exploremos esta conexión</h2></div><span class="sg-ai-dot">IA</span></header>
-              <div id="sg-insights-empty" class="sg-soft-empty">Cuando compartas un texto, aquí encontrarás una conexión para empezar.</div>
+              <header><div><p class="sg-eyebrow">IA · lectura estratégica</p><h2>Qué conviene fortalecer</h2></div><span class="sg-ai-dot">IA</span></header>
+              <div id="sg-insights-empty" class="sg-soft-empty">Cuando compartas un texto, aquí aparecerán la palanca, la ruta y las tensiones principales.</div>
               <div id="sg-insights" hidden>
-                <div class="sg-lever"><span>Conexión sugerida</span><h3 id="sg-lever-title">—</h3><p id="sg-lever-reason">—</p><div class="sg-score"><span>Oportunidad</span><b id="sg-lever-score">0%</b></div></div>
-                <details class="sg-context"><summary>Ver contexto de la conexión</summary><div class="sg-risk-box"><span>Para tener en cuenta</span><p id="sg-risk-copy">—</p></div>
-                </details><button id="sg-microtest" class="sg-secondary" type="button">Explorar conexión</button>
-                <details class="sg-experimental"><summary>Explorar la simulación experimental</summary><button id="sg-night" class="sg-ghost sg-full" type="button">Simular selección nocturna</button></details>
+                <div class="sg-lever"><span>Palanca cognitiva</span><h3 id="sg-lever-title">—</h3><p id="sg-lever-reason">—</p><div class="sg-score"><span>Oportunidad estructural</span><b id="sg-lever-score">0%</b></div></div>
+                <div class="sg-risk-box"><span>Interferencia o tensión</span><p id="sg-risk-copy">—</p></div>
+                <div class="sg-route-box"><span>Ruta de reconstrucción</span><div id="sg-route-copy" class="sg-route-copy">—</div></div>
+                <button id="sg-microtest" class="sg-secondary" type="button">Probar esta conexión</button>
+                <details class="sg-experimental"><summary>Diseño experimental</summary><button id="sg-night" class="sg-ghost sg-full" type="button">Simular selección nocturna</button></details>
               </div>
             </aside>
           </div>
