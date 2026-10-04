@@ -36,7 +36,7 @@ try {
   plumShape.bezierCurveTo(540,340,493,402,411,402);
   plumShape.bezierCurveTo(300,402,231,318,221,194);
 
-  const extrude = {depth:28, bevelEnabled:true, bevelSegments:4, steps:1, bevelSize:5, bevelThickness:5, curveSegments:28};
+  const extrude = {depth:60, bevelEnabled:true, bevelSegments:4, steps:1, bevelSize:5, bevelThickness:5, curveSegments:28};
   const coralGeo = new THREE.ExtrudeGeometry(coralShape, extrude);
   const plumGeo = new THREE.ExtrudeGeometry(plumShape, extrude);
 
@@ -63,8 +63,12 @@ try {
   const box = new THREE.Box3().setFromObject(group);
   const center = box.getCenter(new THREE.Vector3());
   const modelScale = 0.0094;
+  // Center the geometry before animating so it turns around its own center.
+  coralGeo.translate(-center.x, -center.y, -center.z);
+  plumGeo.translate(-center.x, -center.y, -center.z);
+  nucleus.position.sub(center);
   group.scale.set(modelScale,-modelScale,modelScale);
-  group.position.set(-center.x * modelScale, center.y * modelScale, -center.z * modelScale);
+  group.position.set(0, 0, 0);
   const baseY = group.position.y;
 
   scene.add(new THREE.HemisphereLight(0xffeee8,0x211126,2.2));
@@ -99,8 +103,8 @@ try {
     const t=clock.getElapsedTime();
     rx += ((-ty*.16)-rx)*.06;
     ry += ((tx*.20)-ry)*.06;
-    group.rotation.x = -0.08 + rx + Math.sin(t*.7)*0.012;
-    group.rotation.y = 0.12 + ry + Math.sin(t*.5)*0.016;
+    group.rotation.x = -0.08 + rx + Math.sin(t*.9)*0.13;
+    group.rotation.y = 0.24 + ry + Math.sin(t*.85)*0.40;
     group.position.y = baseY + Math.sin(t*.8)*0.025;
     renderer.render(scene,camera);
     requestAnimationFrame(loop);
