@@ -21,7 +21,7 @@
     api: '/api/somnograph-ai'
   });
   const $ = s => document.querySelector(s);
-  const state = { client:null,user:null,project:null,graph:null,sessions:[],busy:false };
+  const state = { client:null,user:null,project:null,graph:null,sessions:[],busy:false,showAll:false };
 
   const els = {
     loading:$('#sg-loading'), auth:$('#sg-auth'), app:$('#sg-app'), signout:$('#sg-signout'),
@@ -96,6 +96,7 @@
 
   function openSource(){ els.sourceStatus.textContent=''; if(state.project){els.sourceTitle.value=state.project.title||'';els.sourceText.value=state.project.source_text||'';} els.sourceDialog.showModal(); }
   els.newSource.addEventListener('click',openSource); els.emptyStart.addEventListener('click',openSource); els.sourceCancel.addEventListener('click',()=>els.sourceDialog.close());
+  $('#sg-show-all').addEventListener('click',()=>{state.showAll=!state.showAll;renderGraph();});
   els.fit.addEventListener('click',()=>renderGraph());
 
   els.sourceForm.addEventListener('submit',async e=>{
@@ -104,7 +105,7 @@
     try{
       const result=await callAI('analyze',{title,source});
       await saveProject(result.graph,title,source); await addSession('analysis',{lever:result.graph.lever,generatedAt:new Date().toISOString()});
-      els.sourceDialog.close(); render(); toast('Mapa construido. Ya podemos buscar una palanca cognitiva.');
+      els.sourceDialog.close(); render(); toast('Tu mapa está listo. Empieza por la conexión sugerida.');
     }catch(err){ els.sourceStatus.textContent=err.message||'No pudimos analizar el contenido.'; }
     finally{state.busy=false;els.analyze.disabled=false;els.analyze.textContent='Analizar con IA';}
   });
@@ -118,20 +119,25 @@
   function render(){
     const has=Boolean(state.graph?.nodes?.length); els.empty.hidden=has; els.graph.hidden=!has; els.insightsEmpty.hidden=has; els.insights.hidden=!has;
     els.chatInput.disabled=!has; els.chatForm.querySelector('button').disabled=!has;
-    if(!has){els.metricEdges.textContent='0';els.metricLever.textContent='—';els.metricRisk.textContent='—';els.summary.textContent='Crea un mapa con IA y observa qué relaciones conviene fortalecer primero.'; updateEvidenceCount(); return;}
+    if(!has){els.metricEdges.textContent='0';els.metricLever.textContent='—';els.metricRisk.textContent='—';els.summary.textContent='Explora a tu ritmo. Puedes volver cuando quieras.'; updateEvidenceCount(); return;}
     renderGraph(); renderInsights(); updateEvidenceCount();
   }
 
   function renderGraph(){
     if(!state.graph?.nodes?.length)return;
-    const box=els.graph.getBoundingClientRect(); const w=Math.max(box.width,500), h=Math.max(box.height,420); const nodes=state.graph.nodes; const positions=new Map();
-    const cx=w/2,cy=h/2,rx=Math.min(w*.37,360),ry=Math.min(h*.34,165);
+    const box=els.graph.getBoundingClientRect(); const w=Math.max(box.width,280), h=Math.max(box.height,420); const allNodes=state.graph.nodes;
+    const focusEdge=(state.graph.edges||[]).find(e=>e.id===state.graph.lever?.edgeId);
+    const priority=new Set(focusEdge?[focusEdge.source,focusEdge.target]:[]);
+    const focusNodes=[...allNodes.filter(n=>priority.has(n.id)),...allNodes.filter(n=>!priority.has(n.id))].slice(0,4);
+    const nodes=state.showAll?allNodes:focusNodes;
+    const toggle=$('#sg-show-all'); toggle.hidden=allNodes.length<=4; toggle.textContent=state.showAll?'Ver una conexión a la vez':'Ver mapa completo'; toggle.setAttribute('aria-pressed',String(state.showAll)); const positions=new Map();
+    const cx=w/2,cy=h/2,rx=Math.min(w*.30,330),ry=Math.min(h*.30,170);
     nodes.forEach((n,i)=>{ const angle=(Math.PI*2*i/nodes.length)-Math.PI/2; const ring=i%3===0?.76:1; positions.set(n.id,{x:cx+Math.cos(angle)*rx*ring,y:cy+Math.sin(angle)*ry*ring}); });
     const lever=state.graph.lever?.edgeId; let svg=`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">`;
     (state.graph.edges||[]).forEach(e=>{const a=positions.get(e.source),b=positions.get(e.target);if(!a||!b)return;const cls=['sg-edge',e.id===lever?'is-lever':'',Number(e.strength||e.confidence||.6)<.48?'is-weak':''].filter(Boolean).join(' ');svg+=`<line class="${cls}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>`;}); svg+='</svg>';
     els.graph.innerHTML=svg;
     const leverEdge=(state.graph.edges||[]).find(e=>e.id===lever); const leverNodes=new Set(leverEdge?[leverEdge.source,leverEdge.target]:[]);
-    nodes.forEach(n=>{const p=positions.get(n.id);const btn=document.createElement('button');btn.type='button';btn.className=`sg-node ${leverNodes.has(n.id)?'is-lever':''} ${Number(n.importance||0)>.78?'is-core':''}`;btn.style.left=`${p.x}px`;btn.style.top=`${p.y}px`;btn.innerHTML=`<b>${escapeHtml(n.label)}</b><small>${escapeHtml(n.role||'concepto')}</small>`;btn.title=n.summary||n.label;btn.addEventListener('click',()=>{toast(n.summary||n.label)});els.graph.appendChild(btn);});
+    nodes.forEach(n=>{const p=positions.get(n.id);const btn=document.createElement('button');btn.type='button';btn.className=`sg-node ${leverNodes.has(n.id)?'is-lever':''} ${Number(n.importance||0)>.78?'is-core':''}`;btn.style.left=`${p.x}px`;btn.style.top=`${p.y}px`;btn.innerHTML=`<b>${escapeHtml(n.label)}</b><small>${escapeHtml(String(n.role||'concepto').replace(/_/g,' '))}</small>`;btn.title=n.summary||n.label;btn.addEventListener('click',()=>{els.leverTitle.textContent=n.label;els.leverReason.textContent=n.summary||'¿Cómo se relaciona esta idea con algo que ya conoces?';els.graph.querySelectorAll('.sg-node').forEach(node=>node.classList.remove('is-selected'));btn.classList.add('is-selected');});els.graph.appendChild(btn);});
   }
   function escapeHtml(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
@@ -149,7 +155,7 @@
   els.testForm.addEventListener('submit',async e=>{
     e.preventDefault(); if(state.busy)return; const answer=els.testAnswer.value.trim();
     if(answer.length<12){els.testStatus.textContent='Escribe una respuesta un poco más completa.';return;}
-    state.busy=true; const submit=els.testForm.querySelector('button[type="submit"]'); submit.disabled=true; submit.textContent='Evaluando…'; els.testStatus.textContent='La IA compara tu explicación con la relación del mapa, no con palabras exactas.';
+    state.busy=true; const submit=els.testForm.querySelector('button[type="submit"]'); submit.disabled=true; submit.textContent='Revisando tu explicación…'; els.testStatus.textContent='La IA compara tu explicación con la relación del mapa, no con palabras exactas.';
     try{
       const assessment=await callAI('assess',{question:els.testQuestion.textContent,answer,confidence:Number(els.confidence.value),graph:state.graph});
       const edgeId=state.graph?.microtest?.edgeId || state.graph?.lever?.edgeId; const edge=(state.graph?.edges||[]).find(e=>e.id===edgeId);
@@ -160,9 +166,9 @@
       }
       await saveProject(state.graph,state.project?.title||'Mapa sin título',state.project?.source_text||'');
       await addSession('microtest',{question:els.testQuestion.textContent,answer,confidence:Number(els.confidence.value),assessment,edgeId});
-      els.testDialog.close(); render(); appendMessage('ai',`Evidencia registrada: ${Math.round(Number(assessment.score||0))}/100. ${assessment.feedback||'La relación fue actualizada con esta respuesta.'}`); toast('La red se actualizó con evidencia de tu respuesta.');
+      els.testDialog.close(); render(); appendMessage('ai',`Respuesta guardada. ${assessment.feedback||'La conexión se actualizó con tu explicación.'}`); toast('La red se actualizó con evidencia de tu respuesta.');
     }catch(err){els.testStatus.textContent=err.message||'No pudimos evaluar esta evidencia.';}
-    finally{state.busy=false;submit.disabled=false;submit.textContent='Registrar evidencia';}
+    finally{state.busy=false;submit.disabled=false;submit.textContent='Guardar mi respuesta';}
   });
   els.night.addEventListener('click',async()=>{if(!state.graph)return;const lever=(state.graph.edges||[]).find(e=>e.id===state.graph.lever?.edgeId);const control=(state.graph.edges||[]).find(e=>e.id===state.graph.control?.edgeId);await addSession('night_simulation',{target:lever?.id||null,control:control?.id||null,note:'Simulación de selección. No hubo estimulación durante sueño.'});toast('Noche simulada: objetivo y control quedaron registrados.');});
 
