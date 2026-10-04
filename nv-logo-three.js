@@ -62,8 +62,10 @@ try {
 
   const box = new THREE.Box3().setFromObject(group);
   const center = box.getCenter(new THREE.Vector3());
-  group.position.sub(center);
-  group.scale.set(0.0094,-0.0094,0.0094);
+  const modelScale = 0.0094;
+  group.scale.set(modelScale,-modelScale,modelScale);
+  group.position.set(-center.x * modelScale, center.y * modelScale, -center.z * modelScale);
+  const baseY = group.position.y;
 
   scene.add(new THREE.HemisphereLight(0xffeee8,0x211126,2.2));
   const key = new THREE.DirectionalLight(0xffd6c8,4.2);
@@ -99,7 +101,7 @@ try {
     ry += ((tx*.20)-ry)*.06;
     group.rotation.x = -0.08 + rx + Math.sin(t*.7)*0.012;
     group.rotation.y = 0.12 + ry + Math.sin(t*.5)*0.016;
-    group.position.y = Math.sin(t*.8)*0.025;
+    group.position.y = baseY + Math.sin(t*.8)*0.025;
     renderer.render(scene,camera);
     requestAnimationFrame(loop);
   };
