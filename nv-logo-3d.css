@@ -1,42 +1,31 @@
-/* Núcleo Vivo · logo 3D web */
+/* Núcleo Vivo · logo 3D real */
 .nv-header .brand.nv-brand-3d{
-  width:320px;
-  min-width:320px;
-  min-height:110px;
-  margin-right:28px;
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
+  width:auto;min-width:310px;min-height:108px;margin-right:28px;
+  display:flex;align-items:center;justify-content:flex-start;gap:12px;
 }
-.nv-header .brand.nv-brand-3d .brand-logo{
-  width:320px;
-  max-width:320px;
-  height:auto;
-  max-height:112px;
-  display:block;
-  object-fit:contain;
-  object-position:left center;
-  filter:drop-shadow(0 9px 16px rgba(53,36,63,.10));
-  transform:translateZ(0);
-  transition:transform .35s cubic-bezier(.2,.75,.25,1),filter .35s ease;
-}
-.nv-header .brand.nv-brand-3d:hover .brand-logo{
-  transform:perspective(800px) rotateX(1.5deg) rotateY(-2.5deg) translateY(-1px);
-  filter:drop-shadow(0 13px 22px rgba(53,36,63,.15));
-}
-@media (max-width:1180px){
-  .nv-header .brand.nv-brand-3d{width:270px;min-width:270px;margin-right:16px}
-  .nv-header .brand.nv-brand-3d .brand-logo{width:270px;max-width:270px}
-}
-@media (max-width:920px){
-  .nv-header .brand.nv-brand-3d{width:220px;min-width:220px;min-height:84px;margin-right:auto}
-  .nv-header .brand.nv-brand-3d .brand-logo{width:220px;max-width:220px;max-height:88px}
-}
-@media (max-width:620px){
-  .nv-header .brand.nv-brand-3d{width:178px;min-width:178px;min-height:70px}
-  .nv-header .brand.nv-brand-3d .brand-logo{width:178px;max-width:178px;max-height:74px}
+.nv-brand-icon3d{position:relative;width:104px;height:92px;flex:0 0 104px;display:block}
+.nv-logo-three{position:absolute;inset:0;width:100%;height:100%;display:block}
+.nv-logo-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0}
+.nv-brand-wordmark{
+  font-family:Commissioner,Arial,sans-serif;font-size:38px;line-height:1;font-weight:650;
+  letter-spacing:-1.5px;color:#35243f;white-space:nowrap;
+  text-shadow:0 4px 10px rgba(53,36,63,.10);
 }
 @media (prefers-reduced-motion:reduce){
-  .nv-header .brand.nv-brand-3d .brand-logo{transition:none}
-  .nv-header .brand.nv-brand-3d:hover .brand-logo{transform:none}
+  .nv-logo-three{display:none}.nv-logo-fallback{opacity:1}
+}
+@media (max-width:1180px){
+  .nv-header .brand.nv-brand-3d{min-width:260px;gap:9px;margin-right:16px}
+  .nv-brand-icon3d{width:86px;height:78px;flex-basis:86px}
+  .nv-brand-wordmark{font-size:32px}
+}
+@media (max-width:920px){
+  .nv-header .brand.nv-brand-3d{min-width:220px;margin-right:auto}
+  .nv-brand-icon3d{width:72px;height:66px;flex-basis:72px}
+  .nv-brand-wordmark{font-size:28px}
+}
+@media (max-width:620px){
+  .nv-header .brand.nv-brand-3d{min-width:174px;gap:7px}
+  .nv-brand-icon3d{width:58px;height:54px;flex-basis:58px}
+  .nv-brand-wordmark{font-size:23px;letter-spacing:-1px}
 }
