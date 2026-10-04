@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#061721" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>SomnoGraph · Memoria Viva | Núcleo Vivo</title>
+  <meta name="description" content="Laboratorio privado de Núcleo Vivo para explorar conexiones de conocimiento, consolidación y transferencia asistidas por inteligencia artificial." />
+  <link rel="icon" href="/assets/nv-humanista-isotipo.svg" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/brand-2026.css" />
+  <link rel="stylesheet" href="/prototipos/somnograph/somnograph.css?v=20261004-1" />
+</head>
+<body class="sg-page" data-state="loading">
+  <a class="skip-link" href="#sg-main">Saltar al contenido</a>
+
+  <div class="sg-shell">
+    <header class="sg-topbar">
+      <a class="sg-brand" href="/prototipos/" aria-label="Volver a proyectos de Núcleo Vivo">
+        <img src="/assets/nv-humanista-logo.svg" alt="Núcleo Vivo" />
+        <span><b>SomnoGraph</b><small>Memoria Viva · laboratorio privado</small></span>
+      </a>
+      <div class="sg-topbar-actions">
+        <span class="sg-private-badge"><i></i> Acceso privado</span>
+        <button id="sg-signout" class="sg-ghost" type="button" hidden>Cerrar sesión</button>
+      </div>
+    </header>
+
+    <main id="sg-main">
+      <section id="sg-loading" class="sg-loading" aria-live="polite">
+        <div class="sg-orbit" aria-hidden="true"><span></span><span></span><span></span><b></b></div>
+        <div><p>SomnoGraph</p><h1>Preparando tu memoria viva.</h1><span>Conectando acceso, conocimiento e inteligencia artificial.</span></div>
+      </section>
+
+      <section id="sg-auth" class="sg-auth" hidden>
+        <div class="sg-auth-story">
+          <p class="sg-kicker">Núcleo Vivo · investigación y prototipado</p>
+          <h1>No queremos guardar más información.<br><em>Queremos descubrir qué conexión falta.</em></h1>
+          <p>SomnoGraph modela conocimiento como una red viva. La IA busca relaciones débiles, palancas cognitivas e interferencias para decidir qué vale la pena fortalecer.</p>
+          <div class="sg-auth-principles">
+            <span><b>01</b> Conexiones, no listas</span>
+            <span><b>02</b> Transferencia, no repetición</span>
+            <span><b>03</b> Sueño como futura capa experimental</span>
+          </div>
+        </div>
+        <form id="sg-auth-form" class="sg-auth-card">
+          <div class="sg-auth-mark"><img src="/assets/nv-humanista-isotipo.svg" alt="" /><span>SomnoGraph <small>Acceso restringido</small></span></div>
+          <h2>Entrar al laboratorio</h2>
+          <p>Usa tu cuenta profesional de Núcleo Vivo.</p>
+          <label><span>Correo</span><input id="sg-email" type="email" autocomplete="email" required placeholder="nombre@nucleovivo.net" /></label>
+          <label><span>Contraseña</span><input id="sg-password" type="password" autocomplete="current-password" required minlength="8" /></label>
+          <p id="sg-auth-status" class="sg-status" role="status"></p>
+          <button class="sg-primary" type="submit">Ingresar</button>
+          <p class="sg-auth-note">Sólo están autorizadas dos identidades del equipo. No existe registro público.</p>
+        </form>
+      </section>
+
+      <section id="sg-app" class="sg-app" hidden>
+        <aside class="sg-sidebar">
+          <div class="sg-user-card">
+            <span id="sg-avatar">NV</span>
+            <div><b id="sg-user-name">Laboratorio</b><small id="sg-user-email">—</small></div>
+          </div>
+          <nav aria-label="SomnoGraph">
+            <button class="is-active" data-view="map" type="button"><span>◌</span> Memoria viva</button>
+            <button data-view="source" type="button"><span>＋</span> Nueva fuente</button>
+            <button data-view="sessions" type="button"><span>↗</span> Evidencia</button>
+          </nav>
+          <div class="sg-sidebar-note">
+            <small>Estado experimental</small>
+            <p>La capa de sueño/EEG aún no está activa. “Noche” es una simulación de diseño experimental.</p>
+          </div>
+        </aside>
+
+        <div class="sg-workspace">
+          <section class="sg-hero-panel">
+            <div>
+              <p class="sg-kicker">Motor de consolidación</p>
+              <h1>Tu conocimiento no es una carpeta.<br><em>Es una red que cambia.</em></h1>
+              <p id="sg-project-summary">Crea un mapa con IA y observa qué relaciones conviene fortalecer primero.</p>
+            </div>
+            <div class="sg-hero-metrics">
+              <article><span>Conexiones</span><strong id="metric-edges">0</strong><small>modeladas</small></article>
+              <article><span>Palanca</span><strong id="metric-lever">—</strong><small>prioridad actual</small></article>
+              <article><span>Riesgo</span><strong id="metric-risk">—</strong><small>interferencia</small></article>
+            </div>
+          </section>
+
+          <div class="sg-grid">
+            <section class="sg-card sg-graph-card">
+              <header>
+                <div><p class="sg-eyebrow">Mapa dinámico</p><h2>Memoria viva</h2></div>
+                <div class="sg-card-actions"><button id="sg-fit" class="sg-chip" type="button">Recentrar</button><button id="sg-new-source" class="sg-chip sg-chip-accent" type="button">+ Fuente</button></div>
+              </header>
+              <div id="sg-empty" class="sg-empty-state">
+                <div class="sg-empty-network" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div>
+                <h3>Todavía no hay una red.</h3>
+                <p>Pega un texto real. La IA extraerá conceptos, relaciones y una primera hipótesis de “palanca cognitiva”.</p>
+                <button id="sg-empty-start" class="sg-primary" type="button">Crear primer mapa</button>
+              </div>
+              <div id="sg-graph" class="sg-graph" hidden aria-label="Mapa de conocimiento"></div>
+              <footer class="sg-legend"><span><i class="is-strong"></i> estable</span><span><i class="is-medium"></i> inestable</span><span><i class="is-weak"></i> débil</span><span><i class="is-lever"></i> palanca</span></footer>
+            </section>
+
+            <aside class="sg-card sg-insight-card">
+              <header><div><p class="sg-eyebrow">IA · lectura estratégica</p><h2>Qué tocar primero</h2></div><span class="sg-ai-dot">IA</span></header>
+              <div id="sg-insights-empty" class="sg-soft-empty">La IA necesita un mapa para recomendar una intervención.</div>
+              <div id="sg-insights" hidden>
+                <div class="sg-lever"><span>Palanca cognitiva</span><h3 id="sg-lever-title">—</h3><p id="sg-lever-reason">—</p><div class="sg-score"><span>Oportunidad</span><b id="sg-lever-score">0%</b></div></div>
+                <div class="sg-risk-box"><span>Interferencia posible</span><p id="sg-risk-copy">—</p></div>
+                <button id="sg-microtest" class="sg-secondary" type="button">Probar esta conexión</button>
+                <button id="sg-night" class="sg-ghost sg-full" type="button">Simular selección nocturna</button>
+              </div>
+            </aside>
+          </div>
+
+          <section class="sg-card sg-ai-studio">
+            <header><div><p class="sg-eyebrow">SomnoGraph Intelligence</p><h2>Pregunta a la red</h2></div><span>Responde sobre el mapa activo, no sobre internet.</span></header>
+            <div id="sg-chat" class="sg-chat"><div class="sg-message is-ai"><b>SomnoGraph</b><p>Cuando exista un mapa, puedo explicarte por qué una relación aparece como débil, sugerir una prueba de transferencia o buscar una mejor palanca.</p></div></div>
+            <form id="sg-chat-form" class="sg-chat-form"><input id="sg-chat-input" autocomplete="off" placeholder="Ej.: ¿por qué esta conexión es estratégica?" disabled /><button type="submit" disabled>Enviar</button></form>
+          </section>
+
+          <section class="sg-card sg-evidence-card">
+            <header><div><p class="sg-eyebrow">Diseño experimental</p><h2>Objetivo · Control · Transferencia</h2></div><span id="sg-evidence-count">0 eventos</span></header>
+            <div class="sg-evidence-grid">
+              <article><span>Objetivo</span><b id="sg-target-edge">Sin seleccionar</b><p>La relación que el motor prioriza para fortalecer.</p></article>
+              <article><span>Control</span><b id="sg-control-edge">Sin seleccionar</b><p>Una relación comparable que se deja sin intervención.</p></article>
+              <article><span>Transferencia</span><b id="sg-transfer-prompt">Sin prueba</b><p>Una pregunta nueva que exige reconstruir, no repetir.</p></article>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="sg-source-dialog" class="sg-dialog">
+    <form method="dialog" class="sg-dialog-card" id="sg-source-form">
+      <button class="sg-dialog-close" value="cancel" aria-label="Cerrar">×</button>
+      <p class="sg-kicker">Nueva fuente</p>
+      <h2>¿Qué conocimiento quieres mapear?</h2>
+      <p>No buscamos resumirlo. Buscamos descubrir su estructura mínima de relaciones.</p>
+      <label><span>Nombre del mapa</span><input id="sg-source-title" maxlength="90" placeholder="Ej.: Consolidación de memoria" /></label>
+      <label><span>Texto fuente</span><textarea id="sg-source-text" rows="12" maxlength="30000" required placeholder="Pega aquí un texto, apuntes o contenido que ya estés trabajando…"></textarea></label>
+      <div class="sg-dialog-actions"><button value="cancel" class="sg-ghost" type="button" id="sg-source-cancel">Cancelar</button><button class="sg-primary" type="submit" id="sg-analyze">Analizar con IA</button></div>
+      <p id="sg-source-status" class="sg-status" role="status"></p>
+    </form>
+  </dialog>
+
+  <dialog id="sg-test-dialog" class="sg-dialog">
+    <form method="dialog" class="sg-dialog-card sg-test-card" id="sg-test-form">
+      <button class="sg-dialog-close" value="cancel" aria-label="Cerrar">×</button>
+      <p class="sg-kicker">Microprueba</p>
+      <h2 id="sg-test-question">—</h2>
+      <p>Responde desde memoria. La calidad de la explicación importa más que repetir palabras.</p>
+      <textarea id="sg-test-answer" rows="6" maxlength="4000" placeholder="Escribe tu respuesta…"></textarea>
+      <label class="sg-range"><span>¿Qué tan seguro estás?</span><input id="sg-confidence" type="range" min="0" max="100" value="60" /><b id="sg-confidence-value">60%</b></label>
+      <div class="sg-dialog-actions"><button value="cancel" class="sg-ghost" type="button" id="sg-test-cancel">Cancelar</button><button class="sg-primary" type="submit">Registrar evidencia</button></div>
+      <p id="sg-test-status" class="sg-status"></p>
+    </form>
+  </dialog>
+
+  <div id="sg-toast" class="sg-toast" hidden></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.0"></script>
+  <script src="/prototipos/somnograph/somnograph.js?v=20261004-1"></script>
+</body>
+</html>
