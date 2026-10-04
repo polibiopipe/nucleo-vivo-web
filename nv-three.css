@@ -10,7 +10,7 @@
   border-radius:50%;
   background:
     radial-gradient(circle at 38% 34%,rgba(255,190,171,.30),transparent 18%),
-    radial-gradient(circle at 52% 48%,rgba(92,48,105,.28),rgba(53,36,63,.11) 48%,transparent 70%);
+    radial-gradient(circle at 52% 48%,rgba(92,48,105,.28),rgba(16,24,40,.11) 48%,transparent 70%);
   box-shadow:0 0 90px rgba(111,72,127,.24),inset 0 0 80px rgba(255,255,255,.05);
   filter:blur(.2px);
 }

@@ -6,7 +6,7 @@
   --nv-aqua: #76d0cf;
   --nv-green: #4f8a2f;
   --nv-mist: #edf7f5;
-  --nv-off-white: #fbfaf5;
+  --nv-off-white: #f8fafc;
   --nv-white: #ffffff;
   --nv-text: #18324a;
   --nv-text-soft: #526776;
@@ -428,8 +428,8 @@ body.splash-complete .site-footer {
 
 .button-primary:hover,
 .button-primary:focus-visible {
-  background: #e7bb70;
-  border-color: #e7bb70;
+  background: #28dcc4;
+  border-color: #28dcc4;
 }
 
 .button-secondary {
@@ -3358,14 +3358,14 @@ body {
   background:
     radial-gradient(circle at 9% 7%, rgba(118, 208, 207, 0.2), transparent 26%),
     radial-gradient(circle at 90% 15%, rgba(79, 138, 47, 0.12), transparent 30%),
-    linear-gradient(180deg, #fbfaf5, #edf7f5);
+    linear-gradient(180deg, #f8fafc, #edf7f5);
 }
 
 .ecosystem-card {
   min-height: 282px;
   background:
     linear-gradient(145deg, rgba(118, 208, 207, 0.12), transparent 42%),
-    linear-gradient(180deg, #ffffff, #fbfaf5);
+    linear-gradient(180deg, #ffffff, #f8fafc);
   box-shadow: 0 20px 60px rgba(6, 43, 95, 0.09);
 }
 
@@ -3418,7 +3418,7 @@ body {
 .audience-list,
 .lab-projection .cta-grid {
   border-color: rgba(0, 140, 149, 0.14);
-  background: linear-gradient(180deg, #ffffff, #fbfaf5);
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
 }
 
 .service-card,
@@ -3470,7 +3470,7 @@ body {
   background:
     radial-gradient(circle at 12% 12%, rgba(118, 208, 207, 0.18), transparent 30%),
     radial-gradient(circle at 88% 20%, rgba(79, 138, 47, 0.1), transparent 30%),
-    linear-gradient(180deg, #ffffff 0%, #fbfaf5 58%, #edf7f5 100%);
+    linear-gradient(180deg, #ffffff 0%, #f8fafc 58%, #edf7f5 100%);
   overflow: hidden;
 }
 
@@ -3534,7 +3534,7 @@ body {
   gap: 12px;
   background:
     radial-gradient(circle at 88% 10%, rgba(118, 208, 207, 0.18), transparent 36%),
-    linear-gradient(180deg, #ffffff, #fbfaf5);
+    linear-gradient(180deg, #ffffff, #f8fafc);
   box-shadow: 0 28px 82px rgba(6, 43, 95, 0.1);
 }
 
@@ -3757,7 +3757,7 @@ section[id] {
   color: var(--nv-text);
   background:
     radial-gradient(circle at 92% 10%, rgba(118, 208, 207, 0.13), transparent 32%),
-    linear-gradient(180deg, #ffffff, #fbfaf5);
+    linear-gradient(180deg, #ffffff, #f8fafc);
   box-shadow: 0 18px 54px rgba(6, 43, 95, 0.08);
   transform: none;
 }

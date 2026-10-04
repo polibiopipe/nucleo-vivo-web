@@ -8,4 +8,4 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
 
 /* Keep the wordmark connected to the original coral and plum symbol. */
-.brand,.footer-brand{color:#35243f}.hero .eyebrow,.invitation .eyebrow{color:#87eee0}.contact:hover{background:#163345}.choice.selected{background:rgba(40,220,196,.10)}.area:hover .area-link,.text-link:hover{color:#087f73}
+.brand,.footer-brand{color:#101828}.hero .eyebrow,.invitation .eyebrow{color:#87eee0}.contact:hover{background:#163345}.choice.selected{background:rgba(40,220,196,.10)}.area:hover .area-link,.text-link:hover{color:#087f73}

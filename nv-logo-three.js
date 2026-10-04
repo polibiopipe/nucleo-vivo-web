@@ -41,10 +41,10 @@ try {
   const plumGeo = new THREE.ExtrudeGeometry(plumShape, extrude);
 
   const coralMat = new THREE.MeshPhysicalMaterial({
-    color:0xe87762, roughness:0.26, metalness:0.14, clearcoat:0.7, clearcoatRoughness:0.2
+    color:0x28dcc4, roughness:0.26, metalness:0.14, clearcoat:0.7, clearcoatRoughness:0.2
   });
   const plumMat = new THREE.MeshPhysicalMaterial({
-    color:0x35243f, roughness:0.25, metalness:0.20, clearcoat:0.72, clearcoatRoughness:0.18
+    color:0x101828, roughness:0.25, metalness:0.20, clearcoat:0.72, clearcoatRoughness:0.18
   });
 
   const coral = new THREE.Mesh(coralGeo, coralMat);
@@ -55,7 +55,7 @@ try {
 
   const nucleus = new THREE.Mesh(
     new THREE.SphereGeometry(39, 48, 32),
-    new THREE.MeshPhysicalMaterial({color:0xf08a72, roughness:0.2, metalness:0.08, clearcoat:0.85, clearcoatRoughness:0.16})
+    new THREE.MeshPhysicalMaterial({color:0x28dcc4, roughness:0.2, metalness:0.08, clearcoat:0.85, clearcoatRoughness:0.16})
   );
   nucleus.position.set(374,162,44);
   group.add(nucleus);
@@ -71,11 +71,11 @@ try {
   group.position.set(0, 0, 0);
   const baseY = group.position.y;
 
-  scene.add(new THREE.HemisphereLight(0xffeee8,0x211126,2.2));
-  const key = new THREE.DirectionalLight(0xffd6c8,4.2);
+  scene.add(new THREE.HemisphereLight(0xeafffc,0x080f1c,2.2));
+  const key = new THREE.DirectionalLight(0xc7fff6,4.2);
   key.position.set(-3,4,6);
   scene.add(key);
-  const rim = new THREE.PointLight(0xa46f9a,5.5,14);
+  const rim = new THREE.PointLight(0x8fbbdd,5.5,14);
   rim.position.set(4,-1,5);
   scene.add(rim);
 
