@@ -1,0 +1,41 @@
+/* Núcleo Vivo · logo 3D web */
+.nv-header .brand.nv-brand-3d{
+  width:300px;
+  min-width:300px;
+  min-height:104px;
+  margin-right:36px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+}
+.nv-header .brand.nv-brand-3d .brand-logo{
+  width:300px;
+  max-width:300px;
+  height:auto;
+  max-height:112px;
+  display:block;
+  object-fit:contain;
+  filter:drop-shadow(0 10px 18px rgba(53,36,63,.10));
+  transform:translateZ(0);
+  transition:transform .35s cubic-bezier(.2,.75,.25,1),filter .35s ease;
+}
+.nv-header .brand.nv-brand-3d:hover .brand-logo{
+  transform:perspective(800px) rotateX(2deg) rotateY(-3deg) translateY(-1px);
+  filter:drop-shadow(0 15px 24px rgba(53,36,63,.16));
+}
+@media (max-width:1180px){
+  .nv-header .brand.nv-brand-3d{width:245px;min-width:245px;margin-right:18px}
+  .nv-header .brand.nv-brand-3d .brand-logo{width:245px;max-width:245px}
+}
+@media (max-width:920px){
+  .nv-header .brand.nv-brand-3d{width:205px;min-width:205px;min-height:82px;margin-right:auto}
+  .nv-header .brand.nv-brand-3d .brand-logo{width:205px;max-width:205px;max-height:86px}
+}
+@media (max-width:620px){
+  .nv-header .brand.nv-brand-3d{width:168px;min-width:168px;min-height:68px}
+  .nv-header .brand.nv-brand-3d .brand-logo{width:168px;max-width:168px;max-height:72px}
+}
+@media (prefers-reduced-motion:reduce){
+  .nv-header .brand.nv-brand-3d .brand-logo{transition:none}
+  .nv-header .brand.nv-brand-3d:hover .brand-logo{transform:none}
+}
