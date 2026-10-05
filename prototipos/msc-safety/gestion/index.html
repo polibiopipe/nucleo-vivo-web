@@ -877,6 +877,14 @@ el('commitmentForm').addEventListener('submit',async function(e){e.preventDefaul
 el('inboundForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});body.quantity=Number(body.quantity);if(!body.expected_date)delete body.expected_date;try{await authFetch('/rest/v1/msc_inbound_stock',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
 el('countForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});var st=inventoryState();body.system_quantity=Number(st.physical[body.product_id]||0);body.counted_quantity=Number(body.counted_quantity);try{await authFetch('/rest/v1/msc_inventory_counts',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
 var parsedInvoice=null;
+var MSC_RUT='77196396K';
+function rutKey(v){return String(v||'').replace(/[^0-9kK]/g,'').toUpperCase()}
+function inferInvoiceType(data){
+  var issuer=rutKey(data&&data.issuer_rut),receiver=rutKey(data&&data.receiver_rut);
+  if(issuer===MSC_RUT)return 'venta';
+  if(receiver===MSC_RUT)return 'compra';
+  return data&&data.detected_document_type?data.detected_document_type:null;
+}
 el('analyzeInvoice').onclick=async function(){
   var file=el('invoiceFile').files[0];if(!file){el('invoiceMsg').textContent='Selecciona un PDF.';return}if(file.size>3*1024*1024){el('invoiceMsg').textContent='El PDF supera 3 MB.';return}
   el('invoiceMsg').textContent='Analizando factura…';
@@ -884,8 +892,11 @@ el('analyzeInvoice').onclick=async function(){
   try{
     var rr=await fetch('/api/msc-invoice',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({pdfBase64:base64,documentType:el('docType').value})});
     var data=await rr.json();if(!rr.ok)throw new Error(data.message||'No fue posible analizar el documento.');
+    var detectedType=inferInvoiceType(data)||el('docType').value;
+    data._documentType=detectedType;
+    el('docType').value=detectedType;
     parsedInvoice=data;
-    if(el('docType').value==='compra'){
+    if(detectedType==='compra'){
       await autoResolvePurchaseLines(data);
     }else{
       renderInvoice(data);
@@ -969,7 +980,9 @@ async function autoResolvePurchaseLines(data){
 function renderInvoice(data){
   el('invoiceMsg').textContent='Documento analizado. Revisa antes de aprobar.';
   var box=el('invoiceReview');box.classList.remove('hidden');
-  var html='<h3>'+esc(data.issuer_name||'Documento')+' · Folio '+esc(data.folio||'—')+'</h3><p class="muted">'+esc(data.document_date||'')+'</p>';
+  var detectedType=data._documentType||inferInvoiceType(data)||el('docType').value;
+  var directionLabel=detectedType==='venta'?'VENTA · disminuye stock':'COMPRA · aumenta stock';
+  var html='<h3>'+esc(data.issuer_name||'Documento')+' · Folio '+esc(data.folio||'—')+'</h3><p class="muted">'+esc(data.document_date||'')+'</p><div class="notice"><b>'+directionLabel+'</b><br>Clasificación automática según RUT de emisor y receptor.</div>';
   (data.lines||[]).forEach(function(line,i){var p=line._product||findProduct(line,data.issuer_name);line._product=p||null;var detail=p?(line._autoCreated?'SKU nuevo creado automáticamente: ':'SKU existente: ')+esc(p.sku):'Sin coincidencia automática; requiere revisión';var label=p?(line._autoCreated?'SKU creado':'Coincidencia'):'Revisar';html+='<div class="line"><div><b>'+esc(line.description)+'</b><div class="muted">'+detail+'</div></div><div>Cant. '+esc(line.quantity)+'</div><div><span class="pill '+(p?'ok':'warn')+'">'+label+'</span>'+(p?'':'<button class="btn alt createSuggested" data-line="'+i+'" type="button" style="margin-top:6px;padding:6px 8px">Crear SKU</button>')+'</div></div>'});
   html+='<div style="margin-top:14px"><button id="approveInvoice" class="btn" '+((data.lines||[]).some(function(x){return !x._product})?'disabled':'')+'>Aprobar y mover stock</button></div>';
   box.innerHTML=html;box.querySelectorAll('.createSuggested').forEach(function(btn){btn.onclick=function(){createSuggestedProduct(Number(btn.dataset.line))}});var b=el('approveInvoice');if(b)b.onclick=approveInvoice
@@ -979,13 +992,15 @@ async function approveInvoice(){
   if(!parsedInvoice)return;var unresolved=(parsedInvoice.lines||[]).some(function(x){return !x._product});if(unresolved){el('invoiceMsg').textContent='Primero crea o relaciona los productos sin SKU.';return}
   el('invoiceMsg').textContent='Procesando…';
   try{
-    var doc={document_type:el('docType').value,folio:parsedInvoice.folio||null,issuer_name:parsedInvoice.issuer_name||null,issuer_rut:parsedInvoice.issuer_rut||null,receiver_name:parsedInvoice.receiver_name||null,receiver_rut:parsedInvoice.receiver_rut||null,document_date:parsedInvoice.document_date||null,status:'procesado'};
+    var documentType=parsedInvoice._documentType||inferInvoiceType(parsedInvoice)||el('docType').value;
+    el('docType').value=documentType;
+    var doc={document_type:documentType,folio:parsedInvoice.folio||null,issuer_name:parsedInvoice.issuer_name||null,issuer_rut:parsedInvoice.issuer_rut||null,receiver_name:parsedInvoice.receiver_name||null,receiver_rut:parsedInvoice.receiver_rut||null,document_date:parsedInvoice.document_date||null,status:'procesado'};
     var dr=await authFetch('/rest/v1/msc_documents?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(doc)});var docId=dr[0].id;
     var lines=parsedInvoice.lines.map(function(x,i){return {document_id:docId,line_no:i+1,raw_description:x.description, supplier_code:x.product_code||null,quantity:Number(x.quantity),unit_price:x.unit_price==null?null:Number(x.unit_price),product_id:x._product.id,match_status:'coincidencia'}});
     await authFetch('/rest/v1/msc_document_lines',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(lines)});
-    var sign=el('docType').value==='venta'?-1:1;var moves=parsedInvoice.lines.map(function(x){return {product_id:x._product.id,document_id:docId,movement_type:el('docType').value,quantity:sign*Math.abs(Number(x.quantity)),notes:'Movimiento generado desde factura '+(parsedInvoice.folio||'')}});
+    var sign=documentType==='venta'?-1:1;var moves=parsedInvoice.lines.map(function(x){return {product_id:x._product.id,document_id:docId,movement_type:documentType,quantity:sign*Math.abs(Number(x.quantity)),notes:'Movimiento generado desde factura '+(parsedInvoice.folio||'')}});
     await authFetch('/rest/v1/msc_stock_movements',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(moves)});
-    if(el('docType').value==='compra'){
+    if(documentType==='compra'){
       for(var pi=0;pi<parsedInvoice.lines.length;pi++){
         var pl=parsedInvoice.lines[pi];
         if(pl._product&&pl.unit_price!=null&&Number(pl.unit_price)>=0){
@@ -996,7 +1011,7 @@ async function approveInvoice(){
         }
       }
     }
-    el('invoiceMsg').textContent='Factura procesada, stock actualizado y costos de referencia revisados.';el('invoiceReview').classList.add('hidden');parsedInvoice=null;el('invoiceFile').value='';await loadAll()
+    el('invoiceMsg').textContent=documentType==='venta'?'Factura de venta procesada. El stock fue descontado y puede quedar negativo si no había existencias previas.':'Factura de compra procesada. El stock fue aumentado y los costos de referencia revisados.';el('invoiceReview').classList.add('hidden');parsedInvoice=null;el('invoiceFile').value='';await loadAll()
   }catch(err){el('invoiceMsg').textContent=err.message}
 }
 if(!parseAuthCallback()&&token){loadRoleAndEnter()}
