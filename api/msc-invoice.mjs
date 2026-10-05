@@ -26,7 +26,7 @@ export default async function handler(req,res){
   try{pdfBase64=cleanBase64(req.body?.pdfBase64);documentType=req.body?.documentType==='venta'?'venta':'compra'}catch{return res.status(400).json({error:'INVALID_INPUT',message:'PDF inválido o demasiado grande.'})}
   const apiKey=process.env.GEMINI_API_KEY?.trim()||process.env.GOOGLE_GENERATIVE_AI_API_KEY?.trim();
   if(!apiKey)return res.status(503).json({error:'AI_CONFIGURATION_REQUIRED',message:'El lector de facturas aún no está configurado.'});
-  const models=[process.env.MOVE_GEMINI_MODEL||'gemini-3.8-flash',process.env.MOVE_GEMINI_FALLBACK_MODEL||'gemini-3.6-flash'].filter((m,i,a)=>m&&a.indexOf(m)===i);
+  const models=[process.env.MOVE_GEMINI_MODEL||'gemini-3.8-flash',process.env.MOVE_GEMINI_FALLBACK_MODEL||'gemini-flash-lite-latest','gemini-3.5-flash-lite'].filter((m,i,a)=>m&&a.indexOf(m)===i);
   const prompt='Extrae esta factura chilena de '+documentType+'. Devuelve SOLO JSON válido con: folio, issuer_name, issuer_rut, receiver_name, receiver_rut, document_date en YYYY-MM-DD y lines como arreglo. Cada línea: description, product_code si aparece, ean_gtin si aparece, quantity numérica, unit_price numérico o null, y una propuesta conservadora de name, brand, model, family_code, subfamily_code, type_code y variant_code para crear un SKU MSC si el producto es nuevo. Usa códigos breves en mayúsculas (ej.: EPP, MAN, GUA, L; si no hay variante usa UNI). No inventes product_code ni EAN. Si un dato documental no aparece usa null.';
   const body={contents:[{role:'user',parts:[{inlineData:{mimeType:'application/pdf',data:pdfBase64}},{text:prompt}]}],generationConfig:{responseMimeType:'application/json',maxOutputTokens:2500}};
   try{
@@ -34,9 +34,10 @@ export default async function handler(req,res){
     for(let i=0;i<models.length;i++){
       const model=models[i];
       try{
-        const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body:JSON.stringify(body),signal:AbortSignal.timeout(12000)});
+        const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body:JSON.stringify(body),signal:AbortSignal.timeout(7000)});
         if(!r.ok){
           console.warn(JSON.stringify({event:'msc_invoice_ai_error',model,status:r.status,attempt:i+1}));
+          if(i<models.length-1) await new Promise(resolve=>setTimeout(resolve,350));
           continue;
         }
         data=await r.json();
