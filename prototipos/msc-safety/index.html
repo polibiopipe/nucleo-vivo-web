@@ -3,590 +3,90 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MSC Safety · Cotizaciones</title>
-<meta name="description" content="Catálogo real de productos disponibles en MSC Safety. Selecciona talla y solicita cotización.">
+<title>MSC Safety · Catálogo y cotización</title>
+<meta name="description" content="Catálogo técnico de MSC Safety para cotizar equipos y elementos de seguridad industrial.">
 <style>
-:root{--bg:#080b0d;--panel:#10151a;--panel2:#151b20;--line:#2b3238;--gold:#c99b3d;--gold2:#e2bf6d;--text:#f1efe9;--muted:#a49f96;--light:#eeeae1;--ink:#1c1e20;--ok:#55ca86;--shadow:0 24px 70px rgba(0,0,0,.28)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}button,input,select,textarea{font:inherit}.shell{width:min(1220px,calc(100% - 40px));margin:auto}
-header{position:sticky;top:0;z-index:30;background:rgba(7,10,12,.94);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.08)}
-.head{height:74px;display:flex;align-items:center;gap:18px}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}.brand img{width:158px;height:50px;object-fit:contain}.nav{margin-left:auto;display:flex;align-items:center;gap:22px}.nav a{color:#c8c4bc;text-decoration:none;font-size:13px}.nav a:hover{color:#fff}.client-access,.primary,.secondary{border-radius:5px;padding:10px 14px;font-weight:800;cursor:pointer}.client-access{border:1px solid rgba(226,191,109,.48);background:transparent;color:#ead8a5}.primary{border:1px solid var(--gold);background:var(--gold);color:#121212}.secondary{border:1px solid #3a4147;background:transparent;color:#fff}
-.hero{padding:54px 0 34px;background:radial-gradient(circle at 78% 28%,rgba(201,155,61,.12),transparent 28%),linear-gradient(180deg,#0a0e11,#080b0d)}
-.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:34px;align-items:center}.kicker{color:var(--gold2);font-size:10px;font-weight:900;letter-spacing:.18em;text-transform:uppercase}.hero h1{font-size:clamp(38px,5vw,72px);line-height:.96;letter-spacing:-.045em;margin:14px 0 18px;max-width:770px}.hero p{color:#b7b3ab;font-size:17px;line-height:1.6;max-width:700px}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.hero-proof{border:1px solid rgba(226,191,109,.18);background:linear-gradient(145deg,#12181d,#0d1216);min-height:320px;position:relative;overflow:hidden;border-radius:10px;box-shadow:var(--shadow)}.hero-proof img{width:100%;height:100%;object-fit:contain;position:absolute;inset:0;padding:32px;background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.07),transparent 40%)}.hero-proof-copy{position:absolute;left:20px;right:20px;bottom:18px;padding:12px 14px;background:rgba(7,10,12,.80);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(8px)}.hero-proof-copy b{display:block}.hero-proof-copy span{font-size:11px;color:#aaa49b}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:30px}.stat{border:1px solid rgba(255,255,255,.08);background:#0e1317;padding:14px 16px}.stat span{display:block;color:#8f979e;font-size:9px;text-transform:uppercase;letter-spacing:.1em}.stat strong{display:block;font-size:22px;margin-top:5px}
-.catalog-section{background:var(--light);color:var(--ink);padding:48px 0 58px}.section-head{display:flex;justify-content:space-between;gap:34px;align-items:end;margin-bottom:20px}.section-head h2{font-size:clamp(30px,4vw,48px);letter-spacing:-.035em;margin:8px 0 0}.section-head p{max-width:520px;color:#625e57;line-height:1.55}.catalog-tools{display:flex;gap:8px;align-items:center;margin:18px 0}.chip{border:1px solid #c9c2b6;background:#f7f3ea;padding:8px 11px;cursor:pointer}.chip.active{background:#222;color:#fff;border-color:#222}.search{margin-left:auto;min-width:290px;border:1px solid #c8c0b3;background:#fff;padding:10px 12px;outline:none}.catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.loading{grid-column:1/-1;padding:40px;text-align:center;border:1px dashed #c9c2b6;color:#6c665e;background:#f7f3ea}.product{border:1px solid #d1cabf;background:#fff;display:flex;flex-direction:column;min-width:0}.product figure{height:260px;margin:0;background:linear-gradient(145deg,#f9f7f1,#e7e2d8);display:grid;place-items:center;overflow:hidden}.product figure img{width:100%;height:100%;object-fit:contain;padding:18px}.product-body{padding:17px}.product-meta{display:flex;justify-content:space-between;gap:10px;color:#716b62;font-size:10px;text-transform:uppercase;letter-spacing:.07em}.product h3{font-size:21px;margin:9px 0 6px}.product p{font-size:13px;color:#625d55;line-height:1.48;min-height:58px}.facts{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.fact{font-size:10px;border:1px solid #d6cec1;padding:5px 7px;background:#f8f5ef}.cert{border-color:#c6b275;background:#f8f1da;color:#5a4a24}.variant{display:grid;grid-template-columns:1fr 84px;gap:8px;margin-top:13px}.variant select,.variant input{border:1px solid #cfc7bb;padding:10px;background:#fff;color:#222}.availability{font-size:10px;color:#34704f;margin-top:7px;font-weight:700}.product-actions{display:flex;gap:8px;margin-top:13px}.product-actions button{flex:1}.catalog-note{font-size:11px;color:#6c665e;margin-top:14px}
-.quote-section{padding:50px 0 64px;background:linear-gradient(180deg,#0a0d10,#080b0d)}.quote-grid{display:grid;grid-template-columns:.75fr 1.25fr;gap:26px}.quote-copy h2{font-size:42px;line-height:1.02;margin:10px 0 14px}.quote-copy p{color:#aaa49b;line-height:1.6}.quote-box{border:1px solid #30373d;background:#0f1418;padding:20px}.client-state{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #333a40;background:#0a0e11;padding:11px 13px;margin-bottom:14px}.client-state b{display:block;color:#f0e3bd}.client-state span{display:block;color:#8d969d;font-size:11px;margin-top:3px}.selected{display:flex;gap:7px;flex-wrap:wrap;min-height:43px;border:1px dashed #3b4247;padding:10px;margin-bottom:14px}.selected span{border:1px solid #4a4130;background:#17140e;color:#e4d2a3;padding:6px 8px;font-size:11px}.selected .empty{border:0;background:transparent;color:#777}.selected button{border:0;background:transparent;color:#efc85f;cursor:pointer}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:10px;color:#aaa49b;text-transform:uppercase;letter-spacing:.08em}.field input,.field textarea{width:100%;border:1px solid #343b41;background:#090c0f;color:#fff;padding:11px}.field textarea{min-height:105px;resize:vertical}.summary{white-space:pre-wrap;border:1px solid #3e453f;background:#0a0d0b;padding:13px;margin-top:14px;display:none;color:#d4d0c8;font-size:12px}.summary.show{display:block}
-footer{border-top:1px solid #252b30;background:#07090b;padding:26px 0;color:#918b82;font-size:11px}.foot{display:flex;justify-content:space-between;gap:20px;align-items:center}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;padding:18px}.modal.show{display:grid;place-items:center}.modal-box{width:min(520px,100%);max-height:90vh;overflow:auto;background:#101519;border:1px solid #3a4147;padding:24px;box-shadow:var(--shadow)}.modal-head{display:flex;justify-content:space-between;gap:14px;align-items:start}.modal-head h3{font-size:28px;margin:7px 0}.modal-head p{color:#99938b;font-size:12px}.tabs{display:flex;gap:8px;margin:14px 0}.tabs button{flex:1;border:1px solid #3b4247;background:#0a0d10;color:#ccc;padding:10px}.tabs button.active{background:var(--gold);border-color:var(--gold);color:#111;font-weight:800}.pane{display:none}.pane.active{display:block}.modal-message{font-size:12px;color:#d2c7af;min-height:18px;margin-top:12px}.history{border-top:1px solid #2b3136;margin-top:18px;padding-top:14px}.history-row{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #262c30;padding:9px 0;font-size:12px}.history-row small{display:block;color:#858078}.close{border:1px solid #3b4247;background:transparent;color:#fff;padding:8px 10px;cursor:pointer}
-@media(max-width:950px){.hero-grid,.quote-grid{grid-template-columns:1fr}.catalog{grid-template-columns:repeat(2,1fr)}.hero-proof{min-height:280px}.nav a{display:none}}
-@media(max-width:640px){.shell{width:min(100% - 24px,1220px)}.head{height:66px}.brand img{width:132px}.catalog{grid-template-columns:1fr}.section-head{display:block}.catalog-tools{flex-wrap:wrap}.search{width:100%;margin-left:0;min-width:0}.stats{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.foot{display:block}.hero{padding-top:34px}.hero h1{font-size:43px}}
-
-/* ===== MSC Safety · experiencia comercial v2 ===== */
-.hero{padding:58px 0 42px;overflow:hidden;background:
-radial-gradient(circle at 73% 38%,rgba(202,153,57,.17),transparent 24%),
-radial-gradient(circle at 90% 80%,rgba(255,255,255,.035),transparent 28%),
-linear-gradient(135deg,#090c0e 0%,#0c1114 55%,#080a0c 100%)}
-.hero-grid{grid-template-columns:1.02fr .98fr;gap:24px;min-height:520px}
-.hero-copy-main{position:relative;z-index:4}
-.hero h1{max-width:690px;font-size:clamp(44px,5.4vw,76px)}
-.hero p{max-width:650px}
-.hero-proof{min-height:500px;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible;isolation:isolate}
-.hero-proof:before{content:"";position:absolute;width:82%;height:68%;right:1%;top:12%;border-radius:50%;background:radial-gradient(circle,rgba(218,174,82,.23) 0%,rgba(175,127,38,.08) 38%,transparent 70%);filter:blur(2px);z-index:0}
-.hero-proof:after{content:"";position:absolute;right:-8%;bottom:3%;width:82%;height:24%;background:radial-gradient(ellipse,rgba(0,0,0,.58),transparent 68%);filter:blur(9px);z-index:0}
-.hero-model-word{position:absolute;right:-2%;top:7%;font-size:clamp(72px,9vw,132px);font-weight:950;letter-spacing:-.07em;color:rgba(226,191,109,.065);white-space:nowrap;z-index:0}
-.hero-proof img{position:absolute;z-index:1;inset:auto -7% 2% auto;width:112%;height:96%;padding:0;object-fit:contain;background:transparent;filter:drop-shadow(0 28px 28px rgba(0,0,0,.42));transform:rotate(-2deg) scale(1.04);transform-origin:center bottom;mix-blend-mode:multiply}
-.hero-proof-copy{z-index:3;left:3%;right:auto;bottom:5%;width:min(390px,78%);padding:15px 17px;background:linear-gradient(120deg,rgba(9,12,14,.94),rgba(15,19,21,.78));border:1px solid rgba(226,191,109,.26);box-shadow:0 15px 40px rgba(0,0,0,.34)}
-.hero-proof-copy b{font-size:18px}.hero-proof-copy span{display:block;margin-top:5px;line-height:1.45}
-.hero-doc-chip{display:inline-flex!important;width:auto;margin-top:9px!important;padding:5px 8px;border:1px solid rgba(226,191,109,.34);color:#ead29a!important;font-size:9px!important;text-transform:uppercase;letter-spacing:.08em}
-.stats{max-width:740px}
-.stat{background:linear-gradient(145deg,#10161a,#0c1114);border-color:rgba(255,255,255,.075)}
-
-.catalog-section{background:#e9e5dc;padding:58px 0 70px}
-.catalog{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.product{position:relative;overflow:hidden;border:1px solid #292c2e;background:#0e1215;color:#fff;box-shadow:0 18px 38px rgba(36,31,22,.10);border-radius:3px;transition:transform .2s ease,box-shadow .2s ease}
-.product:hover{transform:translateY(-3px);box-shadow:0 24px 52px rgba(36,31,22,.16)}
-.product figure{height:326px;position:relative;overflow:hidden;background:
-radial-gradient(circle at 68% 39%,rgba(223,188,113,.52),transparent 26%),
-linear-gradient(145deg,#e7dfcf 0%,#d2c3a7 58%,#ac9874 100%)}
-.product figure:before{content:attr(data-model);position:absolute;left:14px;top:7px;font-size:52px;font-weight:950;letter-spacing:-.06em;color:rgba(44,35,23,.09);z-index:0;white-space:nowrap}
-.product figure:after{content:"";position:absolute;left:13%;right:4%;bottom:5%;height:16%;background:radial-gradient(ellipse,rgba(31,24,17,.32),transparent 67%);filter:blur(7px)}
-.product figure img{position:absolute;z-index:1;width:112%;height:108%;right:-9%;bottom:-8%;padding:0;object-fit:contain;background:transparent;mix-blend-mode:multiply;filter:drop-shadow(0 20px 20px rgba(40,30,18,.24));transform:rotate(-2deg) scale(1.03);transform-origin:center bottom;transition:transform .25s ease}
-.product:hover figure img{transform:rotate(-1deg) scale(1.075)}
-.product-body{position:relative;z-index:2;padding:20px 18px 18px;background:linear-gradient(180deg,#11171b,#0c1013)}
-.product-meta{color:#9ba2a6}.product-meta span:first-child{color:var(--gold2)}
-.product h3{font-size:27px;letter-spacing:-.035em;margin:8px 0 7px}
-.product p{color:#b6b1a9;min-height:76px}
-.facts{margin:11px 0}.fact{border-color:#343a3f;background:#161c20;color:#d7d2ca}.cert{border-color:rgba(226,191,109,.42);background:rgba(201,155,61,.10);color:#ebcf8d}
-.specs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:12px 0}
-.spec{padding:7px 8px;border-left:2px solid #806328;background:#12181c;font-size:9px;color:#aeb4b7}
-.spec b{display:block;color:#f0eee8;font-size:10px;margin-bottom:2px}
-.docs{display:flex;gap:7px;flex-wrap:wrap;margin:11px 0 3px}
-.doc-link{display:inline-flex;align-items:center;gap:5px;padding:7px 9px;border:1px solid rgba(226,191,109,.34);color:#e6c982;text-decoration:none;font-size:10px;font-weight:800;background:rgba(201,155,61,.07)}
-.doc-link:hover{background:rgba(201,155,61,.16)}
-.variant select,.variant input{border-color:#343b40;background:#090d0f;color:#eee}
-.availability{color:#63d091}
-.product-actions .primary{width:100%;padding:11px 14px}
-.catalog-note{font-size:11px;color:#625d55}
-.quote-section{background:
-radial-gradient(circle at 12% 30%,rgba(201,155,61,.09),transparent 25%),
-linear-gradient(180deg,#0b0f12,#07090b)}
-@media(max-width:950px){.hero-grid{min-height:auto}.hero-proof{min-height:430px}.hero-proof img{right:-3%;width:104%}.catalog{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:640px){.hero-grid{gap:5px}.hero-proof{min-height:360px}.hero-proof img{width:108%;right:-4%;bottom:0}.hero-model-word{font-size:64px}.hero-proof-copy{width:92%;left:4%;bottom:3%}.catalog{grid-template-columns:1fr}.product figure{height:300px}.product p{min-height:0}}
-
-.availability.query{color:#e1ae45}.no-photo{width:100%;height:100%;display:grid;place-content:center;gap:7px;text-align:center;background:radial-gradient(circle at 50% 35%,rgba(201,155,61,.10),transparent 38%),linear-gradient(145deg,#171c20,#0d1114);color:#d8d2c7}.no-photo strong{font-size:18px;letter-spacing:.08em}.no-photo span{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#8f979e}.doc-pending{display:inline-flex;padding:7px 9px;border:1px dashed #4a4f53;color:#aaa49b;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
-
-/* ===== MSC Safety · catálogo inteligente premium v4 ===== */
-:root{--cream:#f2eee5;--cream2:#e6e0d4;--char:#0a0d10;--char2:#11171b;--bronze:#b88a35;--bronze2:#e0bd71;--green:#57c785;--amber:#dbad52}
-body{background:#07090b}
-.head{height:70px}.nav{gap:18px}.header-quote{display:inline-flex;align-items:center;gap:8px}.header-quote span{display:grid;place-items:center;min-width:20px;height:20px;border-radius:99px;background:#111;color:#f1d18b;font-size:10px}
-
-.hero{padding:44px 0 36px;background:
-radial-gradient(circle at 80% 18%,rgba(209,161,67,.16),transparent 23%),
-linear-gradient(132deg,#0b0e11 0%,#10161b 58%,#080a0c 100%)}
-.hero-grid{grid-template-columns:minmax(0,1.08fr) minmax(420px,.92fr);min-height:500px;gap:34px}
-.hero-copy-main{align-self:center}
-.hero h1{font-size:clamp(42px,5vw,72px);line-height:.98;margin:13px 0 17px;max-width:760px}
-.hero h1 span{color:var(--bronze2);display:block}
-.hero p{font-size:16px;max-width:720px;color:#c0bbb2}
-.hero-search{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;max-width:760px;margin-top:25px;padding:8px 8px 8px 15px;border:1px solid rgba(226,191,109,.38);background:rgba(9,12,14,.82);box-shadow:0 20px 50px rgba(0,0,0,.25)}
-.hero-search>span{font-size:22px;color:var(--bronze2)}.hero-search input{min-width:0;border:0;background:transparent;color:#fff;outline:0;padding:9px 4px}.hero-search input::placeholder{color:#727a80}
-.hero-helper{margin-top:10px;color:#7f878d;font-size:10px;letter-spacing:.03em}
-.hero-trust{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:760px;margin-top:27px;border-top:1px solid rgba(255,255,255,.08);padding-top:17px;gap:16px}
-.hero-trust div{padding-left:13px;border-left:2px solid rgba(226,191,109,.35)}.hero-trust b{display:block;font-size:11px}.hero-trust span{display:block;color:#818a90;font-size:9px;margin-top:3px;line-height:1.45}
-.hero-proof{min-height:470px}.hero-proof-copy{bottom:4%;width:min(420px,88%)}.hero-proof-copy span{font-size:10px}
-
-.process-strip{border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);background:#0b0f12;padding:18px 0}
-.process-grid{display:grid;grid-template-columns:1.15fr repeat(3,1fr);gap:0}
-.process-intro,.process-step{padding:4px 22px;border-right:1px solid rgba(255,255,255,.08);min-height:62px;display:flex;align-items:center;gap:13px}
-.process-intro{display:block;padding-left:0}.process-intro span{display:block;color:var(--bronze2);font-size:9px;text-transform:uppercase;letter-spacing:.14em}.process-intro b{display:block;margin-top:5px;font-size:17px}
-.process-step strong{color:var(--bronze2);font-size:11px}.process-step b{display:block;font-size:11px}.process-step span{display:block;color:#7f878e;font-size:9px;line-height:1.4;margin-top:3px}
-
-.category-section{padding:46px 0 36px;background:var(--cream);color:#1a1d1f}
-.kicker.dark{color:#86651f}.section-head.compact{margin-bottom:18px}.section-head.compact h2{font-size:clamp(28px,3vw,42px)}.section-head.compact p{font-size:13px}
-.category-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
-.category-card{position:relative;text-align:left;border:1px solid #cfc7b8;background:#f9f6ef;padding:18px 18px 16px;cursor:pointer;min-height:116px;transition:.18s ease;overflow:hidden}
-.category-card:hover{transform:translateY(-2px);border-color:#9f7d3b;box-shadow:0 12px 28px rgba(55,45,28,.10)}
-.category-card .cat-icon{font-size:22px;color:#9b772f}.category-card b{display:block;font-size:15px;margin-top:11px}.category-card span{display:block;color:#716b62;font-size:10px;margin-top:4px}.category-card em{position:absolute;right:13px;top:12px;font-style:normal;color:#a59d91;font-size:10px}.category-card:after{content:"";position:absolute;left:0;bottom:0;height:3px;width:0;background:#b98c39;transition:.2s}.category-card:hover:after{width:100%}
-
-.catalog-section{padding:38px 0 72px;background:#e8e3d8}.section-head.catalog-title{margin-bottom:20px}.section-head.catalog-title h2{font-size:clamp(31px,3.5vw,48px)}.section-head.catalog-title p{font-size:13px}
-.catalog-layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:18px;align-items:start}
-.filter-panel{position:sticky;top:88px;background:#101519;color:#fff;border:1px solid #262d32;padding:16px;box-shadow:0 14px 34px rgba(40,31,17,.10)}
-.filter-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding-bottom:13px;border-bottom:1px solid #262d32}.filter-head span{display:block;color:#9aa1a6;font-size:9px;text-transform:uppercase;letter-spacing:.09em}.filter-head b{display:block;font-size:15px;margin-top:3px}.filter-head button{border:0;background:transparent;color:#d5b76f;font-size:10px;cursor:pointer}
-.filter-group{padding:14px 0;border-bottom:1px solid #23292e}.filter-group label{display:block;color:#8e979d;font-size:9px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}.filter-group select{width:100%;border:1px solid #30383e;background:#0a0e11;color:#f0eee9;padding:10px 9px}
-.filter-buttons{display:grid;grid-template-columns:1fr;gap:6px}.filter-buttons button{text-align:left;border:1px solid #2d353b;background:#0c1115;color:#afb5b9;padding:9px 10px;cursor:pointer}.filter-buttons button.active{border-color:#b68a39;color:#f2d99d;background:rgba(184,138,57,.10)}
-.filter-note{margin-top:14px;padding:13px;background:#0b0f12;border:1px solid rgba(226,191,109,.17)}.filter-note b{display:block;font-size:11px}.filter-note span{display:block;font-size:9px;line-height:1.5;color:#7f878d;margin:5px 0 8px}.filter-note a{color:#dec174;font-size:10px;text-decoration:none}
-.catalog-main{min-width:0}.catalog-toolbar{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:12px;background:#f7f3ea;border:1px solid #d1c9bb;padding:12px}
-.catalog-toolbar>div:first-child>b{font-size:13px;color:#2c2a27}.toolbar-actions{display:flex;gap:8px;align-items:center;flex:1;justify-content:flex-end}.catalog-search-wrap{display:flex;align-items:center;gap:8px;min-width:280px;max-width:430px;flex:1;border:1px solid #c9c1b4;background:#fff;padding:0 10px}.catalog-search-wrap span{color:#847c71}.catalog-search-wrap .search{width:100%;min-width:0;border:0;margin:0;padding:10px 2px;background:transparent}.sort-select{border:1px solid #c9c1b4;background:#fff;color:#292725;padding:10px}
-.applied-filters{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;min-height:20px}.applied-chip{border:1px solid #c7b98f;background:#f7f0dd;padding:4px 7px;color:#685628;font-size:9px;cursor:pointer}
-.catalog{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.product{border:1px solid #252a2d;border-radius:0;box-shadow:0 10px 24px rgba(35,28,18,.08)}.product:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(35,28,18,.13)}
-.product figure{height:236px;background:radial-gradient(circle at 68% 39%,rgba(223,188,113,.42),transparent 27%),linear-gradient(145deg,#e7dfcf,#c9b995)}
-.product figure:before{font-size:38px;left:11px;top:6px}.product figure img{width:105%;height:101%;right:-5%;bottom:-3%}.product:hover figure img{transform:rotate(-1deg) scale(1.04)}
-.product-body{padding:15px 15px 14px}.product-meta{font-size:9px}.product h3{font-size:22px;margin:7px 0 5px}.product .quick-desc{font-size:11px;color:#9fa5a8;line-height:1.42;min-height:31px;margin:0 0 9px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.product-signals{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}.signal{font-size:9px;padding:5px 7px;border:1px solid #353b40;color:#bdc2c4}.signal.stock{color:#72d39a;border-color:#31563f;background:rgba(69,174,111,.08)}.signal.consult{color:#e5bd68;border-color:#665127;background:rgba(198,145,42,.08)}.signal.doc{color:#e6ca89;border-color:#5b4b2c;background:rgba(201,155,61,.08)}
-.key-specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin:9px 0}.key-spec{padding:6px 7px;background:#12181c;border-left:2px solid #795f2b;font-size:8.5px;color:#aeb4b7;min-width:0}.key-spec b{display:block;color:#f1eee8;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.key-spec span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-.docs{margin:8px 0}.doc-link{padding:6px 7px;font-size:9px}.doc-pending{padding:6px 7px;font-size:9px}
-.variant{grid-template-columns:minmax(0,1fr) 68px;margin-top:9px}.variant select,.variant input{padding:9px;font-size:10px}.availability{font-size:9px;margin-top:6px}.product-actions{margin-top:9px}.product-actions .primary{padding:10px 12px;font-size:11px}
-.catalog-note{padding:10px 12px;border-left:2px solid #aa8336;background:#f4efe5;margin-top:14px}
-.catalog-mobile-bar{display:none}
-
-.confidence-section{background:#0b0f12;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);padding:26px 0}
-.confidence-grid{display:grid;grid-template-columns:repeat(4,1fr)}.confidence-grid>div{padding:7px 22px;border-right:1px solid rgba(255,255,255,.07)}.confidence-grid>div:first-child{padding-left:0}.confidence-grid span{color:#d8b665;font-size:9px}.confidence-grid b{display:block;font-size:12px;margin-top:5px}.confidence-grid p{color:#7f878d;font-size:9px;line-height:1.45;margin:4px 0 0}
-
-.quote-section{padding:56px 0 92px}.quote-grid{grid-template-columns:.72fr 1.28fr;gap:34px}.quote-copy{position:sticky;top:95px;align-self:start}.quote-copy h2{font-size:44px}.quote-guide{display:grid;gap:9px;margin-top:22px}.quote-guide>div{display:flex;gap:10px;align-items:flex-start;border-top:1px solid rgba(255,255,255,.08);padding-top:9px}.quote-guide span{display:grid;place-items:center;width:22px;height:22px;border:1px solid rgba(226,191,109,.36);color:#dabb74;font-size:9px}.quote-guide p{font-size:10px;margin:2px 0;color:#8d959b}.quote-guide b{color:#e7e2d9}
-.quote-box{padding:22px;border-color:#353c42}.quote-box-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding-bottom:12px;border-bottom:1px solid #272e33;margin-bottom:12px}.quote-box-head span{display:block;color:#8c949a;font-size:9px;text-transform:uppercase}.quote-box-head b{display:block;margin-top:3px;font-size:13px}.quote-box-head a{color:#d9bd78;text-decoration:none;font-size:10px}.quote-actions{margin-top:16px}
-
-.quote-dock{position:fixed;z-index:80;left:50%;transform:translateX(-50%);bottom:18px;width:min(620px,calc(100% - 28px));display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 11px 10px 13px;background:rgba(10,13,16,.96);border:1px solid rgba(226,191,109,.38);box-shadow:0 18px 58px rgba(0,0,0,.4);backdrop-filter:blur(14px);opacity:0;pointer-events:none;translate:0 16px;transition:.2s}.quote-dock.show{opacity:1;pointer-events:auto;translate:0 0}.quote-dock-copy{display:flex;align-items:center;gap:10px}.quote-dock-copy>span{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#b78b3b;color:#111;font-weight:900}.quote-dock-copy b{display:block;font-size:11px}.quote-dock-copy small{display:block;color:#828b91;font-size:9px;margin-top:2px}.quote-dock button{border:1px solid #b78b3b;background:#b78b3b;color:#111;font-weight:800;padding:9px 11px;cursor:pointer;font-size:10px}
-
+:root{--bg:#080b0e;--panel:#10161b;--panel2:#151c21;--line:#2b3339;--gold:#c99b3d;--gold2:#e2bf6d;--cream:#ece7dc;--paper:#f7f3ea;--ink:#1c1f21;--muted:#8f969b;--ok:#55c985;--warn:#e0b45b;--danger:#e27d73;--shadow:0 24px 70px rgba(0,0,0,.26)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:#f3f0e9;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}button,input,select,textarea{font:inherit}button,a{touch-action:manipulation}.shell{width:min(1240px,calc(100% - 36px));margin:auto}
+header{position:sticky;top:0;z-index:50;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(7,10,12,.94);backdrop-filter:blur(16px)}.head{height:70px;display:flex;align-items:center;gap:20px}.brand{display:flex;align-items:center;text-decoration:none}.brand img{width:154px;height:48px;object-fit:contain}.nav{margin-left:auto;display:flex;align-items:center;gap:18px}.nav a{color:#c8c4bc;text-decoration:none;font-size:12px}.nav a:hover{color:#fff}.client-access,.primary,.secondary{border-radius:5px;padding:10px 14px;font-weight:800;cursor:pointer}.client-access{border:1px solid rgba(226,191,109,.42);background:transparent;color:#ead8a5}.primary{border:1px solid var(--gold);background:var(--gold);color:#111}.secondary{border:1px solid #3a4248;background:transparent;color:#fff}.header-quote{display:inline-flex;align-items:center;gap:7px!important;background:var(--gold);color:#111!important;padding:10px 13px;border-radius:5px;font-weight:900}.header-quote span{display:grid;place-items:center;min-width:19px;height:19px;border-radius:99px;background:#15100a;color:#f0d18e;font-size:9px}
+.hero{padding:48px 0 38px;background:radial-gradient(circle at 80% 18%,rgba(205,157,61,.17),transparent 24%),linear-gradient(135deg,#0a0d10 0%,#11181d 58%,#080a0c 100%);overflow:hidden}.hero-grid{display:grid;grid-template-columns:minmax(0,1.06fr) minmax(390px,.94fr);gap:34px;align-items:center;min-height:475px}.kicker{color:var(--gold2);font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}.hero h1{font-size:clamp(42px,5.2vw,74px);line-height:.96;letter-spacing:-.045em;margin:14px 0 17px;max-width:760px}.hero h1 span{display:block;color:var(--gold2)}.hero p{color:#bbb7af;font-size:16px;line-height:1.62;max-width:720px}.hero-search{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;max-width:760px;margin-top:24px;padding:8px 8px 8px 15px;border:1px solid rgba(226,191,109,.36);background:#090d10;box-shadow:0 18px 48px rgba(0,0,0,.26)}.hero-search>span{font-size:22px;color:var(--gold2)}.hero-search input{border:0;outline:0;background:transparent;color:#fff;min-width:0;padding:9px 2px}.hero-search input::placeholder{color:#69737a}.hero-helper{margin-top:9px;color:#758089;font-size:10px}.hero-trust{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:25px;max-width:760px;padding-top:15px;border-top:1px solid rgba(255,255,255,.08)}.hero-trust>div{padding-left:11px;border-left:2px solid rgba(226,191,109,.34)}.hero-trust b{display:block;font-size:11px}.hero-trust span{display:block;color:#7f888e;font-size:9px;line-height:1.45;margin-top:3px}.hero-visual{position:relative;min-height:440px}.hero-glow{position:absolute;inset:13% 2% 8% 8%;border-radius:50%;background:radial-gradient(circle,rgba(214,172,87,.22),rgba(190,139,43,.07) 40%,transparent 70%)}.hero-word{position:absolute;right:-1%;top:7%;font-weight:950;font-size:clamp(72px,9vw,126px);letter-spacing:-.07em;color:rgba(226,191,109,.065);white-space:nowrap}.hero-product{position:absolute;inset:0;display:grid;place-items:center}.hero-product img{position:relative;z-index:2;width:105%;height:91%;object-fit:contain;filter:drop-shadow(0 30px 28px rgba(0,0,0,.42));mix-blend-mode:multiply}.hero-fallback{position:absolute;z-index:1;text-align:center;color:#7d756a}.hero-fallback b{display:block;font-size:34px;letter-spacing:.08em}.hero-fallback span{font-size:10px;text-transform:uppercase;letter-spacing:.15em}.hero-caption{position:absolute;z-index:4;left:2%;bottom:4%;width:min(410px,88%);padding:15px 17px;border:1px solid rgba(226,191,109,.26);background:linear-gradient(120deg,rgba(9,12,14,.95),rgba(15,19,21,.84));box-shadow:0 18px 44px rgba(0,0,0,.34)}.hero-caption b{display:block;font-size:17px}.hero-caption span{display:block;color:#9ea5a9;font-size:10px;margin-top:5px}.hero-caption em{display:inline-flex;margin-top:9px;padding:5px 8px;border:1px solid rgba(226,191,109,.3);color:#e6cc8c;font-size:9px;font-style:normal;text-transform:uppercase;letter-spacing:.06em}
+.process-strip{border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);background:#0b0f12;padding:18px 0}.process-grid{display:grid;grid-template-columns:1.15fr repeat(3,1fr)}.process-intro,.process-step{min-height:62px;padding:4px 22px;border-right:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:12px}.process-intro{display:block;padding-left:0}.process-intro span{display:block;color:var(--gold2);font-size:9px;text-transform:uppercase;letter-spacing:.14em}.process-intro b{display:block;font-size:17px;margin-top:5px}.process-step strong{color:var(--gold2);font-size:11px}.process-step b{display:block;font-size:11px}.process-step span{display:block;color:#7e878d;font-size:9px;line-height:1.4;margin-top:3px}
+.category-section{padding:44px 0 34px;background:var(--cream);color:var(--ink)}.section-head{display:flex;justify-content:space-between;gap:28px;align-items:end;margin-bottom:18px}.section-head h2{font-size:clamp(30px,3.8vw,48px);letter-spacing:-.035em;margin:7px 0 0}.section-head p{max-width:520px;color:#655f56;font-size:13px;line-height:1.55}.kicker.dark{color:#86651f}.category-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}.category-card{text-align:left;position:relative;overflow:hidden;min-height:112px;border:1px solid #cec6b8;background:#faf7f0;color:#222;padding:17px;cursor:pointer;transition:.18s}.category-card:hover{transform:translateY(-2px);border-color:#a27d35;box-shadow:0 12px 28px rgba(55,45,28,.09)}.category-card .ico{font-size:21px;color:#9b772f}.category-card b{display:block;font-size:15px;margin-top:10px}.category-card span{display:block;color:#736d64;font-size:10px;margin-top:4px}.category-card em{position:absolute;right:12px;top:11px;font-style:normal;color:#a49c91;font-size:9px}.category-card:after{content:"";position:absolute;left:0;bottom:0;height:3px;width:0;background:#b98a36;transition:.2s}.category-card:hover:after{width:100%}
+.catalog-section{padding:40px 0 70px;background:#e7e1d5;color:#1d2022}.catalog-layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:18px;align-items:start}.filter-panel{position:sticky;top:88px;background:#101519;color:#fff;border:1px solid #262d32;padding:16px;box-shadow:0 14px 34px rgba(40,31,17,.10)}.filter-head{display:flex;justify-content:space-between;gap:10px;padding-bottom:12px;border-bottom:1px solid #262d32}.filter-head span{display:block;color:#929a9f;font-size:9px;text-transform:uppercase;letter-spacing:.09em}.filter-head b{display:block;font-size:15px;margin-top:3px}.filter-head button{border:0;background:transparent;color:#d7b96d;cursor:pointer;font-size:10px}.filter-group{padding:14px 0;border-bottom:1px solid #23292e}.filter-group label{display:block;color:#8d959b;font-size:9px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}.filter-group select{width:100%;border:1px solid #30383e;background:#0a0e11;color:#f1eee8;padding:10px 9px}.filter-buttons{display:grid;gap:6px}.filter-buttons button{text-align:left;border:1px solid #2d353b;background:#0c1115;color:#aeb5b9;padding:9px 10px;cursor:pointer}.filter-buttons button.active{border-color:#b78a39;color:#f1d99f;background:rgba(184,138,57,.1)}.filter-note{margin-top:14px;padding:12px;border:1px solid rgba(226,191,109,.16);background:#0b0f12}.filter-note b{display:block;font-size:11px}.filter-note span{display:block;color:#7d868c;font-size:9px;line-height:1.5;margin:5px 0 8px}.filter-note a{color:#d8bd79;font-size:10px;text-decoration:none}.catalog-main{min-width:0}.catalog-toolbar{display:flex;justify-content:space-between;gap:13px;align-items:flex-start;margin-bottom:12px;padding:12px;border:1px solid #d0c8ba;background:#f7f3ea}.catalog-toolbar>div:first-child>b{font-size:13px}.applied{display:flex;gap:5px;flex-wrap:wrap;min-height:18px;margin-top:6px}.applied button{border:1px solid #c7b98f;background:#f6efdc;color:#665326;padding:4px 7px;font-size:9px;cursor:pointer}.toolbar-actions{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex:1}.catalog-search{display:flex;align-items:center;gap:8px;max-width:430px;min-width:270px;flex:1;border:1px solid #c8c0b3;background:#fff;padding:0 10px}.catalog-search input{width:100%;min-width:0;border:0;outline:0;padding:10px 2px}.sort{border:1px solid #c8c0b3;background:#fff;color:#292725;padding:10px}.catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.loading{grid-column:1/-1;padding:42px;text-align:center;border:1px dashed #bfb6a8;background:#f8f4ec;color:#625d55}.product{overflow:hidden;border:1px solid #252a2d;background:#0e1316;color:#fff;box-shadow:0 10px 24px rgba(35,28,18,.08);transition:.18s}.product:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(35,28,18,.13)}.product figure{position:relative;height:236px;margin:0;overflow:hidden;display:grid;place-items:center;background:radial-gradient(circle at 68% 39%,rgba(223,188,113,.42),transparent 27%),linear-gradient(145deg,#e7dfcf,#c9b995)}.product figure:before{content:attr(data-model);position:absolute;left:11px;top:6px;color:rgba(44,35,23,.09);font-size:38px;font-weight:950;letter-spacing:-.06em;white-space:nowrap}.photo-fallback{position:absolute;z-index:0;text-align:center;color:rgba(32,27,20,.33)}.photo-fallback b{display:block;font-size:21px}.photo-fallback span{font-size:9px;text-transform:uppercase}.product figure img{position:absolute;z-index:2;width:105%;height:101%;right:-5%;bottom:-3%;object-fit:contain;mix-blend-mode:multiply;filter:drop-shadow(0 18px 18px rgba(40,30,18,.25));transition:.22s}.product:hover figure img{transform:scale(1.04)}.product-body{padding:15px;background:linear-gradient(180deg,#11171b,#0c1013)}.product-meta{display:flex;justify-content:space-between;gap:8px;color:#9aa1a6;font-size:9px;text-transform:uppercase;letter-spacing:.06em}.product-meta span:first-child{color:var(--gold2)}.product h3{font-size:22px;letter-spacing:-.035em;margin:7px 0 5px}.quick-desc{font-size:11px;color:#9fa5a8;line-height:1.42;margin:0 0 9px;min-height:31px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.signals{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px}.signal{font-size:9px;padding:5px 7px;border:1px solid #353b40;color:#bdc2c4}.signal.stock{color:#72d39a;border-color:#31563f;background:rgba(69,174,111,.08)}.signal.consult{color:#e5bd68;border-color:#665127;background:rgba(198,145,42,.08)}.signal.doc{color:#e7ca88;border-color:#5a4b2c;background:rgba(201,155,61,.08)}.specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin:9px 0}.spec{min-width:0;padding:6px 7px;border-left:2px solid #795f2b;background:#12181c;color:#aeb4b7;font-size:8.5px}.spec b,.spec span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.spec b{color:#f1eee8;font-size:9px}.spec span{margin-top:2px}.docs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.doc-link,.doc-pending{display:inline-flex;padding:6px 7px;font-size:9px}.doc-link{border:1px solid rgba(226,191,109,.34);color:#e5c980;text-decoration:none;background:rgba(201,155,61,.07)}.doc-pending{border:1px dashed #495057;color:#9da4a8}.variant{display:grid;grid-template-columns:minmax(0,1fr) 68px;gap:7px;margin-top:9px}.variant select,.variant input{width:100%;border:1px solid #343b40;background:#090d0f;color:#eee;padding:9px;font-size:10px}.availability{font-size:9px;color:#65d092;margin-top:6px;font-weight:800}.availability.query{color:#e2b65c}.product-actions{margin-top:9px}.product-actions .primary{width:100%;padding:10px 12px;font-size:11px}.catalog-note{margin-top:14px;padding:10px 12px;border-left:2px solid #a98134;background:#f3eee4;color:#625d55;font-size:10px}.mobile-filterbar{display:none}
+.confidence{padding:25px 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);background:#0b0f12}.confidence-grid{display:grid;grid-template-columns:repeat(4,1fr)}.confidence-grid>div{padding:7px 22px;border-right:1px solid rgba(255,255,255,.07)}.confidence-grid>div:first-child{padding-left:0}.confidence-grid span{color:#d9b868;font-size:9px}.confidence-grid b{display:block;font-size:12px;margin-top:5px}.confidence-grid p{margin:4px 0 0;color:#7e878d;font-size:9px;line-height:1.45}
+.quote-section{padding:54px 0 94px;background:radial-gradient(circle at 12% 30%,rgba(201,155,61,.08),transparent 25%),linear-gradient(180deg,#0b0f12,#07090b)}.quote-grid{display:grid;grid-template-columns:.72fr 1.28fr;gap:34px}.quote-copy{position:sticky;top:95px;align-self:start}.quote-copy h2{font-size:44px;line-height:1.02;margin:10px 0 14px}.quote-copy p{color:#999fa3;line-height:1.6}.quote-guide{display:grid;gap:9px;margin-top:22px}.quote-guide>div{display:flex;gap:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,.08)}.quote-guide span{display:grid;place-items:center;width:22px;height:22px;border:1px solid rgba(226,191,109,.34);color:#d9bb76;font-size:9px}.quote-guide p{font-size:10px;margin:2px 0}.quote-guide b{color:#e8e3db}.quote-box{border:1px solid #333b41;background:#0f1418;padding:22px}.quote-box-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding-bottom:12px;border-bottom:1px solid #272e33;margin-bottom:12px}.quote-box-head span{display:block;color:#8c949a;font-size:9px;text-transform:uppercase}.quote-box-head b{display:block;margin-top:3px;font-size:13px}.quote-box-head a{color:#d9bd78;text-decoration:none;font-size:10px}.client-state{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #333a40;background:#0a0e11;padding:11px 13px;margin-bottom:13px}.client-state b{display:block;color:#f0e3bd}.client-state span{display:block;color:#8d969d;font-size:10px;margin-top:3px}.selected{display:flex;gap:7px;flex-wrap:wrap;min-height:44px;border:1px dashed #3b4247;padding:10px;margin-bottom:14px}.selected span{border:1px solid #4a4130;background:#17140e;color:#e4d2a3;padding:6px 8px;font-size:10px}.selected .empty{border:0;background:transparent;color:#777}.selected button{border:0;background:transparent;color:#efc85f;cursor:pointer}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:9px;color:#aaa49b;text-transform:uppercase;letter-spacing:.08em}.field input,.field textarea{width:100%;border:1px solid #343b41;background:#090c0f;color:#fff;padding:11px}.field textarea{min-height:100px;resize:vertical}.quote-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.summary{white-space:pre-wrap;border:1px solid #3e453f;background:#0a0d0b;padding:13px;margin-top:14px;display:none;color:#d4d0c8;font-size:11px}.summary.show{display:block}
+.quote-dock{position:fixed;z-index:80;left:50%;bottom:16px;transform:translateX(-50%) translateY(16px);width:min(620px,calc(100% - 28px));display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 11px 10px 13px;border:1px solid rgba(226,191,109,.38);background:rgba(10,13,16,.96);box-shadow:0 18px 58px rgba(0,0,0,.4);backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:.2s}.quote-dock.show{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}.dock-copy{display:flex;align-items:center;gap:10px}.dock-copy>span{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#b78b3b;color:#111;font-weight:900}.dock-copy b{display:block;font-size:11px}.dock-copy small{display:block;color:#828b91;font-size:9px;margin-top:2px}.quote-dock button{border:1px solid #b78b3b;background:#b78b3b;color:#111;font-weight:800;padding:9px 11px;cursor:pointer;font-size:10px}
+footer{border-top:1px solid #252b30;background:#07090b;padding:25px 0;color:#918b82;font-size:10px}.foot{display:flex;justify-content:space-between;gap:20px}.modal{position:fixed;inset:0;z-index:100;display:none;padding:18px;background:rgba(0,0,0,.78)}.modal.show{display:grid;place-items:center}.modal-box{width:min(520px,100%);max-height:90vh;overflow:auto;border:1px solid #3a4147;background:#101519;padding:24px;box-shadow:var(--shadow)}.modal-head{display:flex;justify-content:space-between;gap:14px}.modal-head h3{font-size:27px;margin:6px 0}.modal-head p{color:#99938b;font-size:11px}.close{border:1px solid #3b4247;background:transparent;color:#fff;padding:8px 10px;cursor:pointer}.tabs{display:flex;gap:8px;margin:14px 0}.tabs button{flex:1;border:1px solid #3b4247;background:#0a0d10;color:#ccc;padding:10px}.tabs button.active{background:var(--gold);border-color:var(--gold);color:#111;font-weight:800}.pane{display:none}.pane.active{display:block}.modal-message{font-size:11px;color:#d2c7af;min-height:18px;margin-top:12px}.history{border-top:1px solid #2b3136;margin-top:18px;padding-top:14px}.history-row{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #262c30;padding:9px 0;font-size:11px}.history-row small{display:block;color:#858078}
 @media(max-width:1100px){.hero-grid{grid-template-columns:1fr .82fr}.catalog{grid-template-columns:repeat(2,minmax(0,1fr))}.process-grid{grid-template-columns:1fr 1fr}.process-intro,.process-step{border-bottom:1px solid rgba(255,255,255,.07)}.confidence-grid{grid-template-columns:1fr 1fr}.confidence-grid>div{border-bottom:1px solid rgba(255,255,255,.06)}}
-@media(max-width:850px){.hero-grid{grid-template-columns:1fr}.hero-proof{min-height:360px}.catalog-layout{grid-template-columns:1fr}.filter-panel{display:none;position:static}.filter-panel.open{display:block}.catalog-mobile-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.filter-toggle{border:1px solid #afa697;background:#fff;padding:9px 11px}.catalog-mobile-bar span{font-size:10px;color:#6c665d}.toolbar-actions{width:100%;justify-content:stretch}.catalog-toolbar{display:grid}.catalog-search-wrap{max-width:none;min-width:0}.process-grid{grid-template-columns:1fr}.process-intro,.process-step{border-right:0}.confidence-grid{grid-template-columns:1fr 1fr}.quote-copy{position:static}.quote-grid{grid-template-columns:1fr}}
-@media(max-width:640px){.hero{padding-top:28px}.hero h1{font-size:42px}.hero-search{grid-template-columns:auto 1fr}.hero-search button{grid-column:1/-1}.hero-trust{grid-template-columns:1fr;gap:9px}.hero-proof{min-height:300px}.category-cards{grid-template-columns:1fr 1fr}.catalog{grid-template-columns:1fr}.toolbar-actions{display:grid}.sort-select{width:100%}.confidence-grid{grid-template-columns:1fr}.confidence-grid>div{padding:12px 0}.quote-grid{gap:15px}.quote-copy h2{font-size:36px}.quote-dock{bottom:10px}.quote-dock-copy small{max-width:185px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
-
+@media(max-width:860px){.nav a:not(.header-quote){display:none}.hero-grid{grid-template-columns:1fr}.hero-visual{min-height:330px}.catalog-layout{grid-template-columns:1fr}.filter-panel{display:none;position:static}.filter-panel.open{display:block}.mobile-filterbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.mobile-filterbar button{border:1px solid #ada596;background:#fff;padding:9px 11px}.mobile-filterbar span{font-size:10px;color:#6b655d}.catalog-toolbar{display:grid}.toolbar-actions{width:100%;justify-content:stretch}.catalog-search{max-width:none;min-width:0}.process-grid{grid-template-columns:1fr}.process-intro,.process-step{border-right:0}.quote-copy{position:static}.quote-grid{grid-template-columns:1fr}}
+@media(max-width:640px){.shell{width:min(100% - 24px,1240px)}.head{height:64px}.brand img{width:132px}.client-access{display:none}.hero{padding:28px 0 24px}.hero h1{font-size:41px}.hero-search{grid-template-columns:auto 1fr}.hero-search button{grid-column:1/-1}.hero-trust{grid-template-columns:1fr;gap:8px}.hero-visual{min-height:280px}.category-cards{grid-template-columns:1fr 1fr}.catalog{grid-template-columns:1fr}.toolbar-actions{display:grid}.sort{width:100%}.section-head{display:block}.confidence-grid{grid-template-columns:1fr}.confidence-grid>div{padding:12px 0}.quote-grid{gap:15px}.quote-copy h2{font-size:36px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.quote-dock{bottom:9px}.dock-copy small{max-width:175px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.foot{display:block}}
 </style>
 </head>
 <body>
-<header>
-  <div class="shell head">
-    <a class="brand" href="/prototipos/msc-safety/"><img src="https://img77.uenicdn.com/image/upload/v1776113071/business/ed85e871-e23a-4fa2-94db-9fe7bc04d03c.jpg" alt="MSC Safety"></a>
-    <nav class="nav">
-      <a href="#categorias">Categorías</a>
-      <a href="#catalogo">Productos</a>
-      <a href="#como-cotizar">Cómo cotizar</a>
-      <button class="client-access" id="clientAccess" type="button">Acceso cliente</button>
-      <a class="primary header-quote" href="#cotizar">Cotización <span id="headerQuoteCount">0</span></a>
-    </nav>
-  </div>
-</header>
-
+<header><div class="shell head"><a class="brand" href="/prototipos/msc-safety/"><img src="https://img77.uenicdn.com/image/upload/v1776113071/business/ed85e871-e23a-4fa2-94db-9fe7bc04d03c.jpg" alt="MSC Safety"></a><nav class="nav"><a href="#categorias">Categorías</a><a href="#catalogo">Productos</a><a href="#proceso">Cómo cotizar</a><button class="client-access" id="clientAccess" type="button">Acceso cliente</button><a class="header-quote" href="#cotizar">Cotización <span id="headerQuoteCount">0</span></a></nav></div></header>
 <main>
-<section class="hero">
-  <div class="shell hero-grid">
-    <div class="hero-copy-main">
-      <div class="kicker">MSC Safety · Catálogo técnico</div>
-      <h1>Encuentra el producto correcto <span>sin perder tiempo.</span></h1>
-      <p>Busca por modelo, marca, categoría o característica técnica. Revisa disponibilidad y documentación antes de sumar productos a tu cotización.</p>
-
-      <div class="hero-search">
-        <span>⌕</span>
-        <input id="heroSearch" type="search" placeholder="Ej. PJ514, Sherpa’s, botín, Kevlar, talla 42…">
-        <button id="heroSearchButton" class="primary" type="button">Buscar</button>
-      </div>
-      <div class="hero-helper">Catálogo conectado al inventario real de MSC Safety · sin precios públicos · cotización B2B.</div>
-
-      <div class="hero-trust">
-        <div><b>Stock real</b><span>Disponibilidad por variante</span></div>
-        <div><b>Documentación</b><span>Ficha y certificación cuando aplica</span></div>
-        <div><b>Cotización directa</b><span>Selecciona y arma tu requerimiento</span></div>
-      </div>
-    </div>
-
-    <div class="hero-proof" id="heroProof">
-      <div class="hero-model-word">MSC</div>
-    </div>
-  </div>
-</section>
-
-<section class="process-strip" id="como-cotizar">
-  <div class="shell process-grid">
-    <div class="process-intro"><span>Compra técnica, sin fricción</span><b>Busca → valida → cotiza</b></div>
-    <div class="process-step"><strong>01</strong><div><b>Encuentra</b><span>Filtra por categoría, marca, disponibilidad o documentación.</span></div></div>
-    <div class="process-step"><strong>02</strong><div><b>Valida</b><span>Revisa variante, ficha técnica y certificación disponible.</span></div></div>
-    <div class="process-step"><strong>03</strong><div><b>Cotiza</b><span>Agrega cantidades y envía el requerimiento desde tu cuenta.</span></div></div>
-  </div>
-</section>
-
-<section class="category-section" id="categorias">
-  <div class="shell">
-    <div class="section-head compact">
-      <div><div class="kicker dark">Navega por necesidad</div><h2>¿Qué necesitas proteger?</h2></div>
-      <p>Partir por categoría reduce el tiempo de búsqueda y te lleva directo a los productos relevantes.</p>
-    </div>
-    <div class="category-cards" id="categoryCards"></div>
-  </div>
-</section>
-
-<section class="catalog-section" id="catalogo">
-  <div class="shell">
-    <div class="section-head catalog-title">
-      <div><div class="kicker dark">Catálogo inteligente</div><h2>Productos para cotizar</h2></div>
-      <p>Variantes agrupadas por modelo, con disponibilidad y documentación visibles antes de cotizar.</p>
-    </div>
-
-    <div class="catalog-mobile-bar">
-      <button id="filtersToggle" class="filter-toggle" type="button">☰ Filtros</button>
-      <span id="mobileResultCount">—</span>
-    </div>
-
-    <div class="catalog-layout">
-      <aside class="filter-panel" id="filterPanel">
-        <div class="filter-head"><div><span>Filtrar catálogo</span><b>Encuentra rápido</b></div><button id="clearFilters" type="button">Limpiar</button></div>
-
-        <div class="filter-group">
-          <label for="categoryFilter">Categoría</label>
-          <select id="categoryFilter"><option value="all">Todas las categorías</option></select>
-        </div>
-
-        <div class="filter-group">
-          <label for="brandFilter">Marca</label>
-          <select id="brandFilter"><option value="all">Todas las marcas</option></select>
-        </div>
-
-        <div class="filter-group">
-          <label>Disponibilidad</label>
-          <div class="filter-buttons" id="availabilityButtons">
-            <button class="active" data-availability="all" type="button">Todos</button>
-            <button data-availability="available" type="button">Con stock</button>
-            <button data-availability="consult" type="button">A consultar</button>
-          </div>
-        </div>
-
-        <div class="filter-group">
-          <label>Documentación</label>
-          <div class="filter-buttons" id="documentButtons">
-            <button class="active" data-doc="all" type="button">Todos</button>
-            <button data-doc="documented" type="button">Con respaldo</button>
-            <button data-doc="pending" type="button">Pendiente</button>
-          </div>
-        </div>
-
-        <div class="filter-note">
-          <b>¿No encuentras el producto?</b>
-          <span>Puedes cotizar igualmente y describir el requerimiento en observaciones.</span>
-          <a href="#cotizar">Ir a cotización →</a>
-        </div>
-      </aside>
-
-      <div class="catalog-main">
-        <div class="catalog-toolbar">
-          <div>
-            <b id="catalogCount">Preparando catálogo…</b>
-            <div class="applied-filters" id="appliedFilters"></div>
-          </div>
-          <div class="toolbar-actions">
-            <div class="catalog-search-wrap"><span>⌕</span><input class="search" id="catalogSearch" type="search" placeholder="Buscar modelo, SKU, marca o característica…"></div>
-            <select id="sortMode" class="sort-select" aria-label="Ordenar productos">
-              <option value="available">Disponibles primero</option>
-              <option value="model">Modelo A–Z</option>
-              <option value="brand">Marca</option>
-              <option value="docs">Documentación primero</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="catalog" id="catalogGrid"><div class="loading">Preparando catálogo MSC Safety…</div></div>
-        <p class="catalog-note">La disponibilidad puede cambiar. Las referencias técnicas y certificaciones se muestran solo cuando están asociadas al producto o modelo correspondiente.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="confidence-section">
-  <div class="shell confidence-grid">
-    <div><span>01</span><b>Identificación precisa</b><p>Modelo, variante y SKU quedan asociados a tu solicitud.</p></div>
-    <div><span>02</span><b>Respaldo técnico</b><p>Ficha y certificación visibles cuando existe documentación validada.</p></div>
-    <div><span>03</span><b>Disponibilidad transparente</b><p>Diferenciamos stock actual de productos que requieren confirmación.</p></div>
-    <div><span>04</span><b>Proceso B2B</b><p>La solicitud queda registrada para seguimiento comercial.</p></div>
-  </div>
-</section>
-
-<section class="quote-section" id="cotizar">
-  <div class="shell quote-grid">
-    <div class="quote-copy">
-      <div class="kicker">Cotización MSC Safety</div>
-      <h2>Tu requerimiento, ordenado y trazable.</h2>
-      <p>Agrega productos desde el catálogo y completa los antecedentes de tu empresa o faena. La solicitud queda vinculada a las variantes seleccionadas.</p>
-      <div class="quote-guide">
-        <div><span>1</span><p><b>Selecciona</b> modelo, variante y cantidad.</p></div>
-        <div><span>2</span><p><b>Identifícate</b> con tu cuenta cliente.</p></div>
-        <div><span>3</span><p><b>Envía</b> y consulta el estado posteriormente.</p></div>
-      </div>
-    </div>
-
-    <div class="quote-box">
-      <div class="quote-box-head"><div><span>Solicitud actual</span><b id="quoteBoxCount">0 productos seleccionados</b></div><a href="#catalogo">+ Seguir agregando</a></div>
-      <div class="client-state" id="clientState"><div><b>Cliente MSC Safety</b><span>Ingresa para enviar y guardar esta solicitud.</span></div><button class="secondary" id="quoteLogin" type="button">Ingresar</button></div>
-      <div class="selected" id="selected"><span class="empty">Aún no has agregado productos</span></div>
-      <div class="form-grid">
-        <div class="field"><label>Empresa</label><input id="empresa" placeholder="Nombre de la empresa"></div>
-        <div class="field"><label>Área / contacto</label><input id="contacto" placeholder="Abastecimiento, Prevención, Mantención…"></div>
-        <div class="field"><label>Faena / proyecto</label><input id="faena" placeholder="Faena, planta o proyecto"></div>
-        <div class="field"><label>Referencia interna</label><input id="referencia" placeholder="OC, solicitud, centro de costo…"></div>
-        <div class="field full"><label>Observaciones</label><textarea id="detalle" placeholder="Fecha requerida, condición especial, producto adicional u otro antecedente."></textarea></div>
-      </div>
-      <div class="hero-actions quote-actions"><button class="primary" id="submitQuote" type="button">Enviar solicitud</button><button class="secondary" id="prepare" type="button">Ver resumen</button><button class="secondary" id="copy" type="button">Copiar</button></div>
-      <div class="summary" id="summary"></div>
-    </div>
-  </div>
-</section>
-
-<div class="quote-dock" id="quoteDock">
-  <div class="quote-dock-copy"><span id="dockCount">0</span><div><b>Tu cotización</b><small id="dockText">Aún no has agregado productos</small></div></div>
-  <button id="viewQuoteDock" type="button">Revisar solicitud →</button>
-</div>
+<section class="hero"><div class="shell hero-grid"><div><div class="kicker">MSC Safety · Catálogo técnico</div><h1>Encuentra el producto correcto <span>sin perder tiempo.</span></h1><p>Busca por modelo, marca, categoría o característica. Revisa disponibilidad y documentación antes de sumar productos a tu cotización.</p><div class="hero-search"><span>⌕</span><input id="heroSearch" type="search" placeholder="Ej. PJ514, Sherpa’s, botín, Kevlar, talla 42…"><button class="primary" id="heroSearchButton" type="button">Buscar</button></div><div class="hero-helper">Catálogo conectado al inventario real de MSC Safety · cotización B2B · sin precios públicos.</div><div class="hero-trust"><div><b>Stock real</b><span>Disponibilidad por variante.</span></div><div><b>Respaldo técnico</b><span>Ficha y certificación cuando corresponde.</span></div><div><b>Cotización directa</b><span>Selecciona, cuantifica y envía.</span></div></div></div><div class="hero-visual" id="heroVisual"><div class="hero-glow"></div><div class="hero-word" id="heroWord">MSC</div><div class="hero-product" id="heroProduct"><div class="hero-fallback"><b>MSC</b><span>Safety</span></div></div><div class="hero-caption" id="heroCaption"><b>Inventario técnico MSC Safety</b><span>Cargando catálogo disponible…</span></div></div></div></section>
+<section class="process-strip" id="proceso"><div class="shell process-grid"><div class="process-intro"><span>Compra técnica, sin fricción</span><b>Busca → valida → cotiza</b></div><div class="process-step"><strong>01</strong><div><b>Encuentra</b><span>Modelo, marca, categoría o característica.</span></div></div><div class="process-step"><strong>02</strong><div><b>Valida</b><span>Variante, disponibilidad y respaldo documental.</span></div></div><div class="process-step"><strong>03</strong><div><b>Cotiza</b><span>Cantidad, faena y requerimiento en una solicitud.</span></div></div></div></section>
+<section class="category-section" id="categorias"><div class="shell"><div class="section-head"><div><div class="kicker dark">Navega por necesidad</div><h2>¿Qué necesitas proteger?</h2></div><p>Parte por la familia de producto y reduce el tiempo de búsqueda. Las categorías se generan desde el inventario publicado.</p></div><div class="category-cards" id="categoryCards"><div class="loading">Cargando categorías…</div></div></div></section>
+<section class="catalog-section" id="catalogo"><div class="shell"><div class="section-head"><div><div class="kicker dark">Catálogo inteligente</div><h2>Productos para cotizar</h2></div><p>Variantes agrupadas por modelo. Puedes filtrar por categoría, marca, disponibilidad y respaldo técnico.</p></div><div class="mobile-filterbar"><button id="filtersToggle" type="button">☰ Filtros</button><span id="mobileResultCount">—</span></div><div class="catalog-layout"><aside class="filter-panel" id="filterPanel"><div class="filter-head"><div><span>Filtrar catálogo</span><b>Encuentra rápido</b></div><button id="clearFilters" type="button">Limpiar</button></div><div class="filter-group"><label for="categoryFilter">Categoría</label><select id="categoryFilter"><option value="all">Todas</option></select></div><div class="filter-group"><label for="brandFilter">Marca</label><select id="brandFilter"><option value="all">Todas</option></select></div><div class="filter-group"><label>Disponibilidad</label><div class="filter-buttons" id="availabilityButtons"><button class="active" data-value="all" type="button">Todos</button><button data-value="available" type="button">Con stock</button><button data-value="consult" type="button">A consultar</button></div></div><div class="filter-group"><label>Documentación</label><div class="filter-buttons" id="documentButtons"><button class="active" data-value="all" type="button">Todos</button><button data-value="documented" type="button">Con respaldo</button><button data-value="pending" type="button">Pendiente</button></div></div><div class="filter-note"><b>¿No encuentras el producto?</b><span>Puedes describir el requerimiento en observaciones y enviarlo igualmente.</span><a href="#cotizar">Ir a cotización →</a></div></aside><div class="catalog-main"><div class="catalog-toolbar"><div><b id="catalogCount">Preparando catálogo…</b><div class="applied" id="appliedFilters"></div></div><div class="toolbar-actions"><div class="catalog-search"><span>⌕</span><input id="catalogSearch" type="search" placeholder="Buscar modelo, marca o característica…"></div><select class="sort" id="sortMode"><option value="available">Disponibles primero</option><option value="model">Modelo A–Z</option><option value="brand">Marca</option><option value="docs">Documentación primero</option></select></div></div><div class="catalog" id="catalogGrid"><div class="loading">Preparando catálogo MSC Safety…</div></div><p class="catalog-note">La disponibilidad puede cambiar. La ficha técnica y certificación se muestran solo cuando existe una referencia asociada al modelo o producto.</p></div></div></div></section>
+<section class="confidence"><div class="shell confidence-grid"><div><span>01</span><b>Identificación precisa</b><p>Modelo, variante y SKU quedan asociados a la solicitud.</p></div><div><span>02</span><b>Respaldo técnico</b><p>Ficha y certificación visibles cuando hay documentación validada.</p></div><div><span>03</span><b>Disponibilidad transparente</b><p>Se distingue stock actual de productos sujetos a confirmación.</p></div><div><span>04</span><b>Proceso B2B</b><p>La solicitud queda registrada para seguimiento comercial.</p></div></div></section>
+<section class="quote-section" id="cotizar"><div class="shell quote-grid"><div class="quote-copy"><div class="kicker">Cotización MSC Safety</div><h2>Tu requerimiento, ordenado y trazable.</h2><p>Agrega productos desde el catálogo y completa los antecedentes de empresa o faena. Puedes revisar el resumen antes de enviarlo.</p><div class="quote-guide"><div><span>1</span><p><b>Selecciona</b> producto, variante y cantidad.</p></div><div><span>2</span><p><b>Identifícate</b> con tu cuenta cliente.</p></div><div><span>3</span><p><b>Envía</b> y consulta posteriormente su estado.</p></div></div></div><div class="quote-box"><div class="quote-box-head"><div><span>Solicitud actual</span><b id="quoteBoxCount">0 productos seleccionados</b></div><a href="#catalogo">+ Seguir agregando</a></div><div class="client-state" id="clientState"><div><b>Cliente MSC Safety</b><span>Ingresa para enviar y guardar esta solicitud.</span></div><button class="secondary" id="quoteLogin" type="button">Ingresar</button></div><div class="selected" id="selected"><span class="empty">Aún no has agregado productos</span></div><div class="form-grid"><div class="field"><label>Empresa</label><input id="empresa" placeholder="Nombre de la empresa"></div><div class="field"><label>Área / contacto</label><input id="contacto" placeholder="Abastecimiento, Prevención, Mantención…"></div><div class="field"><label>Faena / proyecto</label><input id="faena" placeholder="Faena, planta o proyecto"></div><div class="field"><label>Referencia interna</label><input id="referencia" placeholder="OC, solicitud, centro de costo…"></div><div class="field full"><label>Observaciones</label><textarea id="detalle" placeholder="Fecha requerida, condición especial, producto adicional u otro antecedente."></textarea></div></div><div class="quote-actions"><button class="primary" id="submitQuote" type="button">Enviar solicitud</button><button class="secondary" id="prepare" type="button">Ver resumen</button><button class="secondary" id="copy" type="button">Copiar</button></div><div class="summary" id="summary"></div></div></div></section>
 </main>
-
-<footer><div class="shell foot"><div>MSC Safety · Quality Service</div><div>Seguridad industrial · Documentación técnica · Cotización directa</div></div></footer>
-
-<div class="modal" id="clientModal" aria-hidden="true">
-  <div class="modal-box">
-    <div class="modal-head"><div><div class="kicker">Portal cliente</div><h3>Acceso MSC Safety</h3><p>Ingresa con el correo asociado a tu cuenta cliente MSC Safety.</p></div><button class="close" id="closeClient" type="button">Cerrar</button></div>
-    <div class="tabs"><button class="active" data-tab="login" type="button">Ingresar</button><button data-tab="activate" type="button">Activar acceso</button></div>
-    <div class="pane active" id="pane-login">
-      <div class="field"><label>Correo</label><input id="clientEmail" type="email" autocomplete="email"></div>
-      <div class="field"><label>Contraseña</label><input id="clientPassword" type="password" autocomplete="current-password"></div>
-      <div class="hero-actions"><button class="primary" id="clientLogin" type="button">Ingresar</button><button class="secondary" id="clientReset" type="button">Restablecer contraseña</button></div>
-    </div>
-    <div class="pane" id="pane-activate">
-      <div class="field"><label>Correo registrado</label><input id="activateEmail" type="email" autocomplete="email"></div>
-      <div class="field"><label>Crear contraseña</label><input id="activatePassword" type="password" minlength="8" autocomplete="new-password"></div>
-      <div class="hero-actions"><button class="primary" id="clientActivate" type="button">Activar acceso</button></div>
-    </div>
-    <div id="clientRecovery" hidden>
-      <div class="field"><label>Nueva contraseña</label><input id="clientNewPassword" type="password" minlength="8"></div>
-      <div class="hero-actions"><button class="primary" id="clientSavePassword" type="button">Guardar contraseña</button></div>
-    </div>
-    <div class="modal-message" id="clientMessage"></div>
-    <div class="history" id="quoteHistory" hidden><b>Mis solicitudes</b><div id="quoteHistoryRows"></div></div>
-  </div>
-</div>
-
+<div class="quote-dock" id="quoteDock"><div class="dock-copy"><span id="dockCount">0</span><div><b>Tu cotización</b><small id="dockText">Aún no has agregado productos</small></div></div><button id="viewQuoteDock" type="button">Revisar solicitud →</button></div>
+<footer><div class="shell foot"><div>MSC Safety · Quality Service</div><div>Seguridad industrial · Documentación técnica · Cotización B2B</div></div></footer>
+<div class="modal" id="clientModal" aria-hidden="true"><div class="modal-box"><div class="modal-head"><div><div class="kicker">Portal cliente</div><h3>Acceso MSC Safety</h3><p>Ingresa con el correo asociado a tu cuenta cliente.</p></div><button class="close" id="closeClient" type="button">Cerrar</button></div><div class="tabs"><button class="active" data-tab="login" type="button">Ingresar</button><button data-tab="activate" type="button">Activar acceso</button></div><div class="pane active" id="pane-login"><div class="field"><label>Correo</label><input id="clientEmail" type="email"></div><div class="field"><label>Contraseña</label><input id="clientPassword" type="password"></div><div class="quote-actions"><button class="primary" id="clientLogin" type="button">Ingresar</button><button class="secondary" id="clientReset" type="button">Restablecer contraseña</button></div></div><div class="pane" id="pane-activate"><div class="field"><label>Correo registrado</label><input id="activateEmail" type="email"></div><div class="field"><label>Crear contraseña</label><input id="activatePassword" type="password" minlength="8"></div><div class="quote-actions"><button class="primary" id="clientActivate" type="button">Activar acceso</button></div></div><div id="clientRecovery" hidden><div class="field"><label>Nueva contraseña</label><input id="clientNewPassword" type="password" minlength="8"></div><div class="quote-actions"><button class="primary" id="clientSavePassword" type="button">Guardar contraseña</button></div></div><div class="modal-message" id="clientMessage"></div><div class="history" id="quoteHistory" hidden><b>Mis solicitudes</b><div id="quoteHistoryRows"></div></div></div></div>
 <script>
 (function(){
-  var SUPABASE_URL='https://ygfmpwlpmaasooltjujb.supabase.co';
-  var SUPABASE_KEY='sb_publishable_evFWgAwjv7xcNxo156NV0g_CFq0j5Ld';
-  var token=sessionStorage.getItem('msc_customer_token')||'';
-  var customerProfile=null,authUser=null,groups=[],currentFilter='all',chosen=[],availabilityFilter='all',documentFilter='all',brandFilter='all',sortMode='available';
-  function el(id){return document.getElementById(id)}
-  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-  function norm(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim()}
-  async function publicFetch(path,opts){opts=opts||{};return fetch(SUPABASE_URL+path,Object.assign({},opts,{headers:Object.assign({apikey:SUPABASE_KEY,'Content-Type':'application/json'},opts.headers||{})}))}
-  async function authFetch(path,opts){opts=opts||{};var r=await fetch(SUPABASE_URL+path,Object.assign({},opts,{headers:Object.assign({apikey:SUPABASE_KEY,Authorization:'Bearer '+token,'Content-Type':'application/json'},opts.headers||{})}));var t=await r.text(),d=null;try{d=t?JSON.parse(t):null}catch(_){d=t}if(!r.ok)throw new Error((d&&((d.message)||(d.msg)||(d.error_description)))||'No fue posible completar la operación.');return d}
-
-  async function loadCatalog(){
-    try{
-      var r=await publicFetch('/rest/v1/msc_public_catalog_variants?select=*');if(!r.ok)throw new Error('catalog');
-      var rows=await r.json();
-      var map=new Map();
-      rows.forEach(function(r){
-        var key=r.group_key||r.model||r.sku;
-        if(!map.has(key))map.set(key,{key:key,name:String(r.name||'Producto').replace(/\s+Talla\s+\d+$/i,''),brand:r.brand==='P.JACK'?'Panama Jack':(r.brand||''),model:r.model||r.manufacturer_code||'',color:r.product_color||'',description:r.description||'',image:r.image_url||'',datasheet:r.datasheet_url||'',specs:r.catalog_specs||{},category:r.category||'Productos',variants:[],certs:[]});
-        var g=map.get(key);g.variants.push(r);
-        (Array.isArray(r.certifications)?r.certifications:[]).forEach(function(c){var sig=[c.type,c.standard,c.certificate_number].join('|');if(!g.certs.some(function(x){return [x.type,x.standard,x.certificate_number].join('|')===sig}))g.certs.push(c)});
-      });
-      groups=Array.from(map.values());
-      renderStats();renderFilterOptions();renderCategoryCards();renderCatalog();renderHero();
-    }catch(e){el('catalogGrid').innerHTML='<div class="loading">No fue posible cargar el inventario en este momento.</div>'}
-  }
-
-  function renderStats(){
-    var variants=groups.reduce(function(a,g){return a+g.variants.length},0),docs=groups.filter(function(g){return g.datasheet||g.certs.length}).length;
-    el('statModels').textContent=groups.length;el('statVariants').textContent=variants;el('statCategories').textContent=docs;
-  }
-
-  function renderHero(){
-    var g=groups.find(function(x){return x.variants.some(function(v){return v.availability==='Disponible'})&&x.image})||groups.find(function(x){return x.image})||groups[0];if(!g)return;
-    var box=el('heroProof'),doc=g.datasheet||g.certs.length,available=g.variants.filter(function(v){return v.availability==='Disponible'}).length;
-    box.innerHTML='<div class="hero-model-word">'+esc(g.model||g.name)+'</div>'+(g.image?'<img src="'+esc(g.image)+'" alt="'+esc(g.brand+' '+g.model)+'">':'')+'<div class="hero-proof-copy"><b>'+esc(g.brand+' '+(g.model||g.name))+'</b><span>'+esc((g.color?'Color '+g.color+' · ':'')+available+' variantes con stock · '+g.variants.length+' totales')+'</span>'+(doc?'<span class="hero-doc-chip">Ficha / certificación disponible</span>':'<span class="hero-doc-chip">Documentación en validación</span>')+'</div>';
-  }
-
-  function categoryIcon(cat){
-    var n=norm(cat);
-    if(n.includes('calzado'))return '◇';
-    if(n.includes('guante'))return '✦';
-    if(n.includes('facial'))return '◉';
-    if(n.includes('soldadura'))return '▱';
-    if(n.includes('ropa'))return '▤';
-    return '◆';
-  }
-
-  function renderCategoryCards(){
-    var counts={};groups.forEach(function(g){counts[g.category]=(counts[g.category]||0)+1});
-    var cats=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a]||a.localeCompare(b,'es')});
-    el('categoryCards').innerHTML=cats.map(function(cat){return '<button class="category-card" data-cat="'+esc(cat)+'" type="button"><em>'+counts[cat]+' modelos</em><div class="cat-icon">'+categoryIcon(cat)+'</div><b>'+esc(cat)+'</b><span>Ver productos y variantes →</span></button>'}).join('');
-    el('categoryCards').querySelectorAll('[data-cat]').forEach(function(b){b.onclick=function(){el('categoryFilter').value=b.dataset.cat;currentFilter=b.dataset.cat;renderCatalog();document.getElementById('catalogo').scrollIntoView({behavior:'smooth',block:'start'})}})
-  }
-
-  function countBy(arr,keyFn){var out={};arr.forEach(function(x){var k=keyFn(x);out[k]=(out[k]||0)+1});return out}
-  function renderFilterOptions(){
-    var catCounts=countBy(groups,function(g){return g.category}),brandCounts=countBy(groups,function(g){return g.brand||'Sin marca'});
-    var cats=Object.keys(catCounts).sort(),brands=Object.keys(brandCounts).sort();
-    el('categoryFilter').innerHTML='<option value="all">Todas las categorías ('+groups.length+')</option>'+cats.map(function(x){return '<option value="'+esc(x)+'">'+esc(x)+' ('+catCounts[x]+')</option>'}).join('');
-    el('brandFilter').innerHTML='<option value="all">Todas las marcas ('+groups.length+')</option>'+brands.map(function(x){return '<option value="'+esc(x)+'">'+esc(x)+' ('+brandCounts[x]+')</option>'}).join('');
-    el('categoryFilter').onchange=function(){currentFilter=this.value;renderCatalog()};
-    el('brandFilter').onchange=function(){brandFilter=this.value;renderCatalog()};
-    el('sortMode').onchange=function(){sortMode=this.value;renderCatalog()};
-    el('availabilityButtons').querySelectorAll('button').forEach(function(b){b.onclick=function(){availabilityFilter=b.dataset.availability;el('availabilityButtons').querySelectorAll('button').forEach(function(x){x.classList.toggle('active',x===b)});renderCatalog()}});
-    el('documentButtons').querySelectorAll('button').forEach(function(b){b.onclick=function(){documentFilter=b.dataset.doc;el('documentButtons').querySelectorAll('button').forEach(function(x){x.classList.toggle('active',x===b)});renderCatalog()}});
-    el('clearFilters').onclick=clearFilters;
-    el('filtersToggle').onclick=function(){el('filterPanel').classList.toggle('open')};
-  }
-
-  function clearFilters(){
-    currentFilter='all';brandFilter='all';availabilityFilter='all';documentFilter='all';sortMode='available';
-    el('categoryFilter').value='all';el('brandFilter').value='all';el('sortMode').value='available';el('catalogSearch').value='';
-    el('availabilityButtons').querySelectorAll('button').forEach(function(x){x.classList.toggle('active',x.dataset.availability==='all')});
-    el('documentButtons').querySelectorAll('button').forEach(function(x){x.classList.toggle('active',x.dataset.doc==='all')});
-    renderCatalog();
-  }
-
-  function variantLabel(code){
-    var raw=String(code||'').trim(),m=raw.match(/^N?(\d{2})$/i);
-    if(m)return 'Talla '+m[1];
-    if(/^2X$/i.test(raw))return 'Talla 2X';
-    if(/^TXL$/i.test(raw))return 'Talla XL';
-    if(/^XL$/i.test(raw))return 'Talla XL';
-    if(/^UNI$/i.test(raw))return 'Unidad';
-    return raw?'Variante '+raw:'Variante';
-  }
-
-  function groupAvailability(g){return g.variants.some(function(v){return v.availability==='Disponible'})}
-  function groupDocumented(g){return !!(g.datasheet||g.certs.length)}
-  function currentQuery(){return norm(el('catalogSearch').value)}
-
-  function applySort(list){
-    return list.slice().sort(function(a,b){
-      if(sortMode==='model')return String(a.model||a.name).localeCompare(String(b.model||b.name),'es',{numeric:true});
-      if(sortMode==='brand')return String(a.brand).localeCompare(String(b.brand),'es')||String(a.model||a.name).localeCompare(String(b.model||b.name),'es',{numeric:true});
-      if(sortMode==='docs'){var ad=groupDocumented(a)?0:1,bd=groupDocumented(b)?0:1;return ad-bd||String(a.model||a.name).localeCompare(String(b.model||b.name),'es',{numeric:true})}
-      var aa=groupAvailability(a)?0:1,bb=groupAvailability(b)?0:1;return aa-bb||String(a.model||a.name).localeCompare(String(b.model||b.name),'es',{numeric:true})
-    })
-  }
-
-  function renderAppliedFilters(){
-    var chips=[];
-    if(currentFilter!=='all')chips.push({key:'category',label:currentFilter});
-    if(brandFilter!=='all')chips.push({key:'brand',label:brandFilter});
-    if(availabilityFilter!=='all')chips.push({key:'availability',label:availabilityFilter==='available'?'Con stock':'A consultar'});
-    if(documentFilter!=='all')chips.push({key:'doc',label:documentFilter==='documented'?'Con respaldo técnico':'Documentación pendiente'});
-    if(currentQuery())chips.push({key:'search',label:'“'+el('catalogSearch').value.trim()+'”'});
-    el('appliedFilters').innerHTML=chips.length?chips.map(function(c){return '<button class="applied-chip" data-clear="'+c.key+'" type="button">'+esc(c.label)+' ×</button>'}).join(''):'<span style="font-size:9px;color:#8b8479">Sin filtros aplicados</span>';
-    el('appliedFilters').querySelectorAll('[data-clear]').forEach(function(b){b.onclick=function(){var k=b.dataset.clear;if(k==='category'){currentFilter='all';el('categoryFilter').value='all'}if(k==='brand'){brandFilter='all';el('brandFilter').value='all'}if(k==='availability'){availabilityFilter='all';el('availabilityButtons').querySelectorAll('button').forEach(function(x){x.classList.toggle('active',x.dataset.availability==='all')})}if(k==='doc'){documentFilter='all';el('documentButtons').querySelectorAll('button').forEach(function(x){x.classList.toggle('active',x.dataset.doc==='all')})}if(k==='search')el('catalogSearch').value='';renderCatalog()}})
-  }
-
-  function renderCatalog(){
-    var q=currentQuery();
-    var list=groups.filter(function(g){
-      var specText=Object.keys(g.specs||{}).map(function(k){return k+' '+g.specs[k]}).join(' ');
-      var searchable=norm([g.name,g.brand,g.model,g.color,g.category,specText].join(' '));
-      var availabilityOk=availabilityFilter==='all'||(availabilityFilter==='available'?groupAvailability(g):!groupAvailability(g));
-      var docOk=documentFilter==='all'||(documentFilter==='documented'?groupDocumented(g):!groupDocumented(g));
-      return (currentFilter==='all'||g.category===currentFilter)&&(brandFilter==='all'||g.brand===brandFilter)&&availabilityOk&&docOk&&(!q||searchable.includes(q))
-    });
-    list=applySort(list);
-    el('catalogCount').textContent=list.length+' de '+groups.length+' modelos';
-    el('mobileResultCount').textContent=list.length+' resultados';
-    renderAppliedFilters();
-    if(!list.length){el('catalogGrid').innerHTML='<div class="loading"><b>No encontramos coincidencias.</b><br><span style="display:block;margin-top:7px">Prueba quitando un filtro o busca por modelo, marca o característica.</span></div>';return}
-
-    el('catalogGrid').innerHTML=list.map(function(g,idx){
-      var vars=g.variants.slice().sort(function(a,b){var aa=a.availability==='Disponible'?0:1,bb=b.availability==='Disponible'?0:1;return aa-bb||String(a.variant_code).localeCompare(String(b.variant_code),'es',{numeric:true})});
-      var title=g.brand==='MSC'?g.name:(g.model||g.name);
-      var availableCount=vars.filter(function(v){return v.availability==='Disponible'}).length;
-      var firstAvailability=(vars[0]&&vars[0].availability)||'Consultar disponibilidad';
-      var documented=groupDocumented(g);
-      var specEntries=Object.keys(g.specs||{}).slice(0,4);
-      var specs=specEntries.map(function(k){return '<div class="key-spec"><b>'+esc(k)+'</b><span>'+esc(g.specs[k])+'</span></div>'}).join('');
-      var docLinks='';
-      if(g.datasheet)docLinks+='<a class="doc-link" href="'+esc(g.datasheet)+'" target="_blank" rel="noopener">Ficha técnica ↗</a>';
-      var certDoc=g.certs.find(function(c){return c.document_url});
-      if(certDoc)docLinks+='<a class="doc-link" href="'+esc(certDoc.document_url)+'" target="_blank" rel="noopener">Certificación ↗</a>';
-      var photo=g.image?'<img src="'+esc(g.image)+'" alt="'+esc(g.brand+' '+g.model)+'" loading="lazy">':'<div class="no-photo"><strong>MSC Safety</strong><span>Imagen en validación</span></div>';
-      return '<article class="product"><figure data-model="'+esc(g.model||title)+'">'+photo+'</figure><div class="product-body">'+
-        '<div class="product-meta"><span>'+esc(g.category)+'</span><span>'+esc(g.brand)+'</span></div>'+
-        '<h3>'+esc(title)+'</h3>'+
-        '<p class="quick-desc">'+esc(g.description||'Consulta características y disponibilidad para tu operación.')+'</p>'+
-        '<div class="product-signals">'+
-          (availableCount?'<span class="signal stock">'+availableCount+' con stock</span>':'<span class="signal consult">Stock a confirmar</span>')+
-          '<span class="signal">'+vars.length+' variantes</span>'+
-          (documented?'<span class="signal doc">Respaldo técnico</span>':'<span class="signal">Doc. pendiente</span>')+
-        '</div>'+
-        (specs?'<div class="key-specs">'+specs+'</div>':'')+
-        (docLinks?'<div class="docs">'+docLinks+'</div>':'<div class="docs"><span class="doc-pending">Documentación en validación</span></div>')+
-        '<div class="variant"><select id="v-'+idx+'">'+vars.map(function(v){return '<option value="'+esc(v.product_id)+'" data-sku="'+esc(v.sku)+'" data-name="'+esc(title)+'" data-size="'+esc(v.variant_code)+'" data-availability="'+esc(v.availability)+'">'+esc(variantLabel(v.variant_code))+' · '+esc(v.availability)+'</option>'}).join('')+'</select><input id="q-'+idx+'" type="number" min="1" step="1" value="1" aria-label="Cantidad"></div>'+
-        '<div id="a-'+idx+'" class="availability '+(firstAvailability==='Disponible'?'':'query')+'">'+esc(firstAvailability==='Disponible'?'Disponible para cotizar':'Consultar disponibilidad al cotizar')+'</div>'+
-        '<div class="product-actions"><button class="primary add" data-i="'+idx+'" type="button">Agregar a cotización</button></div></div></article>';
-    }).join('');
-
-    list.forEach(function(g,idx){
-      var sel=el('v-'+idx),status=el('a-'+idx);
-      if(sel&&status)sel.onchange=function(){var op=sel.options[sel.selectedIndex],ok=op.dataset.availability==='Disponible';status.classList.toggle('query',!ok);status.textContent=ok?'Disponible para cotizar':'Consultar disponibilidad al cotizar'};
-    });
-    el('catalogGrid').querySelectorAll('.add').forEach(function(b){b.onclick=function(){var i=Number(b.dataset.i),sel=el('v-'+i),qty=Math.max(1,Number(el('q-'+i).value||1)),op=sel.options[sel.selectedIndex],pid=sel.value,existing=chosen.find(function(x){return x.product_id===pid});if(existing)existing.quantity+=qty;else chosen.push({product_id:pid,sku:op.dataset.sku,name:op.dataset.name,variant:op.dataset.size,quantity:qty});renderSelected();b.textContent='✓ Agregado';setTimeout(function(){b.textContent='Agregar a cotización'},800)}})
-  }
-
-  el('catalogSearch').oninput=renderCatalog;
-  el('heroSearchButton').onclick=function(){el('catalogSearch').value=el('heroSearch').value;renderCatalog();document.getElementById('catalogo').scrollIntoView({behavior:'smooth',block:'start'})};
-  el('heroSearch').onkeydown=function(e){if(e.key==='Enter')el('heroSearchButton').click()};
-
-
-  function renderSelected(){
-    var total=chosen.reduce(function(a,x){return a+Number(x.quantity||0)},0),items=chosen.length;
-    el('selected').innerHTML=items?chosen.map(function(x,i){return '<span>'+esc(x.name)+' · '+esc(variantLabel(x.variant))+' · '+x.quantity+' <button data-r="'+i+'" type="button">×</button></span>'}).join(''):'<span class="empty">Aún no has agregado productos</span>';
-    el('selected').querySelectorAll('[data-r]').forEach(function(b){b.onclick=function(){chosen.splice(Number(b.dataset.r),1);renderSelected()}});
-    el('headerQuoteCount').textContent=items;
-    el('quoteBoxCount').textContent=items+(items===1?' producto seleccionado':' productos seleccionados');
-    el('dockCount').textContent=items;
-    el('dockText').textContent=items?(total+' unidades en '+items+(items===1?' producto':' productos')):'Aún no has agregado productos';
-    el('quoteDock').classList.toggle('show',items>0);
-  }
-  function buildText(){
-    var items=chosen.length?chosen.map(function(x){return '- '+x.name+' · '+variantLabel(x.variant)+' · '+x.quantity+' · SKU '+x.sku}).join('\n'):'Sin productos seleccionados';
-    return 'SOLICITUD DE COTIZACIÓN · MSC SAFETY\n\nEmpresa: '+(el('empresa').value||'—')+'\nÁrea / contacto: '+(el('contacto').value||'—')+'\nFaena / proyecto: '+(el('faena').value||'—')+'\nReferencia: '+(el('referencia').value||'—')+'\n\nProductos:\n'+items+'\n\nObservaciones:\n'+(el('detalle').value||'—');
-  }
-  el('prepare').onclick=function(){el('summary').textContent=buildText();el('summary').classList.add('show')};
-  el('copy').onclick=async function(){var t=buildText();el('summary').textContent=t;el('summary').classList.add('show');try{await navigator.clipboard.writeText(t);var old=this.textContent;this.textContent='✓ Copiado';var self=this;setTimeout(function(){self.textContent=old},900)}catch(_){}};
-  el('viewQuoteDock').onclick=function(){document.getElementById('cotizar').scrollIntoView({behavior:'smooth',block:'start'})};
-
-  var modal=el('clientModal'),message=el('clientMessage');
-  function openClient(msg){modal.classList.add('show');modal.setAttribute('aria-hidden','false');message.textContent=msg||''}
-  function closeClient(){modal.classList.remove('show');modal.setAttribute('aria-hidden','true')}
-  el('clientAccess').onclick=function(){openClient()};el('quoteLogin').onclick=function(){openClient()};el('closeClient').onclick=closeClient;modal.onclick=function(e){if(e.target===modal)closeClient()};
-  document.querySelectorAll('[data-tab]').forEach(function(b){b.onclick=function(){document.querySelectorAll('[data-tab]').forEach(function(x){x.classList.toggle('active',x===b)});document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('active')});el('pane-'+b.dataset.tab).classList.add('active');message.textContent=''}});
-  async function loadProfile(){
-    if(!token)return updateClientState();
-    try{
-      authUser=await authFetch('/auth/v1/user');
-      var links=await authFetch('/rest/v1/msc_customer_users?select=customer_id,email,msc_customers(id,name,contact_name,email)&auth_user_id=eq.'+encodeURIComponent(authUser.id));
-      if(!Array.isArray(links)||!links.length||!links[0].msc_customers)throw new Error('No encontramos una cuenta cliente activa asociada a este correo.');
-      customerProfile=links[0].msc_customers;el('empresa').value=customerProfile.name||'';updateClientState();await loadHistory();
-    }catch(e){token='';sessionStorage.removeItem('msc_customer_token');customerProfile=null;authUser=null;updateClientState();message.textContent=e.message}
-  }
-  function updateClientState(){
-    if(customerProfile){el('clientState').innerHTML='<div><b>'+esc(customerProfile.name)+'</b><span>Sesión activa · la solicitud quedará guardada.</span></div><button class="secondary" id="logoutInline" type="button">Salir</button>';el('clientAccess').textContent='Mi cuenta';el('logoutInline').onclick=logoutClient}else{el('clientState').innerHTML='<div><b>Cliente MSC Safety</b><span>Ingresa para enviar y guardar esta solicitud.</span></div><button class="secondary" id="quoteLogin2" type="button">Ingresar</button>';el('clientAccess').textContent='Acceso cliente';el('quoteLogin2').onclick=function(){openClient()}}
-  }
-  async function login(){
-    message.textContent='Ingresando…';
-    try{var r=await publicFetch('/auth/v1/token?grant_type=password',{method:'POST',body:JSON.stringify({email:el('clientEmail').value.trim(),password:el('clientPassword').value})}),d=await r.json();if(!r.ok)throw new Error(d.error_description||d.msg||'Correo o contraseña incorrectos.');token=d.access_token;sessionStorage.setItem('msc_customer_token',token);await loadProfile();if(customerProfile){message.textContent='Acceso correcto.';setTimeout(closeClient,450)}}catch(e){message.textContent=e.message}
-  }
-  async function activate(){
-    var email=el('activateEmail').value.trim(),password=el('activatePassword').value;if(password.length<8){message.textContent='La contraseña debe tener al menos 8 caracteres.';return}message.textContent='Validando correo…';
-    try{
-      var check=await publicFetch('/rest/v1/rpc/msc_customer_email_is_registered',{method:'POST',body:JSON.stringify({candidate_email:email})}),ok=await check.json();if(!check.ok||ok!==true)throw new Error('Este correo aún no está habilitado para acceso cliente.');
-      var r=await publicFetch('/auth/v1/signup?redirect_to='+encodeURIComponent(location.origin+location.pathname),{method:'POST',body:JSON.stringify({email:email,password:password,data:{msc_customer_portal:true}})}),d=await r.json();if(!r.ok)throw new Error(d.msg||d.error_description||'No fue posible activar el acceso.');message.textContent=d.access_token?'Acceso activado.':'Revisa tu correo para confirmar el acceso.';if(d.access_token){token=d.access_token;sessionStorage.setItem('msc_customer_token',token);await loadProfile()}
-    }catch(e){message.textContent=e.message}
-  }
-  async function reset(){var email=el('clientEmail').value.trim();if(!email){message.textContent='Escribe primero tu correo.';return}try{await publicFetch('/auth/v1/recover',{method:'POST',body:JSON.stringify({email:email,redirect_to:location.origin+location.pathname})});message.textContent='Si la cuenta existe, recibirás un enlace para crear una nueva contraseña.'}catch(e){message.textContent=e.message}}
-  async function savePassword(){var p=el('clientNewPassword').value;if(p.length<8){message.textContent='La contraseña debe tener al menos 8 caracteres.';return}try{await authFetch('/auth/v1/user',{method:'PUT',body:JSON.stringify({password:p})});el('clientRecovery').hidden=true;message.textContent='Contraseña actualizada.';await loadProfile()}catch(e){message.textContent=e.message}}
-  function logoutClient(){token='';customerProfile=null;authUser=null;sessionStorage.removeItem('msc_customer_token');el('quoteHistory').hidden=true;updateClientState();closeClient()}
-  el('clientLogin').onclick=login;el('clientActivate').onclick=activate;el('clientReset').onclick=reset;el('clientSavePassword').onclick=savePassword;
-
-  async function loadHistory(){
-    if(!customerProfile)return;
-    try{var rows=await authFetch('/rest/v1/msc_quote_requests?select=request_no,status,project_name,created_at&order=created_at.desc&limit=20');el('quoteHistory').hidden=false;el('quoteHistoryRows').innerHTML=(rows||[]).length?(rows||[]).map(function(r){return '<div class="history-row"><div><b>'+esc(r.request_no)+'</b><small>'+new Date(r.created_at).toLocaleDateString('es-CL')+(r.project_name?' · '+esc(r.project_name):'')+'</small></div><span>'+esc(r.status.replaceAll('_',' '))+'</span></div>'}).join(''):'<div style="color:#888;font-size:12px;padding:10px 0">Aún no tienes solicitudes.</div>'}catch(_){}
-  }
-  el('submitQuote').onclick=async function(){
-    if(!customerProfile||!authUser){openClient('Ingresa con tu cuenta cliente para enviar la solicitud.');return}
-    if(!chosen.length){el('summary').textContent='Selecciona al menos un producto disponible.';el('summary').classList.add('show');return}
-    var b=this,old=b.textContent;b.disabled=true;b.textContent='Enviando…';
-    try{
-      var req=await authFetch('/rest/v1/msc_quote_requests?select=*',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({customer_id:customerProfile.id,contact_area:el('contacto').value.trim()||null,project_name:el('faena').value.trim()||null,notes:[el('referencia').value.trim()?('Referencia: '+el('referencia').value.trim()):'',el('detalle').value.trim()].filter(Boolean).join('\n'),created_by_user:authUser.id})});
-      var q=req[0];await authFetch('/rest/v1/msc_quote_request_lines',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(chosen.map(function(x){return {request_id:q.id,product_id:x.product_id,quantity:x.quantity,notes:'Talla '+x.variant}}))});
-      el('summary').textContent='Solicitud '+q.request_no+' enviada correctamente.';el('summary').classList.add('show');chosen=[];renderSelected();await loadHistory();
-    }catch(e){el('summary').textContent='No fue posible enviar la solicitud: '+e.message;el('summary').classList.add('show')}finally{b.disabled=false;b.textContent=old}
-  };
-
-  function parseCallback(){
-    var p=new URLSearchParams(location.hash.replace(/^#/,'')),access=p.get('access_token'),type=p.get('type');if(!access)return false;token=access;sessionStorage.setItem('msc_customer_token',token);history.replaceState(null,'',location.pathname+location.search);if(type==='recovery'){openClient('Define una nueva contraseña.');el('clientRecovery').hidden=false}else loadProfile();return true
-  }
-  renderSelected();loadCatalog();if(!parseCallback()){if(token)loadProfile();else updateClientState()}
+'use strict';
+var SUPABASE_URL='https://ygfmpwlpmaasooltjujb.supabase.co';
+var SUPABASE_KEY='sb_publishable_evFWgAwjv7xcNxo156NV0g_CFq0j5Ld';
+var token=sessionStorage.getItem('msc_customer_token')||'';
+var customerProfile=null,authUser=null,groups=[],chosen=[];
+var filters={category:'all',brand:'all',availability:'all',documents:'all',sort:'available'};
+function el(id){return document.getElementById(id)}
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function norm(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim()}
+async function publicFetch(path,opts){opts=opts||{};return fetch(SUPABASE_URL+path,Object.assign({},opts,{headers:Object.assign({apikey:SUPABASE_KEY,'Content-Type':'application/json'},opts.headers||{})}))}
+async function authFetch(path,opts){opts=opts||{};var r=await fetch(SUPABASE_URL+path,Object.assign({},opts,{headers:Object.assign({apikey:SUPABASE_KEY,Authorization:'Bearer '+token,'Content-Type':'application/json'},opts.headers||{})}));var t=await r.text(),d=null;try{d=t?JSON.parse(t):null}catch(_){d=t}if(!r.ok)throw new Error((d&&((d.message)||(d.msg)||(d.error_description)))||'No fue posible completar la operación.');return d}
+function variantLabel(code){var raw=String(code||'').trim(),m=raw.match(/^N?(\d{2})$/i);if(m)return 'Talla '+m[1];if(/^2X$/i.test(raw))return 'Talla 2X';if(/^TXL$/i.test(raw)||/^XL$/i.test(raw))return 'Talla XL';if(/^UNI$/i.test(raw))return 'Unidad';return raw?'Variante '+raw:'Variante'}
+function isAvailable(g){return g.variants.some(function(v){return v.availability==='Disponible'})}
+function isDocumented(g){return !!(g.datasheet||g.certs.length)}
+function titleOf(g){return g.brand==='MSC'?g.name:(g.model||g.name)}
+function iconFor(cat){var n=norm(cat);if(n.includes('calzado'))return '◇';if(n.includes('guante'))return '✦';if(n.includes('facial'))return '◉';if(n.includes('soldadura'))return '▱';if(n.includes('ropa'))return '▤';return '◆'}
+async function loadCatalog(){
+ try{
+  var r=await publicFetch('/rest/v1/msc_public_catalog_variants?select=*');
+  if(!r.ok)throw new Error('No fue posible leer el catálogo');
+  var rows=await r.json(),map=new Map();
+  rows.forEach(function(row){var key=row.group_key||row.model||row.sku;if(!map.has(key))map.set(key,{key:key,name:String(row.name||'Producto').replace(/\s+Talla\s+\d+$/i,''),brand:row.brand==='P.JACK'?'Panama Jack':(row.brand||''),model:row.model||row.manufacturer_code||'',color:row.product_color||'',description:row.description||'',image:row.image_url||'',datasheet:row.datasheet_url||'',specs:row.catalog_specs||{},category:row.category||'Productos',variants:[],certs:[]});var g=map.get(key);g.variants.push(row);(Array.isArray(row.certifications)?row.certifications:[]).forEach(function(c){var sig=[c.type,c.standard,c.certificate_number].join('|');if(!g.certs.some(function(x){return [x.type,x.standard,x.certificate_number].join('|')===sig}))g.certs.push(c)})});
+  groups=Array.from(map.values());
+  buildFilterOptions();renderCategories();renderCatalog();renderHero();
+ }catch(e){el('catalogGrid').innerHTML='<div class="loading"><b>No fue posible cargar el catálogo.</b><br><span>'+esc(e.message)+'</span></div>';el('categoryCards').innerHTML='<div class="loading">Catálogo temporalmente no disponible.</div>';el('catalogCount').textContent='Catálogo no disponible'}
+}
+function buildFilterOptions(){var cats={},brands={};groups.forEach(function(g){cats[g.category]=(cats[g.category]||0)+1;brands[g.brand||'Sin marca']=(brands[g.brand||'Sin marca']||0)+1});el('categoryFilter').innerHTML='<option value="all">Todas las categorías ('+groups.length+')</option>'+Object.keys(cats).sort().map(function(x){return '<option value="'+esc(x)+'">'+esc(x)+' ('+cats[x]+')</option>'}).join('');el('brandFilter').innerHTML='<option value="all">Todas las marcas ('+groups.length+')</option>'+Object.keys(brands).sort().map(function(x){return '<option value="'+esc(x)+'">'+esc(x)+' ('+brands[x]+')</option>'}).join('')}
+function renderCategories(){var counts={};groups.forEach(function(g){counts[g.category]=(counts[g.category]||0)+1});var cats=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a]||a.localeCompare(b,'es')});el('categoryCards').innerHTML=cats.map(function(cat){return '<button class="category-card" data-cat="'+esc(cat)+'" type="button"><em>'+counts[cat]+' modelos</em><div class="ico">'+iconFor(cat)+'</div><b>'+esc(cat)+'</b><span>Ver productos y variantes →</span></button>'}).join('');el('categoryCards').querySelectorAll('[data-cat]').forEach(function(b){b.onclick=function(){filters.category=b.dataset.cat;el('categoryFilter').value=filters.category;renderCatalog();el('catalogo').scrollIntoView({behavior:'smooth',block:'start'})}})}
+function renderHero(){var g=groups.find(function(x){return isAvailable(x)&&x.image})||groups.find(function(x){return x.image})||groups[0];if(!g)return;var available=g.variants.filter(function(v){return v.availability==='Disponible'}).length;el('heroWord').textContent=g.model||g.name;el('heroProduct').innerHTML='<div class="hero-fallback"><b>MSC</b><span>Safety</span></div>'+(g.image?'<img src="'+esc(g.image)+'" alt="'+esc(g.brand+' '+titleOf(g))+'" onerror="this.style.display=\'none\'">':'');el('heroCaption').innerHTML='<b>'+esc(g.brand+' · '+titleOf(g))+'</b><span>'+available+' variantes con stock · '+g.variants.length+' variantes publicadas</span><em>'+(isDocumented(g)?'Respaldo técnico disponible':'Documentación en validación')+'</em>'}
+function sorted(list){return list.slice().sort(function(a,b){if(filters.sort==='model')return titleOf(a).localeCompare(titleOf(b),'es',{numeric:true});if(filters.sort==='brand')return a.brand.localeCompare(b.brand,'es')||titleOf(a).localeCompare(titleOf(b),'es',{numeric:true});if(filters.sort==='docs'){var ad=isDocumented(a)?0:1,bd=isDocumented(b)?0:1;return ad-bd||titleOf(a).localeCompare(titleOf(b),'es',{numeric:true})}var aa=isAvailable(a)?0:1,bb=isAvailable(b)?0:1;return aa-bb||titleOf(a).localeCompare(titleOf(b),'es',{numeric:true})})}
+function renderApplied(){var chips=[];if(filters.category!=='all')chips.push(['category',filters.category]);if(filters.brand!=='all')chips.push(['brand',filters.brand]);if(filters.availability!=='all')chips.push(['availability',filters.availability==='available'?'Con stock':'A consultar']);if(filters.documents!=='all')chips.push(['documents',filters.documents==='documented'?'Con respaldo':'Documentación pendiente']);var q=el('catalogSearch').value.trim();if(q)chips.push(['search','“'+q+'”']);el('appliedFilters').innerHTML=chips.length?chips.map(function(c){return '<button data-clear="'+c[0]+'" type="button">'+esc(c[1])+' ×</button>'}).join(''):'<span style="font-size:9px;color:#8a837a">Sin filtros aplicados</span>';el('appliedFilters').querySelectorAll('[data-clear]').forEach(function(b){b.onclick=function(){var k=b.dataset.clear;if(k==='search')el('catalogSearch').value='';else filters[k]='all';syncControls();renderCatalog()}})}
+function syncControls(){el('categoryFilter').value=filters.category;el('brandFilter').value=filters.brand;el('sortMode').value=filters.sort;el('availabilityButtons').querySelectorAll('button').forEach(function(b){b.classList.toggle('active',b.dataset.value===filters.availability)});el('documentButtons').querySelectorAll('button').forEach(function(b){b.classList.toggle('active',b.dataset.value===filters.documents)})}
+function renderCatalog(){var q=norm(el('catalogSearch').value);var list=groups.filter(function(g){var specs=Object.keys(g.specs||{}).map(function(k){return k+' '+g.specs[k]}).join(' '),searchable=norm([g.name,g.brand,g.model,g.color,g.category,specs].join(' '));return (filters.category==='all'||g.category===filters.category)&&(filters.brand==='all'||g.brand===filters.brand)&&(filters.availability==='all'||(filters.availability==='available'?isAvailable(g):!isAvailable(g)))&&(filters.documents==='all'||(filters.documents==='documented'?isDocumented(g):!isDocumented(g)))&&(!q||searchable.includes(q))});list=sorted(list);el('catalogCount').textContent=list.length+' de '+groups.length+' modelos';el('mobileResultCount').textContent=list.length+' resultados';renderApplied();if(!list.length){el('catalogGrid').innerHTML='<div class="loading"><b>No encontramos coincidencias.</b><br><span>Prueba quitando un filtro o busca por modelo, marca o característica.</span></div>';return}el('catalogGrid').innerHTML=list.map(function(g,idx){var vars=g.variants.slice().sort(function(a,b){var aa=a.availability==='Disponible'?0:1,bb=b.availability==='Disponible'?0:1;return aa-bb||String(a.variant_code).localeCompare(String(b.variant_code),'es',{numeric:true})}),available=vars.filter(function(v){return v.availability==='Disponible'}).length,first=(vars[0]&&vars[0].availability)||'Consultar disponibilidad',documented=isDocumented(g),specs=Object.keys(g.specs||{}).slice(0,4).map(function(k){return '<div class="spec"><b>'+esc(k)+'</b><span>'+esc(g.specs[k])+'</span></div>'}).join(''),docs='';if(g.datasheet)docs+='<a class="doc-link" href="'+esc(g.datasheet)+'" target="_blank" rel="noopener">Ficha técnica ↗</a>';var cert=g.certs.find(function(c){return c.document_url});if(cert)docs+='<a class="doc-link" href="'+esc(cert.document_url)+'" target="_blank" rel="noopener">Certificación ↗</a>';return '<article class="product"><figure data-model="'+esc(g.model||titleOf(g))+'"><div class="photo-fallback"><b>MSC Safety</b><span>Imagen referencial</span></div>'+(g.image?'<img src="'+esc(g.image)+'" alt="'+esc(g.brand+' '+titleOf(g))+'" loading="lazy" onerror="this.style.display=\'none\'">':'')+'</figure><div class="product-body"><div class="product-meta"><span>'+esc(g.category)+'</span><span>'+esc(g.brand)+'</span></div><h3>'+esc(titleOf(g))+'</h3><p class="quick-desc">'+esc(g.description||'Consulta características y disponibilidad para tu operación.')+'</p><div class="signals">'+(available?'<span class="signal stock">'+available+' con stock</span>':'<span class="signal consult">Stock a confirmar</span>')+'<span class="signal">'+vars.length+' variantes</span>'+(documented?'<span class="signal doc">Respaldo técnico</span>':'<span class="signal">Doc. pendiente</span>')+'</div>'+(specs?'<div class="specs">'+specs+'</div>':'')+'<div class="docs">'+(docs||'<span class="doc-pending">Documentación en validación</span>')+'</div><div class="variant"><select id="v-'+idx+'">'+vars.map(function(v){return '<option value="'+esc(v.product_id)+'" data-sku="'+esc(v.sku)+'" data-name="'+esc(titleOf(g))+'" data-variant="'+esc(v.variant_code)+'" data-availability="'+esc(v.availability)+'">'+esc(variantLabel(v.variant_code))+' · '+esc(v.availability)+'</option>'}).join('')+'</select><input id="q-'+idx+'" type="number" min="1" step="1" value="1" aria-label="Cantidad"></div><div id="a-'+idx+'" class="availability '+(first==='Disponible'?'':'query')+'">'+(first==='Disponible'?'Disponible para cotizar':'Consultar disponibilidad al cotizar')+'</div><div class="product-actions"><button class="primary add" data-i="'+idx+'" type="button">Agregar a cotización</button></div></div></article>'}).join('');list.forEach(function(g,idx){var sel=el('v-'+idx),status=el('a-'+idx);if(sel&&status)sel.onchange=function(){var op=sel.options[sel.selectedIndex],ok=op.dataset.availability==='Disponible';status.classList.toggle('query',!ok);status.textContent=ok?'Disponible para cotizar':'Consultar disponibilidad al cotizar'}});el('catalogGrid').querySelectorAll('.add').forEach(function(b){b.onclick=function(){var i=Number(b.dataset.i),sel=el('v-'+i),qty=Math.max(1,Number(el('q-'+i).value||1)),op=sel.options[sel.selectedIndex],pid=sel.value,existing=chosen.find(function(x){return x.product_id===pid});if(existing)existing.quantity+=qty;else chosen.push({product_id:pid,sku:op.dataset.sku,name:op.dataset.name,variant:op.dataset.variant,quantity:qty});renderSelected();var old=b.textContent;b.textContent='✓ Agregado';setTimeout(function(){b.textContent=old},800)}})}
+function clearFilters(){filters={category:'all',brand:'all',availability:'all',documents:'all',sort:'available'};el('catalogSearch').value='';syncControls();renderCatalog()}
+function renderSelected(){var items=chosen.length,total=chosen.reduce(function(a,x){return a+Number(x.quantity||0)},0);el('selected').innerHTML=items?chosen.map(function(x,i){return '<span>'+esc(x.name)+' · '+esc(variantLabel(x.variant))+' · '+x.quantity+' <button data-remove="'+i+'" type="button">×</button></span>'}).join(''):'<span class="empty">Aún no has agregado productos</span>';el('selected').querySelectorAll('[data-remove]').forEach(function(b){b.onclick=function(){chosen.splice(Number(b.dataset.remove),1);renderSelected()}});el('headerQuoteCount').textContent=items;el('quoteBoxCount').textContent=items+(items===1?' producto seleccionado':' productos seleccionados');el('dockCount').textContent=items;el('dockText').textContent=items?(total+' unidades en '+items+(items===1?' producto':' productos')):'Aún no has agregado productos';el('quoteDock').classList.toggle('show',items>0)}
+function buildText(){var items=chosen.length?chosen.map(function(x){return '- '+x.name+' · '+variantLabel(x.variant)+' · '+x.quantity+' · SKU '+x.sku}).join('\n'):'Sin productos seleccionados';return 'SOLICITUD DE COTIZACIÓN · MSC SAFETY\n\nEmpresa: '+(el('empresa').value||'—')+'\nÁrea / contacto: '+(el('contacto').value||'—')+'\nFaena / proyecto: '+(el('faena').value||'—')+'\nReferencia: '+(el('referencia').value||'—')+'\n\nProductos:\n'+items+'\n\nObservaciones:\n'+(el('detalle').value||'—')}
+el('categoryFilter').onchange=function(){filters.category=this.value;renderCatalog()};el('brandFilter').onchange=function(){filters.brand=this.value;renderCatalog()};el('sortMode').onchange=function(){filters.sort=this.value;renderCatalog()};el('catalogSearch').oninput=renderCatalog;el('clearFilters').onclick=clearFilters;el('filtersToggle').onclick=function(){el('filterPanel').classList.toggle('open')};el('availabilityButtons').querySelectorAll('button').forEach(function(b){b.onclick=function(){filters.availability=b.dataset.value;syncControls();renderCatalog()}});el('documentButtons').querySelectorAll('button').forEach(function(b){b.onclick=function(){filters.documents=b.dataset.value;syncControls();renderCatalog()}});el('heroSearchButton').onclick=function(){el('catalogSearch').value=el('heroSearch').value;renderCatalog();el('catalogo').scrollIntoView({behavior:'smooth',block:'start'})};el('heroSearch').onkeydown=function(e){if(e.key==='Enter')el('heroSearchButton').click()};el('prepare').onclick=function(){el('summary').textContent=buildText();el('summary').classList.add('show')};el('copy').onclick=async function(){var t=buildText();el('summary').textContent=t;el('summary').classList.add('show');try{await navigator.clipboard.writeText(t);var old=this.textContent;this.textContent='✓ Copiado';var self=this;setTimeout(function(){self.textContent=old},900)}catch(_){}};el('viewQuoteDock').onclick=function(){el('cotizar').scrollIntoView({behavior:'smooth',block:'start'})};
+var modal=el('clientModal'),message=el('clientMessage');function openClient(msg){modal.classList.add('show');modal.setAttribute('aria-hidden','false');message.textContent=msg||''}function closeClient(){modal.classList.remove('show');modal.setAttribute('aria-hidden','true')}el('clientAccess').onclick=function(){openClient()};el('quoteLogin').onclick=function(){openClient()};el('closeClient').onclick=closeClient;modal.onclick=function(e){if(e.target===modal)closeClient()};document.querySelectorAll('[data-tab]').forEach(function(b){b.onclick=function(){document.querySelectorAll('[data-tab]').forEach(function(x){x.classList.toggle('active',x===b)});document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('active')});el('pane-'+b.dataset.tab).classList.add('active');message.textContent=''}});
+async function loadProfile(){if(!token)return updateClientState();try{authUser=await authFetch('/auth/v1/user');var links=await authFetch('/rest/v1/msc_customer_users?select=customer_id,email,msc_customers(id,name,contact_name,email)&auth_user_id=eq.'+encodeURIComponent(authUser.id));if(!Array.isArray(links)||!links.length||!links[0].msc_customers)throw new Error('No encontramos una cuenta cliente activa asociada a este correo.');customerProfile=links[0].msc_customers;el('empresa').value=customerProfile.name||'';updateClientState();await loadHistory()}catch(e){token='';sessionStorage.removeItem('msc_customer_token');customerProfile=null;authUser=null;updateClientState();message.textContent=e.message}}
+function updateClientState(){if(customerProfile){el('clientState').innerHTML='<div><b>'+esc(customerProfile.name)+'</b><span>Sesión activa · la solicitud quedará guardada.</span></div><button class="secondary" id="logoutInline" type="button">Salir</button>';el('clientAccess').textContent='Mi cuenta';el('logoutInline').onclick=logoutClient}else{el('clientState').innerHTML='<div><b>Cliente MSC Safety</b><span>Ingresa para enviar y guardar esta solicitud.</span></div><button class="secondary" id="quoteLogin2" type="button">Ingresar</button>';el('clientAccess').textContent='Acceso cliente';el('quoteLogin2').onclick=function(){openClient()}}}
+async function login(){message.textContent='Ingresando…';try{var r=await publicFetch('/auth/v1/token?grant_type=password',{method:'POST',body:JSON.stringify({email:el('clientEmail').value.trim(),password:el('clientPassword').value})}),d=await r.json();if(!r.ok)throw new Error(d.error_description||d.msg||'Correo o contraseña incorrectos.');token=d.access_token;sessionStorage.setItem('msc_customer_token',token);await loadProfile();if(customerProfile){message.textContent='Acceso correcto.';setTimeout(closeClient,350)}}catch(e){message.textContent=e.message}}
+async function activate(){var email=el('activateEmail').value.trim(),password=el('activatePassword').value;if(password.length<8){message.textContent='La contraseña debe tener al menos 8 caracteres.';return}message.textContent='Validando correo…';try{var check=await publicFetch('/rest/v1/rpc/msc_customer_email_is_registered',{method:'POST',body:JSON.stringify({candidate_email:email})}),ok=await check.json();if(!check.ok||ok!==true)throw new Error('Este correo aún no está habilitado para acceso cliente.');var r=await publicFetch('/auth/v1/signup?redirect_to='+encodeURIComponent(location.origin+location.pathname),{method:'POST',body:JSON.stringify({email:email,password:password,data:{msc_customer_portal:true}})}),d=await r.json();if(!r.ok)throw new Error(d.msg||d.error_description||'No fue posible activar el acceso.');message.textContent=d.access_token?'Acceso activado.':'Revisa tu correo para confirmar el acceso.';if(d.access_token){token=d.access_token;sessionStorage.setItem('msc_customer_token',token);await loadProfile()}}catch(e){message.textContent=e.message}}
+async function resetPassword(){var email=el('clientEmail').value.trim();if(!email){message.textContent='Escribe primero tu correo.';return}try{await publicFetch('/auth/v1/recover',{method:'POST',body:JSON.stringify({email:email,redirect_to:location.origin+location.pathname})});message.textContent='Si la cuenta existe, recibirás un enlace para crear una nueva contraseña.'}catch(e){message.textContent=e.message}}
+async function savePassword(){var p=el('clientNewPassword').value;if(p.length<8){message.textContent='La contraseña debe tener al menos 8 caracteres.';return}try{await authFetch('/auth/v1/user',{method:'PUT',body:JSON.stringify({password:p})});el('clientRecovery').hidden=true;message.textContent='Contraseña actualizada.';await loadProfile()}catch(e){message.textContent=e.message}}
+function logoutClient(){token='';customerProfile=null;authUser=null;sessionStorage.removeItem('msc_customer_token');el('quoteHistory').hidden=true;updateClientState();closeClient()}
+async function loadHistory(){if(!customerProfile)return;try{var rows=await authFetch('/rest/v1/msc_quote_requests?select=request_no,status,project_name,created_at&order=created_at.desc&limit=20');el('quoteHistory').hidden=false;el('quoteHistoryRows').innerHTML=(rows||[]).length?(rows||[]).map(function(r){return '<div class="history-row"><div><b>'+esc(r.request_no)+'</b><small>'+new Date(r.created_at).toLocaleDateString('es-CL')+(r.project_name?' · '+esc(r.project_name):'')+'</small></div><span>'+esc(String(r.status||'').replaceAll('_',' '))+'</span></div>'}).join(''):'<div style="color:#888;font-size:11px;padding:10px 0">Aún no tienes solicitudes.</div>'}catch(_){}}
+el('clientLogin').onclick=login;el('clientActivate').onclick=activate;el('clientReset').onclick=resetPassword;el('clientSavePassword').onclick=savePassword;
+el('submitQuote').onclick=async function(){if(!customerProfile||!authUser){openClient('Ingresa con tu cuenta cliente para enviar la solicitud.');return}if(!chosen.length){el('summary').textContent='Selecciona al menos un producto antes de enviar.';el('summary').classList.add('show');return}var b=this,old=b.textContent;b.disabled=true;b.textContent='Enviando…';try{var req=await authFetch('/rest/v1/msc_quote_requests?select=*',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({customer_id:customerProfile.id,contact_area:el('contacto').value.trim()||null,project_name:el('faena').value.trim()||null,notes:[el('referencia').value.trim()?('Referencia: '+el('referencia').value.trim()):'',el('detalle').value.trim()].filter(Boolean).join('\n'),created_by_user:authUser.id})});var q=req[0];await authFetch('/rest/v1/msc_quote_request_lines',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(chosen.map(function(x){return {request_id:q.id,product_id:x.product_id,quantity:x.quantity,notes:variantLabel(x.variant)}}))});el('summary').textContent='Solicitud '+q.request_no+' enviada correctamente.';el('summary').classList.add('show');chosen=[];renderSelected();await loadHistory()}catch(e){el('summary').textContent='No fue posible enviar la solicitud: '+e.message;el('summary').classList.add('show')}finally{b.disabled=false;b.textContent=old}};
+function parseCallback(){var p=new URLSearchParams(location.hash.replace(/^#/,'')),access=p.get('access_token'),type=p.get('type');if(!access)return false;token=access;sessionStorage.setItem('msc_customer_token',token);history.replaceState(null,'',location.pathname+location.search);if(type==='recovery'){openClient('Define una nueva contraseña.');el('clientRecovery').hidden=false}else loadProfile();return true}
+renderSelected();syncControls();loadCatalog();if(!parseCallback()){if(token)loadProfile();else updateClientState()}
 })();
 </script>
 </body>
