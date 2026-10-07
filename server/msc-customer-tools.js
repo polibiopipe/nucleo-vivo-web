@@ -18,7 +18,7 @@ var oldSubmit=form.onsubmit;
 
 function el(tag,attrs,text){
   var n=document.createElement(tag);attrs=attrs||{};
-  Object.keys(attrs).forEach(function(k){if(k==='class')n.className=attrs[k];else if(k==='html')n.innerHTML=attrs[k];else n.setAttribute(k,attrs[k])});
+  Object.keys(attrs).forEach(function(k){if(k==='class')n.className=attrs[k];else n.setAttribute(k,attrs[k])});
   if(text!=null)n.textContent=text;return n;
 }
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -27,16 +27,21 @@ function addStyle(){
   var s=el('style',{id:'mscCustomerToolsStyle'});s.textContent='\
 .mscAssistBox{grid-column:1/-1;border:1px solid #e2ca93;background:linear-gradient(180deg,#fffaf0,#fff);border-radius:10px;padding:12px;margin-top:2px}\
 .mscAssistHead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:9px}.mscAssistHead b{display:block;font-size:13px}.mscAssistHead span{font-size:10px;color:#777}\
-.mscActionRow{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}.mscMiniBtn{border:1px solid #b98a32;background:#fff;color:#644813;border-radius:7px;padding:8px 10px;font-weight:800;font-size:11px}.mscMiniBtn.dark{background:#0e596b;border-color:#0e596b;color:#fff}.mscMiniBtn:disabled{opacity:.55;cursor:wait}\
-.mscLookupStatus{font-size:11px;color:#626a70;margin-top:8px;line-height:1.45}.mscLookupStatus.good{color:#176f43}.mscLookupStatus.bad{color:#a23d37}\
+.mscActionRow{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}.mscMiniBtn{border:1px solid #b98a32;background:#fff;color:#644813;border-radius:7px;padding:8px 10px;font-weight:800;font-size:11px}.mscMiniBtn.dark{background:#0e596b;border-color:#0e596b;color:#fff}.mscMiniBtn:disabled{opacity:.55;cursor:wait}.mscMiniBtn[hidden]{display:none!important}\
+.mscLookupStatus{font-size:11px;color:#626a70;margin-top:8px;line-height:1.45}.mscLookupStatus.good{color:#176f43}.mscLookupStatus.bad{color:#a23d37}.mscLookupStatus.attn{color:#805d18;font-weight:650}\
 .mscSuggested{border-color:#d3a344!important;background:#fffaf0!important;box-shadow:0 0 0 1px rgba(185,138,50,.12)}\
 .mscSources{margin-top:10px;border-top:1px solid #eadfc7;padding-top:8px;font-size:10px}.mscSources a{display:inline-block;margin:3px 8px 3px 0;color:#0e596b;text-decoration:underline;text-underline-offset:2px}\
 .mscVerify{display:grid;gap:7px;margin-top:11px;padding-top:10px;border-top:1px solid #eadfc7}.mscVerify label{display:flex;gap:8px;align-items:flex-start;font-size:11px;color:#4e555a;text-transform:none!important;letter-spacing:0!important}.mscVerify input{width:auto!important;margin-top:2px}.mscGeoState{font-size:10px;color:#6b7378;margin-top:7px}.mscGeoState.ok{color:#176f43;font-weight:700}\
 .mscDeliveryCard{margin-top:10px;border:1px solid #c9d5d9;background:#f7fbfc;border-radius:9px;padding:11px}.mscDeliveryCard h4{margin:0 0 7px;font-size:13px}.mscDeliveryGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px}.mscDeliveryGrid b{display:block;color:#252a2d;margin-bottom:2px}.mscMapLinks{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.mscMapLinks a{display:inline-block;background:#0e596b;color:white;text-decoration:none;padding:7px 9px;border-radius:7px;font-size:10px;font-weight:800}.mscMapLinks a.waze{background:#172026}\
-.mscSearchEntry{margin-top:8px;max-width:100%;overflow:auto}.mscPublicNote{font-size:10px;color:#7a6842;margin-top:8px}\
+.mscPublicNote{font-size:10px;color:#7a6842;margin-top:8px}.mscHint{font-size:10px;color:#6d747a;margin-top:5px}\
 @media(max-width:760px){.mscDeliveryGrid{grid-template-columns:1fr}.mscActionRow .mscMiniBtn{flex:1 1 140px}}';document.head.appendChild(s);
 }
 addStyle();
+
+var nameField=nameInput.closest('.field');
+var nameLabel=nameField&&nameField.querySelector('label');
+if(nameLabel)nameLabel.textContent='Razón social / nombre';
+nameInput.placeholder='Empresa o persona natural con actividad';
 
 function addField(name,label,type,placeholder){
   if(form.querySelector('[name="'+name+'"]'))return form.querySelector('[name="'+name+'"]');
@@ -55,16 +60,19 @@ var rutField=rutInput.closest('.field');
 var lookupRow=el('div',{class:'mscActionRow'}),lookupBtn=el('button',{type:'button',class:'mscMiniBtn dark',id:'mscLookupRut'},'Buscar datos públicos del RUT');
 lookupRow.appendChild(lookupBtn);rutField.appendChild(lookupRow);
 
+var expandRow=el('div',{class:'mscActionRow'}),expandBtn=el('button',{type:'button',class:'mscMiniBtn',id:'mscLookupName',hidden:'hidden'},'Ampliar búsqueda con nombre');
+expandRow.appendChild(expandBtn);if(nameField)nameField.appendChild(expandRow);
+
 var assist=el('div',{class:'mscAssistBox'});
-assist.innerHTML='<div class="mscAssistHead"><div><b>Asistente de datos y entrega</b><span>Ayuda a prellenar; la validación final siempre corresponde al vendedor con el cliente.</span></div></div>'+
-'<div class="mscActionRow"><button type="button" class="mscMiniBtn" id="mscOpenMap">Ver dirección en mapa</button><button type="button" class="mscMiniBtn" id="mscUseGps">Usar ubicación actual</button></div>'+
-'<div id="mscGeoState" class="mscGeoState">Sin punto GPS guardado. El transportista igualmente podrá abrir la dirección confirmada en el mapa.</div>'+
-'<div id="mscLookupStatus" class="mscLookupStatus">Ingrese un RUT y use “Buscar datos públicos del RUT”.</div>'+
-'<div id="mscSources" class="mscSources" style="display:none"></div><div id="mscSearchEntry" class="mscSearchEntry"></div>'+
-'<div class="mscVerify"><label><input id="mscConfirmData" type="checkbox"> <span>Verifiqué con el cliente que los datos de la ficha son correctos y vigentes.</span></label><label><input id="mscConfirmLocation" type="checkbox"> <span>Confirmé que esta dirección o punto corresponde al lugar de entrega.</span></label></div>'+
-'<div class="mscPublicNote">Los datos encontrados en internet se muestran como sugerencias. No se guardan como confirmados hasta que el vendedor los revise.</div>';
+assist.innerHTML='<div class="mscAssistHead"><div><b>Asistente de datos y entrega</b><span>Prellena desde fuentes públicas; el vendedor confirma todo con el cliente.</span></div></div>'+ 
+'<div class="mscActionRow"><button type="button" class="mscMiniBtn" id="mscOpenMap">Ver dirección en mapa</button><button type="button" class="mscMiniBtn" id="mscUseGps">Usar ubicación actual</button></div>'+ 
+'<div id="mscGeoState" class="mscGeoState">Sin punto GPS guardado. El transportista igualmente podrá abrir la dirección confirmada en el mapa.</div>'+ 
+'<div id="mscLookupStatus" class="mscLookupStatus">Ingrese un RUT y use “Buscar datos públicos del RUT”.</div>'+ 
+'<div id="mscSources" class="mscSources" style="display:none"></div>'+ 
+'<div class="mscVerify"><label><input id="mscConfirmData" type="checkbox"> <span>Verifiqué con el cliente que los datos de la ficha son correctos y vigentes.</span></label><label><input id="mscConfirmLocation" type="checkbox"> <span>Confirmé que esta dirección o punto corresponde al lugar de entrega.</span></label></div>'+ 
+'<div class="mscPublicNote">Los datos encontrados en internet son sugerencias. Una coincidencia por nombre no sustituye la validación del vendedor con el cliente.</div>';
 var firstFull=form.querySelector('.field.full');form.insertBefore(assist,firstFull||form.lastElementChild);
-var status=document.getElementById('mscLookupStatus'),sourcesBox=document.getElementById('mscSources'),searchEntry=document.getElementById('mscSearchEntry');
+var status=document.getElementById('mscLookupStatus'),sourcesBox=document.getElementById('mscSources');
 var confirmData=document.getElementById('mscConfirmData'),confirmLocation=document.getElementById('mscConfirmLocation'),geoState=document.getElementById('mscGeoState');
 var gpsBtn=document.getElementById('mscUseGps'),mapBtn=document.getElementById('mscOpenMap');
 
@@ -85,26 +93,37 @@ rutInput.addEventListener('blur',function(){if(validRut(rutInput.value))rutInput
 function renderSources(list){
   state.sources=Array.isArray(list)?list:[];sourcesBox.innerHTML='';
   if(!state.sources.length){sourcesBox.style.display='none';return}
-  var title=el('b',{},'Fuentes públicas consultadas: ');sourcesBox.appendChild(title);
+  sourcesBox.appendChild(el('b',{},'Fuentes públicas consultadas: '));
   state.sources.forEach(function(s,i){var a=el('a',{href:s.url,target:'_blank',rel:'noopener noreferrer'},(s.title||('Fuente '+(i+1))).slice(0,70));sourcesBox.appendChild(a)});sourcesBox.style.display='block';
 }
-async function lookupRut(){
+function foundCount(c){return [c.name,c.business_activity,c.address,c.city,c.phone,c.email,c.website].filter(Boolean).length}
+function matchText(c){if(c.match==='exact_rut'||c.match==='rut_and_name')return 'Coincidencia vinculada al RUT';if(c.match==='name_assisted')return 'Coincidencia ampliada con nombre';if(c.match==='partial')return 'Coincidencia parcial';return 'Coincidencia encontrada'}
+async function lookupCustomer(expanded){
   var rut=rutInput.value.trim();if(!validRut(rut)){setStatus('Revise el RUT y su dígito verificador.','bad');rutInput.focus();return}
-  lookupBtn.disabled=true;lookupBtn.textContent='Buscando…';setStatus('Consultando información empresarial publicada en la web…');
+  var hint=nameInput.value.trim();if(expanded&&!hint){setStatus('Ingrese la razón social o el nombre para ampliar la búsqueda.','attn');nameInput.focus();return}
+  lookupBtn.disabled=true;expandBtn.disabled=true;lookupBtn.textContent='Buscando…';if(expanded)expandBtn.textContent='Buscando…';
+  setStatus(expanded?'Ampliando búsqueda con RUT + nombre…':'Consultando el RUT en fuentes públicas…');
   try{
-    var token=sessionStorage.getItem('msc_token')||'';
-    var r=await fetch('/api/msc-customer-enrich',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({rut:rut})});
+    var token=sessionStorage.getItem('msc_token')||'',payload={rut:rut};if(expanded)payload.name_hint=hint;
+    var r=await fetch('/api/msc-customer-enrich',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify(payload)});
     var d=await r.json();if(!r.ok)throw new Error(d.message||'No fue posible consultar la información pública.');
-    state.lookupAt=d.lookedUpAt||new Date().toISOString();var c=d.company||{};
-    if(!c.found){renderSources(d.sources);searchEntry.innerHTML=d.searchEntryPoint||'';setStatus('No encontré una coincidencia pública suficientemente inequívoca. Complete la ficha con el cliente.');return}
+    state.lookupAt=d.lookedUpAt||new Date().toISOString();var c=d.company||{};renderSources(d.sources);
+    if(!c.found){
+      confirmData.checked=false;confirmLocation.checked=false;
+      if(!expanded&&d.needs_name_hint!==false){expandBtn.hidden=false;setStatus('No pude identificar al contribuyente sólo con el RUT. Ingrese la razón social o nombre y pulse “Ampliar búsqueda con nombre”.','attn')}
+      else setStatus('No encontré una coincidencia pública suficientemente clara. Complete la ficha directamente con el cliente.','attn');
+      return;
+    }
     fillSuggested(nameInput,c.name);fillSuggested(giroInput,c.business_activity);fillSuggested(addressInput,c.address);fillSuggested(cityInput,c.city);fillSuggested(phoneInput,c.phone);fillSuggested(emailInput,c.email);fillSuggested(websiteInput,c.website);
     if(!deliveryContact.value&&contactInput&&contactInput.value)deliveryContact.value=contactInput.value;if(!deliveryPhone.value&&phoneInput&&phoneInput.value)deliveryPhone.value=phoneInput.value;
-    renderSources(d.sources);searchEntry.innerHTML=d.searchEntryPoint||'';confirmData.checked=false;confirmLocation.checked=false;
-    setStatus('Datos sugeridos cargados. Revise cada campo con el cliente antes de guardar.','good');
+    expandBtn.hidden=true;confirmData.checked=false;confirmLocation.checked=false;
+    var n=foundCount(c),detail=c.note?' '+c.note:'';
+    setStatus(matchText(c)+' · '+n+' dato'+(n===1?'':'s')+' sugerido'+(n===1?'':'s')+'. Revise cada campo con el cliente antes de guardar.'+detail,'good');
   }catch(err){setStatus(err.message||'No fue posible consultar la web.','bad')}
-  finally{lookupBtn.disabled=false;lookupBtn.textContent='Buscar datos públicos del RUT'}
+  finally{lookupBtn.disabled=false;expandBtn.disabled=false;lookupBtn.textContent='Buscar datos públicos del RUT';expandBtn.textContent='Ampliar búsqueda con nombre'}
 }
-lookupBtn.addEventListener('click',lookupRut);
+lookupBtn.addEventListener('click',function(){lookupCustomer(false)});expandBtn.addEventListener('click',function(){lookupCustomer(true)});
+nameInput.addEventListener('input',function(){if(nameInput.value.trim()&&status.textContent.indexOf('sólo con el RUT')>=0)expandBtn.hidden=false});
 
 function mapQuery(){return [addressInput&&addressInput.value,cityInput&&cityInput.value,'Chile'].filter(Boolean).join(', ')}
 function googleMapUrl(){if(Number.isFinite(state.lat)&&Number.isFinite(state.lng))return 'https://www.google.com/maps/search/?api=1&query='+state.lat+','+state.lng;return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(mapQuery())}
@@ -138,7 +157,7 @@ form.onsubmit=async function(e){
   if(typeof oldSubmit==='function')await oldSubmit.call(form,e);else e.preventDefault();
   var msg=document.getElementById('customerMsg');
   if(msg&&/Cliente creado/i.test(msg.textContent||'')){
-    try{var id=await patchCreatedCustomer(snapshot.rut,snapshot);msg.textContent='Cliente creado · datos verificados y ubicación de entrega disponible para despacho.';state.lat=null;state.lng=null;state.sources=[];state.lookupAt='';confirmData.checked=false;confirmLocation.checked=false;geoState.textContent='Sin punto GPS guardado. El transportista igualmente podrá abrir la dirección confirmada en el mapa.';geoState.className='mscGeoState';setTimeout(function(){refreshDeliveryCard(id)},100)}catch(err){msg.textContent='Cliente creado. '+err.message}
+    try{var id=await patchCreatedCustomer(snapshot.rut,snapshot);msg.textContent='Cliente creado · datos verificados y ubicación de entrega disponible para despacho.';state.lat=null;state.lng=null;state.sources=[];state.lookupAt='';confirmData.checked=false;confirmLocation.checked=false;expandBtn.hidden=true;geoState.textContent='Sin punto GPS guardado. El transportista igualmente podrá abrir la dirección confirmada en el mapa.';geoState.className='mscGeoState';setTimeout(function(){refreshDeliveryCard(id)},100)}catch(err){msg.textContent='Cliente creado. '+err.message}
   }
 };
 
