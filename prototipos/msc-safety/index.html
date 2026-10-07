@@ -189,7 +189,7 @@ linear-gradient(180deg,#0b0f12,#07090b)}
       var map=new Map();
       rows.forEach(function(r){
         var key=r.group_key||r.model||r.sku;
-        if(!map.has(key))map.set(key,{key:key,name:String(r.name||'Producto').replace(/\s+Talla\s+\d+$/i,''),brand:r.brand||'',model:r.model||r.manufacturer_code||'',color:r.product_color||'',description:r.description||'',image:r.image_url||'',datasheet:r.datasheet_url||'',specs:r.catalog_specs||{},category:r.category||'Productos',variants:[],certs:[]});
+        if(!map.has(key))map.set(key,{key:key,name:String(r.name||'Producto').replace(/\s+Talla\s+\d+$/i,''),brand:r.brand==='P.JACK'?'Panama Jack':(r.brand||''),model:r.model||r.manufacturer_code||'',color:r.product_color||'',description:r.description||'',image:r.image_url||'',datasheet:r.datasheet_url||'',specs:r.catalog_specs||{},category:r.category||'Productos',variants:[],certs:[]});
         var g=map.get(key);g.variants.push(r);
         (Array.isArray(r.certifications)?r.certifications:[]).forEach(function(c){var sig=[c.type,c.standard,c.certificate_number].join('|');if(!g.certs.some(function(x){return [x.type,x.standard,x.certificate_number].join('|')===sig}))g.certs.push(c)});
       });
@@ -230,6 +230,7 @@ linear-gradient(180deg,#0b0f12,#07090b)}
     if(!list.length){el('catalogGrid').innerHTML='<div class="loading">No encontramos un producto que coincida con la búsqueda.</div>';return}
     el('catalogGrid').innerHTML=list.map(function(g,idx){
       var vars=g.variants.slice().sort(function(a,b){return String(a.variant_code).localeCompare(String(b.variant_code),'es',{numeric:true})});
+      var title=g.brand==='MSC'?g.name:(g.model||g.name);
       var availableCount=vars.filter(function(v){return v.availability==='Disponible'}).length;
       var firstAvailability=(vars[0]&&vars[0].availability)||'Consultar disponibilidad';
       var certs=g.certs.slice(0,2).map(function(c){
@@ -244,12 +245,12 @@ linear-gradient(180deg,#0b0f12,#07090b)}
       var photo=g.image?'<img src="'+esc(g.image)+'" alt="'+esc(g.brand+' '+g.model)+'" loading="lazy">':'<div class="no-photo"><strong>MSC Safety</strong><span>Imagen en validación</span></div>';
       return '<article class="product"><figure data-model="'+esc(g.model)+'">'+photo+
         '</figure><div class="product-body"><div class="product-meta"><span>'+esc(g.category)+'</span><span>'+esc(g.brand)+'</span></div>'+
-        '<h3>'+esc(g.model||g.name)+'</h3>'+
+        '<h3>'+esc(title)+'</h3>'+
         '<div class="facts"><span class="fact">Color '+esc(g.color||'Consultar')+'</span><span class="fact">'+vars.length+' variantes</span>'+(availableCount?'<span class="fact">'+availableCount+' con stock</span>':'<span class="fact">Stock a confirmar</span>')+certs+'</div>'+
         '<p>'+esc(g.description||'Consulta características y disponibilidad para tu operación.')+'</p>'+
         (specs?'<div class="specs">'+specs+'</div>':'')+
         (docLinks?'<div class="docs">'+docLinks+'</div>':'<div class="docs"><span class="doc-pending">Documentación en validación</span></div>')+
-        '<div class="variant"><select id="v-'+idx+'">'+vars.map(function(v){return '<option value="'+esc(v.product_id)+'" data-sku="'+esc(v.sku)+'" data-name="'+esc(g.model||g.name)+'" data-size="'+esc(v.variant_code)+'" data-availability="'+esc(v.availability)+'">'+esc(variantLabel(v.variant_code))+' · '+esc(v.availability)+'</option>'}).join('')+'</select><input id="q-'+idx+'" type="number" min="1" step="1" value="1" aria-label="Cantidad"></div>'+
+        '<div class="variant"><select id="v-'+idx+'">'+vars.map(function(v){return '<option value="'+esc(v.product_id)+'" data-sku="'+esc(v.sku)+'" data-name="'+esc(title)+'" data-size="'+esc(v.variant_code)+'" data-availability="'+esc(v.availability)+'">'+esc(variantLabel(v.variant_code))+' · '+esc(v.availability)+'</option>'}).join('')+'</select><input id="q-'+idx+'" type="number" min="1" step="1" value="1" aria-label="Cantidad"></div>'+
         '<div id="a-'+idx+'" class="availability '+(firstAvailability==='Disponible'?'':'query')+'">'+esc(firstAvailability==='Disponible'?'Disponible para cotizar':'Consultar disponibilidad al cotizar')+'</div>'+
         '<div class="product-actions"><button class="primary add" data-i="'+idx+'" type="button">Agregar a cotización</button></div></div></article>';
     }).join('');
