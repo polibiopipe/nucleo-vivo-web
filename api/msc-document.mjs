@@ -42,7 +42,7 @@ const IMAGES = Object.freeze({
   PJ506BDKTC:'https://images.implementos.cl/img/1000/PROZAP0120-1.jpg',
   PJ507MDKTC:'https://www.apro.cl/cdn/shop/files/507_2-680x680_800x800_072a33ac-ad9a-46c6-a5e9-7477eb326065.jpg?v=1770303319',
   PJ508CDKTC:'https://www.amsec.cl/121-home_default/panama-jack-pj508cdktc.jpg',
-  PJ509BDKTC:'https://www.amsec.cl/519-home_default/panama-jack-pj509bdktc.jpg',
+  PJ509BDKTC:'https://www.apro.cl/cdn/shop/files/1-59.jpg?v=1751650479',
   PJ510GDKTC:'https://www.apro.cl/cdn/shop/files/Botin-de-seguridad-Panama-Jack-PJ510GDKTC.jpg?v=1774878746&width=1200',
   PJ511NDKTC:'https://www.amsec.cl/142-home_default/panama-jack-pj511ndktc.jpg',
   PJ512GDKTC:'https://britaniaseguridad.cl/1126-medium_default/botin-panama-jack-pj512gdktc.jpg',
