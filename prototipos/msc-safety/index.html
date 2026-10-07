@@ -72,6 +72,7 @@ linear-gradient(180deg,#0b0f12,#07090b)}
 @media(max-width:950px){.hero-grid{min-height:auto}.hero-proof{min-height:430px}.hero-proof img{right:-3%;width:104%}.catalog{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){.hero-grid{gap:5px}.hero-proof{min-height:360px}.hero-proof img{width:108%;right:-4%;bottom:0}.hero-model-word{font-size:64px}.hero-proof-copy{width:92%;left:4%;bottom:3%}.catalog{grid-template-columns:1fr}.product figure{height:300px}.product p{min-height:0}}
 
+.availability.query{color:#e1ae45}.no-photo{width:100%;height:100%;display:grid;place-content:center;gap:7px;text-align:center;background:radial-gradient(circle at 50% 35%,rgba(201,155,61,.10),transparent 38%),linear-gradient(145deg,#171c20,#0d1114);color:#d8d2c7}.no-photo strong{font-size:18px;letter-spacing:.08em}.no-photo span{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#8f979e}.doc-pending{display:inline-flex;padding:7px 9px;border:1px dashed #4a4f53;color:#aaa49b;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
 </style>
 </head>
 <body>
@@ -91,13 +92,13 @@ linear-gradient(180deg,#0b0f12,#07090b)}
 <section class="hero">
   <div class="shell hero-grid">
     <div class="hero-copy-main">
-      <div class="kicker">Calzado de seguridad para operaciones exigentes</div>
+      <div class="kicker">Equipamiento para operaciones exigentes</div>
       <h1>Protección que acompaña cada jornada.</h1>
-      <p>Modelos Sherpa’s disponibles para cotizar, con tallas seleccionables y documentación técnica para respaldar una decisión informada.</p>
+      <p>Productos de seguridad disponibles para cotizar, con variantes seleccionables y documentación técnica verificada cuando corresponde.</p>
       <div class="hero-actions"><a class="primary" href="#catalogo">Explorar modelos</a><a class="secondary" href="#cotizar">Solicitar cotización</a></div>
       <div class="stats">
         <div class="stat"><span>Modelos para cotizar</span><strong id="statModels">—</strong></div>
-        <div class="stat"><span>Tallas disponibles</span><strong id="statVariants">—</strong></div>
+        <div class="stat"><span>Variantes para cotizar</span><strong id="statVariants">—</strong></div>
         <div class="stat"><span>Modelos con documentación</span><strong id="statCategories">—</strong></div>
       </div>
     </div>
@@ -109,7 +110,7 @@ linear-gradient(180deg,#0b0f12,#07090b)}
   <div class="shell">
     <div class="section-head">
       <div><div class="kicker" style="color:#8f6d28">Selección MSC Safety</div><h2>Encuentra el modelo adecuado para tu operación.</h2></div>
-      <p>Compara características, color, tallas y documentación disponible. Selecciona la variante que necesitas y agrégala directamente a tu solicitud de cotización.</p>
+      <p>Compara características, variantes, disponibilidad y documentación técnica. Selecciona lo que necesitas y agrégalo directamente a tu solicitud de cotización.</p>
     </div>
     <div class="catalog-tools" id="catalogTools">
       <button class="chip active" data-filter="all" type="button">Todos</button>
@@ -125,7 +126,7 @@ linear-gradient(180deg,#0b0f12,#07090b)}
     <div class="quote-copy">
       <div class="kicker">Solicitud de cotización</div>
       <h2>Selecciona lo que realmente necesitas.</h2>
-      <p>Elige modelo, talla y cantidad. Si tu empresa cuenta con acceso cliente, ingresa con tu correo para enviar la solicitud y consultar su estado.</p>
+      <p>Elige producto, talla o variante y cantidad. Si tu empresa cuenta con acceso cliente, ingresa con tu correo para enviar la solicitud y consultar su estado.</p>
     </div>
     <div class="quote-box">
       <div class="client-state" id="clientState"><div><b>Cliente MSC Safety</b><span>Ingresa para enviar y guardar esta solicitud.</span></div><button class="secondary" id="quoteLogin" type="button">Ingresar</button></div>
@@ -144,7 +145,7 @@ linear-gradient(180deg,#0b0f12,#07090b)}
 </section>
 </main>
 
-<footer><div class="shell foot"><div>MSC Safety · Quality Service</div><div>Calzado de seguridad · Documentación técnica · Cotización directa</div></div></footer>
+<footer><div class="shell foot"><div>MSC Safety · Quality Service</div><div>Seguridad industrial · Documentación técnica · Cotización directa</div></div></footer>
 
 <div class="modal" id="clientModal" aria-hidden="true">
   <div class="modal-box">
@@ -185,7 +186,6 @@ linear-gradient(180deg,#0b0f12,#07090b)}
     try{
       var r=await publicFetch('/rest/v1/msc_public_catalog_variants?select=*');if(!r.ok)throw new Error('catalog');
       var rows=await r.json();
-      rows=rows.filter(function(x){return x.availability==='Disponible'});
       var map=new Map();
       rows.forEach(function(r){
         var key=r.group_key||r.model||r.sku;
@@ -193,7 +193,7 @@ linear-gradient(180deg,#0b0f12,#07090b)}
         var g=map.get(key);g.variants.push(r);
         (Array.isArray(r.certifications)?r.certifications:[]).forEach(function(c){var sig=[c.type,c.standard,c.certificate_number].join('|');if(!g.certs.some(function(x){return [x.type,x.standard,x.certificate_number].join('|')===sig}))g.certs.push(c)});
       });
-      groups=Array.from(map.values()).sort(function(a,b){return a.model.localeCompare(b.model,'es',{numeric:true})});
+      groups=Array.from(map.values()).sort(function(a,b){var aa=a.variants.some(function(v){return v.availability==='Disponible'})?0:1,bb=b.variants.some(function(v){return v.availability==='Disponible'})?0:1;return aa-bb||a.model.localeCompare(b.model,'es',{numeric:true})});
       renderStats();renderFilters();renderCatalog();renderHero();
     }catch(e){el('catalogGrid').innerHTML='<div class="loading">No fue posible cargar el inventario en este momento.</div>'}
   }
@@ -212,15 +212,26 @@ linear-gradient(180deg,#0b0f12,#07090b)}
     Array.from(new Set(groups.map(function(g){return g.category}))).sort().forEach(function(cat){var b=document.createElement('button');b.type='button';b.className='chip';b.dataset.filter=cat;b.textContent=cat;tools.insertBefore(b,el('catalogSearch'))});
     tools.querySelectorAll('.chip').forEach(function(b){b.onclick=function(){currentFilter=b.dataset.filter;tools.querySelectorAll('.chip').forEach(function(x){x.classList.toggle('active',x===b)});renderCatalog()}});
   }
+  function variantLabel(code){
+    var raw=String(code||'').trim(),m=raw.match(/^N?(\d{2})$/i);
+    if(m)return 'Talla '+m[1];
+    if(/^2X$/i.test(raw))return 'Talla 2X';
+    if(/^TXL$/i.test(raw))return 'Talla XL';
+    if(/^XL$/i.test(raw))return 'Talla XL';
+    if(/^UNI$/i.test(raw))return 'Unidad';
+    return raw?'Variante '+raw:'Variante';
+  }
   function renderCatalog(){
     var q=norm(el('catalogSearch').value);
     var list=groups.filter(function(g){
       var specText=Object.keys(g.specs||{}).map(function(k){return k+' '+g.specs[k]}).join(' ');
       return (currentFilter==='all'||g.category===currentFilter)&&(!q||norm([g.name,g.brand,g.model,g.color,g.category,specText].join(' ')).includes(q))
     });
-    if(!list.length){el('catalogGrid').innerHTML='<div class="loading">No encontramos un modelo que coincida con la búsqueda.</div>';return}
+    if(!list.length){el('catalogGrid').innerHTML='<div class="loading">No encontramos un producto que coincida con la búsqueda.</div>';return}
     el('catalogGrid').innerHTML=list.map(function(g,idx){
       var vars=g.variants.slice().sort(function(a,b){return String(a.variant_code).localeCompare(String(b.variant_code),'es',{numeric:true})});
+      var availableCount=vars.filter(function(v){return v.availability==='Disponible'}).length;
+      var firstAvailability=(vars[0]&&vars[0].availability)||'Consultar disponibilidad';
       var certs=g.certs.slice(0,2).map(function(c){
         var label=(c.type||'Certificación')+(c.issuer?' · '+c.issuer:'');
         return '<span class="fact cert">'+esc(label)+'</span>'
@@ -230,18 +241,22 @@ linear-gradient(180deg,#0b0f12,#07090b)}
       if(g.datasheet)docLinks+='<a class="doc-link" href="'+esc(g.datasheet)+'" target="_blank" rel="noopener">Ficha técnica ↗</a>';
       var certDoc=g.certs.find(function(c){return c.document_url});
       if(certDoc)docLinks+='<a class="doc-link" href="'+esc(certDoc.document_url)+'" target="_blank" rel="noopener">Certificación ↗</a>';
-      return '<article class="product"><figure data-model="'+esc(g.model)+'">'+
-        (g.image?'<img src="'+esc(g.image)+'" alt="'+esc(g.brand+' '+g.model)+'" loading="lazy">':'')+
+      var photo=g.image?'<img src="'+esc(g.image)+'" alt="'+esc(g.brand+' '+g.model)+'" loading="lazy">':'<div class="no-photo"><strong>MSC Safety</strong><span>Imagen en validación</span></div>';
+      return '<article class="product"><figure data-model="'+esc(g.model)+'">'+photo+
         '</figure><div class="product-body"><div class="product-meta"><span>'+esc(g.category)+'</span><span>'+esc(g.brand)+'</span></div>'+
-        '<h3>'+esc(g.model)+'</h3>'+
-        '<div class="facts"><span class="fact">Color '+esc(g.color||'Consultar')+'</span><span class="fact">'+vars.length+' tallas disponibles</span>'+certs+'</div>'+
+        '<h3>'+esc(g.model||g.name)+'</h3>'+
+        '<div class="facts"><span class="fact">Color '+esc(g.color||'Consultar')+'</span><span class="fact">'+vars.length+' variantes</span>'+(availableCount?'<span class="fact">'+availableCount+' con stock</span>':'<span class="fact">Stock a confirmar</span>')+certs+'</div>'+
         '<p>'+esc(g.description||'Consulta características y disponibilidad para tu operación.')+'</p>'+
         (specs?'<div class="specs">'+specs+'</div>':'')+
-        (docLinks?'<div class="docs">'+docLinks+'</div>':'')+
-        '<div class="variant"><select id="v-'+idx+'">'+vars.map(function(v){return '<option value="'+esc(v.product_id)+'" data-sku="'+esc(v.sku)+'" data-name="'+esc(g.model)+'" data-size="'+esc(v.variant_code)+'">Talla '+esc(v.variant_code)+'</option>'}).join('')+'</select><input id="q-'+idx+'" type="number" min="1" step="1" value="1" aria-label="Cantidad"></div>'+
-        '<div class="availability">Disponible para cotizar</div>'+
+        (docLinks?'<div class="docs">'+docLinks+'</div>':'<div class="docs"><span class="doc-pending">Documentación en validación</span></div>')+
+        '<div class="variant"><select id="v-'+idx+'">'+vars.map(function(v){return '<option value="'+esc(v.product_id)+'" data-sku="'+esc(v.sku)+'" data-name="'+esc(g.model||g.name)+'" data-size="'+esc(v.variant_code)+'" data-availability="'+esc(v.availability)+'">'+esc(variantLabel(v.variant_code))+' · '+esc(v.availability)+'</option>'}).join('')+'</select><input id="q-'+idx+'" type="number" min="1" step="1" value="1" aria-label="Cantidad"></div>'+
+        '<div id="a-'+idx+'" class="availability '+(firstAvailability==='Disponible'?'':'query')+'">'+esc(firstAvailability==='Disponible'?'Disponible para cotizar':'Consultar disponibilidad al cotizar')+'</div>'+
         '<div class="product-actions"><button class="primary add" data-i="'+idx+'" type="button">Agregar a cotización</button></div></div></article>';
     }).join('');
+    list.forEach(function(g,idx){
+      var sel=el('v-'+idx),status=el('a-'+idx);
+      if(sel&&status)sel.onchange=function(){var op=sel.options[sel.selectedIndex],ok=op.dataset.availability==='Disponible';status.classList.toggle('query',!ok);status.textContent=ok?'Disponible para cotizar':'Consultar disponibilidad al cotizar'};
+    });
     el('catalogGrid').querySelectorAll('.add').forEach(function(b){b.onclick=function(){var i=Number(b.dataset.i),sel=el('v-'+i),qty=Math.max(1,Number(el('q-'+i).value||1)),op=sel.options[sel.selectedIndex],pid=sel.value,existing=chosen.find(function(x){return x.product_id===pid});if(existing)existing.quantity+=qty;else chosen.push({product_id:pid,sku:op.dataset.sku,name:op.dataset.name,variant:op.dataset.size,quantity:qty});renderSelected();b.textContent='✓ Agregado';setTimeout(function(){b.textContent='Agregar a cotización'},800)}})
   }
   el('catalogSearch').oninput=renderCatalog;
