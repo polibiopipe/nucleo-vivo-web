@@ -1,6 +1,13 @@
 import { readFile, mkdir, rm, copyFile } from 'node:fs/promises';
 import path from 'node:path';
 const files = JSON.parse(await readFile(new URL('./public-files.json', import.meta.url), 'utf8'));
+const requiredPublicFiles = [
+  'prototipos/msc-safety/gestion/index.html',
+  'prototipos/msc-safety/ventas/index.html'
+];
+for (const file of requiredPublicFiles) {
+  if (!files.includes(file)) files.push(file);
+}
 const root = path.resolve('.');
 const output = path.join(root,'public');
 await rm(output,{recursive:true,force:true});
