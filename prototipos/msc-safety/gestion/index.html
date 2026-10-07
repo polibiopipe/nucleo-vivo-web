@@ -1363,7 +1363,7 @@ function purchaseReconciliation(po,data){
   var lines=po.msc_purchase_order_lines||[],ordered={},received={},invoiced={};
   lines.forEach(function(l){ordered[l.product_id]=(ordered[l.product_id]||0)+Number(l.quantity||0);received[l.product_id]=(received[l.product_id]||0)+Number(l.received_quantity||0)});
   (data&&data.lines||[]).forEach(function(x){if(x._product)invoiced[x._product.id]=(invoiced[x._product.id]||0)+Number(x.quantity||0)});
-  var ids=Object.keys(ordered),qtyOk=ids.length>0&&ids.every(function(id){return Math.abs(Number(ordered[id]||0)-Number(invoiced[id]||0))<.001}),allReceived=ids.length>0&&ids.every(function(id){return Number(received[id]||0)>=Number(ordered[id]||0)-.001),totalOk=data?Math.abs(Number(po.gross_total||0)-Number(data.total_amount||0))<=2:true;
+  var ids=Object.keys(ordered),qtyOk=ids.length>0&&ids.every(function(id){return Math.abs(Number(ordered[id]||0)-Number(invoiced[id]||0))<.001}),allReceived=ids.length>0&&ids.every(function(id){return Number(received[id]||0)>=Number(ordered[id]||0)-.001}),totalOk=data?Math.abs(Number(po.gross_total||0)-Number(data.total_amount||0))<=2:true;
   var status=qtyOk&&totalOk?'conciliado':'diferencia',notes=[];if(!qtyOk)notes.push('cantidades factura ≠ OC');if(!totalOk)notes.push('total factura ≠ OC');if(!allReceived)notes.push('recepción física pendiente');
   return {status:status,note:notes.join(' · ')||'OC, cantidades y total coinciden',allReceived:allReceived}
 }
