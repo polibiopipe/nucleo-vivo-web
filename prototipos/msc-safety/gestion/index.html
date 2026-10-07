@@ -853,7 +853,7 @@ function renderERP(){
   if(el('kEmployees'))el('kEmployees').textContent=employees.filter(function(x){return x.employment_status==='activo'}).length;if(el('kContracts'))el('kContracts').textContent=contracts.filter(function(x){return x.status==='vigente'}).length;if(el('kLeaves'))el('kLeaves').textContent=leaveRequests.filter(function(x){return x.status==='solicitado'}).length;if(el('kPayroll'))el('kPayroll').textContent=payrollPeriods.length;
   if(el('employeeRows'))el('employeeRows').innerHTML=employees.map(function(x){return '<tr><td class="sku">'+esc(x.rut||'—')+'</td><td><b>'+esc(x.first_name+' '+x.last_name)+'</b></td><td>'+esc(x.position_name||'—')+'</td><td>'+esc(x.department||'—')+'</td><td>'+esc(x.hire_date||'—')+'</td><td>'+esc(x.employment_status)+'</td></tr>'}).join('')
 }
-function money(v){return v==null||v===''?'—':'
+function money(v){return v==null||v===''?'—':'$'+Math.round(Number(v)).toLocaleString('es-CL')}
 function renderProducts(list){
   var canControl=currentEmail==='marsella.solis@nucleovivo.net';
   var canPrice=['admin','bodega'].indexOf(role)>=0;
