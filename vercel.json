@@ -23,6 +23,21 @@
     "api/msc-activate.mjs": {
       "maxDuration": 10,
       "includeFiles": "server/**"
+    },
+    "api/msc-customer-enrich.mjs": {
+      "maxDuration": 30,
+      "includeFiles": "server/**"
+    },
+    "api/msc-customer-tools.mjs": {
+      "maxDuration": 10,
+      "includeFiles": "server/**"
+    },
+    "api/msc-sales.mjs": {
+      "maxDuration": 10,
+      "includeFiles": "prototipos/msc-safety/ventas/**"
+    },
+    "api/msc-transport.mjs": {
+      "maxDuration": 10
     }
   },
   "redirects": [
@@ -45,6 +60,26 @@
     {
       "source": "/prototipos/msc-safety/gestion/",
       "destination": "/api/msc-gestion"
+    },
+    {
+      "source": "/prototipos/msc-safety/ventas",
+      "destination": "/api/msc-sales"
+    },
+    {
+      "source": "/prototipos/msc-safety/ventas/",
+      "destination": "/api/msc-sales"
+    },
+    {
+      "source": "/prototipos/msc-safety/ventas/index.html",
+      "destination": "/api/msc-sales"
+    },
+    {
+      "source": "/prototipos/msc-safety/transporte",
+      "destination": "/api/msc-transport"
+    },
+    {
+      "source": "/prototipos/msc-safety/transporte/",
+      "destination": "/api/msc-transport"
     }
   ]
 }
