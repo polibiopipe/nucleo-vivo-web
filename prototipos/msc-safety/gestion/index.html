@@ -244,7 +244,7 @@ table{max-width:100%}
       <button class="active" data-view="dashboard"><span class="nav-ico">⌂</span><span>Resumen</span></button>
       <button data-view="control"><span class="nav-ico">▥</span><span>Centro de control</span></button>
       <button data-view="productos"><span class="nav-ico">◇</span><span>Productos / SKU</span></button>
-      <button data-view="documentos"><span class="nav-ico">▤</span><span>Facturas</span></button>
+      <button data-view="documentos"><span class="nav-ico">▤</span><span>Documentos</span></button>
       <button data-view="movimientos"><span class="nav-ico">⇄</span><span>Movimientos</span></button>
       <button data-view="ubicaciones"><span class="nav-ico">⌂</span><span>Bodega</span></button>
       <button data-view="proveedores"><span class="nav-ico">◉</span><span>Proveedores</span></button>
@@ -438,11 +438,11 @@ table{max-width:100%}
             <div class="upload"><strong>Subir documento</strong><div class="muted">PDF de hasta 3 MB. Facturas y notas de crédito pasan a revisión tributaria; una OC de cliente se valida y puede convertirse directamente en nota de venta/pedido.</div><input id="invoiceFile" type="file" accept="application/pdf"><button id="analyzeInvoice" class="btn" type="button">Analizar y verificar</button><div id="invoiceMsg" class="msg"></div></div>
           </div>
           <div class="formbox"><h2>Flujo simple</h2><ol class="muted">
-            <li><b>Identificar:</b> la IA lee tipo de DTE, folio, emisor/receptor y montos.</li>
-            <li><b>Verificar duplicado:</b> el sistema busca el mismo tipo + folio + RUT emisor antes de continuar.</li>
-            <li><b>Revisar:</b> el controller compara el PDF con los datos, SKU, inventario y asiento propuesto.</li>
-            <li><b>Registrar:</b> solo después de la confirmación humana se actualiza ERP, stock y contabilidad.</li>
-          </ol><div class="notice"><b>Regla:</b> si el DTE ya existe, el proceso se detiene y no se permite volver a ingresarlo.</div></div>
+            <li><b>Identificar:</b> se distingue factura, nota de crédito u orden de compra de cliente.</li>
+            <li><b>Verificar:</b> se revisa duplicidad, cliente, productos, cantidades, precios y referencias.</li>
+            <li><b>Revisar:</b> una persona confirma la interpretación y las asociaciones con SKU.</li>
+            <li><b>Derivar:</b> los DTE siguen a contabilidad; la OC cliente se convierte en nota de venta y entra al tracking del pedido.</li>
+          </ol><div class="notice"><b>Regla:</b> ningún documento se aplica dos veces. Una OC cliente tampoco mueve inventario ni genera contabilidad por sí sola.</div></div>
         </div>
         <div id="invoiceReview" class="review hidden document-review-shell"></div>
         <div class="panel"><div class="panel-head"><div><h2>Documentos tributarios</h2><span class="muted">Los estados pendientes se pueden abrir para ver qué falta y quién debe resolverlo.</span></div></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Folio / referencia</th><th>Emisor</th><th>Inventario</th><th>Contabilidad</th><th>Estado</th></tr></thead><tbody id="documentRows"></tbody></table></div></div>
@@ -1708,7 +1708,7 @@ async function createSuggestedProduct(index){
   if(!confirm('Crear un SKU nuevo a partir de esta línea? Esta es una decisión manual del controller.'))return;
   el('invoiceMsg').textContent='Creando SKU confirmado por controller…';
   try{
-    var body={name:line.name||line.description,description:line.description,family_code:line.family_code||'EPP',subfamily_code:line.subfamily_code||'GEN',type_code:line.type_code||'PRO',variant_code:line.variant_code||'UNI',brand:line.brand||null,model:line.model||null,manufacturer_code:line.product_code||null,ean_gtin:line.ean_gtin||null,unit:'Unidad'};
+    var body={name:line.name||line.description,description:line.description,family_code:line.family_code||'EPP',subfamily_code:line.subfamily_code||'GEN',type_code:line.type_code||'PRO',variant_code:line.variant_code||'UNI',brand:line.brand||null,model:line.model||null,manufacturer_code:parsedInvoice&&parsedInvoice._documentType==='orden_compra_cliente'?null:(line.product_code||null),ean_gtin:line.ean_gtin||null,unit:'Unidad'};
     var rr=await authFetch('/rest/v1/msc_products?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)});
     line._product=rr[0];line._confirmedMatch=true;products.unshift(rr[0]);
     el('invoiceMsg').textContent='SKU creado por decisión humana: '+rr[0].sku+'. El documento sigue pendiente de aprobación.';
