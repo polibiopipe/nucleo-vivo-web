@@ -140,6 +140,16 @@ table{max-width:100%}
 @media(max-width:1250px){.provider-formgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.provider-formgrid{grid-template-columns:1fr}.provider-formgrid .provider-action{justify-content:stretch}.provider-formgrid .provider-action .btn{width:100%}#view-proveedores .module-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
+
+/* ===== Documentos tributarios · revisión IA + Controller ===== */
+.controller-stage{display:flex;justify-content:space-between;gap:8px;margin:4px 0 14px}.stage-chip{display:inline-block;margin:0 6px 6px 0;padding:6px 9px;border-radius:999px;border:1px solid #363d44;color:#8f979e;font-size:9px;text-transform:uppercase;letter-spacing:.08em}.stage-chip.done{color:#8fd8a8;border-color:#31533d;background:rgba(60,146,92,.09)}.stage-chip.active{color:#f0ca70;border-color:#6a5528;background:rgba(201,155,61,.09)}
+.document-review-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(330px,.92fr);gap:12px;margin-bottom:14px}.document-review-data,.document-pdf-panel{border:1px solid rgba(255,255,255,.09);background:#0c1116;border-radius:8px;padding:14px}.document-pdf-panel{padding:0;overflow:hidden;min-height:520px}.document-pdf-head{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid rgba(255,255,255,.08);font-size:11px}.document-pdf-head span{color:#7f878e}.document-pdf-panel iframe{width:100%;height:520px;border:0;background:#fff}
+.controller-formgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.controller-formgrid .full{grid-column:1/-1}.controller-formgrid .field{margin:0}.controller-formgrid small{display:block;margin-top:5px}
+.controller-subtitle{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:16px 0 7px;padding-bottom:7px;border-bottom:1px solid rgba(255,255,255,.08)}.controller-subtitle b{font-size:13px}.controller-subtitle span{font-size:10px;color:#7e878e}
+.accounting-review-table{border:1px solid rgba(255,255,255,.08);border-radius:7px;overflow:hidden}.accounting-review-head,.accounting-review-row{display:grid;grid-template-columns:minmax(0,1fr) 130px 130px;gap:8px;padding:9px 11px;border-bottom:1px solid rgba(255,255,255,.07);font-size:11px}.accounting-review-head{background:#0d1217;color:#8f979e;text-transform:uppercase;font-size:9px}.accounting-review-row span:nth-child(2),.accounting-review-row span:nth-child(3){text-align:right}.accounting-review-row:last-child{border-bottom:0}.accounting-total{background:rgba(201,155,61,.06);font-weight:800}
+.controller-approval{margin-top:16px;padding:14px;border:1px solid rgba(226,191,109,.34);border-radius:8px;background:linear-gradient(90deg,rgba(201,155,61,.09),rgba(201,155,61,.025));display:grid;gap:11px}.controller-approval label{display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.5}.controller-approval input{margin-top:3px}.controller-approval .btn{justify-self:start}.controller-approval.blocked{border-color:rgba(229,135,127,.28);background:rgba(229,135,127,.04)}
+@media(max-width:1180px){.document-review-grid{grid-template-columns:1fr}.document-pdf-panel{min-height:420px}.document-pdf-panel iframe{height:420px}}
+@media(max-width:700px){.controller-formgrid{grid-template-columns:1fr}.accounting-review-head,.accounting-review-row{grid-template-columns:minmax(0,1fr) 90px 90px}.document-pdf-panel iframe{height:360px}}
 </style>
 </head>
 <body>
@@ -376,14 +386,26 @@ table{max-width:100%}
       <section class="view" id="view-documentos">
         <div class="grid2">
           <div class="formbox">
-            <h2>Procesar factura PDF</h2>
-            <div class="field"><label>Tipo</label><select id="docType"><option value="compra">Factura de compra · aumenta stock</option><option value="venta">Factura de venta · disminuye stock</option></select></div>
-            <div class="upload"><strong>Subir factura</strong><div class="muted">PDF de hasta 3 MB. En compras, el sistema relaciona SKU existentes y crea automáticamente los faltantes. El stock cambia solo después de aprobar.</div><input id="invoiceFile" type="file" accept="application/pdf"><button id="analyzeInvoice" class="btn" type="button">Analizar factura</button><div id="invoiceMsg" class="msg"></div></div>
+            <div class="panel-intro"><div><h2>Procesar documento tributario PDF</h2><p>La IA interpreta; el controller revisa; recién entonces el ERP registra inventario y contabilidad.</p></div><span class="module-tag">IA → Controller → ERP</span></div>
+            <div class="field"><label>Tipo esperado</label><select id="docType">
+              <option value="compra">Factura de compra</option>
+              <option value="venta">Factura de venta</option>
+              <option value="nota_credito_compra">Nota de crédito de compra</option>
+              <option value="nota_credito_venta">Nota de crédito de venta</option>
+            </select></div>
+            <div class="upload"><strong>Subir DTE</strong><div class="muted">PDF de hasta 3 MB. El análisis no mueve stock, no contabiliza y no crea SKU automáticamente. Todo queda sujeto a revisión humana.</div><input id="invoiceFile" type="file" accept="application/pdf"><button id="analyzeInvoice" class="btn" type="button">Analizar con IA</button><div id="invoiceMsg" class="msg"></div></div>
             <div id="invoiceReview" class="review hidden"></div>
           </div>
-          <div class="formbox"><h2>Reglas del flujo</h2><ol class="muted"><li>El PDF se interpreta y extrae folio, proveedor, productos y cantidades.</li><li>Se busca cada artículo por EAN/GTIN, equivalencia del proveedor, código y descripción normalizada.</li><li>En compras, si no existe un producto, el sistema crea automáticamente su SKU interno.</li><li>La equivalencia proveedor → SKU queda guardada para reconocerlo mejor en futuras facturas.</li><li>Solo al aprobar se registra el documento y se mueve el stock.</li><li>Una misma factura no debe procesarse dos veces.</li></ol></div>
+          <div class="formbox"><h2>Reglas del flujo</h2><ol class="muted">
+            <li>La IA identifica tipo de DTE, folio, emisor/receptor, montos, referencias y líneas.</li>
+            <li>El sistema busca equivalencias por EAN/GTIN, código, proveedor, modelo, variante y descripción.</li>
+            <li>La IA propone efecto de inventario y asiento, pero no registra nada por sí sola.</li>
+            <li>El controller revisa el PDF original, confirma/corrige datos, SKU, referencia, efecto físico y cuenta base.</li>
+            <li>Solo con confirmación humana se ejecuta una transacción única: documento, stock, cuentas por cobrar/pagar y asiento contable.</li>
+            <li>Debe = Haber se valida antes de cerrar el asiento. Un DTE ya registrado no puede contabilizarse dos veces.</li>
+          </ol><div class="notice"><b>Control obligatorio:</b> los perfiles de venta pueden analizar, pero solo admin, bodega o supervisor pueden aprobar y contabilizar.</div></div>
         </div>
-        <div class="panel"><div class="panel-head"><h2>Documentos</h2></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Folio</th><th>Emisor</th><th>Estado</th></tr></thead><tbody id="documentRows"></tbody></table></div></div>
+        <div class="panel"><div class="panel-head"><h2>Documentos tributarios</h2></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Folio / referencia</th><th>Emisor</th><th>Inventario</th><th>Contabilidad</th><th>Estado</th></tr></thead><tbody id="documentRows"></tbody></table></div></div>
       </section>
 
       <section class="view" id="view-movimientos"><div class="panel"><div class="panel-head"><h2>Kardex de movimientos</h2></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>SKU</th><th>Producto</th><th>Tipo</th><th>Cantidad</th><th>Documento</th></tr></thead><tbody id="movementRows"></tbody></table></div></div></section>
@@ -891,7 +913,7 @@ function render(){
   }).join('');
   renderProducts(products);renderControl();renderOrderControl();renderManagement();renderERP();
   el('locationRows').innerHTML=locations.map(function(x){var wh=warehouses.find(function(w){return w.id===x.warehouse_id});return '<tr><td class="sku">'+esc(x.code)+'</td><td>'+esc(x.label)+'</td><td>'+esc(wh?wh.name:(x.warehouse||''))+'</td><td><span class="pill '+(x.active?'ok':'bad')+'">'+(x.active?'Activa':'Inactiva')+'</span></td></tr>'}).join('');
-  el('documentRows').innerHTML=documents.map(function(d){return '<tr><td>'+esc(d.document_date||'')+'</td><td>'+esc(d.document_type)+'</td><td>'+esc(d.folio)+'</td><td>'+esc(d.issuer_name)+'</td><td><span class="pill '+(d.status==='procesado'?'ok':'warn')+'">'+esc(d.status)+'</span></td></tr>'}).join('');
+  el('documentRows').innerHTML=documents.map(function(d){var ref=d.reference_folio?'<div class="muted">Ref. '+esc(d.reference_folio)+'</div>':'';var inv=d.stock_managed_elsewhere?'Gestionado por pedido':(d.inventory_effect||'sin movimiento');return '<tr><td>'+esc(d.document_date||'')+'</td><td>'+esc(documentTypeLabel(d.document_type))+'</td><td><b>'+esc(d.folio||'—')+'</b>'+ref+'</td><td>'+esc(d.issuer_name||'')+'</td><td>'+esc(inv)+'</td><td><span class="pill '+(d.accounting_status==='contabilizado'?'ok':'warn')+'">'+esc(d.accounting_status||'pendiente')+'</span></td><td><span class="pill '+(d.status==='procesado'?'ok':'warn')+'">'+esc(d.status)+'</span></td></tr>'}).join('');
   el('movementRows').innerHTML=movements.map(function(m){var p=m.msc_products||{},d=m.msc_documents||{};return '<tr><td>'+new Date(m.created_at).toLocaleString('es-CL')+'</td><td class="sku">'+esc(p.sku)+'</td><td>'+esc(p.name)+'</td><td>'+esc(m.movement_type)+'</td><td><b>'+Number(m.quantity).toLocaleString('es-CL')+'</b></td><td>'+esc(d.folio||'')+'</td></tr>'}).join('')
 }
 function renderERP(){
@@ -1053,17 +1075,94 @@ el('commitmentForm').addEventListener('submit',async function(e){e.preventDefaul
 el('inboundForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});body.quantity=Number(body.quantity);if(!body.expected_date)delete body.expected_date;try{await authFetch('/rest/v1/msc_inbound_stock',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
 el('countForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});var st=inventoryState();body.system_quantity=Number(st.physical[body.product_id]||0);body.counted_quantity=Number(body.counted_quantity);try{await authFetch('/rest/v1/msc_inventory_counts',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
 var parsedInvoice=null;
+var invoicePreviewUrl='';
 var MSC_RUT='77196396K';
 function rutKey(v){return String(v||'').replace(/[^0-9kK]/g,'').toUpperCase()}
+function documentTypeLabel(t){
+  return ({compra:'Factura de compra',venta:'Factura de venta',nota_credito_compra:'Nota de crédito de compra',nota_credito_venta:'Nota de crédito de venta',ajuste:'Ajuste'})[t]||t||'Documento'
+}
+function isCreditNote(t){return t==='nota_credito_compra'||t==='nota_credito_venta'}
 function inferInvoiceType(data){
-  var issuer=rutKey(data&&data.issuer_rut),receiver=rutKey(data&&data.receiver_rut);
-  if(issuer===MSC_RUT)return 'venta';
-  if(receiver===MSC_RUT)return 'compra';
-  return data&&data.detected_document_type?data.detected_document_type:null;
+  if(data&&['compra','venta','nota_credito_compra','nota_credito_venta'].indexOf(data.detected_document_type)>=0)return data.detected_document_type;
+  var issuer=rutKey(data&&data.issuer_rut),receiver=rutKey(data&&data.receiver_rut),base=null;
+  if(issuer===MSC_RUT)base='venta';else if(receiver===MSC_RUT)base='compra';
+  if(!base)return null;
+  return data&&data.document_kind==='nota_credito'?'nota_credito_'+base:base
+}
+function safeNum(v){var n=Number(v);return Number.isFinite(n)?n:0}
+function inputMoney(v){return v==null||v===''?'0':String(Math.round(Number(v)*100)/100)}
+function accountingRowsFor(type,net,exempt,tax,total,purchaseCode){
+  var base=Math.max(0,safeNum(net)+safeNum(exempt)),iva=Math.max(0,safeNum(tax)),gross=Math.max(0,safeNum(total)||base+iva);
+  purchaseCode=purchaseCode||'110301';
+  if(type==='compra')return [
+    {code:purchaseCode,name:purchaseCode==='110301'?'Inventario / mercaderías':(purchaseCode==='610301'?'Transporte y Despacho':'Gastos de Administración'),debit:base,credit:0},
+    ...(iva>0?[{code:'110401',name:'IVA Crédito Fiscal',debit:iva,credit:0}]:[]),
+    {code:'210101',name:'Proveedores',debit:0,credit:gross}
+  ];
+  if(type==='venta')return [
+    {code:'110201',name:'Clientes',debit:gross,credit:0},
+    {code:'410101',name:'Ventas',debit:0,credit:base},
+    ...(iva>0?[{code:'210201',name:'IVA Débito Fiscal',debit:0,credit:iva}]:[])
+  ];
+  if(type==='nota_credito_compra')return [
+    {code:'210101',name:'Proveedores',debit:gross,credit:0},
+    {code:purchaseCode,name:'Reverso compra / inventario',debit:0,credit:base},
+    ...(iva>0?[{code:'110401',name:'Reverso IVA Crédito Fiscal',debit:0,credit:iva}]:[])
+  ];
+  if(type==='nota_credito_venta')return [
+    {code:'410101',name:'Reverso ventas',debit:base,credit:0},
+    ...(iva>0?[{code:'210201',name:'Reverso IVA Débito Fiscal',debit:iva,credit:0}]:[]),
+    {code:'110201',name:'Clientes',debit:0,credit:gross}
+  ];
+  return []
+}
+function reviewValues(){
+  return {
+    type:el('reviewDocType')?el('reviewDocType').value:(parsedInvoice&&parsedInvoice._documentType)||el('docType').value,
+    folio:el('reviewFolio')?el('reviewFolio').value.trim():'',
+    date:el('reviewDate')?el('reviewDate').value:'',
+    issuer_name:el('reviewIssuerName')?el('reviewIssuerName').value.trim():'',
+    issuer_rut:el('reviewIssuerRut')?el('reviewIssuerRut').value.trim():'',
+    receiver_name:el('reviewReceiverName')?el('reviewReceiverName').value.trim():'',
+    receiver_rut:el('reviewReceiverRut')?el('reviewReceiverRut').value.trim():'',
+    net:safeNum(el('reviewNet')&&el('reviewNet').value),
+    exempt:safeNum(el('reviewExempt')&&el('reviewExempt').value),
+    tax:safeNum(el('reviewTax')&&el('reviewTax').value),
+    total:safeNum(el('reviewTotal')&&el('reviewTotal').value),
+    reference_folio:el('reviewReference')?el('reviewReference').value.trim():'',
+    reason:el('reviewCreditReason')?el('reviewCreditReason').value:'',
+    affects_inventory:el('reviewAffectsInventory')?el('reviewAffectsInventory').value==='true':true,
+    purchase_account_code:el('reviewPurchaseAccount')?el('reviewPurchaseAccount').value:'110301',
+    notes:el('reviewControllerNotes')?el('reviewControllerNotes').value.trim():''
+  }
+}
+function refreshControllerProposal(){
+  if(!el('controllerAccountingPreview'))return;
+  var v=reviewValues(),isNC=isCreditNote(v.type),isPurchase=v.type==='compra'||v.type==='nota_credito_compra';
+  if(el('creditNoteFields'))el('creditNoteFields').classList.toggle('hidden',!isNC);
+  if(el('purchaseAccountField'))el('purchaseAccountField').classList.toggle('hidden',!isPurchase);
+  var rows=accountingRowsFor(v.type,v.net,v.exempt,v.tax,v.total,v.purchase_account_code);
+  var debit=rows.reduce(function(s,x){return s+safeNum(x.debit)},0),credit=rows.reduce(function(s,x){return s+safeNum(x.credit)},0);
+  var extra=(v.type==='venta'||v.type==='nota_credito_venta')?'<div class="muted" style="margin-top:7px">Costo de ventas e inventario contable se calculan con el costo vigente de los SKU al aprobar.</div>':'';
+  el('controllerAccountingPreview').innerHTML='<div class="accounting-review-table"><div class="accounting-review-head"><span>Cuenta</span><span>Debe</span><span>Haber</span></div>'+rows.map(function(x){return '<div class="accounting-review-row"><span><b>'+esc(x.code)+'</b> · '+esc(x.name)+'</span><span>'+money(x.debit||0)+'</span><span>'+money(x.credit||0)+'</span></div>'}).join('')+'<div class="accounting-review-row accounting-total"><span>Control</span><span>'+money(debit)+'</span><span>'+money(credit)+'</span></div></div>'+extra;
+  if(el('reviewStockEffect')){
+    var label=!v.affects_inventory?'Sin movimiento físico':(v.type==='compra'?'Entrada de stock':v.type==='venta'?'Salida de stock (el ERP evita duplicarla si el pedido ya la gestiona)':v.type==='nota_credito_compra'?'Salida de stock por devolución al proveedor':'Entrada de stock por devolución del cliente');
+    el('reviewStockEffect').textContent=label;
+  }
+  updateApproveState()
+}
+function updateApproveState(){
+  var b=el('approveInvoice');if(!b)return;
+  var v=reviewValues(),canController=['admin','bodega','supervisor'].indexOf(role)>=0,confirmed=el('controllerConfirm')&&el('controllerConfirm').checked;
+  var unresolved=parsedInvoice&&(parsedInvoice.lines||[]).some(function(x){return !x._product});
+  var referenceMissing=isCreditNote(v.type)&&!v.reference_folio;
+  b.disabled=!canController||!confirmed||referenceMissing||(v.affects_inventory&&unresolved);
 }
 el('analyzeInvoice').onclick=async function(){
   var file=el('invoiceFile').files[0];if(!file){el('invoiceMsg').textContent='Selecciona un PDF.';return}if(file.size>3*1024*1024){el('invoiceMsg').textContent='El PDF supera 3 MB.';return}
-  el('invoiceMsg').textContent='Analizando factura…';
+  el('invoiceMsg').textContent='Analizando documento con IA…';
+  if(invoicePreviewUrl)URL.revokeObjectURL(invoicePreviewUrl);
+  invoicePreviewUrl=URL.createObjectURL(file);
   var base64=await new Promise(function(resolve,reject){var r=new FileReader();r.onload=function(){resolve(String(r.result).split(',')[1])};r.onerror=reject;r.readAsDataURL(file)});
   try{
     var rr=await fetch('/api/msc-invoice',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({pdfBase64:base64,documentType:el('docType').value,catalog:products.filter(function(p){return p.active!==false}).slice(0,180).map(function(p){return {sku:p.sku,name:p.name,brand:p.brand||null,model:p.model||null,manufacturer_code:p.manufacturer_code||null,variant_code:p.variant_code||null,product_color:p.product_color||null}})})});
@@ -1072,11 +1171,7 @@ el('analyzeInvoice').onclick=async function(){
     data._documentType=detectedType;
     el('docType').value=detectedType;
     parsedInvoice=data;
-    if(detectedType==='compra'){
-      await autoResolvePurchaseLines(data);
-    }else{
-      renderInvoice(data);
-    }
+    prepareInvoiceLines(data);
   }catch(err){el('invoiceMsg').textContent=err.message}
 };
 function norm(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
@@ -1086,175 +1181,198 @@ function invoiceCandidates(line){
   if(line.existing_sku&&line.match_confidence==='high')aiSkus.unshift(line.existing_sku);
   var ai=aiSkus.map(function(s){return active.find(function(p){return p.sku===s})}).filter(Boolean);
   if(ai.length)return ai.filter(function(p,i,a){return a.findIndex(function(x){return x.id===p.id})===i}).slice(0,3);
-
   var raw=[line.model,line.product_code,line.name,line.description].filter(Boolean).join(' ').toUpperCase();
-  var m=raw.match(/\b([A-Z]{2,6}\d{2,}[A-Z0-9]*)\b/);
-  var model=m?m[1]:null;
+  var m=raw.match(/\b([A-Z]{2,6}\d{2,}[A-Z0-9]*)\b/),model=m?m[1]:null;
   var size=String(line.variant_code||'').toUpperCase().replace(/^(?:N|NRO|TALLA)/,'').replace(/[^A-Z0-9]/g,'');
   if(!size){var sm=raw.match(/(?:N[°º]?|TALLA|SIZE)\s*([0-9]{2}|[XSML]{1,3}|2X|3X)/i);size=sm?String(sm[1]).toUpperCase():''}
   if(!model||!size)return [];
   return active.filter(function(p){
-    var pm=String(p.manufacturer_code||p.model||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
-    var pv=String(p.variant_code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+    var pm=String(p.manufacturer_code||p.model||'').toUpperCase().replace(/[^A-Z0-9]/g,''),pv=String(p.variant_code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
     if(!pm||pv!==size)return false;
-    return pm.indexOf(model)===0||model.indexOf(pm)===0;
-  }).slice(0,4);
+    return pm.indexOf(model)===0||model.indexOf(pm)===0
+  }).slice(0,4)
 }
 function findProduct(line,issuerName){
   var activeProducts=products.filter(function(p){return p.active!==false});
   var code=norm(line.product_code),ean=String(line.ean_gtin||'').replace(/\D/g,''),desc=norm(line.description),name=norm(line.name),supplier=norm(issuerName);
-  if(line.existing_sku&&line.match_confidence==='high'){
-    var aiExact=activeProducts.find(function(p){return p.sku===line.existing_sku});
-    if(aiExact)return aiExact;
-  }
-  if(ean){
-    var byEan=activeProducts.find(function(p){return String(p.ean_gtin||'').replace(/\D/g,'')===ean});
-    if(byEan)return byEan;
-  }
-  if(code&&supplier){
-    var alias=aliases.find(function(a){return norm(a.supplier_name)===supplier&&norm(a.supplier_product_code)===code});
-    if(alias){
-      var byAlias=activeProducts.find(function(p){return p.id===alias.product_id});
-      if(byAlias)return byAlias;
-    }
-  }
-  if(code){
-    var byCode=activeProducts.find(function(p){return norm(p.manufacturer_code)===code});
-    if(byCode)return byCode;
-  }
-  var exact=activeProducts.find(function(p){var pn=norm(p.name);return pn&&(pn===name||pn===desc)});
-  if(exact)return exact;
-  var contains=activeProducts.find(function(p){var pn=norm(p.name);return pn&&desc&&pn.length>=8&&(desc.indexOf(pn)>=0||pn.indexOf(desc)>=0)});
-  if(contains)return contains;
+  if(line.existing_sku&&line.match_confidence==='high'){var aiExact=activeProducts.find(function(p){return p.sku===line.existing_sku});if(aiExact)return aiExact}
+  if(ean){var byEan=activeProducts.find(function(p){return String(p.ean_gtin||'').replace(/\D/g,'')===ean});if(byEan)return byEan}
+  if(code&&supplier){var alias=aliases.find(function(a){return norm(a.supplier_name)===supplier&&norm(a.supplier_product_code)===code});if(alias){var byAlias=activeProducts.find(function(p){return p.id===alias.product_id});if(byAlias)return byAlias}}
+  if(code){var byCode=activeProducts.find(function(p){return norm(p.manufacturer_code)===code});if(byCode)return byCode}
+  var exact=activeProducts.find(function(p){var pn=norm(p.name);return pn&&(pn===name||pn===desc)});if(exact)return exact;
+  var contains=activeProducts.find(function(p){var pn=norm(p.name);return pn&&desc&&pn.length>=8&&(desc.indexOf(pn)>=0||pn.indexOf(desc)>=0)});if(contains)return contains;
   var candidates=invoiceCandidates(line);
-  if(candidates.length===1&&line.match_confidence!=='medium'&&line.match_confidence!=='low'){
-    line._matchReason='Modelo/talla compatibles con una única referencia existente';
-    return candidates[0];
-  }
+  if(candidates.length===1&&line.match_confidence!=='medium'&&line.match_confidence!=='low'){line._matchReason='Modelo/talla compatibles con una única referencia existente';return candidates[0]}
   if(candidates.length)line._candidates=candidates;
-  return null;
+  return null
+}
+function prepareInvoiceLines(data){
+  var matched=0,review=0;
+  (data.lines||[]).forEach(function(line){
+    var p=findProduct(line,data.issuer_name);
+    if(p){line._product=p;line._autoCreated=false;matched++}
+    else{line._product=null;review++}
+  });
+  renderInvoice(data);
+  el('invoiceMsg').textContent='Filtro IA completado: '+matched+' línea'+(matched===1?'':'s')+' con coincidencia alta · '+review+' requiere'+(review===1?'':'n')+' revisión. Nada ha sido registrado todavía.'
 }
 async function rememberAlias(issuerName,line,product){
-  var code=String(line.product_code||'').trim();
-  if(!issuerName||!code||!product)return;
-  var exists=aliases.some(function(a){return norm(a.supplier_name)===norm(issuerName)&&norm(a.supplier_product_code)===norm(code)});
-  if(exists)return;
-  try{
-    var body={supplier_name:issuerName,supplier_product_code:code,raw_description:line.description||null,product_id:product.id};
-    var r=await authFetch('/rest/v1/msc_supplier_aliases?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)});
-    if(r&&r[0])aliases.unshift(r[0]);
-  }catch(_){}
-}
-async function autoResolvePurchaseLines(data){
-  var created=0,matched=0,failed=0;
-  el('invoiceMsg').textContent='Analizando productos y verificando SKU existentes…';
-  for(var i=0;i<(data.lines||[]).length;i++){
-    var line=data.lines[i],p=findProduct(line,data.issuer_name);
-    if(p){
-      line._product=p;line._autoCreated=false;matched++;
-      await rememberAlias(data.issuer_name,line,p);
-      continue;
-    }
-    if(line._candidates&&line._candidates.length){
-      line._product=null;line._autoError='Coincidencia posible; requiere confirmación';failed++;
-      continue;
-    }
-    try{
-      var body={
-        name:line.name||line.description,
-        description:line.description,
-        family_code:String(line.family_code||'EPP').toUpperCase(),
-        subfamily_code:String(line.subfamily_code||'GEN').toUpperCase(),
-        type_code:String(line.type_code||'PRO').toUpperCase(),
-        variant_code:String(line.variant_code||'UNI').toUpperCase(),
-        brand:line.brand||null,
-        model:line.model||null,
-        manufacturer_code:line.product_code||null,
-        ean_gtin:line.ean_gtin||null,
-        unit:'Unidad',
-        supplier:data.issuer_name||null
-      };
-      var r=await authFetch('/rest/v1/msc_products?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)});
-      p=r&&r[0];
-      if(!p)throw new Error('No se pudo crear el SKU');
-      line._product=p;line._autoCreated=true;products.unshift(p);created++;
-      await rememberAlias(data.issuer_name,line,p);
-    }catch(err){
-      line._product=null;line._autoError=err.message;failed++;
-    }
-  }
-  renderInvoice(data);
-  var parts=[];
-  if(matched)parts.push(matched+' producto'+(matched===1?'':'s')+' reconocido'+(matched===1?'':'s'));
-  if(created)parts.push(created+' SKU nuevo'+(created===1?' creado':'s creados')+' automáticamente');
-  if(failed)parts.push(failed+' línea'+(failed===1?'':'s')+' requiere'+(failed===1?'':'n')+' revisión');
-  el('invoiceMsg').textContent=(parts.join(' · ')||'Factura analizada')+'. Revisa antes de aprobar el movimiento de stock.';
+  var code=String(line.product_code||'').trim();if(!issuerName||!code||!product)return;
+  var exists=aliases.some(function(a){return norm(a.supplier_name)===norm(issuerName)&&norm(a.supplier_product_code)===norm(code)});if(exists)return;
+  try{var body={supplier_name:issuerName,supplier_product_code:code,raw_description:line.description||null,product_id:product.id};var rr=await authFetch('/rest/v1/msc_supplier_aliases?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)});if(rr&&rr[0])aliases.unshift(rr[0])}catch(_){}
 }
 function chooseInvoiceProduct(index,productId){
   var line=parsedInvoice&&parsedInvoice.lines&&parsedInvoice.lines[index],p=products.find(function(x){return x.id===productId&&x.active!==false});
   if(!line||!p)return;
   line._product=p;line._autoCreated=false;line._confirmedMatch=true;line._candidates=[];
-  el('invoiceMsg').textContent='Coincidencia confirmada: '+p.sku+'. Revisa las demás líneas antes de aprobar.';
-  renderInvoice(parsedInvoice);
+  el('invoiceMsg').textContent='Coincidencia confirmada por controller: '+p.sku+'.';
+  renderInvoice(parsedInvoice)
+}
+async function createSuggestedProduct(index){
+  var line=parsedInvoice&&parsedInvoice.lines&&parsedInvoice.lines[index];if(!line)return;
+  if(['admin','bodega','supervisor'].indexOf(role)<0){el('invoiceMsg').textContent='Tu perfil puede analizar, pero no crear SKU durante la revisión.';return}
+  if(!confirm('Crear un SKU nuevo a partir de esta línea? Esta es una decisión manual del controller.'))return;
+  el('invoiceMsg').textContent='Creando SKU confirmado por controller…';
+  try{
+    var body={name:line.name||line.description,description:line.description,family_code:line.family_code||'EPP',subfamily_code:line.subfamily_code||'GEN',type_code:line.type_code||'PRO',variant_code:line.variant_code||'UNI',brand:line.brand||null,model:line.model||null,manufacturer_code:line.product_code||null,ean_gtin:line.ean_gtin||null,unit:'Unidad'};
+    var rr=await authFetch('/rest/v1/msc_products?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)});
+    line._product=rr[0];line._confirmedMatch=true;products.unshift(rr[0]);
+    el('invoiceMsg').textContent='SKU creado por decisión del controller: '+rr[0].sku+'. El DTE sigue pendiente de aprobación.';
+    renderInvoice(parsedInvoice)
+  }catch(err){el('invoiceMsg').textContent=err.message}
 }
 function renderInvoice(data){
-  el('invoiceMsg').textContent='Documento analizado. Revisa antes de aprobar.';
   var box=el('invoiceReview');box.classList.remove('hidden');
   var detectedType=data._documentType||inferInvoiceType(data)||el('docType').value;
-  var directionLabel=detectedType==='venta'?'VENTA · disminuye stock':'COMPRA · aumenta stock';
-  var html='<h3>'+esc(data.issuer_name||'Documento')+' · Folio '+esc(data.folio||'—')+'</h3><p class="muted">'+esc(data.document_date||'')+'</p><div class="notice"><b>'+directionLabel+'</b><br>Clasificación automática según RUT de emisor y receptor. Si una descripción puede corresponder a más de un SKU, el sistema pedirá confirmación antes de mover stock.</div>';
+  var affects=typeof data.affects_inventory_proposal==='boolean'?data.affects_inventory_proposal:!isCreditNote(detectedType);
+  var canController=['admin','bodega','supervisor'].indexOf(role)>=0;
+  var html='<div class="controller-stage"><div><span class="stage-chip done">1 · IA analizó</span><span class="stage-chip '+(canController?'active':'')+'">2 · Revisión controller</span><span class="stage-chip">3 · Registrar ERP</span></div></div>';
+  html+='<div class="document-review-grid"><div class="document-review-data">';
+  html+='<h3>'+esc(data.issuer_name||'Documento')+' · Folio '+esc(data.folio||'—')+'</h3>';
+  html+='<div class="notice"><b>Propuesta IA · confianza '+esc(data.ai_confidence||'media')+'</b><br>'+esc(data.accounting_reason||'Revisa todos los datos contra el PDF original. La IA no contabiliza por sí sola.')+'</div>';
+  html+='<div class="controller-formgrid">';
+  html+='<div class="field"><label>Tipo definitivo</label><select id="reviewDocType"><option value="compra" '+(detectedType==='compra'?'selected':'')+'>Factura de compra</option><option value="venta" '+(detectedType==='venta'?'selected':'')+'>Factura de venta</option><option value="nota_credito_compra" '+(detectedType==='nota_credito_compra'?'selected':'')+'>Nota de crédito de compra</option><option value="nota_credito_venta" '+(detectedType==='nota_credito_venta'?'selected':'')+'>Nota de crédito de venta</option></select></div>';
+  html+='<div class="field"><label>Folio</label><input id="reviewFolio" value="'+esc(data.folio||'')+'"></div>';
+  html+='<div class="field"><label>Fecha</label><input id="reviewDate" type="date" value="'+esc(data.document_date||'')+'"></div>';
+  html+='<div class="field"><label>Código DTE</label><input id="reviewDteCode" value="'+esc(data.dte_code||'')+'" placeholder="33 / 34 / 61"></div>';
+  html+='<div class="field"><label>Emisor</label><input id="reviewIssuerName" value="'+esc(data.issuer_name||'')+'"></div>';
+  html+='<div class="field"><label>RUT emisor</label><input id="reviewIssuerRut" value="'+esc(data.issuer_rut||'')+'"></div>';
+  html+='<div class="field"><label>Receptor</label><input id="reviewReceiverName" value="'+esc(data.receiver_name||'')+'"></div>';
+  html+='<div class="field"><label>RUT receptor</label><input id="reviewReceiverRut" value="'+esc(data.receiver_rut||'')+'"></div>';
+  html+='<div class="field"><label>Neto</label><input id="reviewNet" type="number" min="0" step=".01" value="'+esc(inputMoney(data.net_amount))+'"></div>';
+  html+='<div class="field"><label>Exento</label><input id="reviewExempt" type="number" min="0" step=".01" value="'+esc(inputMoney(data.exempt_amount))+'"></div>';
+  html+='<div class="field"><label>IVA</label><input id="reviewTax" type="number" min="0" step=".01" value="'+esc(inputMoney(data.tax_amount))+'"></div>';
+  html+='<div class="field"><label>Total</label><input id="reviewTotal" type="number" min="0" step=".01" value="'+esc(inputMoney(data.total_amount))+'"></div>';
+  html+='<div id="creditNoteFields" class="'+(isCreditNote(detectedType)?'':'hidden')+'" style="grid-column:1/-1"><div class="controller-formgrid"><div class="field"><label>Factura / DTE de referencia</label><input id="reviewReference" value="'+esc(data.reference_folio||'')+'" placeholder="Folio obligatorio para nota de crédito"></div><div class="field"><label>Motivo NC</label><select id="reviewCreditReason"><option value="devolucion" '+(data.credit_note_reason==='devolucion'?'selected':'')+'>Devolución de mercadería</option><option value="diferencia_precio" '+(data.credit_note_reason==='diferencia_precio'?'selected':'')+'>Diferencia de precio</option><option value="descuento" '+(data.credit_note_reason==='descuento'?'selected':'')+'>Descuento</option><option value="anulacion" '+(data.credit_note_reason==='anulacion'?'selected':'')+'>Anulación</option><option value="correccion" '+(data.credit_note_reason==='correccion'?'selected':'')+'>Corrección</option><option value="otro" '+(data.credit_note_reason==='otro'?'selected':'')+'>Otro</option></select></div></div></div>';
+  html+='<div class="field"><label>¿Afecta inventario físico?</label><select id="reviewAffectsInventory"><option value="true" '+(affects?'selected':'')+'>Sí</option><option value="false" '+(!affects?'selected':'')+'>No</option></select><small id="reviewStockEffect" class="muted"></small></div>';
+  html+='<div class="field '+((detectedType==='compra'||detectedType==='nota_credito_compra')?'':'hidden')+'" id="purchaseAccountField"><label>Cuenta base compra</label><select id="reviewPurchaseAccount"><option value="110301" '+(data.purchase_account_code==='110301'?'selected':'')+'>110301 · Inventario</option><option value="610101" '+(data.purchase_account_code==='610101'?'selected':'')+'>610101 · Gastos de Administración</option><option value="610301" '+(data.purchase_account_code==='610301'?'selected':'')+'>610301 · Transporte y Despacho</option></select></div>';
+  html+='<div class="field full"><label>Observación del controller</label><textarea id="reviewControllerNotes" rows="2" placeholder="Deja constancia si corregiste tipo, referencia, SKU, monto o efecto de stock."></textarea></div>';
+  html+='</div></div>';
+  html+='<div class="document-pdf-panel"><div class="document-pdf-head"><b>PDF original</b><span>Comparar antes de aprobar</span></div>'+(invoicePreviewUrl?'<iframe src="'+esc(invoicePreviewUrl)+'" title="PDF original del DTE"></iframe>':'<div class="muted">Vista previa no disponible.</div>')+'</div></div>';
+
+  html+='<div class="controller-subtitle"><b>Conciliación de productos</b><span>La IA propone; el controller confirma.</span></div>';
   (data.lines||[]).forEach(function(line,i){
     var p=line._product||findProduct(line,data.issuer_name);line._product=p||null;
-    var candidates=!p?(line._candidates||invoiceCandidates(line)):[];
-    line._candidates=candidates;
+    var candidates=!p?(line._candidates||invoiceCandidates(line)):[];line._candidates=candidates;
     var detail,label,actions='';
     if(p){
-      detail=(line._autoCreated?'SKU nuevo creado automáticamente: ':'SKU existente: ')+esc(p.sku)+(line._matchReason?' · '+esc(line._matchReason):'');
-      label=line._confirmedMatch?'Confirmado':(line._autoCreated?'SKU creado':'Coincidencia');
+      detail='SKU asociado: '+esc(p.sku)+(line._confirmedMatch?' · confirmado manualmente':(line.match_confidence==='high'?' · coincidencia IA alta':''));
+      label=line._confirmedMatch?'Confirmado':'Revisar';
     }else if(candidates.length){
-      detail='Hay '+candidates.length+' posible'+(candidates.length===1?'':'s')+' coincidencia'+(candidates.length===1?'':'s')+'. Confirma antes de continuar.'+(line.match_reason?' '+esc(line.match_reason):'');
+      detail='Hay '+candidates.length+' posible'+(candidates.length===1?'':'s')+' coincidencia'+(candidates.length===1?'':'s')+'. '+esc(line.match_reason||'Confirma la variante correcta.');
       label='Confirmar';
       actions=candidates.map(function(cp){return '<button class="btn alt chooseExisting" data-line="'+i+'" data-product="'+esc(cp.id)+'" type="button" style="margin-top:6px;padding:6px 8px;display:block;width:100%;text-align:left">Usar '+esc(cp.sku)+' · '+esc(cp.name)+'</button>'}).join('');
       actions+='<button class="btn alt createSuggested" data-line="'+i+'" type="button" style="margin-top:6px;padding:6px 8px">No corresponde · crear SKU</button>';
     }else{
-      detail='Sin coincidencia suficientemente segura; requiere revisión';
+      detail='Sin coincidencia suficientemente segura. No se creará un SKU automáticamente.';
       label='Revisar';
-      actions='<button class="btn alt createSuggested" data-line="'+i+'" type="button" style="margin-top:6px;padding:6px 8px">Crear SKU</button>';
+      actions='<button class="btn alt createSuggested" data-line="'+i+'" type="button" style="margin-top:6px;padding:6px 8px">Crear SKU manualmente</button>';
     }
-    html+='<div class="line"><div><b>'+esc(line.description)+'</b><div class="muted">'+detail+'</div></div><div>Cant. '+esc(line.quantity)+'</div><div><span class="pill '+(p?'ok':'warn')+'">'+label+'</span>'+actions+'</div></div>';
+    html+='<div class="line"><div><b>'+esc(line.description)+'</b><div class="muted">'+detail+'</div></div><div>Cant. '+esc(line.quantity)+'</div><div><span class="pill '+(p?'ok':'warn')+'">'+label+'</span>'+actions+'</div></div>'
   });
-  html+='<div style="margin-top:14px"><button id="approveInvoice" class="btn" '+((data.lines||[]).some(function(x){return !x._product})?'disabled':'')+'>Aprobar y mover stock</button></div>';
+  html+='<div class="controller-subtitle"><b>Asiento propuesto</b><span>El motor contable vuelve a validarlo al registrar.</span></div><div id="controllerAccountingPreview"></div>';
+  html+='<div class="controller-approval '+(canController?'':'blocked')+'"><label><input id="controllerConfirm" type="checkbox" '+(canController?'':'disabled')+'> Confirmo que revisé el PDF original, tipo de DTE, folio, RUT, montos, referencias, SKU, efecto de inventario y asiento propuesto.</label>'+(canController?'':'<div class="muted">Tu perfil puede analizar documentos, pero no aprobarlos.</div>')+'<button id="approveInvoice" class="btn" type="button" disabled>Aprobar, contabilizar y aplicar</button></div>';
   box.innerHTML=html;
+
   box.querySelectorAll('.chooseExisting').forEach(function(btn){btn.onclick=function(){chooseInvoiceProduct(Number(btn.dataset.line),btn.dataset.product)}});
   box.querySelectorAll('.createSuggested').forEach(function(btn){btn.onclick=function(){createSuggestedProduct(Number(btn.dataset.line))}});
-  var b=el('approveInvoice');if(b)b.onclick=approveInvoice
+  ['reviewDocType','reviewNet','reviewExempt','reviewTax','reviewTotal','reviewAffectsInventory','reviewPurchaseAccount','reviewReference','reviewCreditReason'].forEach(function(id){if(el(id))el(id).addEventListener('change',refreshControllerProposal)});
+  if(el('controllerConfirm'))el('controllerConfirm').addEventListener('change',updateApproveState);
+  var b=el('approveInvoice');if(b)b.onclick=approveInvoice;
+  refreshControllerProposal()
 }
-async function createSuggestedProduct(index){var line=parsedInvoice&&parsedInvoice.lines&&parsedInvoice.lines[index];if(!line)return;el('invoiceMsg').textContent='Creando SKU sugerido…';try{var body={name:line.name||line.description,description:line.description,family_code:line.family_code||'EPP',subfamily_code:line.subfamily_code||'GEN',type_code:line.type_code||'PRO',variant_code:line.variant_code||'UNI',brand:line.brand||null,model:line.model||null,manufacturer_code:line.product_code||null,ean_gtin:line.ean_gtin||null,unit:'Unidad'};var r=await authFetch('/rest/v1/msc_products?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)});line._product=r[0];products.unshift(r[0]);el('invoiceMsg').textContent='SKU creado: '+r[0].sku+'. Revisa la factura antes de aprobar.';renderInvoice(parsedInvoice)}catch(err){el('invoiceMsg').textContent=err.message}}
 async function approveInvoice(){
-  if(!parsedInvoice)return;var unresolved=(parsedInvoice.lines||[]).some(function(x){return !x._product});if(unresolved){el('invoiceMsg').textContent='Primero crea o relaciona los productos sin SKU.';return}
-  el('invoiceMsg').textContent='Procesando…';
+  if(!parsedInvoice)return;
+  if(['admin','bodega','supervisor'].indexOf(role)<0){el('invoiceMsg').textContent='Se requiere perfil controller para aprobar y contabilizar.';return}
+  var v=reviewValues();
+  if(!el('controllerConfirm')||!el('controllerConfirm').checked){el('invoiceMsg').textContent='Debes confirmar la revisión manual del controller.';return}
+  if(!v.folio){el('invoiceMsg').textContent='Revisa el folio antes de aprobar.';return}
+  if(isCreditNote(v.type)&&!v.reference_folio){el('invoiceMsg').textContent='La nota de crédito debe indicar el folio del DTE de referencia.';return}
+  var unresolved=(parsedInvoice.lines||[]).some(function(x){return !x._product});
+  if(v.affects_inventory&&unresolved){el('invoiceMsg').textContent='Hay líneas sin SKU confirmado. Para mover inventario, primero debes resolverlas.';return}
+  if(v.total<=0){el('invoiceMsg').textContent='Revisa el total del documento.';return}
+
+  el('invoiceMsg').textContent='Controller confirmado. Validando y registrando en una sola transacción…';
+  if(el('approveInvoice'))el('approveInvoice').disabled=true;
   try{
-    var documentType=parsedInvoice._documentType||inferInvoiceType(parsedInvoice)||el('docType').value;
-    el('docType').value=documentType;
-    var doc={document_type:documentType,folio:parsedInvoice.folio||null,issuer_name:parsedInvoice.issuer_name||null,issuer_rut:parsedInvoice.issuer_rut||null,receiver_name:parsedInvoice.receiver_name||null,receiver_rut:parsedInvoice.receiver_rut||null,document_date:parsedInvoice.document_date||null,status:'procesado'};
-    var dr=await authFetch('/rest/v1/msc_documents?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(doc)});var docId=dr[0].id;
-    var lines=parsedInvoice.lines.map(function(x,i){return {document_id:docId,line_no:i+1,raw_description:x.description, supplier_code:x.product_code||null,quantity:Number(x.quantity),unit_price:x.unit_price==null?null:Number(x.unit_price),product_id:x._product.id,match_status:'coincidencia'}});
-    await authFetch('/rest/v1/msc_document_lines',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(lines)});
-    var sign=documentType==='venta'?-1:1;var moves=parsedInvoice.lines.map(function(x){return {product_id:x._product.id,document_id:docId,movement_type:documentType,quantity:sign*Math.abs(Number(x.quantity)),notes:'Movimiento generado desde factura '+(parsedInvoice.folio||'')}});
-    await authFetch('/rest/v1/msc_stock_movements',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(moves)});
-    if(documentType==='compra'){
-      for(var pi=0;pi<parsedInvoice.lines.length;pi++){
-        var pl=parsedInvoice.lines[pi];
-        if(pl._product&&pl.unit_price!=null&&Number(pl.unit_price)>=0){
-          try{
-            var pr=await authFetch('/rest/v1/rpc/msc_update_cost_from_purchase',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({p_product_id:pl._product.id,p_cost_price:Number(pl.unit_price)})});
-            var prow=Array.isArray(pr)?pr[0]:pr,pidx=products.findIndex(function(p){return p.id===pl._product.id});if(pidx>=0&&prow)products[pidx]=prow;
-          }catch(_){}
-        }
+    var doc={
+      document_type:v.type,
+      folio:v.folio,
+      issuer_name:v.issuer_name||null,
+      issuer_rut:v.issuer_rut||null,
+      receiver_name:v.receiver_name||null,
+      receiver_rut:v.receiver_rut||null,
+      document_date:v.date||null,
+      dte_code:el('reviewDteCode')?el('reviewDteCode').value.trim()||null:parsedInvoice.dte_code||null,
+      reference_folio:v.reference_folio||null,
+      reference_dte_code:parsedInvoice.reference_dte_code||null,
+      credit_note_reason:isCreditNote(v.type)?v.reason:null,
+      affects_inventory:v.affects_inventory,
+      net_amount:v.net,
+      exempt_amount:v.exempt,
+      tax_amount:v.tax,
+      total_amount:v.total,
+      purchase_account_code:v.purchase_account_code,
+      ai_confidence:parsedInvoice.ai_confidence||'medium',
+      ai_payload:{
+        detected_document_type:parsedInvoice.detected_document_type||null,
+        document_kind:parsedInvoice.document_kind||null,
+        accounting_reason:parsedInvoice.accounting_reason||null,
+        affects_inventory_proposal:parsedInvoice.affects_inventory_proposal,
+        original_totals:{net:parsedInvoice.net_amount||0,exempt:parsedInvoice.exempt_amount||0,tax:parsedInvoice.tax_amount||0,total:parsedInvoice.total_amount||0}
+      },
+      controller_notes:v.notes||null,
+      controller_confirmed:true
+    };
+    var lines=(parsedInvoice.lines||[]).map(function(x){
+      return {
+        raw_description:x.description,
+        supplier_code:x.product_code||null,
+        quantity:Number(x.quantity),
+        unit_price:x.unit_price==null?null:Number(x.unit_price),
+        line_total:x.line_total==null?null:Number(x.line_total),
+        product_id:x._product?x._product.id:null,
+        match_status:x._confirmedMatch?'confirmado_controller':(x._product?'coincidencia_alta':'sin_sku'),
+        affects_inventory:v.affects_inventory,
+        ai_match_confidence:x.match_confidence||'none',
+        ai_match_reason:x.match_reason||x._matchReason||null
       }
-    }
-    el('invoiceMsg').textContent=documentType==='venta'?'Factura de venta procesada. El stock fue descontado y puede quedar negativo si no había existencias previas.':'Factura de compra procesada. El stock fue aumentado y los costos de referencia revisados.';el('invoiceReview').classList.add('hidden');parsedInvoice=null;el('invoiceFile').value='';await loadAll()
-  }catch(err){el('invoiceMsg').textContent=err.message}
+    });
+    var result=await authFetch('/rest/v1/rpc/msc_post_tax_document',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({p_document:doc,p_lines:lines})});
+    for(var i=0;i<parsedInvoice.lines.length;i++){var line=parsedInvoice.lines[i];if(line._product)await rememberAlias(v.issuer_name,line,line._product)}
+    var stockMsg=result&&result.stock_managed_elsewhere?'El stock queda gestionado por el flujo del pedido para evitar duplicidad.':('Efecto inventario: '+esc((result&&result.inventory_effect)||'sin movimiento')+'.');
+    el('invoiceMsg').innerHTML='<b>Documento registrado correctamente.</b> Asiento '+esc((result&&result.journal_entry_number)||'creado')+'. '+stockMsg;
+    el('invoiceReview').classList.add('hidden');parsedInvoice=null;el('invoiceFile').value='';
+    if(invoicePreviewUrl){URL.revokeObjectURL(invoicePreviewUrl);invoicePreviewUrl=''}
+    await loadAll()
+  }catch(err){
+    var msg=String(err.message||err);
+    if(msg.indexOf('DOCUMENT_ALREADY_POSTED')>=0)msg='Este DTE ya está registrado. No se realizó ningún movimiento.';
+    else if(msg.indexOf('CONTROLLER_ROLE_REQUIRED')>=0)msg='Tu perfil no tiene permiso de controller para contabilizar.';
+    else if(msg.indexOf('UNBALANCED_ENTRY')>=0)msg='El asiento no cuadró. El documento no fue registrado; revisa montos y vuelve a intentar.';
+    else if(msg.indexOf('CREDIT_NOTE_REFERENCE_REQUIRED')>=0)msg='La nota de crédito requiere el folio del documento de referencia.';
+    el('invoiceMsg').textContent=msg;updateApproveState()
+  }
 }
 if(!parseAuthCallback()&&token){loadRoleAndEnter()}
 })();
