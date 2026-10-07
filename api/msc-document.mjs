@@ -7,12 +7,15 @@ const DOCUMENTS = Object.freeze({
   'pj510-ficha': { url: 'https://www.amsec.cl/index.php?controller=attachment&id_attachment=54', name: 'Ficha-Tecnica-PJ510GDKTC.pdf' },
   'pj511-ficha': { url: 'https://www.amsec.cl/index.php?controller=attachment&id_attachment=48', name: 'Ficha-Tecnica-PJ511NDKTC.pdf' },
   'pj512-ficha': { url: 'https://www.amsec.cl/index.php?controller=attachment&id_attachment=47', name: 'Ficha-Tecnica-PJ512GDKTC.pdf' },
+  'pj513-ficha': { url: 'https://comercialdimasur.cl/wp-content/uploads/2025/03/CATALOGO-DIGITAL-PANAMA-JACK.pdf', name: 'Ficha-Tecnica-Catalogo-PJ513GDKTC.pdf' },
   'pj514-ficha': { url: 'https://www.amsec.cl/index.php?controller=attachment&id_attachment=58', name: 'Ficha-Tecnica-PJ514ADKCW.pdf' },
   'pj516-ficha': { url: 'https://www.amsec.cl/index.php?controller=attachment&id_attachment=46', name: 'Ficha-Tecnica-PJ516BDKCW.pdf' },
   'pj517-ficha': { url: 'https://www.amsec.cl/index.php?controller=attachment&id_attachment=77', name: 'Ficha-Tecnica-PJ517NDKCW.pdf' },
   'pj518c-ficha': { url: 'https://www.amsec.cl/index.php?controller=attachment&id_attachment=45', name: 'Ficha-Tecnica-PJ518CDKCW.pdf' },
   'pj518n-ficha': { url: 'https://www.amsec.cl/index.php?controller=attachment&id_attachment=44', name: 'Ficha-Tecnica-PJ518NDKCW.pdf' },
+  'pj526-ficha': { url: 'https://www.amsec.cl/index.php?controller=attachment&id_attachment=88', name: 'Ficha-Tecnica-PJ526BDKCW.pdf' },
   'pj527-ficha': { url: 'https://images.jumpseller.com/store/eppweb/32157312/attachments/9a6b61e38a1b5ac6435c1d95c1cf3c43/Ficha_PJ527NDKTC.pdf?1760057857=', name: 'Ficha-Tecnica-PJ527NDKTC.pdf' },
+  'pj528-ficha': { url: 'https://www.amsec.cl/index.php?controller=attachment&id_attachment=90', name: 'Ficha-Tecnica-PJ528BDKTC.pdf' },
 
   // SHERPA'S · fichas técnicas originales
   'sh406-ficha': { url: 'https://epp.cl/wp-content/uploads/2024/01/SH406CDK-V6.pdf', name: 'Ficha-Tecnica-SH406CDK.pdf' },
@@ -29,6 +32,7 @@ const DOCUMENTS = Object.freeze({
 
   // Certificados / registros originales
   'cesmec-024': { url: 'https://www.amsec.cl/index.php?controller=attachment&id_attachment=2', name: 'Certificado-CESMEC-024.pdf' },
+  'cesmec-019-historico': { url: 'https://images.jumpseller.com/store/isoprevent/30104236/attachments/f2d3cae933125dd2437bfab764baece0/CERTIFICADO_019__2_b2068cd9-7d05-4b0a-aedd-e7b1f56ea22d.pdf?1748631076=', name: 'Certificado-Historico-CESMEC-019.pdf' },
   'cesmec-023': { url: 'https://mayjo.cl/wp-content/uploads/2026/07/CESMEC-023.pdf', name: 'Certificado-CESMEC-023.pdf' },
   'isp-pj526': { url: 'https://mayjo.cl/wp-content/uploads/2026/07/REGISTRO-ISP-PJ526BDKCW.pdf', name: 'Registro-ISP-PJ526BDKCW.pdf' },
   'isp-sh436': { url: 'https://mayjo.cl/wp-content/uploads/2026/07/REGISTRO-ISP-SH436CDKCW.pdf', name: 'Registro-ISP-SH436CDKCW.pdf' }
