@@ -42,11 +42,42 @@ const salesPath = path.join(output,'prototipos/msc-safety/ventas/index.html');
 try {
   let html = await readFile(salesPath,'utf8');
   html = html.replace(`var CUSTOMER_FIELDS=['rut','name','address','city','contact_name','phone','email','business_activity','credit_limit','payment_terms','default_discount_percent','notes'];`,`var CUSTOMER_FIELDS=${JSON.stringify(customerFields)};`);
-  // En la segunda pantalla de variantes se evita repetir KPI ya visibles en el nivel superior.
-  // El foco queda en variante, SKU/EAN, precio, disponible, cantidad y agregar al carro.
+
+  // Selector de variantes: sin KPIs repetidos. Solo variante/identificación, precio, stock disponible y cantidad.
   if (!html.includes('msc-variant-selector-cleanup')) {
-    html = html.replace('</head>','<style id="msc-variant-selector-cleanup">.variantExtra{display:none!important}.variantCard{padding-top:12px;padding-bottom:12px}</style>\n</head>');
+    html = html.replace('</head>',`<style id="msc-variant-selector-cleanup">
+.variantExtra{display:none!important}
+.variantCard{padding-top:12px;padding-bottom:12px;border:1px solid transparent}
+.variantCard.mscOutOfStock{border:2px solid #c62828!important;border-radius:10px;margin:6px 8px;background:#fff7f7}
+.variantCard.mscOutOfStock .variantTitle,.variantCard.mscOutOfStock .stockBox b{color:#b71c1c!important}
+.variantCard.mscOutOfStock .qtyWrap input{border-color:#d32f2f;background:#fffafa}
+.variantCard.mscOutOfStock .stockBox span:after{content:' · SIN STOCK';color:#b71c1c;font-weight:900}
+</style>\n</head>`);
+  } else {
+    html = html.replace('.variantExtra{display:none!important}.variantCard{padding-top:12px;padding-bottom:12px}',`.variantExtra{display:none!important}.variantCard{padding-top:12px;padding-bottom:12px;border:1px solid transparent}.variantCard.mscOutOfStock{border:2px solid #c62828!important;border-radius:10px;margin:6px 8px;background:#fff7f7}.variantCard.mscOutOfStock .variantTitle,.variantCard.mscOutOfStock .stockBox b{color:#b71c1c!important}.variantCard.mscOutOfStock .qtyWrap input{border-color:#d32f2f;background:#fffafa}.variantCard.mscOutOfStock .stockBox span:after{content:' · SIN STOCK';color:#b71c1c;font-weight:900}`);
   }
+
+  // Clasifica automáticamente cada variante según el stock disponible mostrado en pantalla.
+  if (!html.includes('mscMarkOutOfStock')) {
+    html = html.replace('</body>',`<script id="mscMarkOutOfStock">
+(function(){
+  function mark(){
+    document.querySelectorAll('.variantCard').forEach(function(card){
+      var box=card.querySelector('.stockBox b');
+      if(!box)return;
+      var raw=(box.textContent||'').replace(/[^0-9,.-]/g,'').replace(/\./g,'').replace(',','.');
+      var value=Number(raw||0);
+      card.classList.toggle('mscOutOfStock',value<=0);
+    });
+  }
+  document.addEventListener('click',function(e){if(e.target.closest('[data-open-group]'))setTimeout(mark,40)});
+  var list=document.getElementById('variantList');
+  if(list)new MutationObserver(mark).observe(list,{childList:true,subtree:true,characterData:true});
+  setTimeout(mark,250);
+})();
+</script>\n</body>`);
+  }
+
   await writeFile(salesPath,html,'utf8');
 } catch (error) {
   console.warn('MSC sales normalization skipped:',error.message);
