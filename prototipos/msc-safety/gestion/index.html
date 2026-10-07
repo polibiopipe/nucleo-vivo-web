@@ -173,6 +173,24 @@ table{max-width:100%}
 .controller-approval{margin-top:16px;padding:14px;border:1px solid rgba(226,191,109,.34);border-radius:8px;background:linear-gradient(90deg,rgba(201,155,61,.09),rgba(201,155,61,.025));display:grid;gap:11px}.controller-approval label{display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.5}.controller-approval input{margin-top:3px}.controller-approval .btn{justify-self:start}.controller-approval.blocked{border-color:rgba(229,135,127,.28);background:rgba(229,135,127,.04)}
 @media(max-width:1180px){.document-review-grid{grid-template-columns:1fr}.document-pdf-panel{min-height:420px}.document-pdf-panel iframe{height:420px}}
 @media(max-width:700px){.controller-formgrid{grid-template-columns:1fr}.accounting-review-head,.accounting-review-row{grid-template-columns:minmax(0,1fr) 90px 90px}.document-pdf-panel iframe{height:360px}}
+
+/* ===== Resolución de estados contables pendientes ===== */
+.status-action{appearance:none;background:transparent;cursor:pointer;font:inherit}
+.status-action:hover{filter:brightness(1.18);text-decoration:underline;text-underline-offset:3px}
+.accounting-task-panel{margin-top:16px;border:1px solid rgba(226,191,109,.28);background:linear-gradient(145deg,#11161b,#0b0f13);border-radius:10px;overflow:hidden}
+.accounting-task-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
+.accounting-task-head h3{margin:0 0 5px;font-size:22px}.accounting-task-head p{margin:0;color:#9ea5aa;line-height:1.5}.accounting-task-body{padding:18px 20px}
+.accounting-task-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.accounting-task-card{border:1px solid rgba(255,255,255,.08);background:#0b1014;border-radius:8px;padding:12px}
+.accounting-task-card span{display:block;color:#808a91;font-size:9px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}.accounting-task-card b{font-size:13px}
+.accounting-task-note{padding:12px 14px;border-left:3px solid var(--gold);background:rgba(201,155,61,.07);line-height:1.55;margin:12px 0}
+.accounting-task-blocker{padding:12px 14px;border-left:3px solid var(--bad);background:rgba(190,70,58,.08);line-height:1.55;margin:12px 0}
+.accounting-task-ok{padding:12px 14px;border-left:3px solid var(--ok);background:rgba(70,160,100,.08);line-height:1.55;margin:12px 0}
+.accounting-task-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}.accounting-task-form .full{grid-column:1/-1}.accounting-task-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.accounting-task-actions .btn[disabled]{opacity:.45;cursor:not-allowed}.accounting-task-close{background:transparent;border:0;color:#aaa;cursor:pointer;font-size:22px;line-height:1;padding:0}
+.accounting-task-missing{margin-top:6px;color:#d9a69f;font-size:11px;line-height:1.45}
+@media(max-width:1100px){.accounting-task-grid,.accounting-task-form{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.accounting-task-grid,.accounting-task-form{grid-template-columns:1fr}.accounting-task-head{display:block}.accounting-task-close{position:absolute;right:22px}.accounting-task-form .full{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -426,7 +444,8 @@ table{max-width:100%}
           </ol><div class="notice"><b>Regla:</b> si el DTE ya existe, el proceso se detiene y no se permite volver a ingresarlo.</div></div>
         </div>
         <div id="invoiceReview" class="review hidden document-review-shell"></div>
-        <div class="panel"><div class="panel-head"><h2>Documentos tributarios</h2></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Folio / referencia</th><th>Emisor</th><th>Inventario</th><th>Contabilidad</th><th>Estado</th></tr></thead><tbody id="documentRows"></tbody></table></div></div>
+        <div class="panel"><div class="panel-head"><div><h2>Documentos tributarios</h2><span class="muted">Los estados pendientes se pueden abrir para ver qué falta y quién debe resolverlo.</span></div></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Folio / referencia</th><th>Emisor</th><th>Inventario</th><th>Contabilidad</th><th>Estado</th></tr></thead><tbody id="documentRows"></tbody></table></div></div>
+        <div id="accountingPendingPanel" class="accounting-task-panel hidden"></div>
       </section>
 
       <section class="view" id="view-movimientos"><div class="panel"><div class="panel-head"><h2>Kardex de movimientos</h2></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>SKU</th><th>Producto</th><th>Tipo</th><th>Cantidad</th><th>Documento</th></tr></thead><tbody id="movementRows"></tbody></table></div></div></section>
@@ -934,8 +953,111 @@ function render(){
   }).join('');
   renderProducts(products);renderControl();renderOrderControl();renderManagement();renderERP();
   el('locationRows').innerHTML=locations.map(function(x){var wh=warehouses.find(function(w){return w.id===x.warehouse_id});return '<tr><td class="sku">'+esc(x.code)+'</td><td>'+esc(x.label)+'</td><td>'+esc(wh?wh.name:(x.warehouse||''))+'</td><td><span class="pill '+(x.active?'ok':'bad')+'">'+(x.active?'Activa':'Inactiva')+'</span></td></tr>'}).join('');
-  el('documentRows').innerHTML=documents.map(function(d){var ref=d.reference_folio?'<div class="muted">Ref. '+esc(d.reference_folio)+'</div>':'';var inv=d.stock_managed_elsewhere?'Gestionado por pedido':(d.inventory_effect||'sin movimiento');return '<tr><td>'+esc(d.document_date||'')+'</td><td>'+esc(documentTypeLabel(d.document_type))+'</td><td><b>'+esc(d.folio||'—')+'</b>'+ref+'</td><td>'+esc(d.issuer_name||'')+'</td><td>'+esc(inv)+'</td><td><span class="pill '+(d.accounting_status==='contabilizado'?'ok':'warn')+'">'+esc(d.accounting_status||'pendiente')+'</span></td><td><span class="pill '+(d.status==='procesado'?'ok':'warn')+'">'+esc(d.status)+'</span></td></tr>'}).join('');
+  el('documentRows').innerHTML=documents.map(function(d){
+    var ref=d.reference_folio?'<div class="muted">Ref. '+esc(d.reference_folio)+'</div>':'';
+    var docMoves=movements.filter(function(m){return m.document_id===d.id});
+    var inv=d.stock_managed_elsewhere?'Gestionado por pedido':(d.inventory_effect||(docMoves.length?(d.document_type==='venta'?'Salida registrada':d.document_type==='compra'?'Entrada registrada':'Movimiento registrado'):'sin movimiento'));
+    var acc=d.accounting_status||'pendiente';
+    var accCell=acc==='pendiente'
+      ? '<button class="pill warn status-action accountingPendingBtn" data-document-id="'+esc(d.id)+'" type="button" title="Ver qué falta y resolver">pendiente · revisar</button>'
+      : '<span class="pill '+(acc==='contabilizado'?'ok':'warn')+'">'+esc(acc)+'</span>';
+    return '<tr><td>'+esc(d.document_date||'')+'</td><td>'+esc(documentTypeLabel(d.document_type))+'</td><td><b>'+esc(d.folio||'—')+'</b>'+ref+'</td><td>'+esc(d.issuer_name||'')+'</td><td>'+esc(inv)+'</td><td>'+accCell+'</td><td><span class="pill '+(d.status==='procesado'?'ok':'warn')+'">'+esc(d.status)+'</span></td></tr>'
+  }).join('');
+  el('documentRows').querySelectorAll('.accountingPendingBtn').forEach(function(btn){btn.onclick=function(){openAccountingPending(btn.dataset.documentId)}});
   el('movementRows').innerHTML=movements.map(function(m){var p=m.msc_products||{},d=m.msc_documents||{};return '<tr><td>'+new Date(m.created_at).toLocaleString('es-CL')+'</td><td class="sku">'+esc(p.sku)+'</td><td>'+esc(p.name)+'</td><td>'+esc(m.movement_type)+'</td><td><b>'+Number(m.quantity).toLocaleString('es-CL')+'</b></td><td>'+esc(d.folio||'')+'</td></tr>'}).join('')
+}
+async function openAccountingPending(documentId){
+  var d=documents.find(function(x){return x.id===documentId});if(!d)return;
+  var panel=el('accountingPendingPanel');if(!panel)return;
+  panel.classList.remove('hidden');panel.innerHTML='<div class="accounting-task-body">Cargando detalle del pendiente…</div>';
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
+  try{
+    var lines=await authFetch('/rest/v1/msc_document_lines?select=*&document_id=eq.'+encodeURIComponent(documentId)+'&order=line_no');
+    var docMoves=movements.filter(function(m){return m.document_id===documentId});
+    var lineBase=(lines||[]).reduce(function(s,x){var lt=x.line_total==null?Number(x.quantity||0)*Number(x.unit_price||0):Number(x.line_total||0);return s+lt},0);
+    var net=Number(d.net_amount||0)>0?Number(d.net_amount):Math.round(lineBase);
+    var exempt=Number(d.exempt_amount||0);
+    var tax=Number(d.tax_amount||0)>0?Number(d.tax_amount):Math.round(Math.max(0,net)*0.19);
+    var total=Number(d.total_amount||0)>0?Number(d.total_amount):net+exempt+tax;
+    var sale=d.document_type==='venta',purchase=d.document_type==='compra';
+    var missing=[];
+    if(sale){
+      (lines||[]).forEach(function(x){
+        var p=products.find(function(pp){return pp.id===x.product_id});
+        if(!x.product_id||!p||p.cost_price==null)missing.push((p&&p.sku)||x.raw_description||('Línea '+x.line_no))
+      })
+    }
+    var canResolve=['admin','supervisor'].indexOf(role)>=0;
+    var supported=sale||purchase;
+    var reason=d.journal_entry_id?'Existe una referencia de asiento que requiere revisión.':'No existe asiento contable asociado a este documento.';
+    var responsibility='Controller / Administración';
+    var invText=docMoves.length
+      ? (docMoves.length+' movimiento'+(docMoves.length===1?'':'s')+' de inventario ya registrado'+(docMoves.length===1?'':'s')+'. La regularización contable no volverá a mover stock.')
+      : 'No se encontraron movimientos de inventario vinculados a este documento. Revisa esta condición antes de contabilizar.';
+    var html='<div class="accounting-task-head"><div><h3>Resolver contabilidad pendiente · '+esc(documentTypeLabel(d.document_type))+' '+esc(d.folio||'')+'</h3><p>'+esc(reason)+' Aquí puedes ver qué falta, quién debe resolverlo y ejecutar la regularización cuando estén completos los datos.</p></div><button id="accountingTaskClose" class="accounting-task-close" type="button" aria-label="Cerrar">×</button></div>';
+    html+='<div class="accounting-task-body"><div class="accounting-task-grid">';
+    html+='<div class="accounting-task-card"><span>Responsable</span><b>'+esc(responsibility)+'</b></div>';
+    html+='<div class="accounting-task-card"><span>Rol habilitado</span><b>admin o supervisor</b></div>';
+    html+='<div class="accounting-task-card"><span>Inventario</span><b>'+esc(docMoves.length?'ya ejecutado':'revisar')+'</b></div>';
+    html+='<div class="accounting-task-card"><span>Estado actual</span><b>'+esc(d.accounting_status||'pendiente')+'</b></div>';
+    html+='</div><div class="accounting-task-note"><b>Qué falta:</b> confirmar los montos tributarios y generar el asiento, sin repetir los movimientos físicos ya registrados.<br>'+esc(invText)+'</div>';
+    if(!supported)html+='<div class="accounting-task-blocker"><b>Este tipo de documento requiere una regularización específica.</b> Por ahora las regularizaciones directas desde esta vista están habilitadas para facturas de compra y venta.</div>';
+    if(sale&&missing.length){
+      html+='<div class="accounting-task-blocker"><b>No se puede cerrar la contabilización completa todavía.</b> Faltan costos en '+missing.length+' SKU/línea'+(missing.length===1?'':'s')+'. El costo de ventas no se puede inventar ni omitir.<div class="accounting-task-missing">'+esc(missing.join(' · '))+'</div></div>';
+    }else if(supported){
+      html+='<div class="accounting-task-ok"><b>Condiciones técnicas completas.</b> El controller puede confirmar los montos contra el DTE y ejecutar el pendiente.</div>';
+    }
+    html+='<div class="accounting-task-form">';
+    html+='<div class="field"><label>Neto</label><input id="pendingNet" type="number" min="0" step=".01" value="'+esc(net)+'"></div>';
+    html+='<div class="field"><label>Exento</label><input id="pendingExempt" type="number" min="0" step=".01" value="'+esc(exempt)+'"></div>';
+    html+='<div class="field"><label>IVA</label><input id="pendingTax" type="number" min="0" step=".01" value="'+esc(tax)+'"></div>';
+    html+='<div class="field"><label>Total</label><input id="pendingTotal" type="number" min="0" step=".01" value="'+esc(total)+'"></div>';
+    if(purchase){
+      html+='<div class="field"><label>Cuenta base compra</label><select id="pendingPurchaseAccount"><option value="110301">110301 · Inventario</option><option value="610101">610101 · Gastos de Administración</option><option value="610301">610301 · Transporte y Despacho</option></select></div>';
+    }
+    html+='<div class="field full"><label>Observación del controller</label><textarea id="pendingAccountingNotes" rows="2" placeholder="Indica qué verificaste o corregiste antes de contabilizar."></textarea></div>';
+    html+='</div>';
+    html+='<label style="display:flex;gap:9px;align-items:flex-start;margin-top:12px;font-size:12px"><input id="pendingAccountingConfirm" type="checkbox" style="margin-top:3px"> Confirmo que revisé los montos contra el DTE y que esta acción solo regulariza contabilidad; no debe repetir inventario.</label>';
+    html+='<div class="accounting-task-actions">';
+    if(sale&&missing.length)html+='<button id="pendingGoProducts" class="btn alt" type="button">Completar costos en Productos / SKU</button>';
+    html+='<button id="resolveAccountingPending" class="btn" type="button" '+((!canResolve||!supported||missing.length)?'disabled':'')+'>Ejecutar pendiente contable</button>';
+    if(!canResolve)html+='<span class="muted">Tu perfil puede revisar el pendiente, pero solo admin o supervisor puede ejecutarlo.</span>';
+    html+='</div><div id="pendingAccountingMsg" class="msg"></div></div>';
+    panel.innerHTML=html;
+    el('accountingTaskClose').onclick=function(){panel.classList.add('hidden');panel.innerHTML=''};
+    if(el('pendingGoProducts'))el('pendingGoProducts').onclick=function(){
+      document.querySelectorAll('.nav button').forEach(function(b){b.classList.toggle('active',b.dataset.view==='productos')});
+      document.querySelectorAll('.view').forEach(function(v){v.classList.toggle('active',v.id==='view-productos')});
+      var search=el('globalSearch');if(search){search.value=missing[0]||'';search.dispatchEvent(new Event('input'))}
+      panel.classList.add('hidden');
+      el('pageTitle').textContent='Productos / SKU';
+      window.scrollTo({top:0,behavior:'smooth'})
+    };
+    if(el('resolveAccountingPending'))el('resolveAccountingPending').onclick=async function(){
+      if(!el('pendingAccountingConfirm').checked){el('pendingAccountingMsg').textContent='Debes confirmar la revisión del controller antes de ejecutar.';return}
+      var n=Number(el('pendingNet').value||0),ex=Number(el('pendingExempt').value||0),tx=Number(el('pendingTax').value||0),tt=Number(el('pendingTotal').value||0);
+      if(Math.abs((n+ex+tx)-tt)>1){el('pendingAccountingMsg').textContent='Los montos no cuadran: Neto + Exento + IVA debe ser igual al Total.';return}
+      el('resolveAccountingPending').disabled=true;el('pendingAccountingMsg').textContent='Regularizando contabilidad…';
+      try{
+        var result=await authFetch('/rest/v1/rpc/msc_regularize_pending_document_accounting',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({
+          p_document_id:d.id,p_net:n,p_exempt:ex,p_tax:tx,p_total:tt,
+          p_purchase_account_code:el('pendingPurchaseAccount')?el('pendingPurchaseAccount').value:'110301',
+          p_controller_notes:el('pendingAccountingNotes').value.trim()||null
+        })});
+        el('pendingAccountingMsg').innerHTML='<b>Regularización completada.</b> Asiento '+esc((result&&result.journal_entry_number)||'creado')+'. El inventario no fue modificado.';
+        await loadAll();
+        setTimeout(function(){panel.classList.add('hidden');panel.innerHTML=''},700)
+      }catch(err){
+        var msg=String(err.message||err);
+        if(msg.indexOf('MISSING_PRODUCT_COSTS')>=0)msg='Aún faltan costos de producto. Complétalos antes de cerrar la contabilización.';
+        else if(msg.indexOf('ACCOUNTING_CONTROLLER_REQUIRED')>=0)msg='Se requiere rol admin o supervisor para ejecutar este pendiente.';
+        else if(msg.indexOf('DOCUMENT_ALREADY_ACCOUNTED')>=0)msg='Este documento ya fue contabilizado.';
+        else if(msg.indexOf('ACCOUNTING_TOTAL_MISMATCH')>=0)msg='Los montos del DTE no cuadran. Revisa Neto, Exento, IVA y Total.';
+        el('pendingAccountingMsg').textContent=msg;
+        el('resolveAccountingPending').disabled=false
+      }
+    }
+  }catch(err){panel.innerHTML='<div class="accounting-task-body"><b>No fue posible cargar el detalle.</b><div class="msg">'+esc(err.message||err)+'</div></div>'}
 }
 function renderERP(){
   var accOpts='<option value="">Seleccionar…</option>'+accounts.map(function(a){return '<option value="'+a.id+'">'+esc(a.code)+' · '+esc(a.name)+'</option>'}).join('');
