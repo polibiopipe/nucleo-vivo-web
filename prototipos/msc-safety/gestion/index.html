@@ -157,6 +157,10 @@ table{max-width:100%}
 .duplicate-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .duplicate-detail{border:1px solid rgba(255,255,255,.08);background:#0b1014;border-radius:8px;padding:12px}.duplicate-detail span{display:block;color:#808990;font-size:9px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}.duplicate-detail b{font-size:13px}
 .duplicate-stop{margin-top:12px;padding:12px;border-left:3px solid #e18173;background:rgba(174,65,49,.08);font-size:12px;line-height:1.5}
+.type-mismatch-alert{margin:0 0 14px;padding:13px 14px;border:1px solid rgba(237,182,78,.42);border-left:4px solid #d9aa43;border-radius:8px;background:rgba(174,125,30,.09);font-size:12px;line-height:1.55}
+.type-mismatch-alert b{color:#f2cc74}.type-mismatch-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-top:9px}
+.type-mismatch-box{border:1px solid rgba(255,255,255,.08);background:#0b1014;border-radius:7px;padding:9px 10px}.type-mismatch-box span{display:block;color:#818b93;font-size:9px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}.type-mismatch-arrow{color:#d9aa43;font-weight:900}
+@media(max-width:700px){.type-mismatch-grid{grid-template-columns:1fr}.type-mismatch-arrow{transform:rotate(90deg);text-align:center}}
 .duplicate-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 @media(max-width:1180px){.document-review-shell .document-review-grid,.duplicate-review-body{grid-template-columns:1fr}.duplicate-review-shell{margin-top:14px}}
 @media(max-width:700px){.duplicate-review-head{display:block}.duplicate-badge{display:inline-block;margin-top:10px}.duplicate-details{grid-template-columns:1fr}}
@@ -1120,9 +1124,20 @@ function renderDuplicateDocument(data,existing){
   var box=el('invoiceReview');box.classList.remove('hidden');
   var registeredAt=existing.created_at?new Date(existing.created_at).toLocaleString('es-CL'):'—';
   var accounting=existing.accounting_status||'pendiente';
+  var expectedType=data._expectedType||existing.document_type;
+  var detectedType=data._documentType||existing.document_type;
+  var mismatch=expectedType!==detectedType;
   var html='<div class="duplicate-review">';
-  html+='<div class="duplicate-review-head"><div><h3>Este documento ya está ingresado</h3><p>Se encontró el mismo <b>'+esc(documentTypeLabel(existing.document_type))+'</b>, folio <b>'+esc(existing.folio||'—')+'</b> y RUT emisor <b>'+esc(existing.issuer_rut||'—')+'</b>.</p></div><span class="duplicate-badge">Proceso detenido</span></div>';
-  html+='<div class="duplicate-review-body"><div><div class="duplicate-details">';
+  html+='<div class="duplicate-review-head"><div><h3>'+esc(mismatch?'Tipo incorrecto y documento duplicado':'Este documento ya está ingresado')+'</h3><p>'+(
+    mismatch
+      ? 'Seleccionaste <b>'+esc(documentTypeLabel(expectedType))+'</b>, pero el PDF corresponde a <b>'+esc(documentTypeLabel(detectedType))+'</b>. Además, ese documento ya existe en el sistema.'
+      : 'Se encontró el mismo <b>'+esc(documentTypeLabel(existing.document_type))+'</b>, folio <b>'+esc(existing.folio||'—')+'</b> y RUT emisor <b>'+esc(existing.issuer_rut||'—')+'</b>.'
+  )+'</p></div><span class="duplicate-badge">Proceso detenido</span></div>';
+  html+='<div class="duplicate-review-body"><div>';
+  if(mismatch){
+    html+='<div class="type-mismatch-alert"><b>El tipo seleccionado no corresponde al PDF.</b><div class="type-mismatch-grid"><div class="type-mismatch-box"><span>Seleccionaste</span><b>'+esc(documentTypeLabel(expectedType))+'</b></div><div class="type-mismatch-arrow">→</div><div class="type-mismatch-box"><span>Documento detectado</span><b>'+esc(documentTypeLabel(detectedType))+'</b></div></div></div>';
+  }
+  html+='<div class="duplicate-details">';
   html+='<div class="duplicate-detail"><span>Documento</span><b>'+esc(documentTypeLabel(existing.document_type))+'</b></div>';
   html+='<div class="duplicate-detail"><span>Folio</span><b>'+esc(existing.folio||'—')+'</b></div>';
   html+='<div class="duplicate-detail"><span>Emisor</span><b>'+esc(existing.issuer_name||data.issuer_name||'—')+'</b></div>';
@@ -1135,7 +1150,9 @@ function renderDuplicateDocument(data,existing){
   html+='<div class="duplicate-actions"><button id="duplicateReset" class="btn" type="button">Cargar otro documento</button></div></div>';
   html+='<div class="document-pdf-panel"><div class="document-pdf-head"><b>PDF que intentaste subir</b><span>Solo referencia</span></div>'+(invoicePreviewUrl?'<iframe src="'+esc(invoicePreviewUrl)+'" title="PDF duplicado"></iframe>':'<div class="muted">Vista previa no disponible.</div>')+'</div></div></div>';
   box.innerHTML=html;
-  el('invoiceMsg').innerHTML='<b>Duplicado detectado.</b> Folio '+esc(existing.folio||'')+' ya existe y no será procesado nuevamente.';
+  el('invoiceMsg').innerHTML=mismatch
+    ? '<b>Tipo incorrecto + duplicado.</b> Seleccionaste '+esc(documentTypeLabel(expectedType))+', pero el PDF es '+esc(documentTypeLabel(detectedType))+' y el folio '+esc(existing.folio||'')+' ya está ingresado.'
+    : '<b>Duplicado detectado.</b> Folio '+esc(existing.folio||'')+' ya existe y no será procesado nuevamente.';
   var reset=el('duplicateReset');if(reset)reset.onclick=function(){box.classList.add('hidden');box.innerHTML='';el('invoiceFile').value='';el('invoiceMsg').textContent='Selecciona un documento nuevo para analizar.';if(invoicePreviewUrl){URL.revokeObjectURL(invoicePreviewUrl);invoicePreviewUrl=''}}
 }
 function safeNum(v){var n=Number(v);return Number.isFinite(n)?n:0}
@@ -1216,10 +1233,14 @@ el('analyzeInvoice').onclick=async function(){
   try{
     var rr=await fetch('/api/msc-invoice',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({pdfBase64:base64,documentType:el('docType').value,catalog:products.filter(function(p){return p.active!==false}).slice(0,180).map(function(p){return {sku:p.sku,name:p.name,brand:p.brand||null,model:p.model||null,manufacturer_code:p.manufacturer_code||null,variant_code:p.variant_code||null,product_color:p.product_color||null}})})});
     var data=await rr.json();if(!rr.ok)throw new Error(data.message||'No fue posible analizar el documento.');
-    var detectedType=inferInvoiceType(data)||el('docType').value;
+    var expectedType=el('docType').value;
+    var detectedType=inferInvoiceType(data)||expectedType;
+    data._expectedType=expectedType;
     data._documentType=detectedType;
-    el('docType').value=detectedType;
-    el('invoiceMsg').textContent='Documento identificado. Verificando si ya existe…';
+    data._typeMismatch=expectedType!==detectedType;
+    el('invoiceMsg').textContent=data._typeMismatch
+      ? 'Atención: el tipo seleccionado no coincide con el PDF. Verificando documento real y duplicados…'
+      : 'Documento identificado. Verificando si ya existe…';
     var existing=await findExistingTaxDocument(data,detectedType);
     if(existing){renderDuplicateDocument(data,existing);return}
     parsedInvoice=data;
@@ -1266,7 +1287,9 @@ function prepareInvoiceLines(data){
     else{line._product=null;review++}
   });
   renderInvoice(data);
-  el('invoiceMsg').textContent='Filtro IA completado: '+matched+' línea'+(matched===1?'':'s')+' con coincidencia alta · '+review+' requiere'+(review===1?'':'n')+' revisión. Nada ha sido registrado todavía.'
+  el('invoiceMsg').textContent=(data._typeMismatch
+    ? 'Advertencia: seleccionaste '+documentTypeLabel(data._expectedType)+', pero el PDF corresponde a '+documentTypeLabel(data._documentType)+'. '
+    : '')+'Filtro IA completado: '+matched+' línea'+(matched===1?'':'s')+' con coincidencia alta · '+review+' requiere'+(review===1?'':'n')+' revisión. Nada ha sido registrado todavía.'
 }
 async function rememberAlias(issuerName,line,product){
   var code=String(line.product_code||'').trim();if(!issuerName||!code||!product)return;
@@ -1299,6 +1322,9 @@ function renderInvoice(data){
   var affects=typeof data.affects_inventory_proposal==='boolean'?data.affects_inventory_proposal:!isCreditNote(detectedType);
   var canController=['admin','bodega','supervisor'].indexOf(role)>=0;
   var html='<div class="controller-stage"><div><span class="stage-chip done">1 · IA analizó</span><span class="stage-chip '+(canController?'active':'')+'">2 · Revisión controller</span><span class="stage-chip">3 · Registrar ERP</span></div></div>';
+  if(data._typeMismatch){
+    html+='<div class="type-mismatch-alert"><b>El tipo esperado no coincide con el documento.</b><div class="type-mismatch-grid"><div class="type-mismatch-box"><span>Seleccionaste</span><b>'+esc(documentTypeLabel(data._expectedType))+'</b></div><div class="type-mismatch-arrow">→</div><div class="type-mismatch-box"><span>La IA identificó</span><b>'+esc(documentTypeLabel(detectedType))+'</b></div></div>La revisión continuará usando el tipo detectado. El controller debe confirmarlo contra el PDF.</div>';
+  }
   html+='<div class="document-review-grid"><div class="document-review-data">';
   html+='<h3>'+esc(documentTypeLabel(detectedType))+' · Folio '+esc(data.folio||'—')+'</h3>';
   html+='<div class="notice"><b>Documento nuevo · listo para revisión del controller</b><br>Emisor: '+esc(data.issuer_name||'—')+' · RUT '+esc(data.issuer_rut||'—')+' · Confianza IA: '+esc(data.ai_confidence||'media')+'. Revisa los datos contra el PDF antes de aprobar.</div>';
