@@ -200,6 +200,9 @@ table{max-width:100%}
       <button data-view="compras"><span class="nav-ico">⇣</span><span>Compras / OC</span></button>
       <button data-view="cumplimiento"><span class="nav-ico">✓</span><span>Cumplimiento</span></button>
       <button data-view="clientes"><span class="nav-ico">◎</span><span>Clientes / pedidos</span></button>
+      <button data-view="finanzas"><span class="nav-ico">$</span><span>Finanzas</span></button>
+      <button data-view="contabilidad"><span class="nav-ico">▤</span><span>Contabilidad</span></button>
+      <button data-view="personas"><span class="nav-ico">♙</span><span>Personas / RR.HH.</span></button>
       <button data-view="reportes"><span class="nav-ico">▥</span><span>Reportes</span></button>
     </nav>
     <div class="side-foot"><b>SEGURIDAD · INVENTARIO · CONFIANZA</b>MSC Safety · Quality Service<br><span style="opacity:.65">Gestión operativa</span></div>
@@ -449,6 +452,50 @@ table{max-width:100%}
         <div class="panel"><div class="panel-head"><h2>Pedidos recientes</h2></div><div class="table-wrap"><table><thead><tr><th>Pedido</th><th>Cliente</th><th>Fecha</th><th>Total neto</th><th>Estado</th><th>Acción</th></tr></thead><tbody id="salesOrderRows"></tbody></table></div></div>
       </section>
 
+      <section class="view" id="view-finanzas">
+        <div class="module-hero"><div><div class="module-tag">Tesorería</div><h1>Finanzas</h1><p>Caja, bancos, cuentas por cobrar y cuentas por pagar conectadas a la operación.</p></div></div>
+        <div class="module-kpis">
+          <div class="module-kpi"><span>Por cobrar</span><strong id="kReceivable">$0</strong></div>
+          <div class="module-kpi"><span>Por pagar</span><strong id="kPayable">$0</strong></div>
+          <div class="module-kpi"><span>Saldo tesorería</span><strong id="kTreasury">$0</strong></div>
+          <div class="module-kpi"><span>Movimientos caja/banco</span><strong id="kCashMoves">0</strong></div>
+        </div>
+        <div class="split-2">
+          <div class="formbox"><h2>Cuenta de caja / banco</h2><form id="cashAccountForm"><div class="field"><label>Código</label><input name="code" required placeholder="BCO-01"></div><div class="field"><label>Nombre</label><input name="name" required placeholder="Banco principal"></div><div class="field"><label>Tipo</label><select name="account_kind"><option value="banco">Banco</option><option value="caja">Caja</option><option value="otro">Otro</option></select></div><div class="field"><label>Banco</label><input name="bank_name"></div><div class="field"><label>Saldo inicial</label><input name="opening_balance" type="number" step=".01" value="0"></div><button class="btn" type="submit">Crear cuenta</button></form></div>
+          <div class="formbox"><h2>Movimiento de tesorería</h2><form id="cashTransactionForm"><div class="field"><label>Cuenta</label><select name="cash_account_id" id="cashAccountSelect" required></select></div><div class="field"><label>Tipo</label><select name="direction"><option value="ingreso">Ingreso</option><option value="egreso">Egreso</option></select></div><div class="field"><label>Monto</label><input name="amount" type="number" min=".01" step=".01" required></div><div class="field"><label>Descripción</label><input name="description" required></div><div class="field"><label>Fecha</label><input name="transaction_date" type="date"></div><button class="btn" type="submit">Registrar movimiento</button></form></div>
+        </div>
+        <div class="split-2" style="margin-top:12px">
+          <div class="panel" style="margin-top:0"><div class="panel-head"><h2>Cuentas por cobrar</h2></div><div class="table-wrap"><table><thead><tr><th>Referencia</th><th>Cliente</th><th>Vence</th><th>Total</th><th>Saldo</th><th>Estado</th></tr></thead><tbody id="receivableRows"></tbody></table></div></div>
+          <div class="panel" style="margin-top:0"><div class="panel-head"><h2>Cuentas por pagar</h2></div><div class="table-wrap"><table><thead><tr><th>Referencia</th><th>Proveedor</th><th>Vence</th><th>Total</th><th>Saldo</th><th>Estado</th></tr></thead><tbody id="payableRows"></tbody></table></div></div>
+        </div>
+        <div class="panel"><div class="panel-head"><h2>Movimientos de tesorería</h2></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Cuenta</th><th>Tipo</th><th>Descripción</th><th>Monto</th><th>Conciliado</th></tr></thead><tbody id="cashTransactionRows"></tbody></table></div></div>
+      </section>
+
+      <section class="view" id="view-contabilidad">
+        <div class="module-hero"><div><div class="module-tag">Finanzas</div><h1>Contabilidad</h1><p>Plan de cuentas y asientos de doble partida, preparados para cierres e integración tributaria futura.</p></div></div>
+        <div class="split-2">
+          <div class="formbox"><h2>Asiento manual</h2><form id="journalForm"><div class="field"><label>Fecha</label><input name="entry_date" type="date"></div><div class="field"><label>Descripción</label><input name="description" required></div><div class="field"><label>Cuenta Debe</label><select name="debit_account_id" id="journalDebit" required></select></div><div class="field"><label>Cuenta Haber</label><select name="credit_account_id" id="journalCredit" required></select></div><div class="field"><label>Monto</label><input name="amount" type="number" min=".01" step=".01" required></div><div class="field"><label>Centro de costo</label><select name="cost_center_id" id="journalCostCenter"></select></div><button class="btn" type="submit">Contabilizar</button></form></div>
+          <div class="panel" style="margin-top:0"><div class="panel-head"><h2>Plan de cuentas</h2></div><div class="table-wrap"><table><thead><tr><th>Código</th><th>Cuenta</th><th>Tipo</th></tr></thead><tbody id="accountRows"></tbody></table></div></div>
+        </div>
+        <div class="panel"><div class="panel-head"><h2>Libro Diario · últimos asientos</h2></div><div class="table-wrap"><table><thead><tr><th>Nº</th><th>Fecha</th><th>Descripción</th><th>Debe</th><th>Haber</th><th>Estado</th></tr></thead><tbody id="journalRows"></tbody></table></div></div>
+      </section>
+
+      <section class="view" id="view-personas">
+        <div class="module-hero"><div><div class="module-tag">Personas</div><h1>Recursos Humanos</h1><p>Preparado desde ahora para crecer sin rehacer la estructura cuando se incorporen nuevos trabajadores.</p></div></div>
+        <div class="module-kpis">
+          <div class="module-kpi"><span>Personas activas</span><strong id="kEmployees">0</strong></div>
+          <div class="module-kpi"><span>Contratos vigentes</span><strong id="kContracts">0</strong></div>
+          <div class="module-kpi"><span>Ausencias pendientes</span><strong id="kLeaves">0</strong></div>
+          <div class="module-kpi"><span>Períodos remuneración</span><strong id="kPayroll">0</strong></div>
+        </div>
+        <div class="split-3">
+          <div class="formbox"><h2>Nueva persona</h2><form id="employeeForm"><div class="field"><label>RUT</label><input name="rut"></div><div class="field"><label>Nombres</label><input name="first_name" required></div><div class="field"><label>Apellidos</label><input name="last_name" required></div><div class="field"><label>Cargo</label><input name="position_name"></div><div class="field"><label>Área</label><input name="department"></div><div class="field"><label>Email</label><input name="email" type="email"></div><div class="field"><label>Fecha ingreso</label><input name="hire_date" type="date"></div><div class="field"><label>Centro de costo</label><select name="cost_center_id" id="employeeCostCenter"></select></div><button class="btn" type="submit">Guardar persona</button></form></div>
+          <div class="formbox"><h2>Contrato</h2><form id="contractForm"><div class="field"><label>Persona</label><select name="employee_id" id="contractEmployee" required></select></div><div class="field"><label>Tipo</label><select name="contract_type"><option value="indefinido">Indefinido</option><option value="plazo_fijo">Plazo fijo</option><option value="otro">Otro</option></select></div><div class="field"><label>Inicio</label><input name="start_date" type="date" required></div><div class="field"><label>Término</label><input name="end_date" type="date"></div><div class="field"><label>Horas semanales</label><input name="weekly_hours" type="number" step=".5"></div><div class="field"><label>Sueldo base</label><input name="base_salary" type="number" min="0" step="1"></div><button class="btn" type="submit">Guardar contrato</button></form></div>
+          <div class="formbox"><h2>Vacación / permiso / licencia</h2><form id="leaveForm"><div class="field"><label>Persona</label><select name="employee_id" id="leaveEmployee" required></select></div><div class="field"><label>Tipo</label><select name="leave_type"><option value="vacaciones">Vacaciones</option><option value="permiso">Permiso</option><option value="licencia_medica">Licencia médica</option><option value="otro">Otro</option></select></div><div class="field"><label>Desde</label><input name="start_date" type="date" required></div><div class="field"><label>Hasta</label><input name="end_date" type="date" required></div><div class="field"><label>Observación</label><input name="notes"></div><button class="btn" type="submit">Registrar</button></form></div>
+        </div>
+        <div class="panel"><div class="panel-head"><h2>Dotación</h2></div><div class="table-wrap"><table><thead><tr><th>RUT</th><th>Persona</th><th>Cargo</th><th>Área</th><th>Ingreso</th><th>Estado</th></tr></thead><tbody id="employeeRows"></tbody></table></div></div>
+      </section>
+
       <section class="view" id="view-reportes">
         <div class="module-hero"><div><div class="module-tag">Gestión</div><h1>Reportes y riesgo</h1><p>Aptitud para vender, rentabilidad, rotación ABC y capital inmovilizado.</p></div></div>
         <div class="module-kpis"><div class="module-kpi"><span>Aptos para vender</span><strong id="kSellable">0</strong></div><div class="module-kpi"><span>Requieren revisión</span><strong id="kReview">0</strong></div><div class="module-kpi"><span>No despachar</span><strong id="kBlocked">0</strong></div><div class="module-kpi"><span>Capital inmovilizado</span><strong id="kFrozenCapital">$0</strong></div></div>
@@ -513,7 +560,7 @@ var SUPABASE_KEY='sb_publishable_evFWgAwjv7xcNxo156NV0g_CFq0j5Ld';
 var token=sessionStorage.getItem('msc_token')||'';
 var role='';
 var currentEmail='';
-var products=[],locations=[],documents=[],movements=[],aliases=[],commitments=[],inbound=[],counts=[],warehouses=[],suppliers=[],purchaseOrders=[],certifications=[],lots=[],inspections=[],customers=[],salesOrders=[],returnsData=[],auditLog=[],dispatches=[],notifications=[],customerUsers=[],quoteRequests=[],orderEvents=[];var activePickingOrderId=null;
+var products=[],locations=[],documents=[],movements=[],aliases=[],commitments=[],inbound=[],counts=[],warehouses=[],suppliers=[],purchaseOrders=[],certifications=[],lots=[],inspections=[],customers=[],salesOrders=[],returnsData=[],auditLog=[],dispatches=[],notifications=[],customerUsers=[],quoteRequests=[],orderEvents=[],costCenters=[],accounts=[],journalEntries=[],journalLines=[],payables=[],receivables=[],cashAccounts=[],cashTransactions=[],employees=[],contracts=[],leaveRequests=[],payrollPeriods=[];var activePickingOrderId=null;
 function el(id){return document.getElementById(id)}
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function authRedirectUrl(){return window.location.origin+'/prototipos/msc-safety/gestion/'}
@@ -580,10 +627,22 @@ async function loadAll(){
       authFetch('/rest/v1/msc_notifications?select=*&resolved=eq.false&order=severity.desc,updated_at.desc&limit=100'),
       authFetch('/rest/v1/msc_customer_users?select=*&order=created_at.desc&limit=500'),
       authFetch('/rest/v1/msc_quote_requests?select=*,msc_customers(name,email),msc_quote_request_lines(quantity,notes,msc_products(sku,name,variant_code))&order=created_at.desc&limit=200'),
-      authFetch('/rest/v1/msc_order_events?select=*&order=created_at.desc&limit=1000')
+      authFetch('/rest/v1/msc_order_events?select=*&order=created_at.desc&limit=1000'),
+      authFetch('/rest/v1/msc_cost_centers?select=*&active=eq.true&order=code'),
+      authFetch('/rest/v1/msc_accounts?select=*&active=eq.true&order=code'),
+      authFetch('/rest/v1/msc_journal_entries?select=*&order=entry_date.desc,created_at.desc&limit=200'),
+      authFetch('/rest/v1/msc_journal_lines?select=*&limit=1000'),
+      authFetch('/rest/v1/msc_payables?select=*,msc_suppliers(name)&order=created_at.desc&limit=300'),
+      authFetch('/rest/v1/msc_receivables?select=*,msc_customers(name)&order=created_at.desc&limit=300'),
+      authFetch('/rest/v1/msc_cash_accounts?select=*&active=eq.true&order=name'),
+      authFetch('/rest/v1/msc_cash_transactions?select=*,msc_cash_accounts(name)&order=transaction_date.desc,created_at.desc&limit=500'),
+      authFetch('/rest/v1/msc_employees?select=*&order=last_name,first_name'),
+      authFetch('/rest/v1/msc_employment_contracts?select=*&order=created_at.desc&limit=500'),
+      authFetch('/rest/v1/msc_leave_requests?select=*&order=created_at.desc&limit=500'),
+      authFetch('/rest/v1/msc_payroll_periods?select=*&order=period.desc&limit=120')
     ]);
     products=rs[0]||[];locations=rs[1]||[];documents=rs[2]||[];movements=rs[3]||[];aliases=rs[4]||[];commitments=rs[5]||[];inbound=rs[6]||[];counts=rs[7]||[];
-    warehouses=rs[8]||[];suppliers=rs[9]||[];purchaseOrders=rs[10]||[];certifications=rs[11]||[];lots=rs[12]||[];inspections=rs[13]||[];customers=rs[14]||[];salesOrders=rs[15]||[];returnsData=rs[16]||[];auditLog=rs[17]||[];dispatches=rs[18]||[];notifications=rs[19]||[];customerUsers=rs[20]||[];quoteRequests=rs[21]||[];orderEvents=rs[22]||[];
+    warehouses=rs[8]||[];suppliers=rs[9]||[];purchaseOrders=rs[10]||[];certifications=rs[11]||[];lots=rs[12]||[];inspections=rs[13]||[];customers=rs[14]||[];salesOrders=rs[15]||[];returnsData=rs[16]||[];auditLog=rs[17]||[];dispatches=rs[18]||[];notifications=rs[19]||[];customerUsers=rs[20]||[];quoteRequests=rs[21]||[];orderEvents=rs[22]||[];costCenters=rs[23]||[];accounts=rs[24]||[];journalEntries=rs[25]||[];journalLines=rs[26]||[];payables=rs[27]||[];receivables=rs[28]||[];cashAccounts=rs[29]||[];cashTransactions=rs[30]||[];employees=rs[31]||[];contracts=rs[32]||[];leaveRequests=rs[33]||[];payrollPeriods=rs[34]||[];
     render()
   }catch(e){if(String(e.message).indexOf('JWT')>=0){logout()}else{console.error(e)}}
 }
@@ -770,12 +829,371 @@ function render(){
     var status=!defined?'<span class="pill warn">Pendiente Marsella</span>':(s<=0?'<span class="pill bad">Sin stock</span>':(p.stock_alert_enabled!==false&&s<=threshold?'<span class="pill warn">1 semana o menos</span>':'<span class="pill ok">Normal</span>'));
     return '<tr><td class="sku">'+esc(p.sku)+'</td><td><b>'+esc(p.name)+'</b><div class="muted">'+esc([p.manufacturer_code||p.model,p.product_color?('Color '+p.product_color):'',p.variant_code?('Talla '+p.variant_code):''].filter(Boolean).join(' · '))+'</div></td><td>'+esc(p.brand)+'</td><td><b>'+s.toLocaleString('es-CL')+'</b></td><td>'+(defined?threshold.toLocaleString('es-CL'):'—')+'</td><td>'+status+'</td><td>'+esc(p.unit)+'</td></tr>'
   }).join('');
-  renderProducts(products);renderControl();renderManagement();
+  renderProducts(products);renderControl();renderManagement();renderERP();
   el('locationRows').innerHTML=locations.map(function(x){var wh=warehouses.find(function(w){return w.id===x.warehouse_id});return '<tr><td class="sku">'+esc(x.code)+'</td><td>'+esc(x.label)+'</td><td>'+esc(wh?wh.name:(x.warehouse||''))+'</td><td><span class="pill '+(x.active?'ok':'bad')+'">'+(x.active?'Activa':'Inactiva')+'</span></td></tr>'}).join('');
   el('documentRows').innerHTML=documents.map(function(d){return '<tr><td>'+esc(d.document_date||'')+'</td><td>'+esc(d.document_type)+'</td><td>'+esc(d.folio)+'</td><td>'+esc(d.issuer_name)+'</td><td><span class="pill '+(d.status==='procesado'?'ok':'warn')+'">'+esc(d.status)+'</span></td></tr>'}).join('');
   el('movementRows').innerHTML=movements.map(function(m){var p=m.msc_products||{},d=m.msc_documents||{};return '<tr><td>'+new Date(m.created_at).toLocaleString('es-CL')+'</td><td class="sku">'+esc(p.sku)+'</td><td>'+esc(p.name)+'</td><td>'+esc(m.movement_type)+'</td><td><b>'+Number(m.quantity).toLocaleString('es-CL')+'</b></td><td>'+esc(d.folio||'')+'</td></tr>'}).join('')
 }
-function money(v){return v==null||v===''?'—':'$'+Math.round(Number(v)).toLocaleString('es-CL')}
+function renderERP(){
+  var accOpts='<option value="">Seleccionar…</option>'+accounts.map(function(a){return '<option value="'+a.id+'">'+esc(a.code)+' · '+esc(a.name)+'</option>'}).join('');
+  if(el('journalDebit'))el('journalDebit').innerHTML=accOpts;if(el('journalCredit'))el('journalCredit').innerHTML=accOpts;
+  var ccOpts='<option value="">Sin centro de costo</option>'+costCenters.map(function(x){return '<option value="'+x.id+'">'+esc(x.code)+' · '+esc(x.name)+'</option>'}).join('');
+  if(el('journalCostCenter'))el('journalCostCenter').innerHTML=ccOpts;if(el('employeeCostCenter'))el('employeeCostCenter').innerHTML=ccOpts;
+  var cashOpts='<option value="">Seleccionar…</option>'+cashAccounts.map(function(x){return '<option value="'+x.id+'">'+esc(x.name)+'</option>'}).join('');if(el('cashAccountSelect'))el('cashAccountSelect').innerHTML=cashOpts;
+  var empOpts='<option value="">Seleccionar…</option>'+employees.map(function(x){return '<option value="'+x.id+'">'+esc(x.first_name+' '+x.last_name)+'</option>'}).join('');if(el('contractEmployee'))el('contractEmployee').innerHTML=empOpts;if(el('leaveEmployee'))el('leaveEmployee').innerHTML=empOpts;
+  var ar=receivables.filter(function(x){return x.status!=='pagado'&&x.status!=='anulado'}),ap=payables.filter(function(x){return x.status!=='pagado'&&x.status!=='anulado'});
+  var arBal=ar.reduce(function(s,x){return s+Math.max(0,Number(x.total_amount||0)-Number(x.collected_amount||0))},0),apBal=ap.reduce(function(s,x){return s+Math.max(0,Number(x.total_amount||0)-Number(x.paid_amount||0))},0);
+  var cashBal=cashAccounts.reduce(function(s,a){var mv=cashTransactions.filter(function(t){return t.cash_account_id===a.id}).reduce(function(v,t){return v+(t.direction==='ingreso'?1:-1)*Number(t.amount||0)},0);return s+Number(a.opening_balance||0)+mv},0);
+  if(el('kReceivable'))el('kReceivable').textContent=money(arBal);if(el('kPayable'))el('kPayable').textContent=money(apBal);if(el('kTreasury'))el('kTreasury').textContent=money(cashBal);if(el('kCashMoves'))el('kCashMoves').textContent=cashTransactions.length;
+  if(el('receivableRows'))el('receivableRows').innerHTML=receivables.map(function(x){var bal=Math.max(0,Number(x.total_amount||0)-Number(x.collected_amount||0));return '<tr><td class="sku">'+esc(x.reference||'')+'</td><td>'+esc((x.msc_customers||{}).name||'')+'</td><td>'+esc(x.due_date||'—')+'</td><td>'+money(x.total_amount)+'</td><td><b>'+money(bal)+'</b></td><td>'+esc(x.status)+'</td></tr>'}).join('');
+  if(el('payableRows'))el('payableRows').innerHTML=payables.map(function(x){var bal=Math.max(0,Number(x.total_amount||0)-Number(x.paid_amount||0));return '<tr><td class="sku">'+esc(x.reference||'')+'</td><td>'+esc((x.msc_suppliers||{}).name||'')+'</td><td>'+esc(x.due_date||'—')+'</td><td>'+money(x.total_amount)+'</td><td><b>'+money(bal)+'</b></td><td>'+esc(x.status)+'</td></tr>'}).join('');
+  if(el('cashTransactionRows'))el('cashTransactionRows').innerHTML=cashTransactions.map(function(x){return '<tr><td>'+esc(x.transaction_date)+'</td><td>'+esc((x.msc_cash_accounts||{}).name||'')+'</td><td>'+esc(x.direction)+'</td><td>'+esc(x.description)+'</td><td><b>'+money(x.amount)+'</b></td><td>'+(x.reconciled?'Sí':'No')+'</td></tr>'}).join('');
+  if(el('accountRows'))el('accountRows').innerHTML=accounts.map(function(a){return '<tr><td class="sku">'+esc(a.code)+'</td><td>'+esc(a.name)+'</td><td>'+esc(a.account_type)+'</td></tr>'}).join('');
+  if(el('journalRows'))el('journalRows').innerHTML=journalEntries.map(function(j){return '<tr><td class="sku">'+esc(j.entry_number)+'</td><td>'+esc(j.entry_date)+'</td><td>'+esc(j.description)+'</td><td>'+money(j.total_debit)+'</td><td>'+money(j.total_credit)+'</td><td>'+esc(j.status)+'</td></tr>'}).join('');
+  if(el('kEmployees'))el('kEmployees').textContent=employees.filter(function(x){return x.employment_status==='activo'}).length;if(el('kContracts'))el('kContracts').textContent=contracts.filter(function(x){return x.status==='vigente'}).length;if(el('kLeaves'))el('kLeaves').textContent=leaveRequests.filter(function(x){return x.status==='solicitado'}).length;if(el('kPayroll'))el('kPayroll').textContent=payrollPeriods.length;
+  if(el('employeeRows'))el('employeeRows').innerHTML=employees.map(function(x){return '<tr><td class="sku">'+esc(x.rut||'—')+'</td><td><b>'+esc(x.first_name+' '+x.last_name)+'</b></td><td>'+esc(x.position_name||'—')+'</td><td>'+esc(x.department||'—')+'</td><td>'+esc(x.hire_date||'—')+'</td><td>'+esc(x.employment_status)+'</td></tr>'}).join('')
+}
+function money(v){return v==null||v===''?'—':'
+function renderProducts(list){
+  var canControl=currentEmail==='marsella.solis@nucleovivo.net';
+  var canPrice=['admin','bodega'].indexOf(role)>=0;
+  el('productRows').innerHTML=list.map(function(p){
+    var cost=p.cost_price==null?'':Number(p.cost_price),markup=p.markup_percent==null?'':Number(p.markup_percent);
+    var sale=p.sale_price==null?null:Number(p.sale_price),gross=sale==null?null:sale*1.19,profit=(sale!=null&&p.cost_price!=null)?sale-Number(p.cost_price):null;
+    var pricing=canPrice?'<div style="display:grid;grid-template-columns:90px 75px auto;gap:6px;align-items:center"><input class="costInput" data-product="'+p.id+'" type="number" min="0" step="0.01" value="'+esc(cost)+'" placeholder="Costo" style="width:90px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><input class="markupInput" data-product="'+p.id+'" type="number" min="0" step="0.01" value="'+esc(markup)+'" placeholder="Markup %" style="width:75px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><button class="btn alt savePrice" data-product="'+p.id+'" type="button" style="padding:7px 9px">Guardar</button></div>':'';
+    var controls=canControl?'<div style="display:grid;grid-template-columns:78px 78px 68px auto;gap:5px;align-items:center"><input class="weekInput" data-product="'+p.id+'" type="number" min="0" step="0.001" value="'+esc(p.week_stock_units==null?'':Number(p.week_stock_units))+'" placeholder="1 semana" title="Unidades para 1 semana" style="width:78px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><input class="targetInput" data-product="'+p.id+'" type="number" min="0" step="0.001" value="'+esc(p.target_stock_units==null?'':Number(p.target_stock_units))+'" placeholder="Objetivo" style="width:78px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><input class="leadInput" data-product="'+p.id+'" type="number" min="0" step="1" value="'+esc(p.lead_time_days==null?'':Number(p.lead_time_days))+'" placeholder="Días" style="width:68px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><button class="btn alt saveControls" data-product="'+p.id+'" type="button" style="padding:7px 9px">Guardar</button></div>':('<span class="muted">1 sem: '+(p.week_stock_units==null?'—':esc(p.week_stock_units))+' · obj: '+(p.target_stock_units==null?'—':esc(p.target_stock_units))+' · '+(p.lead_time_days==null?'—':esc(p.lead_time_days)+'d')+'</span>');
+    var alert=p.week_stock_units==null?'<span class="pill warn">Sin definir</span>':(p.stock_alert_enabled===false?'<span class="pill">Desactivada</span>':'<span class="pill ok">Activa</span>');
+    var catalog='<span class="pill '+(p.catalog_visible?'ok':'')+'">'+(p.catalog_visible?'Publicado':'Interno')+'</span><div><button class="btn alt editCatalog" data-product="'+p.id+'" type="button" style="padding:5px 7px;margin-top:5px;font-size:9px">Ficha catálogo</button></div>';
+    return '<tr><td class="sku">'+esc(p.sku)+'<div><button class="btn alt printSku" data-product="'+p.id+'" type="button" style="padding:4px 6px;margin-top:5px;font-size:9px">Etiqueta</button></div></td><td><b>'+esc(p.name)+'</b><div class="muted">'+esc([p.manufacturer_code||p.model,p.product_color?('Color '+p.product_color):'',p.variant_code?('Talla '+p.variant_code):''].filter(Boolean).join(' · '))+'</div></td><td>'+esc(p.brand)+'</td><td>'+money(p.cost_price)+(pricing?'<div style="margin-top:6px">'+pricing+'</div>':'')+'</td><td>'+(p.markup_percent==null?'—':esc(p.markup_percent)+'%')+'</td><td>'+money(sale)+'</td><td>'+money(gross)+'</td><td>'+money(profit)+'</td><td>'+controls+'</td><td>'+catalog+'</td><td>'+alert+'</td><td><span class="pill '+(p.active?'ok':'bad')+'">'+(p.active?'Activo':'Inactivo')+'</span></td></tr>'
+  }).join('');
+  el('productRows').querySelectorAll('.saveControls').forEach(function(btn){btn.onclick=function(){saveProductControls(btn.dataset.product)}});
+  el('productRows').querySelectorAll('.savePrice').forEach(function(btn){btn.onclick=function(){saveProductPricing(btn.dataset.product)}});el('productRows').querySelectorAll('.printSku').forEach(function(btn){btn.onclick=function(){printSkuLabel(btn.dataset.product)}});el('productRows').querySelectorAll('.editCatalog').forEach(function(btn){btn.onclick=function(){openCatalogEditor(btn.dataset.product)}});
+}
+function openCatalogEditor(productId){
+  var p=products.find(function(x){return x.id===productId});if(!p)return;
+  el('catalogProductId').value=p.id;el('catalogVisible').value=String(Boolean(p.catalog_visible));el('catalogGroup').value=p.catalog_group_key||p.manufacturer_code||p.model||'';el('catalogCategory').value=p.catalog_category||'';el('catalogDescription').value=p.catalog_description||'';el('catalogImage').value=p.catalog_image_url||'';el('catalogModalTitle').textContent=p.name;el('catalogMsg').textContent='';el('catalogModal').classList.add('show')
+}
+el('catalogModalClose').onclick=function(){el('catalogModal').classList.remove('show')};el('logisticsClose').onclick=function(){el('logisticsModal').classList.remove('show')};el('finishPicking').onclick=finishPicking;
+el('catalogModal').addEventListener('click',function(e){if(e.target===el('catalogModal'))el('catalogModal').classList.remove('show')});
+el('catalogForm').addEventListener('submit',async function(e){e.preventDefault();var id=el('catalogProductId').value,body={catalog_visible:el('catalogVisible').value==='true',catalog_group_key:el('catalogGroup').value.trim()||null,catalog_category:el('catalogCategory').value.trim()||null,catalog_description:el('catalogDescription').value.trim()||null,catalog_image_url:el('catalogImage').value.trim()||null};if(body.catalog_visible&&!body.catalog_description){el('catalogMsg').textContent='Agrega una descripción comercial antes de publicar.';return}el('catalogMsg').textContent='Guardando…';try{await authFetch('/rest/v1/msc_products?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});el('catalogMsg').textContent='Ficha actualizada.';await loadAll();setTimeout(function(){el('catalogModal').classList.remove('show')},500)}catch(err){el('catalogMsg').textContent=err.message}});
+async function updateQuoteStatus(id,status){try{await authFetch('/rest/v1/msc_quote_requests?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:status,updated_at:new Date().toISOString()})});await loadAll()}catch(err){alert(err.message)}}
+
+async function saveProductControls(productId){
+  if(currentEmail!=='marsella.solis@nucleovivo.net'){alert('Solo Marsella puede definir los parámetros operativos.');return}
+  var root=el('productRows'),week=Number(root.querySelector('.weekInput[data-product="'+productId+'"]').value),target=Number(root.querySelector('.targetInput[data-product="'+productId+'"]').value),lead=Number(root.querySelector('.leadInput[data-product="'+productId+'"]').value);
+  if(!Number.isFinite(week)||week<0||!Number.isFinite(target)||target<0||!Number.isFinite(lead)||lead<0){alert('Completa semana, objetivo y días de reposición con valores válidos.');return}
+  try{
+    var r=await authFetch('/rest/v1/rpc/msc_set_product_controls',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({p_product_id:productId,p_week_stock_units:week,p_target_stock_units:target,p_lead_time_days:Math.round(lead),p_alert_enabled:true})});
+    var row=Array.isArray(r)?r[0]:r,idx=products.findIndex(function(p){return p.id===productId});if(idx>=0&&row)products[idx]=row;render();
+  }catch(err){alert(err.message)}
+}
+async function saveProductPricing(productId){
+  var root=el('productRows'),cost=Number(root.querySelector('.costInput[data-product="'+productId+'"]').value),markup=Number(root.querySelector('.markupInput[data-product="'+productId+'"]').value);
+  if(!Number.isFinite(cost)||cost<0||!Number.isFinite(markup)||markup<0){alert('Ingresa costo y markup válidos.');return}
+  try{
+    var r=await authFetch('/rest/v1/rpc/msc_set_product_pricing',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({p_product_id:productId,p_cost_price:cost,p_markup_percent:markup})});
+    var row=Array.isArray(r)?r[0]:r,idx=products.findIndex(function(p){return p.id===productId});if(idx>=0&&row)products[idx]=row;render();
+  }catch(err){alert(err.message)}
+}
+function logout(){sessionStorage.removeItem('msc_token');sessionStorage.removeItem('msc_refresh');sessionStorage.removeItem('msc_role');token='';location.reload()}
+el('loginForm').addEventListener('submit',async function(e){e.preventDefault();el('loginMsg').textContent='Ingresando…';try{await login(el('email').value,el('password').value)}catch(err){el('loginMsg').textContent=err.message}})
+el('googleLogin').onclick=function(){
+  var redirect=encodeURIComponent(authRedirectUrl());
+  window.location.href=SUPABASE_URL+'/auth/v1/authorize?provider=google&redirect_to='+redirect;
+};
+el('activateAccess').onclick=async function(){
+  var email=el('email').value.trim(),password=el('password').value;
+  if(!email){el('loginMsg').textContent='Escribe primero el correo autorizado.';el('email').focus();return}
+  if(password.length<8){el('loginMsg').textContent='Define una contraseña de al menos 8 caracteres antes de activar.';el('password').focus();return}
+  el('loginMsg').textContent='Activando acceso…';
+  try{
+    var r=await fetch('/api/msc-activate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email,password:password})});
+    var d=await r.json();
+    if(!r.ok)throw new Error(d&&d.message?d.message:'No fue posible activar la cuenta.');
+    el('loginMsg').textContent=d.requiresConfirmation?'Cuenta creada. Revisa el correo recibido en ese alias y confirma el acceso. Luego podrás ingresar con esta contraseña.':'Acceso activado. Ya puedes ingresar con esta contraseña.';
+  }catch(err){el('loginMsg').textContent=err.message}
+};
+el('resetPassword').onclick=async function(){
+  var email=el('email').value.trim();
+  if(!email){el('loginMsg').textContent='Escribe primero tu correo.';el('email').focus();return}
+  el('loginMsg').textContent='Enviando enlace…';
+  try{
+    var r=await fetch(SUPABASE_URL+'/auth/v1/recover',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,redirect_to:authRedirectUrl()})});
+    if(!r.ok)throw new Error('No fue posible solicitar el restablecimiento.');
+    el('loginMsg').textContent='Si el correo está registrado, recibirás un enlace para crear una nueva contraseña.';
+  }catch(err){el('loginMsg').textContent=err.message}
+};
+el('saveNewPassword').onclick=async function(){
+  var password=el('newPassword').value;
+  if(password.length<8){el('loginMsg').textContent='La contraseña debe tener al menos 8 caracteres.';return}
+  el('loginMsg').textContent='Guardando nueva contraseña…';
+  try{
+    var r=await fetch(SUPABASE_URL+'/auth/v1/user',{method:'PUT',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({password:password})});
+    var d=await r.json();if(!r.ok)throw new Error(d&&d.msg?d.msg:'No fue posible actualizar la contraseña.');
+    el('recoveryBox').classList.add('hidden');el('loginMsg').textContent='Contraseña actualizada. Ingresando…';await loadRoleAndEnter();
+  }catch(err){el('loginMsg').textContent=err.message}
+};
+el('logout').onclick=logout;
+document.querySelectorAll('[data-view]').forEach(function(b){b.onclick=function(){document.querySelectorAll('[data-view]').forEach(function(x){x.classList.toggle('active',x===b)});document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active')});el('view-'+b.dataset.view).classList.add('active');var label=b.querySelector('span:last-child');el('pageTitle').textContent=label?label.textContent.trim():b.textContent.trim();if(b.dataset.view==='control')setTimeout(function(){renderPremiumAnalytics(inventoryState())},30)}})
+el('globalSearch').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var q=this.value.trim();if(!q)return;var target=document.querySelector('[data-view="productos"]');if(target)target.click();el('productSearch').value=q;el('productSearch').dispatchEvent(new Event('input'));setTimeout(function(){el('productSearch').focus()},50)});
+el('notificationButton').onclick=function(){var b=document.querySelector('[data-view="reportes"]');if(b)b.click()};
+el('productSearch').oninput=function(){var q=this.value.toLowerCase();renderProducts(products.filter(function(p){return [p.sku,p.name,p.brand,p.model,p.manufacturer_code,p.product_color,p.variant_code,p.ean_gtin].join(' ').toLowerCase().indexOf(q)>=0}))}
+el('productForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});if(body.week_stock_units==='')delete body.week_stock_units;else if(body.week_stock_units!=null)body.week_stock_units=Number(body.week_stock_units);['requires_certification','expiry_tracking','serial_tracking'].forEach(function(k){body[k]=body[k]==='true'});if(body.min_margin_percent==='')delete body.min_margin_percent;else body.min_margin_percent=Number(body.min_margin_percent);if(!body.preferred_supplier_id)delete body.preferred_supplier_id;['family_code','subfamily_code','type_code','variant_code'].forEach(function(k){body[k]=body[k].toUpperCase()});el('productMsg').textContent='Guardando…';try{var r=await authFetch('/rest/v1/msc_products?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)});el('productMsg').textContent='Creado: '+r[0].sku;e.target.reset();e.target.elements.variant_code.value='UNI';e.target.elements.unit.value='Unidad';await loadAll()}catch(err){el('productMsg').textContent=err.message}})
+el('locationForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});body.code=body.code.toUpperCase();el('locationMsg').textContent='Guardando…';try{await authFetch('/rest/v1/msc_locations',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});el('locationMsg').textContent='Ubicación creada';e.target.reset();await loadAll()}catch(err){el('locationMsg').textContent=err.message}})
+
+function formObject(form){var f=new FormData(form),o={};f.forEach(function(v,k){o[k]=String(v).trim()});return o}
+function uniqueRef(prefix){var d=new Date();return prefix+'-'+d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'-'+String(d.getHours()).padStart(2,'0')+String(d.getMinutes()).padStart(2,'0')+String(d.getSeconds()).padStart(2,'0')}
+
+el('cashAccountForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target);b.code=b.code.toUpperCase();b.opening_balance=Number(b.opening_balance||0);try{await authFetch('/rest/v1/msc_cash_accounts',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(b)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+el('cashTransactionForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target);b.amount=Number(b.amount);if(!b.transaction_date)delete b.transaction_date;try{await authFetch('/rest/v1/msc_cash_transactions',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(b)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+el('journalForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target),amount=Number(b.amount);if(b.debit_account_id===b.credit_account_id){alert('Debe y Haber deben usar cuentas distintas.');return}var no=uniqueRef('ASI'),head={entry_number:no,entry_date:b.entry_date||new Date().toISOString().slice(0,10),description:b.description,status:'contabilizado',total_debit:amount,total_credit:amount,posted_at:new Date().toISOString()};try{var h=await authFetch('/rest/v1/msc_journal_entries?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(head)});var cc=b.cost_center_id||null;await authFetch('/rest/v1/msc_journal_lines',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify([{journal_entry_id:h[0].id,account_id:b.debit_account_id,cost_center_id:cc,description:b.description,debit:amount,credit:0},{journal_entry_id:h[0].id,account_id:b.credit_account_id,cost_center_id:cc,description:b.description,debit:0,credit:amount}])});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+el('employeeForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target);['hire_date'].forEach(function(k){if(!b[k])delete b[k]});if(!b.cost_center_id)delete b.cost_center_id;try{await authFetch('/rest/v1/msc_employees',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(b)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+el('contractForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target);['weekly_hours','base_salary'].forEach(function(k){b[k]=Number(b[k]||0)});if(!b.end_date)delete b.end_date;try{await authFetch('/rest/v1/msc_employment_contracts',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(b)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+el('leaveForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target),a=new Date(b.start_date+'T00:00:00'),z=new Date(b.end_date+'T00:00:00');if(z<a){alert('La fecha final no puede ser anterior al inicio.');return}b.days=Math.floor((z-a)/86400000)+1;try{await authFetch('/rest/v1/msc_leave_requests',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(b)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+
+el('warehouseForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target);b.code=b.code.toUpperCase();try{await authFetch('/rest/v1/msc_warehouses',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(b)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+
+el('supplierForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target);['lead_time_days'].forEach(function(k){if(b[k]==='')delete b[k];else b[k]=Number(b[k])});['quality_rating','delivery_rating','price_rating'].forEach(function(k){if(b[k]==='')delete b[k];else b[k]=Number(b[k])});try{await authFetch('/rest/v1/msc_suppliers',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(b)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+
+el('purchaseOrderForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target),qty=Number(b.quantity),cost=Number(b.unit_cost),net=qty*cost,poNumber=uniqueRef('OC');try{var header={po_number:poNumber,supplier_id:b.supplier_id,status:'emitida',expected_date:b.expected_date||null,net_total:net,tax_total:net*.19,gross_total:net*1.19};var h=await authFetch('/rest/v1/msc_purchase_orders?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(header)});await authFetch('/rest/v1/msc_purchase_order_lines',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({purchase_order_id:h[0].id,product_id:b.product_id,quantity:qty,unit_cost:cost})});var sup=suppliers.find(function(s){return s.id===b.supplier_id});await authFetch('/rest/v1/msc_inbound_stock',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({product_id:b.product_id,quantity:qty,supplier_name:sup?sup.name:null,purchase_reference:poNumber,expected_date:b.expected_date||null,status:'en_transito'})});var p=products.find(function(x){return x.id===b.product_id});if(p&&!p.preferred_supplier_id){try{await authFetch('/rest/v1/msc_products?id=eq.'+encodeURIComponent(p.id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({preferred_supplier_id:b.supplier_id})})}catch(_){}}e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+
+el('certForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target),d=daysUntil(b.expiry_date);b.status=d==null?'vigente':d<0?'vencida':d<=60?'por_vencer':'vigente';['issued_date','expiry_date'].forEach(function(k){if(!b[k])delete b[k]});if(!b.document_url)delete b.document_url;try{await authFetch('/rest/v1/msc_product_certifications',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(b)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+
+el('lotForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target);b.quantity=Number(b.quantity);if(!b.expiry_date)delete b.expiry_date;else if(daysUntil(b.expiry_date)<0)b.status='vencido';if(!b.lot_code)delete b.lot_code;if(!b.serial_number)delete b.serial_number;try{await authFetch('/rest/v1/msc_product_lots',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(b)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+
+el('inspectionForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target);if(!b.next_inspection_date)delete b.next_inspection_date;try{await authFetch('/rest/v1/msc_equipment_inspections',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(b)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+
+el('customerForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target);b.default_discount_percent=Number(b.default_discount_percent||0);try{await authFetch('/rest/v1/msc_customers',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(b)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+
+el('salesOrderForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target),qty=Number(b.quantity),price=Number(b.unit_price),disc=Number(b.discount_percent||0),p=products.find(function(x){return x.id===b.product_id}),st=inventoryState(),ready=p?productReadiness(p,st):null;if(!p||!ready){alert('Producto inválido');return}if(ready.level==='red'){alert('Este producto está marcado como NO DESPACHAR: '+ready.reasons.join(', '));return}if(ready.available<qty){alert('Stock disponible insuficiente. Disponible: '+ready.available);return}var net=qty*price*(1-disc/100),orderNo=uniqueRef('PED');try{var h=await authFetch('/rest/v1/msc_sales_orders?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({order_number:orderNo,customer_id:b.customer_id,status:'confirmado',net_total:net,tax_total:net*.19,gross_total:net*1.19})});await authFetch('/rest/v1/msc_sales_order_lines',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({sales_order_id:h[0].id,product_id:b.product_id,quantity:qty,unit_price:price,discount_percent:disc})});var c=customers.find(function(x){return x.id===b.customer_id});await authFetch('/rest/v1/msc_stock_commitments',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({product_id:b.product_id,quantity:qty,reference:orderNo,customer_name:c?c.name:null,status:'activo'})});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+
+el('returnForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target),qty=Number(b.quantity),retNo=uniqueRef('DEV');try{var h=await authFetch('/rest/v1/msc_returns?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({return_number:retNo,customer_id:b.customer_id||null,status:'recibida',reason:b.reason||null})});await authFetch('/rest/v1/msc_return_lines',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({return_id:h[0].id,product_id:b.product_id,quantity:qty,disposition:b.disposition,notes:b.reason||null})});if(b.disposition==='reingreso'){await authFetch('/rest/v1/msc_stock_movements',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({product_id:b.product_id,movement_type:'devolucion_cliente',quantity:qty,notes:'Devolución '+retNo})})}e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+
+async function receivePurchaseOrder(id){var o=purchaseOrders.find(function(x){return x.id===id});if(!o)return;var lines=o.msc_purchase_order_lines||[];if(!lines.length){alert('La OC no tiene líneas.');return}try{for(var i=0;i<lines.length;i++){var l=lines[i];await authFetch('/rest/v1/msc_stock_movements',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({product_id:l.product_id,movement_type:'compra',quantity:Number(l.quantity),notes:'Recepción '+o.po_number})});await authFetch('/rest/v1/msc_purchase_order_lines?id=eq.'+encodeURIComponent(l.id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({received_quantity:Number(l.quantity)})});await authFetch('/rest/v1/rpc/msc_update_cost_from_purchase',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({p_product_id:l.product_id,p_cost_price:Number(l.unit_cost)})})}await authFetch('/rest/v1/msc_purchase_orders?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'recibida'})});await authFetch('/rest/v1/msc_inbound_stock?purchase_reference=eq.'+encodeURIComponent(o.po_number),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'recibido',received_at:new Date().toISOString()})});await loadAll()}catch(err){alert(err.message)}}
+
+function orderStatusLabel(status,d){var labels={confirmado:'En espera',preparacion:'Picking',revision:'Revisión',listo_facturar:'Listo para facturar',facturado:'Facturado',en_despacho:'En despacho',entregado:'Entregado',cancelado:'Cancelado'};var s=labels[status]||String(status||'').replaceAll('_',' ');return '<span class="status-light '+(status==='entregado'?'green':status==='listo_facturar'?'yellow':'')+'">'+esc(s)+'</span>'}
+function trackingHtml(status){var steps=[['confirmado','En espera'],['preparacion','Picking'],['revision','Revisión'],['listo_facturar','Facturar'],['facturado','Facturado'],['en_despacho','Despacho'],['entregado','Entregado']],idx=steps.findIndex(function(x){return x[0]===status});return steps.map(function(x,i){return '<span class="tracking-step '+(i<idx?'done':i===idx?'on':'')+'">'+x[1]+'</span>'}).join('')}
+async function logOrderEvent(orderId,dispatchId,type,status,detail,metadata){try{await authFetch('/rest/v1/msc_order_events',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({sales_order_id:orderId,dispatch_id:dispatchId||null,event_type:type,status:status||null,detail:detail||null,metadata:metadata||{}})})}catch(_){}}
+async function prepareSalesDispatch(id){var o=salesOrders.find(function(x){return x.id===id});if(!o)return;var existing=dispatches.find(function(x){return x.sales_order_id===id&&['preparacion','revision','listo_facturar'].indexOf(x.status)>=0});if(existing){openPicking(id);return}var lines=o.msc_sales_order_lines||[],wh=warehouses[0];if(!lines.length||!wh){alert('Faltan líneas o bodega configurada.');return}var no=uniqueRef('DSP');try{var d=await authFetch('/rest/v1/msc_dispatches?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({dispatch_number:no,sales_order_id:id,warehouse_id:wh.id,status:'preparacion',picking_started_at:new Date().toISOString(),prepared_by:currentEmail||null})});var dl=lines.map(function(l){return {dispatch_id:d[0].id,product_id:l.product_id,quantity:Number(l.quantity),picked_quantity:0,pick_status:'pendiente',checked:false}});await authFetch('/rest/v1/msc_dispatch_lines',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(dl)});await authFetch('/rest/v1/msc_sales_orders?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'preparacion',logistics_updated_at:new Date().toISOString()})});await logOrderEvent(id,d[0].id,'picking_iniciado','preparacion','Picking iniciado',{dispatch_number:no});await loadAll();openPicking(id)}catch(err){alert(err.message)}}
+function openPicking(id){var o=salesOrders.find(function(x){return x.id===id}),d=dispatches.find(function(x){return x.sales_order_id===id&&['preparacion','revision','listo_facturar','facturado'].indexOf(x.status)>=0});if(!o||!d){alert('No existe picking para este pedido.');return}activePickingOrderId=id;el('logisticsTitle').textContent=o.order_number+' · Picking';el('trackingRail').innerHTML=trackingHtml(o.status);var lines=d.msc_dispatch_lines||[],done=lines.filter(function(l){return Number(l.picked_quantity)===Number(l.quantity)&&l.checked}).length,pct=lines.length?Math.round(done/lines.length*100):0;el('pickProgressBar').style.width=pct+'%';el('pickSummary').textContent=done+' de '+lines.length+' líneas verificadas.';el('pickList').innerHTML=lines.map(function(l){var p=l.msc_products||{},ok=Number(l.picked_quantity)===Number(l.quantity);return '<div class="pick-row"><div><div class="sku">'+esc(p.sku||'')+'</div><b>'+esc(p.name||'Producto')+'</b></div><div><small>Solicitado</small><br><b>'+Number(l.quantity).toLocaleString('es-CL')+'</b></div><div><small>Pickeado</small><input class="pickQty" data-id="'+l.id+'" type="number" min="0" step="1" value="'+Number(l.picked_quantity||0)+'"></div><label class="pick-check"><input class="pickChecked" data-id="'+l.id+'" type="checkbox" '+(l.checked?'checked':'')+'> Revisado</label><input class="pickReason" data-id="'+l.id+'" type="text" placeholder="'+(ok?'Observación opcional':'Motivo de diferencia')+'" value="'+esc(l.discrepancy_reason||'')+'"></div>'}).join('');el('logisticsModal').classList.add('show');el('pickList').querySelectorAll('.pickQty,.pickChecked,.pickReason').forEach(function(x){x.onchange=function(){savePickLine(d.id,x.dataset.id)}})}
+async function savePickLine(dispatchId,lineId){var row=el('pickList').querySelector('.pickQty[data-id="'+lineId+'"]').closest('.pick-row'),qty=Number(row.querySelector('.pickQty').value||0),checked=row.querySelector('.pickChecked').checked,reason=row.querySelector('.pickReason').value.trim(),d=dispatches.find(function(x){return x.id===dispatchId}),l=(d&&d.msc_dispatch_lines||[]).find(function(x){return x.id===lineId});if(!l)return;if(qty<0||qty>Number(l.quantity)){alert('La cantidad pickeada debe estar entre 0 y la cantidad solicitada.');openPicking(activePickingOrderId);return}if(checked&&qty!==Number(l.quantity)&&!reason){alert('Si existe diferencia, indique el motivo antes de marcar revisado.');row.querySelector('.pickChecked').checked=false;return}var status=qty===0?'pendiente':qty===Number(l.quantity)?'completo':'diferencia';var body={picked_quantity:qty,checked:checked,pick_status:status,discrepancy_reason:reason||null,picked_at:qty>0?new Date().toISOString():null,checked_at:checked?new Date().toISOString():null};await authFetch('/rest/v1/msc_dispatch_lines?id=eq.'+encodeURIComponent(lineId),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});await loadAll();openPicking(activePickingOrderId)}
+async function finishPicking(){var id=activePickingOrderId,o=salesOrders.find(function(x){return x.id===id}),d=dispatches.find(function(x){return x.sales_order_id===id&&['preparacion','revision'].indexOf(x.status)>=0});if(!o||!d)return;var lines=d.msc_dispatch_lines||[],bad=lines.filter(function(l){return !l.checked||Number(l.picked_quantity)!==Number(l.quantity)});if(bad.length){await authFetch('/rest/v1/msc_dispatches?id=eq.'+encodeURIComponent(d.id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'revision',picking_completed_at:new Date().toISOString()})});await authFetch('/rest/v1/msc_sales_orders?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'revision',logistics_updated_at:new Date().toISOString()})});await logOrderEvent(id,d.id,'picking_con_diferencias','revision',bad.length+' línea(s) pendientes o con diferencia');await loadAll();openPicking(id);alert('El pedido queda en revisión. Deben cuadrar todas las cantidades antes de facturar.');return}var now=new Date().toISOString();await authFetch('/rest/v1/msc_dispatches?id=eq.'+encodeURIComponent(d.id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'listo_facturar',picking_completed_at:now,reviewed_at:now,ready_to_invoice_at:now})});await authFetch('/rest/v1/msc_sales_orders?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'listo_facturar',invoice_status:'pendiente',logistics_updated_at:now})});await logOrderEvent(id,d.id,'picking_aprobado','listo_facturar','Picking y revisión completos. Pedido habilitado para facturación.');el('logisticsModal').classList.remove('show');await loadAll()}
+async function registerManualInvoice(id){var o=salesOrders.find(function(x){return x.id===id}),d=dispatches.find(function(x){return x.sales_order_id===id});if(!o||o.status!=='listo_facturar'){alert('El pedido todavía no está listo para facturar.');return}var folio=prompt('Ingrese el folio de la factura emitida manualmente en SII:');if(!folio)return;folio=folio.trim();if(!folio)return;var now=new Date().toISOString();await authFetch('/rest/v1/msc_sales_orders?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'facturado',invoice_status:'emitida_manual',invoice_number:folio,invoiced_at:now,sii_status:'manual_pendiente_conciliacion',logistics_updated_at:now})});if(d)await authFetch('/rest/v1/msc_dispatches?id=eq.'+encodeURIComponent(d.id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'facturado',invoice_number:folio,invoiced_at:now})});await logOrderEvent(id,d&&d.id,'factura_registrada','facturado','Factura registrada manualmente',{invoice_number:folio,source:'SII manual'});await loadAll()}
+async function markDelivered(id){var o=salesOrders.find(function(x){return x.id===id}),d=dispatches.find(function(x){return x.sales_order_id===id});if(!o||!d||o.status!=='en_despacho'){alert('El pedido no está en despacho.');return}var who=prompt('¿Quién recibió el pedido? (opcional)')||'',now=new Date().toISOString();await authFetch('/rest/v1/msc_dispatches?id=eq.'+encodeURIComponent(d.id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'entregado',delivered_at:now,delivered_by:who||null})});await authFetch('/rest/v1/msc_sales_orders?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'entregado',logistics_updated_at:now})});await logOrderEvent(id,d.id,'pedido_entregado','entregado','Pedido entregado al cliente',{received_by:who||null});await loadAll()}
+
+async function dispatchSalesOrder(id){var o=salesOrders.find(function(x){return x.id===id}),d=dispatches.find(function(x){return x.sales_order_id===id&&x.status==='facturado'});if(!o||!d||o.status!=='facturado'){alert('Primero debe completar picking, revisión y registrar la factura.');return}try{var lines=d.msc_dispatch_lines||[],invalid=lines.filter(function(l){return !l.checked||Number(l.picked_quantity)!==Number(l.quantity)});if(invalid.length){alert('El picking no está completamente verificado.');return}var now=new Date().toISOString();for(var i=0;i<lines.length;i++){var l=lines[i],q=Number(l.picked_quantity);await authFetch('/rest/v1/msc_stock_movements',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({product_id:l.product_id,movement_type:'venta',quantity:-Math.abs(q),notes:'Despacho '+d.dispatch_number+' · Factura '+(o.invoice_number||'')})});await authFetch('/rest/v1/msc_sales_order_lines?sales_order_id=eq.'+encodeURIComponent(id)+'&product_id=eq.'+encodeURIComponent(l.product_id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({dispatched_quantity:q})});await authFetch('/rest/v1/msc_stock_commitments?reference=eq.'+encodeURIComponent(o.order_number)+'&product_id=eq.'+encodeURIComponent(l.product_id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'despachado',resolved_at:now})})}await authFetch('/rest/v1/msc_dispatches?id=eq.'+encodeURIComponent(d.id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'en_despacho',dispatched_at:now})});await authFetch('/rest/v1/msc_sales_orders?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'en_despacho',logistics_updated_at:now})});await logOrderEvent(id,d.id,'pedido_despachado','en_despacho','Pedido salió a despacho',{invoice_number:o.invoice_number||null});await loadAll()}catch(err){alert(err.message)}}
+
+el('commitmentForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});body.quantity=Number(body.quantity);try{await authFetch('/rest/v1/msc_stock_commitments',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+el('inboundForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});body.quantity=Number(body.quantity);if(!body.expected_date)delete body.expected_date;try{await authFetch('/rest/v1/msc_inbound_stock',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+el('countForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});var st=inventoryState();body.system_quantity=Number(st.physical[body.product_id]||0);body.counted_quantity=Number(body.counted_quantity);try{await authFetch('/rest/v1/msc_inventory_counts',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
+var parsedInvoice=null;
+var MSC_RUT='77196396K';
+function rutKey(v){return String(v||'').replace(/[^0-9kK]/g,'').toUpperCase()}
+function inferInvoiceType(data){
+  var issuer=rutKey(data&&data.issuer_rut),receiver=rutKey(data&&data.receiver_rut);
+  if(issuer===MSC_RUT)return 'venta';
+  if(receiver===MSC_RUT)return 'compra';
+  return data&&data.detected_document_type?data.detected_document_type:null;
+}
+el('analyzeInvoice').onclick=async function(){
+  var file=el('invoiceFile').files[0];if(!file){el('invoiceMsg').textContent='Selecciona un PDF.';return}if(file.size>3*1024*1024){el('invoiceMsg').textContent='El PDF supera 3 MB.';return}
+  el('invoiceMsg').textContent='Analizando factura…';
+  var base64=await new Promise(function(resolve,reject){var r=new FileReader();r.onload=function(){resolve(String(r.result).split(',')[1])};r.onerror=reject;r.readAsDataURL(file)});
+  try{
+    var rr=await fetch('/api/msc-invoice',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({pdfBase64:base64,documentType:el('docType').value,catalog:products.filter(function(p){return p.active!==false}).slice(0,180).map(function(p){return {sku:p.sku,name:p.name,brand:p.brand||null,model:p.model||null,manufacturer_code:p.manufacturer_code||null,variant_code:p.variant_code||null,product_color:p.product_color||null}})})});
+    var data=await rr.json();if(!rr.ok)throw new Error(data.message||'No fue posible analizar el documento.');
+    var detectedType=inferInvoiceType(data)||el('docType').value;
+    data._documentType=detectedType;
+    el('docType').value=detectedType;
+    parsedInvoice=data;
+    if(detectedType==='compra'){
+      await autoResolvePurchaseLines(data);
+    }else{
+      renderInvoice(data);
+    }
+  }catch(err){el('invoiceMsg').textContent=err.message}
+};
+function norm(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
+function invoiceCandidates(line){
+  var active=products.filter(function(p){return p.active!==false});
+  var aiSkus=Array.isArray(line.candidate_skus)?line.candidate_skus.filter(Boolean):[];
+  if(line.existing_sku&&line.match_confidence==='high')aiSkus.unshift(line.existing_sku);
+  var ai=aiSkus.map(function(s){return active.find(function(p){return p.sku===s})}).filter(Boolean);
+  if(ai.length)return ai.filter(function(p,i,a){return a.findIndex(function(x){return x.id===p.id})===i}).slice(0,3);
+
+  var raw=[line.model,line.product_code,line.name,line.description].filter(Boolean).join(' ').toUpperCase();
+  var m=raw.match(/\b([A-Z]{2,6}\d{2,}[A-Z0-9]*)\b/);
+  var model=m?m[1]:null;
+  var size=String(line.variant_code||'').toUpperCase().replace(/^(?:N|NRO|TALLA)/,'').replace(/[^A-Z0-9]/g,'');
+  if(!size){var sm=raw.match(/(?:N[°º]?|TALLA|SIZE)\s*([0-9]{2}|[XSML]{1,3}|2X|3X)/i);size=sm?String(sm[1]).toUpperCase():''}
+  if(!model||!size)return [];
+  return active.filter(function(p){
+    var pm=String(p.manufacturer_code||p.model||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+    var pv=String(p.variant_code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+    if(!pm||pv!==size)return false;
+    return pm.indexOf(model)===0||model.indexOf(pm)===0;
+  }).slice(0,4);
+}
+function findProduct(line,issuerName){
+  var activeProducts=products.filter(function(p){return p.active!==false});
+  var code=norm(line.product_code),ean=String(line.ean_gtin||'').replace(/\D/g,''),desc=norm(line.description),name=norm(line.name),supplier=norm(issuerName);
+  if(line.existing_sku&&line.match_confidence==='high'){
+    var aiExact=activeProducts.find(function(p){return p.sku===line.existing_sku});
+    if(aiExact)return aiExact;
+  }
+  if(ean){
+    var byEan=activeProducts.find(function(p){return String(p.ean_gtin||'').replace(/\D/g,'')===ean});
+    if(byEan)return byEan;
+  }
+  if(code&&supplier){
+    var alias=aliases.find(function(a){return norm(a.supplier_name)===supplier&&norm(a.supplier_product_code)===code});
+    if(alias){
+      var byAlias=activeProducts.find(function(p){return p.id===alias.product_id});
+      if(byAlias)return byAlias;
+    }
+  }
+  if(code){
+    var byCode=activeProducts.find(function(p){return norm(p.manufacturer_code)===code});
+    if(byCode)return byCode;
+  }
+  var exact=activeProducts.find(function(p){var pn=norm(p.name);return pn&&(pn===name||pn===desc)});
+  if(exact)return exact;
+  var contains=activeProducts.find(function(p){var pn=norm(p.name);return pn&&desc&&pn.length>=8&&(desc.indexOf(pn)>=0||pn.indexOf(desc)>=0)});
+  if(contains)return contains;
+  var candidates=invoiceCandidates(line);
+  if(candidates.length===1&&line.match_confidence!=='medium'&&line.match_confidence!=='low'){
+    line._matchReason='Modelo/talla compatibles con una única referencia existente';
+    return candidates[0];
+  }
+  if(candidates.length)line._candidates=candidates;
+  return null;
+}
+async function rememberAlias(issuerName,line,product){
+  var code=String(line.product_code||'').trim();
+  if(!issuerName||!code||!product)return;
+  var exists=aliases.some(function(a){return norm(a.supplier_name)===norm(issuerName)&&norm(a.supplier_product_code)===norm(code)});
+  if(exists)return;
+  try{
+    var body={supplier_name:issuerName,supplier_product_code:code,raw_description:line.description||null,product_id:product.id};
+    var r=await authFetch('/rest/v1/msc_supplier_aliases?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)});
+    if(r&&r[0])aliases.unshift(r[0]);
+  }catch(_){}
+}
+async function autoResolvePurchaseLines(data){
+  var created=0,matched=0,failed=0;
+  el('invoiceMsg').textContent='Analizando productos y verificando SKU existentes…';
+  for(var i=0;i<(data.lines||[]).length;i++){
+    var line=data.lines[i],p=findProduct(line,data.issuer_name);
+    if(p){
+      line._product=p;line._autoCreated=false;matched++;
+      await rememberAlias(data.issuer_name,line,p);
+      continue;
+    }
+    if(line._candidates&&line._candidates.length){
+      line._product=null;line._autoError='Coincidencia posible; requiere confirmación';failed++;
+      continue;
+    }
+    try{
+      var body={
+        name:line.name||line.description,
+        description:line.description,
+        family_code:String(line.family_code||'EPP').toUpperCase(),
+        subfamily_code:String(line.subfamily_code||'GEN').toUpperCase(),
+        type_code:String(line.type_code||'PRO').toUpperCase(),
+        variant_code:String(line.variant_code||'UNI').toUpperCase(),
+        brand:line.brand||null,
+        model:line.model||null,
+        manufacturer_code:line.product_code||null,
+        ean_gtin:line.ean_gtin||null,
+        unit:'Unidad',
+        supplier:data.issuer_name||null
+      };
+      var r=await authFetch('/rest/v1/msc_products?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)});
+      p=r&&r[0];
+      if(!p)throw new Error('No se pudo crear el SKU');
+      line._product=p;line._autoCreated=true;products.unshift(p);created++;
+      await rememberAlias(data.issuer_name,line,p);
+    }catch(err){
+      line._product=null;line._autoError=err.message;failed++;
+    }
+  }
+  renderInvoice(data);
+  var parts=[];
+  if(matched)parts.push(matched+' producto'+(matched===1?'':'s')+' reconocido'+(matched===1?'':'s'));
+  if(created)parts.push(created+' SKU nuevo'+(created===1?' creado':'s creados')+' automáticamente');
+  if(failed)parts.push(failed+' línea'+(failed===1?'':'s')+' requiere'+(failed===1?'':'n')+' revisión');
+  el('invoiceMsg').textContent=(parts.join(' · ')||'Factura analizada')+'. Revisa antes de aprobar el movimiento de stock.';
+}
+function chooseInvoiceProduct(index,productId){
+  var line=parsedInvoice&&parsedInvoice.lines&&parsedInvoice.lines[index],p=products.find(function(x){return x.id===productId&&x.active!==false});
+  if(!line||!p)return;
+  line._product=p;line._autoCreated=false;line._confirmedMatch=true;line._candidates=[];
+  el('invoiceMsg').textContent='Coincidencia confirmada: '+p.sku+'. Revisa las demás líneas antes de aprobar.';
+  renderInvoice(parsedInvoice);
+}
+function renderInvoice(data){
+  el('invoiceMsg').textContent='Documento analizado. Revisa antes de aprobar.';
+  var box=el('invoiceReview');box.classList.remove('hidden');
+  var detectedType=data._documentType||inferInvoiceType(data)||el('docType').value;
+  var directionLabel=detectedType==='venta'?'VENTA · disminuye stock':'COMPRA · aumenta stock';
+  var html='<h3>'+esc(data.issuer_name||'Documento')+' · Folio '+esc(data.folio||'—')+'</h3><p class="muted">'+esc(data.document_date||'')+'</p><div class="notice"><b>'+directionLabel+'</b><br>Clasificación automática según RUT de emisor y receptor. Si una descripción puede corresponder a más de un SKU, el sistema pedirá confirmación antes de mover stock.</div>';
+  (data.lines||[]).forEach(function(line,i){
+    var p=line._product||findProduct(line,data.issuer_name);line._product=p||null;
+    var candidates=!p?(line._candidates||invoiceCandidates(line)):[];
+    line._candidates=candidates;
+    var detail,label,actions='';
+    if(p){
+      detail=(line._autoCreated?'SKU nuevo creado automáticamente: ':'SKU existente: ')+esc(p.sku)+(line._matchReason?' · '+esc(line._matchReason):'');
+      label=line._confirmedMatch?'Confirmado':(line._autoCreated?'SKU creado':'Coincidencia');
+    }else if(candidates.length){
+      detail='Hay '+candidates.length+' posible'+(candidates.length===1?'':'s')+' coincidencia'+(candidates.length===1?'':'s')+'. Confirma antes de continuar.'+(line.match_reason?' '+esc(line.match_reason):'');
+      label='Confirmar';
+      actions=candidates.map(function(cp){return '<button class="btn alt chooseExisting" data-line="'+i+'" data-product="'+esc(cp.id)+'" type="button" style="margin-top:6px;padding:6px 8px;display:block;width:100%;text-align:left">Usar '+esc(cp.sku)+' · '+esc(cp.name)+'</button>'}).join('');
+      actions+='<button class="btn alt createSuggested" data-line="'+i+'" type="button" style="margin-top:6px;padding:6px 8px">No corresponde · crear SKU</button>';
+    }else{
+      detail='Sin coincidencia suficientemente segura; requiere revisión';
+      label='Revisar';
+      actions='<button class="btn alt createSuggested" data-line="'+i+'" type="button" style="margin-top:6px;padding:6px 8px">Crear SKU</button>';
+    }
+    html+='<div class="line"><div><b>'+esc(line.description)+'</b><div class="muted">'+detail+'</div></div><div>Cant. '+esc(line.quantity)+'</div><div><span class="pill '+(p?'ok':'warn')+'">'+label+'</span>'+actions+'</div></div>';
+  });
+  html+='<div style="margin-top:14px"><button id="approveInvoice" class="btn" '+((data.lines||[]).some(function(x){return !x._product})?'disabled':'')+'>Aprobar y mover stock</button></div>';
+  box.innerHTML=html;
+  box.querySelectorAll('.chooseExisting').forEach(function(btn){btn.onclick=function(){chooseInvoiceProduct(Number(btn.dataset.line),btn.dataset.product)}});
+  box.querySelectorAll('.createSuggested').forEach(function(btn){btn.onclick=function(){createSuggestedProduct(Number(btn.dataset.line))}});
+  var b=el('approveInvoice');if(b)b.onclick=approveInvoice
+}
+async function createSuggestedProduct(index){var line=parsedInvoice&&parsedInvoice.lines&&parsedInvoice.lines[index];if(!line)return;el('invoiceMsg').textContent='Creando SKU sugerido…';try{var body={name:line.name||line.description,description:line.description,family_code:line.family_code||'EPP',subfamily_code:line.subfamily_code||'GEN',type_code:line.type_code||'PRO',variant_code:line.variant_code||'UNI',brand:line.brand||null,model:line.model||null,manufacturer_code:line.product_code||null,ean_gtin:line.ean_gtin||null,unit:'Unidad'};var r=await authFetch('/rest/v1/msc_products?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)});line._product=r[0];products.unshift(r[0]);el('invoiceMsg').textContent='SKU creado: '+r[0].sku+'. Revisa la factura antes de aprobar.';renderInvoice(parsedInvoice)}catch(err){el('invoiceMsg').textContent=err.message}}
+async function approveInvoice(){
+  if(!parsedInvoice)return;var unresolved=(parsedInvoice.lines||[]).some(function(x){return !x._product});if(unresolved){el('invoiceMsg').textContent='Primero crea o relaciona los productos sin SKU.';return}
+  el('invoiceMsg').textContent='Procesando…';
+  try{
+    var documentType=parsedInvoice._documentType||inferInvoiceType(parsedInvoice)||el('docType').value;
+    el('docType').value=documentType;
+    var doc={document_type:documentType,folio:parsedInvoice.folio||null,issuer_name:parsedInvoice.issuer_name||null,issuer_rut:parsedInvoice.issuer_rut||null,receiver_name:parsedInvoice.receiver_name||null,receiver_rut:parsedInvoice.receiver_rut||null,document_date:parsedInvoice.document_date||null,status:'procesado'};
+    var dr=await authFetch('/rest/v1/msc_documents?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(doc)});var docId=dr[0].id;
+    var lines=parsedInvoice.lines.map(function(x,i){return {document_id:docId,line_no:i+1,raw_description:x.description, supplier_code:x.product_code||null,quantity:Number(x.quantity),unit_price:x.unit_price==null?null:Number(x.unit_price),product_id:x._product.id,match_status:'coincidencia'}});
+    await authFetch('/rest/v1/msc_document_lines',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(lines)});
+    var sign=documentType==='venta'?-1:1;var moves=parsedInvoice.lines.map(function(x){return {product_id:x._product.id,document_id:docId,movement_type:documentType,quantity:sign*Math.abs(Number(x.quantity)),notes:'Movimiento generado desde factura '+(parsedInvoice.folio||'')}});
+    await authFetch('/rest/v1/msc_stock_movements',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(moves)});
+    if(documentType==='compra'){
+      for(var pi=0;pi<parsedInvoice.lines.length;pi++){
+        var pl=parsedInvoice.lines[pi];
+        if(pl._product&&pl.unit_price!=null&&Number(pl.unit_price)>=0){
+          try{
+            var pr=await authFetch('/rest/v1/rpc/msc_update_cost_from_purchase',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({p_product_id:pl._product.id,p_cost_price:Number(pl.unit_price)})});
+            var prow=Array.isArray(pr)?pr[0]:pr,pidx=products.findIndex(function(p){return p.id===pl._product.id});if(pidx>=0&&prow)products[pidx]=prow;
+          }catch(_){}
+        }
+      }
+    }
+    el('invoiceMsg').textContent=documentType==='venta'?'Factura de venta procesada. El stock fue descontado y puede quedar negativo si no había existencias previas.':'Factura de compra procesada. El stock fue aumentado y los costos de referencia revisados.';el('invoiceReview').classList.add('hidden');parsedInvoice=null;el('invoiceFile').value='';await loadAll()
+  }catch(err){el('invoiceMsg').textContent=err.message}
+}
+if(!parseAuthCallback()&&token){loadRoleAndEnter()}
+})();
+</script>
+</body></html>+Math.round(Number(v)).toLocaleString('es-CL')}
 function renderProducts(list){
   var canControl=currentEmail==='marsella.solis@nucleovivo.net';
   var canPrice=['admin','bodega'].indexOf(role)>=0;
