@@ -142,6 +142,25 @@ table{max-width:100%}
 
 
 /* ===== Documentos tributarios · revisión IA + Controller ===== */
+.document-review-shell{margin-top:18px;padding:0!important;border:0!important;background:transparent!important}
+.document-review-shell.hidden{display:none!important}
+.document-review-shell .controller-stage{margin:0 0 12px}
+.document-review-shell .document-review-grid{grid-template-columns:minmax(520px,1.1fr) minmax(430px,.9fr);gap:16px}
+.document-review-shell .document-review-data{min-width:0}
+.document-review-shell .document-review-data h3{margin:0 0 10px;font-size:20px;line-height:1.2}
+.document-review-shell .notice{line-height:1.55}
+.duplicate-review{border:1px solid rgba(225,122,109,.38);background:linear-gradient(135deg,rgba(120,34,24,.18),rgba(10,13,16,.98));border-radius:10px;overflow:hidden}
+.duplicate-review-head{padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.duplicate-review-head h3{margin:0 0 5px;font-size:22px}.duplicate-review-head p{margin:0;color:#aab0b6;line-height:1.5}
+.duplicate-badge{white-space:nowrap;border:1px solid rgba(236,139,124,.45);color:#ffb3a7;background:rgba(180,61,43,.13);padding:7px 10px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.duplicate-review-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(390px,.8fr);gap:16px;padding:16px}
+.duplicate-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.duplicate-detail{border:1px solid rgba(255,255,255,.08);background:#0b1014;border-radius:8px;padding:12px}.duplicate-detail span{display:block;color:#808990;font-size:9px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}.duplicate-detail b{font-size:13px}
+.duplicate-stop{margin-top:12px;padding:12px;border-left:3px solid #e18173;background:rgba(174,65,49,.08);font-size:12px;line-height:1.5}
+.duplicate-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+@media(max-width:1180px){.document-review-shell .document-review-grid,.duplicate-review-body{grid-template-columns:1fr}.duplicate-review-shell{margin-top:14px}}
+@media(max-width:700px){.duplicate-review-head{display:block}.duplicate-badge{display:inline-block;margin-top:10px}.duplicate-details{grid-template-columns:1fr}}
+
 .controller-stage{display:flex;justify-content:space-between;gap:8px;margin:4px 0 14px}.stage-chip{display:inline-block;margin:0 6px 6px 0;padding:6px 9px;border-radius:999px;border:1px solid #363d44;color:#8f979e;font-size:9px;text-transform:uppercase;letter-spacing:.08em}.stage-chip.done{color:#8fd8a8;border-color:#31533d;background:rgba(60,146,92,.09)}.stage-chip.active{color:#f0ca70;border-color:#6a5528;background:rgba(201,155,61,.09)}
 .document-review-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(330px,.92fr);gap:12px;margin-bottom:14px}.document-review-data,.document-pdf-panel{border:1px solid rgba(255,255,255,.09);background:#0c1116;border-radius:8px;padding:14px}.document-pdf-panel{padding:0;overflow:hidden;min-height:520px}.document-pdf-head{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid rgba(255,255,255,.08);font-size:11px}.document-pdf-head span{color:#7f878e}.document-pdf-panel iframe{width:100%;height:520px;border:0;background:#fff}
 .controller-formgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.controller-formgrid .full{grid-column:1/-1}.controller-formgrid .field{margin:0}.controller-formgrid small{display:block;margin-top:5px}
@@ -393,18 +412,16 @@ table{max-width:100%}
               <option value="nota_credito_compra">Nota de crédito de compra</option>
               <option value="nota_credito_venta">Nota de crédito de venta</option>
             </select></div>
-            <div class="upload"><strong>Subir DTE</strong><div class="muted">PDF de hasta 3 MB. El análisis no mueve stock, no contabiliza y no crea SKU automáticamente. Todo queda sujeto a revisión humana.</div><input id="invoiceFile" type="file" accept="application/pdf"><button id="analyzeInvoice" class="btn" type="button">Analizar con IA</button><div id="invoiceMsg" class="msg"></div></div>
-            <div id="invoiceReview" class="review hidden"></div>
+            <div class="upload"><strong>Subir DTE</strong><div class="muted">PDF de hasta 3 MB. Primero se identifica el documento y se verifica si ya existe. Solo los documentos nuevos pasan a revisión del controller.</div><input id="invoiceFile" type="file" accept="application/pdf"><button id="analyzeInvoice" class="btn" type="button">Analizar y verificar</button><div id="invoiceMsg" class="msg"></div></div>
           </div>
-          <div class="formbox"><h2>Reglas del flujo</h2><ol class="muted">
-            <li>La IA identifica tipo de DTE, folio, emisor/receptor, montos, referencias y líneas.</li>
-            <li>El sistema busca equivalencias por EAN/GTIN, código, proveedor, modelo, variante y descripción.</li>
-            <li>La IA propone efecto de inventario y asiento, pero no registra nada por sí sola.</li>
-            <li>El controller revisa el PDF original, confirma/corrige datos, SKU, referencia, efecto físico y cuenta base.</li>
-            <li>Solo con confirmación humana se ejecuta una transacción única: documento, stock, cuentas por cobrar/pagar y asiento contable.</li>
-            <li>Debe = Haber se valida antes de cerrar el asiento. Un DTE ya registrado no puede contabilizarse dos veces.</li>
-          </ol><div class="notice"><b>Control obligatorio:</b> los perfiles de venta pueden analizar, pero solo admin, bodega o supervisor pueden aprobar y contabilizar.</div></div>
+          <div class="formbox"><h2>Flujo simple</h2><ol class="muted">
+            <li><b>Identificar:</b> la IA lee tipo de DTE, folio, emisor/receptor y montos.</li>
+            <li><b>Verificar duplicado:</b> el sistema busca el mismo tipo + folio + RUT emisor antes de continuar.</li>
+            <li><b>Revisar:</b> el controller compara el PDF con los datos, SKU, inventario y asiento propuesto.</li>
+            <li><b>Registrar:</b> solo después de la confirmación humana se actualiza ERP, stock y contabilidad.</li>
+          </ol><div class="notice"><b>Regla:</b> si el DTE ya existe, el proceso se detiene y no se permite volver a ingresarlo.</div></div>
         </div>
+        <div id="invoiceReview" class="review hidden document-review-shell"></div>
         <div class="panel"><div class="panel-head"><h2>Documentos tributarios</h2></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Folio / referencia</th><th>Emisor</th><th>Inventario</th><th>Contabilidad</th><th>Estado</th></tr></thead><tbody id="documentRows"></tbody></table></div></div>
       </section>
 
@@ -1089,6 +1106,38 @@ function inferInvoiceType(data){
   if(!base)return null;
   return data&&data.document_kind==='nota_credito'?'nota_credito_'+base:base
 }
+async function findExistingTaxDocument(data,type){
+  var folio=String(data&&data.folio||'').trim(),issuer=rutKey(data&&data.issuer_rut);
+  if(!folio||!issuer||!type)return null;
+  try{
+    var url='/rest/v1/msc_documents?select=id,document_type,folio,issuer_name,issuer_rut,receiver_name,receiver_rut,document_date,status,accounting_status,created_at&folio=eq.'+encodeURIComponent(folio)+'&document_type=eq.'+encodeURIComponent(type)+'&status=neq.rechazado&order=created_at.desc&limit=20';
+    var rows=await authFetch(url);
+    return (rows||[]).find(function(d){return rutKey(d.issuer_rut)===issuer})||null
+  }catch(_){return null}
+}
+function renderDuplicateDocument(data,existing){
+  parsedInvoice=null;
+  var box=el('invoiceReview');box.classList.remove('hidden');
+  var registeredAt=existing.created_at?new Date(existing.created_at).toLocaleString('es-CL'):'—';
+  var accounting=existing.accounting_status||'pendiente';
+  var html='<div class="duplicate-review">';
+  html+='<div class="duplicate-review-head"><div><h3>Este documento ya está ingresado</h3><p>Se encontró el mismo <b>'+esc(documentTypeLabel(existing.document_type))+'</b>, folio <b>'+esc(existing.folio||'—')+'</b> y RUT emisor <b>'+esc(existing.issuer_rut||'—')+'</b>.</p></div><span class="duplicate-badge">Proceso detenido</span></div>';
+  html+='<div class="duplicate-review-body"><div><div class="duplicate-details">';
+  html+='<div class="duplicate-detail"><span>Documento</span><b>'+esc(documentTypeLabel(existing.document_type))+'</b></div>';
+  html+='<div class="duplicate-detail"><span>Folio</span><b>'+esc(existing.folio||'—')+'</b></div>';
+  html+='<div class="duplicate-detail"><span>Emisor</span><b>'+esc(existing.issuer_name||data.issuer_name||'—')+'</b></div>';
+  html+='<div class="duplicate-detail"><span>RUT emisor</span><b>'+esc(existing.issuer_rut||data.issuer_rut||'—')+'</b></div>';
+  html+='<div class="duplicate-detail"><span>Fecha DTE</span><b>'+esc(existing.document_date||'—')+'</b></div>';
+  html+='<div class="duplicate-detail"><span>Registrado en sistema</span><b>'+esc(registeredAt)+'</b></div>';
+  html+='<div class="duplicate-detail"><span>Estado documento</span><b>'+esc(existing.status||'—')+'</b></div>';
+  html+='<div class="duplicate-detail"><span>Estado contable</span><b>'+esc(accounting)+'</b></div>';
+  html+='</div><div class="duplicate-stop"><b>No se realizará una segunda carga.</b><br>El sistema bloqueó la revisión y cualquier nuevo movimiento de inventario o contabilidad asociado a este DTE.</div>';
+  html+='<div class="duplicate-actions"><button id="duplicateReset" class="btn" type="button">Cargar otro documento</button></div></div>';
+  html+='<div class="document-pdf-panel"><div class="document-pdf-head"><b>PDF que intentaste subir</b><span>Solo referencia</span></div>'+(invoicePreviewUrl?'<iframe src="'+esc(invoicePreviewUrl)+'" title="PDF duplicado"></iframe>':'<div class="muted">Vista previa no disponible.</div>')+'</div></div></div>';
+  box.innerHTML=html;
+  el('invoiceMsg').innerHTML='<b>Duplicado detectado.</b> Folio '+esc(existing.folio||'')+' ya existe y no será procesado nuevamente.';
+  var reset=el('duplicateReset');if(reset)reset.onclick=function(){box.classList.add('hidden');box.innerHTML='';el('invoiceFile').value='';el('invoiceMsg').textContent='Selecciona un documento nuevo para analizar.';if(invoicePreviewUrl){URL.revokeObjectURL(invoicePreviewUrl);invoicePreviewUrl=''}}
+}
 function safeNum(v){var n=Number(v);return Number.isFinite(n)?n:0}
 function inputMoney(v){return v==null||v===''?'0':String(Math.round(Number(v)*100)/100)}
 function accountingRowsFor(type,net,exempt,tax,total,purchaseCode){
@@ -1170,6 +1219,9 @@ el('analyzeInvoice').onclick=async function(){
     var detectedType=inferInvoiceType(data)||el('docType').value;
     data._documentType=detectedType;
     el('docType').value=detectedType;
+    el('invoiceMsg').textContent='Documento identificado. Verificando si ya existe…';
+    var existing=await findExistingTaxDocument(data,detectedType);
+    if(existing){renderDuplicateDocument(data,existing);return}
     parsedInvoice=data;
     prepareInvoiceLines(data);
   }catch(err){el('invoiceMsg').textContent=err.message}
@@ -1248,8 +1300,8 @@ function renderInvoice(data){
   var canController=['admin','bodega','supervisor'].indexOf(role)>=0;
   var html='<div class="controller-stage"><div><span class="stage-chip done">1 · IA analizó</span><span class="stage-chip '+(canController?'active':'')+'">2 · Revisión controller</span><span class="stage-chip">3 · Registrar ERP</span></div></div>';
   html+='<div class="document-review-grid"><div class="document-review-data">';
-  html+='<h3>'+esc(data.issuer_name||'Documento')+' · Folio '+esc(data.folio||'—')+'</h3>';
-  html+='<div class="notice"><b>Propuesta IA · confianza '+esc(data.ai_confidence||'media')+'</b><br>'+esc(data.accounting_reason||'Revisa todos los datos contra el PDF original. La IA no contabiliza por sí sola.')+'</div>';
+  html+='<h3>'+esc(documentTypeLabel(detectedType))+' · Folio '+esc(data.folio||'—')+'</h3>';
+  html+='<div class="notice"><b>Documento nuevo · listo para revisión del controller</b><br>Emisor: '+esc(data.issuer_name||'—')+' · RUT '+esc(data.issuer_rut||'—')+' · Confianza IA: '+esc(data.ai_confidence||'media')+'. Revisa los datos contra el PDF antes de aprobar.</div>';
   html+='<div class="controller-formgrid">';
   html+='<div class="field"><label>Tipo definitivo</label><select id="reviewDocType"><option value="compra" '+(detectedType==='compra'?'selected':'')+'>Factura de compra</option><option value="venta" '+(detectedType==='venta'?'selected':'')+'>Factura de venta</option><option value="nota_credito_compra" '+(detectedType==='nota_credito_compra'?'selected':'')+'>Nota de crédito de compra</option><option value="nota_credito_venta" '+(detectedType==='nota_credito_venta'?'selected':'')+'>Nota de crédito de venta</option></select></div>';
   html+='<div class="field"><label>Folio</label><input id="reviewFolio" value="'+esc(data.folio||'')+'"></div>';
