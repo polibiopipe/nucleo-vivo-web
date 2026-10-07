@@ -684,6 +684,42 @@ async function authFetch(path,opt){
   opt=opt||{};opt.headers=Object.assign({'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json'},opt.headers||{});
   var r=await fetch(SUPABASE_URL+path,opt);var txt=await r.text();var data=txt?JSON.parse(txt):null;if(!r.ok)throw new Error((data&&data.message)||'Error '+r.status);return data
 }
+function storagePathEncode(path){return String(path||'').split('/').map(encodeURIComponent).join('/')}
+function storageSafeName(name){return String(name||'documento.pdf').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9._-]+/g,'_').replace(/^_+|_+$/g,'').slice(-120)||'documento.pdf'}
+async function uploadOriginalPdf(folder,reference){
+  if(!invoiceSourceFile)return null;
+  if(invoiceSourceFile.type&&invoiceSourceFile.type!=='application/pdf')throw new Error('El documento original debe ser PDF.');
+  var d=new Date(),yyyy=d.getFullYear(),mm=String(d.getMonth()+1).padStart(2,'0');
+  var uid=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(36).slice(2);
+  var path=[folder||'documentos',yyyy,mm,String(reference||'sin-referencia').replace(/[^a-zA-Z0-9_-]+/g,'_')+'-'+uid+'-'+storageSafeName(invoiceSourceFile.name)].join('/');
+  var r=await fetch(SUPABASE_URL+'/storage/v1/object/msc-documents/'+storagePathEncode(path),{
+    method:'POST',
+    headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/pdf','x-upsert':'false'},
+    body:invoiceSourceFile
+  });
+  var data=await r.json().catch(function(){return {}});
+  if(!r.ok)throw new Error((data&&data.message)||'No fue posible archivar el PDF original.');
+  return {path:path,name:invoiceSourceFile.name||'documento.pdf',mime:'application/pdf'}
+}
+async function deleteStoredPdf(path){
+  if(!path)return;
+  try{await fetch(SUPABASE_URL+'/storage/v1/object/msc-documents/'+storagePathEncode(path),{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token}})}catch(_){}
+}
+async function openStoredPdf(path){
+  if(!path)return;
+  try{
+    var r=await fetch(SUPABASE_URL+'/storage/v1/object/sign/msc-documents/'+storagePathEncode(path),{
+      method:'POST',
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+      body:JSON.stringify({expiresIn:300})
+    });
+    var data=await r.json();if(!r.ok)throw new Error((data&&data.message)||'No fue posible abrir el PDF.');
+    var u=data.signedURL||data.signedUrl||data.signed_url||'';
+    if(u&&u.indexOf('http')!==0)u=SUPABASE_URL+'/storage/v1'+u;
+    if(!u)throw new Error('No se recibió un enlace temporal.');
+    window.open(u,'_blank','noopener')
+  }catch(err){alert(err.message||err)}
+}
 async function login(email,password){
   var r=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:password})});
   var d=await r.json();if(!r.ok)throw new Error('Credenciales no válidas o usuario no habilitado.');
@@ -896,7 +932,9 @@ function openOrderTracking(id){
   var rail='<div style="display:flex;gap:7px;flex-wrap:wrap;margin:12px 0">'+trackingHtml(o.status)+'</div>';
   var events=ev.map(function(x){return '<div style="padding:9px 0;border-bottom:1px solid #252a2f"><b>'+new Date(x.created_at).toLocaleString('es-CL')+' · '+esc(x.event_type.replaceAll('_',' '))+'</b><div class="muted">'+esc(x.detail||x.status||'')+(x.actor_email?' · '+esc(x.actor_email):'')+'</div></div>'}).join('')||'<div class="muted">Aún no hay eventos logísticos registrados.</div>';
   var collections=ca.map(function(x){return '<div style="padding:8px 0;border-bottom:1px solid #252a2f"><b>'+new Date(x.created_at).toLocaleString('es-CL')+' · Cobranza</b><div class="muted">'+esc(x.detail)+(x.promised_payment_date?' · Compromiso '+esc(x.promised_payment_date):'')+'</div></div>'}).join('');
-  el('orderTrackingBody').innerHTML=credit+'<div class="grid2"><div><b>Vendedor</b><div class="muted">'+esc(o.seller_name||o.seller_email||'—')+'</div></div><div><b>OC cliente</b><div class="muted">'+esc(o.customer_po_number||'Ingreso manual')+'</div></div><div><b>Factura</b><div class="muted">'+esc(o.invoice_number||'Aún no emitida')+'</div></div><div><b>Origen</b><div class="muted">'+esc(o.source_type==='customer_po'?'OC convertida a nota de venta':'Ingreso manual')+'</div></div></div>'+rail+'<h3>Historial del pedido</h3>'+events+(collections?'<h3 style="margin-top:16px">Gestiones de cobranza</h3>'+collections:'');
+  var sourceDoc=o.source_file_path?'<button id="orderSourcePdf" class="btn alt" type="button" style="margin:8px 0">Abrir OC original</button>':'';
+  el('orderTrackingBody').innerHTML=credit+'<div class="grid2"><div><b>Vendedor</b><div class="muted">'+esc(o.seller_name||o.seller_email||'—')+'</div></div><div><b>OC cliente</b><div class="muted">'+esc(o.customer_po_number||'Ingreso manual')+'</div></div><div><b>Factura</b><div class="muted">'+esc(o.invoice_number||'Aún no emitida')+'</div></div><div><b>Origen</b><div class="muted">'+esc(o.source_type==='customer_po'?'OC convertida a nota de venta':'Ingreso manual')+'</div></div></div>'+sourceDoc+rail+'<h3>Historial del pedido</h3>'+events+(collections?'<h3 style="margin-top:16px">Gestiones de cobranza</h3>'+collections:'');
+  if(el('orderSourcePdf'))el('orderSourcePdf').onclick=function(){openStoredPdf(o.source_file_path)};
   el('orderTrackingDetail').classList.remove('hidden');
   el('orderTrackingDetail').scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -972,15 +1010,19 @@ function render(){
   el('locationRows').innerHTML=locations.map(function(x){var wh=warehouses.find(function(w){return w.id===x.warehouse_id});return '<tr><td class="sku">'+esc(x.code)+'</td><td>'+esc(x.label)+'</td><td>'+esc(wh?wh.name:(x.warehouse||''))+'</td><td><span class="pill '+(x.active?'ok':'bad')+'">'+(x.active?'Activa':'Inactiva')+'</span></td></tr>'}).join('');
   el('documentRows').innerHTML=documents.map(function(d){
     var ref=d.reference_folio?'<div class="muted">Ref. '+esc(d.reference_folio)+'</div>':'';
+    var source=d.source_file_path?'<button class="link-btn storedPdfBtn" data-path="'+esc(d.source_file_path)+'" type="button">PDF original</button>':'';
     var docMoves=movements.filter(function(m){return m.document_id===d.id});
     var inv=d.stock_managed_elsewhere?'Gestionado por pedido':(d.inventory_effect||(docMoves.length?(d.document_type==='venta'?'Salida registrada':d.document_type==='compra'?'Entrada registrada':'Movimiento registrado'):'sin movimiento'));
     var acc=d.accounting_status||'pendiente';
     var accCell=acc==='pendiente'
       ? '<button class="pill warn status-action accountingPendingBtn" data-document-id="'+esc(d.id)+'" type="button" title="Ver qué falta y resolver">pendiente · revisar</button>'
       : '<span class="pill '+(acc==='contabilizado'?'ok':'warn')+'">'+esc(acc)+'</span>';
-    return '<tr><td>'+esc(d.document_date||'')+'</td><td>'+esc(documentTypeLabel(d.document_type))+'</td><td><b>'+esc(d.folio||'—')+'</b>'+ref+'</td><td>'+esc(d.issuer_name||'')+'</td><td>'+esc(inv)+'</td><td>'+accCell+'</td><td><span class="pill '+(d.status==='procesado'?'ok':'warn')+'">'+esc(d.status)+'</span></td></tr>'
+    if(d.cost_accounting_status==='pendiente_costos')accCell+=' <button class="pill warn status-action costPendingBtn" data-document-id="'+esc(d.id)+'" type="button">costo pendiente</button>';
+    return '<tr><td>'+esc(d.document_date||'')+'</td><td>'+esc(documentTypeLabel(d.document_type))+'</td><td><b>'+esc(d.folio||'—')+'</b>'+ref+(source?'<div>'+source+'</div>':'')+'</td><td>'+esc(d.issuer_name||'')+'</td><td>'+esc(inv)+'</td><td>'+accCell+'</td><td><span class="pill '+(d.status==='procesado'?'ok':'warn')+'">'+esc(d.status)+'</span></td></tr>'
   }).join('');
   el('documentRows').querySelectorAll('.accountingPendingBtn').forEach(function(btn){btn.onclick=function(){openAccountingPending(btn.dataset.documentId)}});
+  el('documentRows').querySelectorAll('.costPendingBtn').forEach(function(btn){btn.onclick=function(){openCostPending(btn.dataset.documentId)}});
+  el('documentRows').querySelectorAll('.storedPdfBtn').forEach(function(btn){btn.onclick=function(){openStoredPdf(btn.dataset.path)}});
   el('movementRows').innerHTML=movements.map(function(m){var p=m.msc_products||{},d=m.msc_documents||{};return '<tr><td>'+new Date(m.created_at).toLocaleString('es-CL')+'</td><td class="sku">'+esc(p.sku)+'</td><td>'+esc(p.name)+'</td><td>'+esc(m.movement_type)+'</td><td><b>'+Number(m.quantity).toLocaleString('es-CL')+'</b></td><td>'+esc(d.folio||'')+'</td></tr>'}).join('')
 }
 async function openAccountingPending(documentId){
@@ -1020,7 +1062,7 @@ async function openAccountingPending(documentId){
     html+='</div><div class="accounting-task-note"><b>Qué falta:</b> confirmar los montos tributarios y generar el asiento, sin repetir los movimientos físicos ya registrados.<br>'+esc(invText)+'</div>';
     if(!supported)html+='<div class="accounting-task-blocker"><b>Este tipo de documento requiere una regularización específica.</b> Por ahora las regularizaciones directas desde esta vista están habilitadas para facturas de compra y venta.</div>';
     if(sale&&missing.length){
-      html+='<div class="accounting-task-blocker"><b>No se puede cerrar la contabilización completa todavía.</b> Faltan costos en '+missing.length+' SKU/línea'+(missing.length===1?'':'s')+'. El costo de ventas no se puede inventar ni omitir.<div class="accounting-task-missing">'+esc(missing.join(' · '))+'</div></div>';
+      html+='<div class="accounting-task-blocker"><b>Faltan costos reales en '+missing.length+' SKU/línea'+(missing.length===1?'':'s')+'.</b> La venta y el IVA sí pueden contabilizarse ahora; el costo de ventas quedará explícitamente pendiente y se regularizará cuando existan los costos reales.<div class="accounting-task-missing">'+esc(missing.join(' · '))+'</div></div>';
     }else if(supported){
       html+='<div class="accounting-task-ok"><b>Condiciones técnicas completas.</b> El controller puede confirmar los montos contra el DTE y ejecutar el pendiente.</div>';
     }
@@ -1037,7 +1079,7 @@ async function openAccountingPending(documentId){
     html+='<label style="display:flex;gap:9px;align-items:flex-start;margin-top:12px;font-size:12px"><input id="pendingAccountingConfirm" type="checkbox" style="margin-top:3px"> Confirmo que revisé los montos contra el DTE y que esta acción solo regulariza contabilidad; no debe repetir inventario.</label>';
     html+='<div class="accounting-task-actions">';
     if(sale&&missing.length)html+='<button id="pendingGoProducts" class="btn alt" type="button">Completar costos en Productos / SKU</button>';
-    html+='<button id="resolveAccountingPending" class="btn" type="button" '+((!canResolve||!supported||missing.length)?'disabled':'')+'>Ejecutar pendiente contable</button>';
+    html+='<button id="resolveAccountingPending" class="btn" type="button" '+((!canResolve||!supported)?'disabled':'')+'>'+(sale&&missing.length?'Contabilizar venta · dejar costo pendiente':'Ejecutar pendiente contable')+'</button>';
     if(!canResolve)html+='<span class="muted">Tu perfil puede revisar el pendiente, pero solo admin o supervisor puede ejecutarlo.</span>';
     html+='</div><div id="pendingAccountingMsg" class="msg"></div></div>';
     panel.innerHTML=html;
@@ -1056,12 +1098,12 @@ async function openAccountingPending(documentId){
       if(Math.abs((n+ex+tx)-tt)>1){el('pendingAccountingMsg').textContent='Los montos no cuadran: Neto + Exento + IVA debe ser igual al Total.';return}
       el('resolveAccountingPending').disabled=true;el('pendingAccountingMsg').textContent='Regularizando contabilidad…';
       try{
-        var result=await authFetch('/rest/v1/rpc/msc_regularize_pending_document_accounting',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({
+        var result=await authFetch('/rest/v1/rpc/msc_regularize_pending_document_accounting_v2',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({
           p_document_id:d.id,p_net:n,p_exempt:ex,p_tax:tx,p_total:tt,
           p_purchase_account_code:el('pendingPurchaseAccount')?el('pendingPurchaseAccount').value:'110301',
           p_controller_notes:el('pendingAccountingNotes').value.trim()||null
         })});
-        el('pendingAccountingMsg').innerHTML='<b>Regularización completada.</b> Asiento '+esc((result&&result.journal_entry_number)||'creado')+'. El inventario no fue modificado.';
+        el('pendingAccountingMsg').innerHTML='<b>Regularización completada.</b> Asiento '+esc((result&&result.journal_entry_number)||'creado')+'. El inventario no fue modificado.'+(result&&result.cost_accounting_status==='pendiente_costos'?' El costo de ventas quedó pendiente hasta completar los costos reales.':'');
         await loadAll();
         setTimeout(function(){panel.classList.add('hidden');panel.innerHTML=''},700)
       }catch(err){
@@ -1076,6 +1118,39 @@ async function openAccountingPending(documentId){
     }
   }catch(err){panel.innerHTML='<div class="accounting-task-body"><b>No fue posible cargar el detalle.</b><div class="msg">'+esc(err.message||err)+'</div></div>'}
 }
+async function openCostPending(documentId){
+  var d=documents.find(function(x){return x.id===documentId});if(!d)return;
+  var panel=el('accountingPendingPanel');if(!panel)return;
+  panel.classList.remove('hidden');panel.innerHTML='<div class="accounting-task-body">Revisando costos pendientes…</div>';
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
+  try{
+    var lines=await authFetch('/rest/v1/msc_document_lines?select=*&document_id=eq.'+encodeURIComponent(documentId)+'&order=line_no');
+    var missing=[];
+    (lines||[]).forEach(function(x){var p=products.find(function(pp){return pp.id===x.product_id});if(!x.product_id||!p||p.cost_price==null)missing.push((p&&p.sku)||x.raw_description||('Línea '+x.line_no))});
+    var canResolve=['admin','supervisor'].indexOf(role)>=0;
+    var html='<div class="accounting-task-head"><div><h3>Costo de ventas pendiente · Factura '+esc(d.folio||'')+'</h3><p>La venta y el IVA ya están contabilizados. Este pendiente existe para no inventar costos de producto.</p></div><button id="costTaskClose" class="accounting-task-close" type="button">×</button></div><div class="accounting-task-body">';
+    if(missing.length){
+      html+='<div class="accounting-task-blocker"><b>Faltan costos en '+missing.length+' SKU/línea'+(missing.length===1?'':'s')+'.</b><div class="accounting-task-missing">'+esc(missing.join(' · '))+'</div></div>';
+      html+='<div class="accounting-task-actions"><button id="costGoProducts" class="btn alt" type="button">Completar costos en Productos / SKU</button></div>'
+    }else{
+      html+='<div class="accounting-task-ok"><b>Todos los costos están completos.</b> Ya se puede generar el asiento de costo de ventas sin modificar inventario físico.</div>';
+      html+='<div class="accounting-task-actions"><button id="finalizeCostAccounting" class="btn" type="button" '+(canResolve?'':'disabled')+'>Regularizar costo de ventas</button></div>'
+    }
+    html+='<div id="costPendingMsg" class="msg"></div></div>';
+    panel.innerHTML=html;
+    el('costTaskClose').onclick=function(){panel.classList.add('hidden');panel.innerHTML=''};
+    if(el('costGoProducts'))el('costGoProducts').onclick=function(){var b=document.querySelector('[data-view="productos"]');if(b)b.click();panel.classList.add('hidden')};
+    if(el('finalizeCostAccounting'))el('finalizeCostAccounting').onclick=async function(){
+      el('finalizeCostAccounting').disabled=true;el('costPendingMsg').textContent='Regularizando costo de ventas…';
+      try{
+        var result=await authFetch('/rest/v1/rpc/msc_finalize_pending_cost_accounting',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({p_document_id:d.id})});
+        el('costPendingMsg').innerHTML='<b>Costo de ventas regularizado.</b> Asiento '+esc((result&&result.journal_entry_number)||'creado')+' · '+money(result&&result.cost_of_sales)+'.';
+        await loadAll();setTimeout(function(){panel.classList.add('hidden');panel.innerHTML=''},700)
+      }catch(err){el('costPendingMsg').textContent=String(err.message||err).replace('MISSING_PRODUCT_COSTS:','Aún faltan costos: ');el('finalizeCostAccounting').disabled=false}
+    }
+  }catch(err){panel.innerHTML='<div class="accounting-task-body"><b>No fue posible revisar los costos.</b><div class="msg">'+esc(err.message||err)+'</div></div>'}
+}
+
 function renderERP(){
   var accOpts='<option value="">Seleccionar…</option>'+accounts.map(function(a){return '<option value="'+a.id+'">'+esc(a.code)+' · '+esc(a.name)+'</option>'}).join('');
   if(el('journalDebit'))el('journalDebit').innerHTML=accOpts;if(el('journalCredit'))el('journalCredit').innerHTML=accOpts;
@@ -1263,6 +1338,7 @@ el('inboundForm').addEventListener('submit',async function(e){e.preventDefault()
 el('countForm').addEventListener('submit',async function(e){e.preventDefault();var f=new FormData(e.target),body={};f.forEach(function(v,k){body[k]=String(v).trim()});var st=inventoryState();body.system_quantity=Number(st.physical[body.product_id]||0);body.counted_quantity=Number(body.counted_quantity);try{await authFetch('/rest/v1/msc_inventory_counts',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify(body)});e.target.reset();await loadAll()}catch(err){alert(err.message)}});
 var parsedInvoice=null;
 var invoicePreviewUrl='';
+var invoiceSourceFile=null;
 var MSC_RUT='77196396K';
 function rutKey(v){return String(v||'').replace(/[^0-9kK]/g,'').toUpperCase()}
 function documentTypeLabel(t){
@@ -1424,6 +1500,7 @@ function updateApproveState(){
 }
 el('analyzeInvoice').onclick=async function(){
   var file=el('invoiceFile').files[0];if(!file){el('invoiceMsg').textContent='Selecciona un PDF.';return}if(file.size>3*1024*1024){el('invoiceMsg').textContent='El PDF supera 3 MB.';return}
+  invoiceSourceFile=file;
   var expectedType=el('docType').value,isCustomerPo=expectedType==='orden_compra_cliente';
   el('invoiceMsg').textContent=isCustomerPo?'Analizando orden de compra del cliente…':'Analizando documento con IA…';
   if(invoicePreviewUrl)URL.revokeObjectURL(invoicePreviewUrl);
@@ -1647,9 +1724,14 @@ async function convertCustomerPoToSalesOrder(){
     document_tax_amount:Number(data.tax_amount||0),
     document_total_amount:Number(data.total_amount||0)
   };
-  el('invoiceMsg').textContent='Creando nota de venta y enviando el pedido al tracking…';
+  el('invoiceMsg').textContent='Archivando OC original y creando nota de venta…';
   if(el('convertCustomerPo'))el('convertCustomerPo').disabled=true;
+  var archived=null,posted=false;
   try{
+    archived=await uploadOriginalPdf('oc-clientes',poNo);
+    if(archived){
+      meta.source_file_path=archived.path;meta.source_file_name=archived.name;meta.source_file_mime=archived.mime
+    }
     var result=await authFetch('/rest/v1/rpc/msc_create_sales_order_from_customer_po',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({
       p_customer_id:customerId,
       p_customer_po_number:poNo,
@@ -1659,18 +1741,21 @@ async function convertCustomerPoToSalesOrder(){
       p_source_meta:meta
     })});
     if(result&&result.duplicate){
+      if(archived)await deleteStoredPdf(archived.path);
       data._duplicateOrder={id:result.sales_order_id,order_number:result.order_number,status:result.status};renderCustomerPo(data);
       el('invoiceMsg').textContent='La OC ya estaba ingresada como '+result.order_number+'. No se duplicó el pedido.';return
     }
+    posted=true;
     for(var i=0;i<data.lines.length;i++)await rememberCustomerAlias(customerId,data.lines[i],data.lines[i]._product);
     var orderNo=result&&result.order_number?result.order_number:'pedido creado';
     var credit=result&&result.credit_blocked?' Quedó bloqueado por crédito: '+(result.credit_block_reason||'revisión de cobranza')+'.':' Crédito aprobado para continuar el flujo.';
-    el('invoiceMsg').innerHTML='<b>OC convertida correctamente.</b> Nota de venta/pedido '+esc(orderNo)+'.'+esc(credit);
-    el('invoiceReview').classList.add('hidden');parsedInvoice=null;el('invoiceFile').value='';
+    el('invoiceMsg').innerHTML='<b>OC convertida correctamente.</b> Nota de venta/pedido '+esc(orderNo)+'. PDF original archivado.'+esc(credit);
+    el('invoiceReview').classList.add('hidden');parsedInvoice=null;invoiceSourceFile=null;el('invoiceFile').value='';
     if(invoicePreviewUrl){URL.revokeObjectURL(invoicePreviewUrl);invoicePreviewUrl=''}
     await loadAll();
     var pedidos=document.querySelector('[data-view="pedidos"]');if(pedidos)pedidos.click()
   }catch(err){
+    if(archived&&!posted)await deleteStoredPdf(archived.path);
     var msg=String(err.message||err);
     if(msg.indexOf('MSC_SALES_ROLE_REQUIRED')>=0)msg='Tu perfil no tiene permiso para crear notas de venta.';
     else if(msg.indexOf('INVALID_ORDER_LINE')>=0)msg='Hay una línea inválida. Revisa producto, cantidad, precio y descuento.';
@@ -1795,9 +1880,17 @@ async function approveInvoice(){
   if(v.affects_inventory&&unresolved){el('invoiceMsg').textContent='Hay líneas sin SKU confirmado. Para mover inventario, primero debes resolverlas.';return}
   if(v.total<=0){el('invoiceMsg').textContent='Revisa el total del documento.';return}
 
-  el('invoiceMsg').textContent='Controller confirmado. Validando y registrando en una sola transacción…';
+  var po=null,rec=null;
+  if(v.type==='compra'&&v.purchase_order_id){
+    po=purchaseOrders.find(function(o){return o.id===v.purchase_order_id});
+    rec=purchaseReconciliation(po,parsedInvoice)
+  }
+
+  el('invoiceMsg').textContent='Archivando PDF original y registrando el documento en una sola transacción…';
   if(el('approveInvoice'))el('approveInvoice').disabled=true;
+  var archived=null,posted=false;
   try{
+    archived=await uploadOriginalPdf('dte',v.type+'-'+v.folio);
     var doc={
       document_type:v.type,
       folio:v.folio,
@@ -1816,6 +1909,12 @@ async function approveInvoice(){
       tax_amount:v.tax,
       total_amount:v.total,
       purchase_account_code:v.purchase_account_code,
+      purchase_order_id:v.purchase_order_id||null,
+      po_match_status:rec?rec.status:null,
+      po_match_note:rec?rec.note:null,
+      source_file_path:archived?archived.path:null,
+      source_file_name:archived?archived.name:null,
+      source_file_mime:archived?archived.mime:null,
       ai_confidence:parsedInvoice.ai_confidence||'medium',
       ai_payload:{
         detected_document_type:parsedInvoice.detected_document_type||null,
@@ -1841,18 +1940,16 @@ async function approveInvoice(){
         ai_match_reason:x.match_reason||x._matchReason||null
       }
     });
-    var result=await authFetch('/rest/v1/rpc/msc_post_tax_document',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({p_document:doc,p_lines:lines})});
-    if(v.type==='compra'&&v.purchase_order_id&&result&&result.document_id){
-      var po=purchaseOrders.find(function(o){return o.id===v.purchase_order_id}),rec=purchaseReconciliation(po,parsedInvoice);
-      await authFetch('/rest/v1/msc_documents?id=eq.'+encodeURIComponent(result.document_id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({purchase_order_id:v.purchase_order_id,po_match_status:rec.status,po_match_note:rec.note,affects_inventory:false,inventory_effect:'sin_movimiento',stock_managed_elsewhere:true})});
-    }
+    var result=await authFetch('/rest/v1/rpc/msc_post_tax_document_v2',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({p_document:doc,p_lines:lines})});
+    posted=true;
     for(var i=0;i<parsedInvoice.lines.length;i++){var line=parsedInvoice.lines[i];if(line._product)await rememberAlias(v.issuer_name,line,line._product)}
-    var stockMsg=v.type==='compra'&&v.purchase_order_id?'Factura asociada a OC. El stock se controla exclusivamente desde la recepción física para evitar duplicidad.':(result&&result.stock_managed_elsewhere?'El stock queda gestionado por el flujo del pedido para evitar duplicidad.':('Efecto inventario: '+esc((result&&result.inventory_effect)||'sin movimiento')+'.'));
-    el('invoiceMsg').innerHTML='<b>Documento registrado correctamente.</b> Asiento '+esc((result&&result.journal_entry_number)||'creado')+'. '+stockMsg;
-    el('invoiceReview').classList.add('hidden');parsedInvoice=null;el('invoiceFile').value='';
+    var stockMsg=v.type==='compra'&&v.purchase_order_id?'Factura y OC quedaron asociadas atómicamente. El stock se controla exclusivamente desde la recepción física para evitar duplicidad.':(result&&result.stock_managed_elsewhere?'El stock queda gestionado por el flujo del pedido para evitar duplicidad.':('Efecto inventario: '+esc((result&&result.inventory_effect)||'sin movimiento')+'.'));
+    el('invoiceMsg').innerHTML='<b>Documento registrado correctamente.</b> Asiento '+esc((result&&result.journal_entry_number)||'creado')+'. PDF original archivado. '+stockMsg;
+    el('invoiceReview').classList.add('hidden');parsedInvoice=null;invoiceSourceFile=null;el('invoiceFile').value='';
     if(invoicePreviewUrl){URL.revokeObjectURL(invoicePreviewUrl);invoicePreviewUrl=''}
     await loadAll()
   }catch(err){
+    if(archived&&!posted)await deleteStoredPdf(archived.path);
     var msg=String(err.message||err);
     if(msg.indexOf('DOCUMENT_ALREADY_POSTED')>=0)msg='Este DTE ya está registrado. No se realizó ningún movimiento.';
     else if(msg.indexOf('CONTROLLER_ROLE_REQUIRED')>=0)msg='Tu perfil no tiene permiso de controller para contabilizar.';
