@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "node scripts/preview-static.mjs",
-    "build": "node scripts/build-public.mjs && next build && node scripts/merge-next.mjs",
+    "build": "node scripts/build-public.mjs && node scripts/inject-msc-customer-tools.mjs && next build && node scripts/merge-next.mjs",
     "test:move": "node --test tests/move-*.test.mjs",
     "dev:next": "next dev --port 3000"
   },
