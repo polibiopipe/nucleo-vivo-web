@@ -1397,6 +1397,10 @@ function reviewValues(){
 function refreshControllerProposal(){
   if(!el('controllerAccountingPreview'))return;
   var v=reviewValues(),isNC=isCreditNote(v.type),isPurchase=v.type==='compra'||v.type==='nota_credito_compra';
+  if(v.type==='compra'&&v.purchase_order_id){
+    v.affects_inventory=false;
+    if(el('reviewAffectsInventory')){el('reviewAffectsInventory').value='false';el('reviewAffectsInventory').disabled=true}
+  }else if(el('reviewAffectsInventory'))el('reviewAffectsInventory').disabled=false;
   if(el('creditNoteFields'))el('creditNoteFields').classList.toggle('hidden',!isNC);
   if(el('purchaseAccountField'))el('purchaseAccountField').classList.toggle('hidden',!isPurchase);
   var rows=accountingRowsFor(v.type,v.net,v.exempt,v.tax,v.total,v.purchase_account_code);
@@ -1404,7 +1408,7 @@ function refreshControllerProposal(){
   var extra=(v.type==='venta'||v.type==='nota_credito_venta')?'<div class="muted" style="margin-top:7px">Costo de ventas e inventario contable se calculan con el costo vigente de los SKU al aprobar.</div>':'';
   el('controllerAccountingPreview').innerHTML='<div class="accounting-review-table"><div class="accounting-review-head"><span>Cuenta</span><span>Debe</span><span>Haber</span></div>'+rows.map(function(x){return '<div class="accounting-review-row"><span><b>'+esc(x.code)+'</b> · '+esc(x.name)+'</span><span>'+money(x.debit||0)+'</span><span>'+money(x.credit||0)+'</span></div>'}).join('')+'<div class="accounting-review-row accounting-total"><span>Control</span><span>'+money(debit)+'</span><span>'+money(credit)+'</span></div></div>'+extra;
   if(el('reviewStockEffect')){
-    var label=!v.affects_inventory?'Sin movimiento físico':(v.type==='compra'?'Entrada de stock':v.type==='venta'?'Salida de stock (el ERP evita duplicarla si el pedido ya la gestiona)':v.type==='nota_credito_compra'?'Salida de stock por devolución al proveedor':'Entrada de stock por devolución del cliente');
+    var label=(v.type==='compra'&&v.purchase_order_id)?'Sin movimiento físico · stock controlado por recepción de la OC':(!v.affects_inventory?'Sin movimiento físico':(v.type==='compra'?'Entrada de stock':v.type==='venta'?'Salida de stock (el ERP evita duplicarla si el pedido ya la gestiona)':v.type==='nota_credito_compra'?'Salida de stock por devolución al proveedor':'Entrada de stock por devolución del cliente'));
     el('reviewStockEffect').textContent=label;
   }
   updateApproveState()
