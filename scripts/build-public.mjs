@@ -42,6 +42,11 @@ const salesPath = path.join(output,'prototipos/msc-safety/ventas/index.html');
 try {
   let html = await readFile(salesPath,'utf8');
   html = html.replace(`var CUSTOMER_FIELDS=['rut','name','address','city','contact_name','phone','email','business_activity','credit_limit','payment_terms','default_discount_percent','notes'];`,`var CUSTOMER_FIELDS=${JSON.stringify(customerFields)};`);
+  // En la segunda pantalla de variantes se evita repetir KPI ya visibles en el nivel superior.
+  // El foco queda en variante, SKU/EAN, precio, disponible, cantidad y agregar al carro.
+  if (!html.includes('msc-variant-selector-cleanup')) {
+    html = html.replace('</head>','<style id="msc-variant-selector-cleanup">.variantExtra{display:none!important}.variantCard{padding-top:12px;padding-bottom:12px}</style>\n</head>');
+  }
   await writeFile(salesPath,html,'utf8');
 } catch (error) {
   console.warn('MSC sales normalization skipped:',error.message);
