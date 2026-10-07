@@ -483,10 +483,16 @@ table{max-width:100%}
       </section>
 
       <section class="view" id="view-compras">
-        <div class="module-hero"><div><div class="module-tag">Reposición</div><h1>Compras y órdenes</h1><p>Convierte sugerencias de reposición en órdenes trazables.</p></div></div>
+        <div class="module-hero"><div><div class="module-tag">Abastecimiento</div><h1>Compras y órdenes</h1><p>OC, recepción física y factura del proveedor quedan conectadas en un mismo flujo.</p></div></div>
+        <div class="module-kpis">
+          <div class="module-kpi"><span>OC abiertas</span><strong id="kOpenPO2">0</strong></div>
+          <div class="module-kpi"><span>Recepción parcial</span><strong id="kPartialPO">0</strong></div>
+          <div class="module-kpi"><span>Esperando factura</span><strong id="kAwaitingInvoice">0</strong></div>
+          <div class="module-kpi"><span>Diferencias por revisar</span><strong id="kPoDifferences">0</strong></div>
+        </div>
         <div class="split-2">
-          <div class="formbox"><h2>Nueva orden de compra</h2><form id="purchaseOrderForm"><div class="field"><label>Proveedor</label><select name="supplier_id" id="poSupplier" required></select></div><div class="field"><label>Producto</label><select name="product_id" id="poProduct" required></select></div><div class="field"><label>Cantidad</label><input name="quantity" type="number" min=".001" step=".001" required></div><div class="field"><label>Costo unitario neto</label><input name="unit_cost" type="number" min="0" step=".01" required></div><div class="field"><label>Fecha esperada</label><input name="expected_date" type="date"></div><button class="btn" type="submit">Crear OC</button></form></div>
-          <div class="panel" style="margin-top:0"><div class="panel-head"><h2>Órdenes recientes</h2></div><div class="table-wrap"><table><thead><tr><th>OC</th><th>Proveedor</th><th>Fecha</th><th>Esperada</th><th>Total neto</th><th>Estado</th><th>Acción</th></tr></thead><tbody id="poRows"></tbody></table></div></div>
+          <div class="formbox"><div class="panel-intro"><div><h2>Nueva orden de compra</h2><p>La OC genera un correlativo y deja la mercadería esperada “en tránsito”.</p></div><span class="module-tag">OC → recepción → factura</span></div><form id="purchaseOrderForm"><div class="field"><label>Proveedor</label><select name="supplier_id" id="poSupplier" required></select></div><div class="field"><label>Producto</label><select name="product_id" id="poProduct" required></select></div><div class="field"><label>Cantidad</label><input name="quantity" type="number" min=".001" step=".001" required></div><div class="field"><label>Costo unitario neto</label><input name="unit_cost" type="number" min="0" step=".01" required></div><div class="field"><label>Fecha esperada</label><input name="expected_date" type="date"></div><button class="btn" type="submit">Crear OC</button></form><div class="notice" style="margin-top:12px"><b>Recepción separada de factura:</b> al recibir mercadería se actualiza stock. Cuando llegue el DTE, se asocia a la OC sin volver a sumar inventario.</div></div>
+          <div class="panel" style="margin-top:0"><div class="panel-head"><div><h2>Órdenes recientes</h2><span class="muted">Control de pedido, recepción y DTE asociado</span></div></div><div class="table-wrap"><table><thead><tr><th>OC</th><th>Proveedor</th><th>Esperada</th><th>Pedido / recibido</th><th>Total neto</th><th>Factura</th><th>Conciliación</th><th>Acción</th></tr></thead><tbody id="poRows"></tbody></table></div></div>
         </div>
       </section>
 
@@ -642,7 +648,7 @@ var SUPABASE_KEY='sb_publishable_evFWgAwjv7xcNxo156NV0g_CFq0j5Ld';
 var token=sessionStorage.getItem('msc_token')||'';
 var role='';
 var currentEmail='';
-var products=[],locations=[],documents=[],movements=[],aliases=[],commitments=[],inbound=[],counts=[],warehouses=[],suppliers=[],purchaseOrders=[],certifications=[],lots=[],inspections=[],customers=[],salesOrders=[],returnsData=[],auditLog=[],dispatches=[],notifications=[],customerUsers=[],quoteRequests=[],orderEvents=[],costCenters=[],accounts=[],journalEntries=[],journalLines=[],payables=[],receivables=[],cashAccounts=[],cashTransactions=[],employees=[],contracts=[],leaveRequests=[],payrollPeriods=[],salespeople=[],collectionActions=[];var activePickingOrderId=null;
+var products=[],locations=[],documents=[],movements=[],aliases=[],commitments=[],inbound=[],counts=[],warehouses=[],suppliers=[],purchaseOrders=[],certifications=[],lots=[],inspections=[],customers=[],salesOrders=[],returnsData=[],auditLog=[],dispatches=[],notifications=[],customerUsers=[],quoteRequests=[],orderEvents=[],costCenters=[],accounts=[],journalEntries=[],journalLines=[],payables=[],receivables=[],cashAccounts=[],cashTransactions=[],employees=[],contracts=[],leaveRequests=[],payrollPeriods=[],salespeople=[],collectionActions=[];var activePickingOrderId=null;var activePurchaseOrderId=null;
 function el(id){return document.getElementById(id)}
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function authRedirectUrl(){return window.location.origin+'/prototipos/msc-safety/gestion/'}
@@ -689,7 +695,7 @@ async function loadAll(){
     var rs=await Promise.all([
       authFetch('/rest/v1/msc_products?select=*&order=created_at.desc'),
       authFetch('/rest/v1/msc_locations?select=*&order=code'),
-      authFetch('/rest/v1/msc_documents?select=*&order=created_at.desc&limit=100'),
+      authFetch('/rest/v1/msc_documents?select=*,msc_purchase_orders(po_number)&order=created_at.desc&limit=100'),
       authFetch('/rest/v1/msc_stock_movements?select=*,msc_products(sku,name,unit),msc_documents(folio)&order=created_at.desc&limit=500'),
       authFetch('/rest/v1/msc_supplier_aliases?select=*&order=created_at.desc&limit=1000'),
       authFetch('/rest/v1/msc_stock_commitments?select=*&order=created_at.desc&limit=1000'),
@@ -697,7 +703,7 @@ async function loadAll(){
       authFetch('/rest/v1/msc_inventory_counts?select=*&order=counted_at.desc&limit=500'),
       authFetch('/rest/v1/msc_warehouses?select=*&order=name'),
       authFetch('/rest/v1/msc_suppliers?select=*&order=name'),
-      authFetch('/rest/v1/msc_purchase_orders?select=*,msc_suppliers(name),msc_purchase_order_lines(*,msc_products(sku,name))&order=created_at.desc&limit=200'),
+      authFetch('/rest/v1/msc_purchase_orders?select=*,msc_suppliers(name,rut),msc_purchase_order_lines(*,msc_products(sku,name)),msc_documents(id,folio,total_amount,document_type,status,document_date,po_match_status,po_match_note)&order=created_at.desc&limit=200'),
       authFetch('/rest/v1/msc_product_certifications?select=*,msc_products(sku,name)&order=created_at.desc&limit=1000'),
       authFetch('/rest/v1/msc_product_lots?select=*,msc_products(sku,name)&order=created_at.desc&limit=1000'),
       authFetch('/rest/v1/msc_equipment_inspections?select=*,msc_products(sku,name)&order=created_at.desc&limit=1000'),
@@ -909,7 +915,16 @@ function renderManagement(){
   var scored=suppliers.filter(function(s){return s.quality_rating!=null||s.delivery_rating!=null||s.price_rating!=null}),score=scored.length?scored.reduce(function(a,s){var vals=[s.quality_rating,s.delivery_rating,s.price_rating].filter(function(x){return x!=null}).map(Number);return a+(vals.length?vals.reduce(function(x,y){return x+y},0)/vals.length:0)},0)/scored.length:null;
   if(el('kSupplierScore'))el('kSupplierScore').textContent=score?score.toFixed(1)+'/5':'—';
   if(el('supplierRows'))el('supplierRows').innerHTML=suppliers.map(function(s){var vals=[s.quality_rating,s.delivery_rating,s.price_rating].filter(function(x){return x!=null}).map(Number),sc=vals.length?(vals.reduce(function(a,b){return a+b},0)/vals.length).toFixed(1):'—';return '<tr><td><b>'+esc(s.name)+'</b><div class="muted">'+esc(s.contact_name||'')+'</div></td><td>'+esc(s.rut||'')+'</td><td>'+(s.lead_time_days==null?'—':s.lead_time_days+' días')+'</td><td>'+sc+'</td><td><span class="pill '+(s.active?'ok':'bad')+'">'+(s.active?'Activo':'Inactivo')+'</span></td></tr>'}).join('');
-  if(el('poRows'))el('poRows').innerHTML=purchaseOrders.map(function(o){var late=o.expected_date&&new Date(o.expected_date+'T23:59:59')<today&&['recibida','cancelada'].indexOf(o.status)<0;var action=o.status==='recibida'||o.status==='cancelada'?'—':'<button class="btn alt receivePo" data-id="'+o.id+'" type="button" style="padding:6px 8px">Recibir</button>';return '<tr><td class="sku">'+esc(o.po_number)+'</td><td>'+esc((o.msc_suppliers||{}).name||'')+'</td><td>'+esc(o.order_date)+'</td><td>'+esc(o.expected_date||'—')+(late?' <span class="pill bad">Atrasada</span>':'')+'</td><td>'+money(o.net_total)+'</td><td>'+esc(o.status)+'</td><td>'+action+'</td></tr>'}).join('');
+  var poOpen=purchaseOrders.filter(function(o){return ['borrador','emitida','parcial'].indexOf(o.status)>=0}),poPartial=purchaseOrders.filter(function(o){return o.status==='parcial'}),poAwait=purchaseOrders.filter(function(o){return o.status!=='cancelada'&&!(o.msc_documents||[]).some(function(d){return d.document_type==='compra'})}),poDiff=purchaseOrders.filter(function(o){return (o.msc_documents||[]).some(function(d){return d.po_match_status==='diferencia'})});
+  if(el('kOpenPO2'))el('kOpenPO2').textContent=poOpen.length;if(el('kPartialPO'))el('kPartialPO').textContent=poPartial.length;if(el('kAwaitingInvoice'))el('kAwaitingInvoice').textContent=poAwait.length;if(el('kPoDifferences'))el('kPoDifferences').textContent=poDiff.length;
+  if(el('poRows'))el('poRows').innerHTML=purchaseOrders.map(function(o){
+    var late=o.expected_date&&new Date(o.expected_date+'T23:59:59')<today&&['recibida','cancelada'].indexOf(o.status)<0;
+    var lines=o.msc_purchase_order_lines||[],ordered=lines.reduce(function(s,l){return s+Number(l.quantity||0)},0),received=lines.reduce(function(s,l){return s+Number(l.received_quantity||0)},0),docs=(o.msc_documents||[]).filter(function(d){return d.document_type==='compra'}),lastDoc=docs.slice().sort(function(a,b){return String(b.document_date||'').localeCompare(String(a.document_date||''))})[0];
+    var invoice=lastDoc?('<b>F'+esc(lastDoc.folio||'')+'</b><div class="muted">'+money(lastDoc.total_amount)+'</div>'):'<span class="pill warn">Pendiente</span>';
+    var recon=lastDoc?(lastDoc.po_match_status==='diferencia'?'<span class="pill bad">Revisar</span>':'<span class="pill ok">'+esc(lastDoc.po_match_status==='conciliado'?'OK':'Asociada')+'</span>'):'—';
+    var action=o.status==='cancelada'?'—':'<button class="btn alt receivePo" data-id="'+o.id+'" type="button" style="padding:6px 8px">'+(received>=ordered&&ordered>0?'Ver recepción':'Recibir')+'</button>';
+    return '<tr><td class="sku"><b>'+esc(o.po_number)+'</b><div class="muted">'+esc(o.status)+'</div></td><td>'+esc((o.msc_suppliers||{}).name||'')+'</td><td>'+esc(o.expected_date||'—')+(late?' <span class="pill bad">Atrasada</span>':'')+'</td><td><b>'+received.toLocaleString('es-CL')+' / '+ordered.toLocaleString('es-CL')+'</b></td><td>'+money(o.net_total)+'</td><td>'+invoice+'</td><td>'+recon+'</td><td>'+action+'</td></tr>'
+  }).join('');
   if(el('poRows'))el('poRows').querySelectorAll('.receivePo').forEach(function(b){b.onclick=function(){receivePurchaseOrder(b.dataset.id)}});
 
   var certExp=certifications.filter(function(c){var d=daysUntil(c.expiry_date);return d!=null&&d>=0&&d<=60}),certExpired=certifications.filter(function(c){var d=daysUntil(c.expiry_date);return d!=null&&d<0}),lotExp=lots.filter(function(l){var d=daysUntil(l.expiry_date);return l.status==='disponible'&&d!=null&&d>=0&&d<=60}),inspDue=inspections.filter(function(i){var d=daysUntil(i.next_inspection_date);return d!=null&&d<=30});
@@ -1200,7 +1215,34 @@ if(el('closeOrderTracking'))el('closeOrderTracking').onclick=function(){el('orde
 
 el('returnForm').addEventListener('submit',async function(e){e.preventDefault();var b=formObject(e.target),qty=Number(b.quantity),retNo=uniqueRef('DEV');try{var h=await authFetch('/rest/v1/msc_returns?select=*',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({return_number:retNo,customer_id:b.customer_id||null,status:'recibida',reason:b.reason||null})});await authFetch('/rest/v1/msc_return_lines',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({return_id:h[0].id,product_id:b.product_id,quantity:qty,disposition:b.disposition,notes:b.reason||null})});if(b.disposition==='reingreso'){await authFetch('/rest/v1/msc_stock_movements',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({product_id:b.product_id,movement_type:'devolucion_cliente',quantity:qty,notes:'Devolución '+retNo})})}e.target.reset();await loadAll()}catch(err){alert(err.message)}});
 
-async function receivePurchaseOrder(id){var o=purchaseOrders.find(function(x){return x.id===id});if(!o)return;var lines=o.msc_purchase_order_lines||[];if(!lines.length){alert('La OC no tiene líneas.');return}try{for(var i=0;i<lines.length;i++){var l=lines[i];await authFetch('/rest/v1/msc_stock_movements',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({product_id:l.product_id,movement_type:'compra',quantity:Number(l.quantity),notes:'Recepción '+o.po_number})});await authFetch('/rest/v1/msc_purchase_order_lines?id=eq.'+encodeURIComponent(l.id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({received_quantity:Number(l.quantity)})});await authFetch('/rest/v1/rpc/msc_update_cost_from_purchase',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({p_product_id:l.product_id,p_cost_price:Number(l.unit_cost)})})}await authFetch('/rest/v1/msc_purchase_orders?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'recibida'})});await authFetch('/rest/v1/msc_inbound_stock?purchase_reference=eq.'+encodeURIComponent(o.po_number),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'recibido',received_at:new Date().toISOString()})});await loadAll()}catch(err){alert(err.message)}}
+async function receivePurchaseOrder(id){
+  var o=purchaseOrders.find(function(x){return x.id===id});if(!o)return;
+  var lines=o.msc_purchase_order_lines||[];if(!lines.length){alert('La OC no tiene líneas.');return}
+  var changes=[];
+  for(var i=0;i<lines.length;i++){
+    var l=lines[i],ordered=Number(l.quantity||0),already=Number(l.received_quantity||0),remaining=Math.max(0,ordered-already),p=l.msc_products||{};
+    if(remaining<=0)continue;
+    var raw=prompt(o.po_number+' · '+(p.sku||'')+' '+(p.name||'Producto')+'\nPedido: '+ordered+' · ya recibido: '+already+' · pendiente: '+remaining+'\n¿Cuántas unidades llegaron ahora?',String(remaining));
+    if(raw===null)return;
+    var qty=Number(String(raw).replace(',','.'));
+    if(!Number.isFinite(qty)||qty<0||qty>remaining){alert('Cantidad inválida. Debe estar entre 0 y '+remaining+'.');return}
+    if(qty>0)changes.push({line:l,qty:qty});
+  }
+  if(!changes.length){alert('No hay cantidades nuevas por recibir en esta OC.');return}
+  try{
+    for(var j=0;j<changes.length;j++){
+      var ch=changes[j],l=ch.line,newReceived=Number(l.received_quantity||0)+ch.qty;
+      await authFetch('/rest/v1/msc_stock_movements',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({product_id:l.product_id,movement_type:'compra',quantity:ch.qty,notes:'Recepción física '+o.po_number+' · '+ch.qty+' unidades'})});
+      await authFetch('/rest/v1/msc_purchase_order_lines?id=eq.'+encodeURIComponent(l.id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({received_quantity:newReceived})});
+      await authFetch('/rest/v1/rpc/msc_update_cost_from_purchase',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({p_product_id:l.product_id,p_cost_price:Number(l.unit_cost)})})
+    }
+    var projected=lines.map(function(l){var ch=changes.find(function(x){return x.line.id===l.id});return {q:Number(l.quantity||0),r:Number(l.received_quantity||0)+(ch?ch.qty:0)}}),allDone=projected.every(function(x){return x.r>=x.q}),anyDone=projected.some(function(x){return x.r>0});
+    await authFetch('/rest/v1/msc_purchase_orders?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:allDone?'recibida':(anyDone?'parcial':'emitida')})});
+    var pending=projected.reduce(function(s,x){return s+Math.max(0,x.q-x.r)},0);
+    await authFetch('/rest/v1/msc_inbound_stock?purchase_reference=eq.'+encodeURIComponent(o.po_number),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({quantity:pending,status:allDone?'recibido':'en_transito',received_at:allDone?new Date().toISOString():null})});
+    await loadAll()
+  }catch(err){alert(err.message)}
+}
 
 function orderStatusLabel(status,d){var labels={bloqueado_cobranza:'Bloqueado cobranza',confirmado:'En espera',preparacion:'Picking',revision:'Revisión',listo_facturar:'Listo para facturar',facturado:'Facturado',en_despacho:'En despacho',entregado:'Entregado',cancelado:'Cancelado'};var s=labels[status]||String(status||'').replaceAll('_',' ');return '<span class="status-light '+(status==='entregado'?'green':status==='listo_facturar'?'yellow':'')+'">'+esc(s)+'</span>'}
 function trackingHtml(status){var steps=[['confirmado','En espera'],['preparacion','Picking'],['revision','Revisión'],['listo_facturar','Facturar'],['facturado','Facturado'],['en_despacho','Despacho'],['entregado','Entregado']],idx=steps.findIndex(function(x){return x[0]===status});return steps.map(function(x,i){return '<span class="tracking-step '+(i<idx?'done':i===idx?'on':'')+'">'+x[1]+'</span>'}).join('')}
@@ -1304,6 +1346,33 @@ function accountingRowsFor(type,net,exempt,tax,total,purchaseCode){
   ];
   return []
 }
+function normalizeRut(v){return String(v||'').toUpperCase().replace(/[^0-9K]/g,'')}
+function purchaseOrderForInvoice(data){
+  if(!data||((data._documentType||inferInvoiceType(data))!=='compra'))return null;
+  var issuer=normalizeRut(data.issuer_rut),total=Number(data.total_amount||0),ranked=purchaseOrders.filter(function(o){return o.status!=='cancelada'}).map(function(o){
+    var s=suppliers.find(function(x){return x.id===o.supplier_id}),score=0;
+    if(issuer&&s&&normalizeRut(s.rut)===issuer)score+=6;
+    var diff=Math.abs(Number(o.gross_total||0)-total);if(total>0&&diff<=2)score+=5;else if(total>0&&diff/Math.max(total,1)<=.02)score+=2;
+    var lines=o.msc_purchase_order_lines||[],matched=(data.lines||[]).filter(function(x){return x._product&&lines.some(function(l){return l.product_id===x._product.id})}).length;if(matched)score+=Math.min(4,matched);
+    return {po:o,score:score}
+  }).sort(function(a,b){return b.score-a.score});
+  return ranked.length&&ranked[0].score>=6?ranked[0].po:null
+}
+function purchaseReconciliation(po,data){
+  if(!po)return {status:'sin_oc',note:'Factura sin OC asociada',allReceived:false};
+  var lines=po.msc_purchase_order_lines||[],ordered={},received={},invoiced={};
+  lines.forEach(function(l){ordered[l.product_id]=(ordered[l.product_id]||0)+Number(l.quantity||0);received[l.product_id]=(received[l.product_id]||0)+Number(l.received_quantity||0)});
+  (data&&data.lines||[]).forEach(function(x){if(x._product)invoiced[x._product.id]=(invoiced[x._product.id]||0)+Number(x.quantity||0)});
+  var ids=Object.keys(ordered),qtyOk=ids.length>0&&ids.every(function(id){return Math.abs(Number(ordered[id]||0)-Number(invoiced[id]||0))<.001}),allReceived=ids.length>0&&ids.every(function(id){return Number(received[id]||0)>=Number(ordered[id]||0)-.001),totalOk=data?Math.abs(Number(po.gross_total||0)-Number(data.total_amount||0))<=2:true;
+  var status=qtyOk&&totalOk?'conciliado':'diferencia',notes=[];if(!qtyOk)notes.push('cantidades factura ≠ OC');if(!totalOk)notes.push('total factura ≠ OC');if(!allReceived)notes.push('recepción física pendiente');
+  return {status:status,note:notes.join(' · ')||'OC, cantidades y total coinciden',allReceived:allReceived}
+}
+function refreshPurchaseReconciliation(){
+  var s=el('reviewPurchaseOrder'),box=el('poReconciliation');if(!s||!box||!parsedInvoice)return;
+  var po=purchaseOrders.find(function(o){return o.id===s.value}),r=purchaseReconciliation(po,parsedInvoice);
+  if(!po){box.innerHTML='<span class="pill warn">Sin OC asociada</span> La factura de compra moverá inventario según el DTE.';return}
+  box.innerHTML='<b>'+esc(po.po_number)+'</b> · <span class="pill '+(r.status==='conciliado'?'ok':'bad')+'">'+(r.status==='conciliado'?'Conciliación OK':'Diferencias')+'</span><div class="muted" style="margin-top:5px">'+esc(r.note)+(r.allReceived?' · recepción completa':'')+'</div>';
+}
 function reviewValues(){
   return {
     type:el('reviewDocType')?el('reviewDocType').value:(parsedInvoice&&parsedInvoice._documentType)||el('docType').value,
@@ -1321,7 +1390,8 @@ function reviewValues(){
     reason:el('reviewCreditReason')?el('reviewCreditReason').value:'',
     affects_inventory:el('reviewAffectsInventory')?el('reviewAffectsInventory').value==='true':true,
     purchase_account_code:el('reviewPurchaseAccount')?el('reviewPurchaseAccount').value:'110301',
-    notes:el('reviewControllerNotes')?el('reviewControllerNotes').value.trim():''
+    notes:el('reviewControllerNotes')?el('reviewControllerNotes').value.trim():'',
+    purchase_order_id:el('reviewPurchaseOrder')?el('reviewPurchaseOrder').value:''
   }
 }
 function refreshControllerProposal(){
@@ -1470,6 +1540,10 @@ function renderInvoice(data){
   html+='</div></div>';
   html+='<div class="document-pdf-panel"><div class="document-pdf-head"><b>PDF original</b><span>Comparar antes de aprobar</span></div>'+(invoicePreviewUrl?'<iframe src="'+esc(invoicePreviewUrl)+'" title="PDF original del DTE"></iframe>':'<div class="muted">Vista previa no disponible.</div>')+'</div></div>';
 
+  if((data._documentType||inferInvoiceType(data))==='compra'){
+    var suggested=purchaseOrderForInvoice(data),poOptions=purchaseOrders.filter(function(o){return o.status!=='cancelada'}).map(function(o){var sup=(o.msc_suppliers||{}).name||'',sel=suggested&&suggested.id===o.id?' selected':'';return '<option value="'+esc(o.id)+'"'+sel+'>'+esc(o.po_number)+' · '+esc(sup)+' · '+money(o.gross_total)+'</option>'}).join('');
+    html+='<div class="controller-subtitle"><b>Orden de compra asociada</b><span>Vincula el DTE con la compra antes de contabilizar.</span></div><div class="grid2"><div class="field"><label>OC</label><select id="reviewPurchaseOrder"><option value="">Sin OC asociada</option>'+poOptions+'</select></div><div id="poReconciliation" class="notice" style="margin:0"></div></div>';
+  }
   html+='<div class="controller-subtitle"><b>Conciliación de productos</b><span>La IA propone; el controller confirma.</span></div>';
   (data.lines||[]).forEach(function(line,i){
     var p=line._product||findProduct(line,data.issuer_name);line._product=p||null;
@@ -1497,14 +1571,16 @@ function renderInvoice(data){
   box.querySelectorAll('.chooseExisting').forEach(function(btn){btn.onclick=function(){chooseInvoiceProduct(Number(btn.dataset.line),btn.dataset.product)}});
   box.querySelectorAll('.createSuggested').forEach(function(btn){btn.onclick=function(){createSuggestedProduct(Number(btn.dataset.line))}});
   ['reviewDocType','reviewNet','reviewExempt','reviewTax','reviewTotal','reviewAffectsInventory','reviewPurchaseAccount','reviewReference','reviewCreditReason'].forEach(function(id){if(el(id))el(id).addEventListener('change',refreshControllerProposal)});
+  if(el('reviewPurchaseOrder'))el('reviewPurchaseOrder').addEventListener('change',function(){refreshPurchaseReconciliation();refreshControllerProposal()});
   if(el('controllerConfirm'))el('controllerConfirm').addEventListener('change',updateApproveState);
   var b=el('approveInvoice');if(b)b.onclick=approveInvoice;
-  refreshControllerProposal()
+  refreshPurchaseReconciliation();refreshControllerProposal()
 }
 async function approveInvoice(){
   if(!parsedInvoice)return;
   if(['admin','bodega','supervisor'].indexOf(role)<0){el('invoiceMsg').textContent='Se requiere perfil controller para aprobar y contabilizar.';return}
   var v=reviewValues();
+  if(v.type==='compra'&&v.purchase_order_id){v.affects_inventory=false;if(el('reviewAffectsInventory'))el('reviewAffectsInventory').value='false'}
   if(!el('controllerConfirm')||!el('controllerConfirm').checked){el('invoiceMsg').textContent='Debes confirmar la revisión manual del controller.';return}
   if(!v.folio){el('invoiceMsg').textContent='Revisa el folio antes de aprobar.';return}
   if(isCreditNote(v.type)&&!v.reference_folio){el('invoiceMsg').textContent='La nota de crédito debe indicar el folio del DTE de referencia.';return}
@@ -1559,8 +1635,12 @@ async function approveInvoice(){
       }
     });
     var result=await authFetch('/rest/v1/rpc/msc_post_tax_document',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({p_document:doc,p_lines:lines})});
+    if(v.type==='compra'&&v.purchase_order_id&&result&&result.document_id){
+      var po=purchaseOrders.find(function(o){return o.id===v.purchase_order_id}),rec=purchaseReconciliation(po,parsedInvoice);
+      await authFetch('/rest/v1/msc_documents?id=eq.'+encodeURIComponent(result.document_id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({purchase_order_id:v.purchase_order_id,po_match_status:rec.status,po_match_note:rec.note,affects_inventory:false,inventory_effect:'sin_movimiento',stock_managed_elsewhere:true})});
+    }
     for(var i=0;i<parsedInvoice.lines.length;i++){var line=parsedInvoice.lines[i];if(line._product)await rememberAlias(v.issuer_name,line,line._product)}
-    var stockMsg=result&&result.stock_managed_elsewhere?'El stock queda gestionado por el flujo del pedido para evitar duplicidad.':('Efecto inventario: '+esc((result&&result.inventory_effect)||'sin movimiento')+'.');
+    var stockMsg=v.type==='compra'&&v.purchase_order_id?'Factura asociada a OC. El stock se controla exclusivamente desde la recepción física para evitar duplicidad.':(result&&result.stock_managed_elsewhere?'El stock queda gestionado por el flujo del pedido para evitar duplicidad.':('Efecto inventario: '+esc((result&&result.inventory_effect)||'sin movimiento')+'.'));
     el('invoiceMsg').innerHTML='<b>Documento registrado correctamente.</b> Asiento '+esc((result&&result.journal_entry_number)||'creado')+'. '+stockMsg;
     el('invoiceReview').classList.add('hidden');parsedInvoice=null;el('invoiceFile').value='';
     if(invoicePreviewUrl){URL.revokeObjectURL(invoicePreviewUrl);invoicePreviewUrl=''}
