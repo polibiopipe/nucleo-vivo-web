@@ -147,7 +147,7 @@ CATÁLOGO INTERNO ACTIVO: ${JSON.stringify(catalog)}`;
     for(let i=0;i<models.length && i<4;i++){
       const model=models[i];
       try{
-        const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body:JSON.stringify(body),signal:AbortSignal.timeout(6500)});
+        const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body:JSON.stringify(body),signal:AbortSignal.timeout(4500)});
         if(!r.ok){
           if(r.status===404 && !modelListChecked){
             modelListChecked=true;
