@@ -143,7 +143,7 @@ CATÁLOGO INTERNO ACTIVO: ${JSON.stringify(catalog)}`;
 
   try{
     let data=null;
-    for(let i=0;i<models.length;i++){
+    for(let i=0;i<models.length && i<8;i++){
       const model=models[i];
       try{
         const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body:JSON.stringify(body),signal:AbortSignal.timeout(20000)});
