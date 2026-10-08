@@ -100,7 +100,7 @@ export default async function handler(req,res){
 
   const apiKey=process.env.GEMINI_API_KEY?.trim()||process.env.GOOGLE_GENERATIVE_AI_API_KEY?.trim();
   if(!apiKey)return res.status(503).json({error:'AI_CONFIGURATION_REQUIRED',message:'El lector de documentos aún no está configurado.'});
-  const models=[process.env.MOVE_GEMINI_MODEL||'gemini-2.5-flash',process.env.MOVE_GEMINI_FALLBACK_MODEL||'gemini-2.5-flash-lite','gemini-2.5-flash'].filter((m,i,a)=>m&&a.indexOf(m)===i);
+  const models=[process.env.MSC_GEMINI_MODEL||process.env.MOVE_GEMINI_MODEL||'gemini-2.5-flash',process.env.MOVE_GEMINI_FALLBACK_MODEL||'gemini-2.5-flash-lite','gemini-2.5-flash'].filter((m,i,a)=>m&&a.indexOf(m)===i);
 
   const prompt=`Interpreta este DTE chileno para un ERP de MSC Safety. El documento puede ser FACTURA o NOTA DE CRÉDITO, de compra o de venta. Identifica correctamente EMISOR y RECEPTOR según el DTE; no deduzcas emisor por frases de la interfaz.
 
@@ -143,11 +143,25 @@ CATÁLOGO INTERNO ACTIVO: ${JSON.stringify(catalog)}`;
 
   try{
     let data=null;
-    for(let i=0;i<models.length;i++){
+    let modelListChecked=false;
+    for(let i=0;i<models.length && i<8;i++){
       const model=models[i];
       try{
         const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body:JSON.stringify(body),signal:AbortSignal.timeout(20000)});
         if(!r.ok){
+          if(r.status===404 && !modelListChecked){
+            modelListChecked=true;
+            try {
+              const lookup=await fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=100',{headers:{'x-goog-api-key':apiKey},signal:AbortSignal.timeout(5000)});
+              if(lookup.ok){
+                const available=await lookup.json();
+                for(const item of (available.models||[])){
+                  const name=String(item.name||'').replace(/^models\//,'');
+                  if((item.supportedGenerationMethods||[]).includes('generateContent') && /^gemini-[a-z0-9.-]*flash[a-z0-9.-]*$/.test(name) && !models.includes(name))models.push(name);
+                }
+              }
+            }catch(_){console.warn('msc_invoice_model_lookup_unavailable')}
+          }
           console.warn(JSON.stringify({event:'msc_invoice_ai_error',model,status:r.status,attempt:i+1}));
           if(i<models.length-1) await new Promise(resolve=>setTimeout(resolve,350));
           continue;
@@ -158,7 +172,7 @@ CATÁLOGO INTERNO ACTIVO: ${JSON.stringify(catalog)}`;
         console.warn(JSON.stringify({event:'msc_invoice_ai_error',model,status:'network_or_timeout',attempt:i+1}));
       }
     }
-    if(!data)return res.status(503).json({error:'AI_UNAVAILABLE',message:'No fue posible leer el documento en este momento.'});
+    if(!data)return res.status(503).json({error:'AI_UNAVAILABLE',message:'No se pudo procesar el PDF con los modelos disponibles. El documento no se registró. Conserva el original y reintenta o revisa el acceso a Gemini.'});
     const raw=data?.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('')||'';
     let out;try{out=JSON.parse(raw)}catch{return res.status(503).json({error:'INVALID_AI_RESPONSE',message:'El documento necesita revisión manual.'})}
     if(!Array.isArray(out.lines))return res.status(503).json({error:'INVALID_AI_RESPONSE',message:'No se detectaron líneas del documento.'});
@@ -213,3 +227,4 @@ CATÁLOGO INTERNO ACTIVO: ${JSON.stringify(catalog)}`;
     return res.status(503).json({error:'AI_UNAVAILABLE',message:'No fue posible leer el documento en este momento.'});
   }
 }
+
