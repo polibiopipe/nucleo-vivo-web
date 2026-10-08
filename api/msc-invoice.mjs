@@ -100,7 +100,7 @@ export default async function handler(req,res){
 
   const apiKey=process.env.GEMINI_API_KEY?.trim()||process.env.GOOGLE_GENERATIVE_AI_API_KEY?.trim();
   if(!apiKey)return res.status(503).json({error:'AI_CONFIGURATION_REQUIRED',message:'El lector de documentos aún no está configurado.'});
-  const models=[process.env.MOVE_GEMINI_MODEL||'gemini-3.8-flash',process.env.MOVE_GEMINI_FALLBACK_MODEL||'gemini-flash-lite-latest','gemini-3.5-flash-lite'].filter((m,i,a)=>m&&a.indexOf(m)===i);
+  const models=[process.env.MOVE_GEMINI_MODEL||'gemini-2.5-flash',process.env.MOVE_GEMINI_FALLBACK_MODEL||'gemini-2.5-flash-lite','gemini-2.5-flash'].filter((m,i,a)=>m&&a.indexOf(m)===i);
 
   const prompt=`Interpreta este DTE chileno para un ERP de MSC Safety. El documento puede ser FACTURA o NOTA DE CRÉDITO, de compra o de venta. Identifica correctamente EMISOR y RECEPTOR según el DTE; no deduzcas emisor por frases de la interfaz.
 
@@ -146,7 +146,7 @@ CATÁLOGO INTERNO ACTIVO: ${JSON.stringify(catalog)}`;
     for(let i=0;i<models.length;i++){
       const model=models[i];
       try{
-        const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body:JSON.stringify(body),signal:AbortSignal.timeout(9000)});
+        const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body:JSON.stringify(body),signal:AbortSignal.timeout(20000)});
         if(!r.ok){
           console.warn(JSON.stringify({event:'msc_invoice_ai_error',model,status:r.status,attempt:i+1}));
           if(i<models.length-1) await new Promise(resolve=>setTimeout(resolve,350));
