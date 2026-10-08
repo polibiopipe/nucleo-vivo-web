@@ -143,6 +143,7 @@ CATÁLOGO INTERNO ACTIVO: ${JSON.stringify(catalog)}`;
 
   try{
     let data=null;
+    let modelListChecked=false;
     for(let i=0;i<models.length && i<8;i++){
       const model=models[i];
       try{
