@@ -213,3 +213,4 @@ CATÁLOGO INTERNO ACTIVO: ${JSON.stringify(catalog)}`;
     return res.status(503).json({error:'AI_UNAVAILABLE',message:'No fue posible leer el documento en este momento.'});
   }
 }
+
