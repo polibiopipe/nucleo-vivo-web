@@ -670,8 +670,41 @@ function parseAuthCallback(){
   }
   return false
 }
+var refreshInFlight=null;
+function tokenExpiresSoon(){
+  if(!token)return true;
+  try{
+    var payload=JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+    return !payload.exp || payload.exp*1000-Date.now()<90000
+  }catch(_){return true}
+}
+async function refreshMscSession(){
+  if(refreshInFlight)return refreshInFlight;
+  refreshInFlight=(async function(){
+    var refresh=sessionStorage.getItem('msc_refresh');
+    if(!refresh)throw new Error('La sesión venció. Ingresa nuevamente para continuar.');
+    var response=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=refresh_token',{
+      method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({refresh_token:refresh})
+    });
+    var result=await response.json().catch(function(){return {}});
+    if(!response.ok||!result.access_token){
+      if(response.status===400||response.status===401||response.status===403){
+        sessionStorage.removeItem('msc_token');sessionStorage.removeItem('msc_refresh');token='';
+      }
+      throw new Error('No fue posible renovar la sesión. Ingresa nuevamente para continuar.');
+    }
+    token=result.access_token;
+    sessionStorage.setItem('msc_token',token);
+    if(result.refresh_token)sessionStorage.setItem('msc_refresh',result.refresh_token);
+    return token
+  })();
+  try{return await refreshInFlight}finally{refreshInFlight=null}
+}
+async function ensureMscSession(){if(tokenExpiresSoon())await refreshMscSession();return token}
 async function loadRoleAndEnter(){
   try{
+    await ensureMscSession();
     var r=await fetch(SUPABASE_URL+'/auth/v1/user',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token}});
     var u=await r.json();if(!r.ok)throw new Error('No fue posible validar la sesión.');
     role=(u&&u.app_metadata&&u.app_metadata.msc_role)||'';
@@ -681,12 +714,26 @@ async function loadRoleAndEnter(){
   }catch(err){sessionStorage.removeItem('msc_token');token='';el('loginMsg').textContent=err.message}
 }
 async function authFetch(path,opt){
-  opt=opt||{};opt.headers=Object.assign({'apikey':SUPABASE_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json'},opt.headers||{});
-  var r=await fetch(SUPABASE_URL+path,opt);var txt=await r.text();var data=txt?JSON.parse(txt):null;if(!r.ok)throw new Error((data&&data.message)||'Error '+r.status);return data
+  opt=opt||{};
+  await ensureMscSession();
+  var headers=Object.assign({'apikey':SUPABASE_KEY,'Content-Type':'application/json'},opt.headers||{});
+  headers.Authorization='Bearer '+token;
+  var request=Object.assign({},opt,{headers:headers});
+  var r=await fetch(SUPABASE_URL+path,request);
+  if(r.status===401){
+    await refreshMscSession();
+    request.headers=Object.assign({},headers,{Authorization:'Bearer '+token});
+    r=await fetch(SUPABASE_URL+path,request);
+  }
+  var txt=await r.text(),data=null;
+  try{data=txt?JSON.parse(txt):null}catch(_){throw new Error('Respuesta no válida del servidor (HTTP '+r.status+').')}
+  if(!r.ok)throw new Error((data&&(data.message||data.msg))||'Error '+r.status);
+  return data
 }
 function storagePathEncode(path){return String(path||'').split('/').map(encodeURIComponent).join('/')}
 function storageSafeName(name){return String(name||'documento.pdf').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9._-]+/g,'_').replace(/^_+|_+$/g,'').slice(-120)||'documento.pdf'}
 async function uploadPdfFile(file,folder,reference){
+  await ensureMscSession();
   if(!file)return null;
   if(file.type&&file.type!=='application/pdf')throw new Error('El documento original debe ser PDF.');
   if(file.size>10*1024*1024)throw new Error('El PDF supera el máximo de 10 MB para archivo documental.');
