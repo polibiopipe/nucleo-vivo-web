@@ -149,6 +149,19 @@ CATÁLOGO INTERNO ACTIVO: ${JSON.stringify(catalog)}`;
       try{
         const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body:JSON.stringify(body),signal:AbortSignal.timeout(20000)});
         if(!r.ok){
+          if(r.status===404 && !modelListChecked){
+            modelListChecked=true;
+            try {
+              const lookup=await fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=100',{headers:{'x-goog-api-key':apiKey},signal:AbortSignal.timeout(5000)});
+              if(lookup.ok){
+                const available=await lookup.json();
+                for(const item of (available.models||[])){
+                  const name=String(item.name||'').replace(/^models\//,'');
+                  if((item.supportedGenerationMethods||[]).includes('generateContent') && /^gemini-[a-z0-9.-]*flash[a-z0-9.-]*$/.test(name) && !models.includes(name))models.push(name);
+                }
+              }
+            }catch(_){console.warn('msc_invoice_model_lookup_unavailable')}
+          }
           console.warn(JSON.stringify({event:'msc_invoice_ai_error',model,status:r.status,attempt:i+1}));
           if(i<models.length-1) await new Promise(resolve=>setTimeout(resolve,350));
           continue;
