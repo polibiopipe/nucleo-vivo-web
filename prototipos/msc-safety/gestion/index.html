@@ -1535,7 +1535,7 @@ el('analyzeInvoice').onclick=async function(){
   try{
     var endpoint=isCustomerPo?'/api/msc-customer-po':'/api/msc-invoice';
     var rr=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({pdfBase64:base64,documentType:expectedType,catalog:products.filter(function(p){return p.active!==false}).slice(0,180).map(function(p){return {sku:p.sku,name:p.name,brand:p.brand||null,model:p.model||null,manufacturer_code:p.manufacturer_code||null,variant_code:p.variant_code||null,product_color:p.product_color||null}})})});
-    var data=await rr.json();if(!rr.ok)throw new Error(data.message||'No fue posible analizar el documento.');
+    var responseText=await rr.text(),data=null;try{data=JSON.parse(responseText)}catch(_){throw new Error(rr.status===504||rr.status===502||rr.status===503?'El lector tardó demasiado o no está disponible. No se registró la factura; inténtalo nuevamente.':'El servidor no respondió correctamente (HTTP '+rr.status+'). No se registró el documento.')}if(!rr.ok)throw new Error(data.message||'No fue posible analizar el documento (HTTP '+rr.status+').');
     data._sourceFileName=file.name||null;
     var detectedType=inferInvoiceType(data)||expectedType;
     data._expectedType=expectedType;
