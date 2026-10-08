@@ -175,7 +175,7 @@ CATÁLOGO INTERNO ACTIVO: ${JSON.stringify(catalog)}`;
     if(!data)return res.status(503).json({error:'AI_UNAVAILABLE',message:'No se pudo procesar el PDF con los modelos disponibles. El documento no se registró. Conserva el original y reintenta o revisa el acceso a Gemini.'});
     const raw=data?.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('')||'';
     let out;try{out=JSON.parse(raw)}catch{return res.status(503).json({error:'INVALID_AI_RESPONSE',message:'El documento necesita revisión manual.'})}
-    if(!Array.isArray(out.lines))return res.status(503).json({error:'INVALID_AI_RESPONSE',message:'No se detectaron líneas del documento.'});
+    if(!Array.isArray(out.lines)||!out.lines.length)return res.status(422).json({error:'INVALID_AI_RESPONSE',message:'No se detectaron líneas del documento.'});
 
     const detectedType=inferDocumentType(out,requestedType);
     out.detected_document_type=detectedType;
