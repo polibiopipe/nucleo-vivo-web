@@ -21,6 +21,21 @@ for (const file of files) {
   await copyFile(path.join(root,file),destination);
 }
 
+ 
+// Pausa reversible de la oferta de consultoría (octubre 2026).
+// Conservamos las páginas fuente; limpiamos únicamente la salida pública.
+for (const file of files.filter(file => file.endsWith('.html') && file !== 'consultoria/index.html')) {
+  const page = path.join(output, file);
+  let html = await readFile(page, 'utf8');
+  html = html
+    .replaceAll('<a href="/consultoria/">Consultoría</a>', '')
+    .replaceAll('Integramos consultoría tecnológica, comercial y organizacional, inteligencia artificial y aprendizaje para empresas e instituciones educativas.', 'Integramos simuladores, tecnología educativa y experiencias de aprendizaje para personas e instituciones.')
+    .replaceAll('Conversa con Núcleo Vivo sobre consultoría tecnológica, comercial y organizacional, IA aplicada y aprendizaje para empresas e instituciones educativas.', 'Conversa con Núcleo Vivo sobre simuladores, aprendizaje experiencial, IA aplicada y proyectos educativos.')
+    .replaceAll('Consultoría tecnológica, comercial y organizacional, inteligencia artificial aplicada, desarrollo digital y experiencias para equipos.', 'Simuladores educativos, inteligencia artificial aplicada, desarrollo digital y experiencias de aprendizaje.')
+    .replaceAll('Núcleo Operativo lleva a herramientas concretas las necesidades identificadas en la consultoría.', 'Núcleo Operativo transforma necesidades de aprendizaje y gestión en herramientas digitales.');
+  if (html !== await readFile(page, 'utf8')) await writeFile(page, html, 'utf8');
+}
+
 // MSC Safety: un solo maestro de clientes para app de ventas, gestión y portal.
 const customerFields = ['rut','name','address','city','contact_name','phone','email','business_activity','credit_limit','payment_terms','default_discount_percent','notes'];
 
