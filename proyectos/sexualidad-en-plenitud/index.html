@@ -175,6 +175,55 @@ body{background:#f7f1e9;color:var(--c6-ink)}
 @media(max-width:380px){.c6-controls .c6-font:first-child{display:none}.c6-cinema{height:800px}.c6-actions{gap:8px}.c6-primary,.c6-secondary{min-height:41px;padding:9px 14px;font-size:.82rem}}
 @media(prefers-reduced-motion:reduce){.c6-photo{animation:none}}
 
+
+/* V7 · luz, vida comunitaria, conversación. Fotografía sin encuadre de pareja */
+:root{--c6-plum:#382144;--c6-accent:#e86666;--c6-cream:#fff8ed;--c6-sage:#068c87;--c6-mist:#fbeedc}
+body{background:#fffaf2}
+.c6-header{background:#fffdf9;border-bottom:1px solid #f6e7da}
+.c6-brand-name em{color:#e35b74}.c6-brand-name small{color:#76647b}
+.c6-links button{color:#4d3b55}.c6-links button:hover{color:#c24a73}
+.c6-font{background:#fff5e9;border-color:#f0e0d0;color:#4a2b4f}
+.c6-login{background:#b63368;color:#fff;box-shadow:0 5px 16px #b633681e}.c6-login:hover{background:#90285b}
+.c6-shell{background:linear-gradient(135deg,#fff9ef,#fff5f0 62%,#fdf8f2);padding:12px 18px 8px}
+.c6-cinema{background:#fff6e7;border-radius:26px;box-shadow:0 12px 35px rgba(115,67,73,.11)}
+.c6-photo{left:auto;right:0;width:64%;object-fit:cover;object-position:center center;filter:saturate(1.07) contrast(1.025) brightness(1.06);animation:c6SlowFilm 34s ease-in-out alternate infinite}
+.c6-overlay{background:linear-gradient(90deg,#fff9ef 0%,#fff7ed 32%,rgba(255,247,236,.96) 39%,rgba(255,247,236,.69) 49%,rgba(255,247,236,.04) 64%,transparent 89%),linear-gradient(0deg,rgba(74,47,38,.21),transparent 28%);z-index:-2}
+.c6-cinema:before{content:"";position:absolute;left:-120px;top:-120px;width:260px;height:260px;border:34px solid #ffc9736a;border-radius:50%;pointer-events:none;z-index:-1}
+.c6-cinema:after{content:"";position:absolute;right:-60px;top:-100px;width:180px;height:180px;border:28px solid #fb8c8170;border-radius:50%;pointer-events:none}
+.c6-content{left:clamp(32px,4.3vw,82px);width:min(46%,635px);color:#352040;gap:clamp(14px,1.8vh,23px);top:43%}
+.c6-eyebrow{color:#a7456f;font-size:clamp(.73rem,.89vw,.91rem);letter-spacing:.09em}
+.c6-light{background:#ee8069}
+.c6-content h1{color:#352040;font-family:Georgia,"Times New Roman",serif;font-size:clamp(3rem,4.7vw,5.1rem);font-weight:600;line-height:1.03;letter-spacing:-.055em;max-width:650px;text-wrap:balance}
+.c6-content h1 span{color:#d85072;display:block;font-weight:600;font-style:italic}
+.c6-subhead{color:#5f4a5d;font-size:clamp(1.04rem,1.17vw,1.26rem);line-height:1.55;max-width:545px}
+.c6-primary{background:linear-gradient(120deg,#e65678,#f47b62);color:white;box-shadow:0 8px 22px #de55752f}.c6-primary:hover{background:#cf4266}
+.c6-secondary{border:1px solid #dcbfc5;background:#ffffffb5;color:#543353;backdrop-filter:blur(6px)}.c6-secondary:hover{background:white}
+.c6-caption{color:#765b6b;font-size:.86rem}
+.c6-drift{right:3.6%;top:7%;color:#4a2a4f;background:#fffaf0da;border:1px solid #fff8df;border-radius:22px 22px 6px 22px;padding:12px 17px;text-shadow:none;box-shadow:0 7px 26px #644e4620;font-style:italic;font-size:clamp(1rem,1.17vw,1.27rem);opacity:1}
+.c6-credit{color:#fff8ed;background:#3c2b31a8;bottom:88px}
+.c6-quick{background:rgba(255,252,247,.96);border-top:1px solid #eeddd5}
+.c6-quick button{border-right:1px solid #eedbd8;padding:15px clamp(18px,3vw,46px)}
+.c6-quick button:nth-child(1){background:linear-gradient(110deg,#fff2ed,#fffdf8)}
+.c6-quick button:nth-child(2){background:linear-gradient(110deg,#eefaf6,#fffdf8)}
+.c6-quick button:nth-child(3){background:linear-gradient(110deg,#f8f1ff,#fffdf8)}
+.c6-quick button:hover{background:#ffeddb}
+.c6-quick-icon{color:#d55e70;border-color:#e9a7ab;background:#fff;border-radius:15px}
+.c6-quick button:nth-child(2) .c6-quick-icon{color:#078f8b;border-color:#91cfc2}
+.c6-quick button:nth-child(3) .c6-quick-icon{color:#8656a1;border-color:#bea1d3}
+.c6-quick-text strong{color:#422948}
+.c6-quick-text small{color:#66566a}
+.c6-quick-arrow{color:#c24a73}
+.c6-proof{background:#fffdf6;border-color:#f3e4d8;box-shadow:none}
+.c6-proof-kicker{color:#b45173}
+.c6-proof b{color:#d87965}
+.c6-proof-cta{background:#ecf7f3;color:#12645f;border:1px solid #d2e9e0}.c6-proof-cta:hover{background:#d9f0e8}
+.c6-status{color:#816e7e}
+@media(max-height:740px) and (min-width:1051px){.c6-content h1{font-size:clamp(2.8rem,3.75vw,4.2rem)}.c6-content{gap:12px}}
+@media(max-width:1150px) and (min-width:951px){.c6-photo{width:62%}.c6-content{width:49%}.c6-content h1{font-size:clamp(2.6rem,4.2vw,4.4rem)}.c6-drift{font-size:.85rem}}
+@media(max-width:950px){.c6-photo{left:0;right:0;width:100%;height:63%;top:auto;bottom:0;object-position:center 46%}.c6-overlay{background:linear-gradient(180deg,#fff9ef 0%,#fff8ed 35%,rgba(255,248,237,.92) 44%,rgba(255,248,237,.36) 57%,transparent 79%)}.c6-content{top:8%;transform:none;width:80%;max-width:650px}.c6-drift{top:auto;bottom:118px;right:3%;font-size:.97rem}.c6-credit{bottom:90px}.c6-cinema:before{z-index:-1}}
+@media(max-width:690px){.c6-cinema{height:770px}.c6-photo{height:58%;object-position:center 55%;filter:saturate(1.07) brightness(1.06)}.c6-overlay{background:linear-gradient(180deg,#fff9ef 0%,#fff8ed 36%,rgba(255,248,237,.74) 49%,rgba(255,248,237,.05) 67%,rgba(53,39,48,.10) 80%)}.c6-content{top:24px;left:20px;right:20px;width:auto;transform:none;gap:11px}.c6-content h1{font-size:clamp(2.7rem,9vw,3.5rem)}.c6-eyebrow{font-size:.74rem}.c6-subhead{font-size:1rem;max-width:95%}.c6-caption{font-size:.78rem}.c6-drift{bottom:194px;right:10px;max-width:180px;padding:7px 9px;font-size:.85rem}.c6-credit{bottom:185px;left:8px;right:auto;max-width:135px;line-height:1.22;font-size:.53rem}.c6-quick button:nth-child(n){background:#fffcf8}.c6-quick button:nth-child(2){background:#f4fcf9}.c6-quick button:nth-child(3){background:#f9f5fc}}
+@media(max-width:400px){.c6-cinema{height:815px}.c6-content h1{font-size:2.65rem}.c6-photo{height:54%}.c6-actions{gap:7px}}
+
 </style>
 </head>
 <body>
@@ -186,17 +235,17 @@ body{background:#f7f1e9;color:var(--c6-ink)}
 <main id="contenido"><div id="publicView">
 <section id="inicio" class="c6-shell" aria-labelledby="c6-title">
 <div class="c6-cinema">
-<img class="c6-photo" src="https://images.pexels.com/photos/8153898/pexels-photo-8153898.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Personas mayores conversando y disfrutando de un encuentro en un café. Imagen de referencia." decoding="async" fetchpriority="high" loading="eager">
+<img class="c6-photo" src="https://images.pexels.com/photos/6838536/pexels-photo-6838536.jpeg?auto=compress&cs=tinysrgb&w=1700" alt="Grupo de personas mayores conversando y compartiendo un momento al aire libre." decoding="async" fetchpriority="high" loading="eager">
 <div class="c6-overlay" aria-hidden="true"></div>
 <div class="c6-content">
-<div class="c6-eyebrow"><span class="c6-light"></span> VILLA ALEMANA · UNA COMUNIDAD PARA CONVERSAR</div>
-<h1 id="c6-title">La vida también <span>se conversa.</span></h1>
-<p class="c6-subhead">Sexualidad, afecto y vínculos sin tabúes. Un espacio para compartir con libertad, aprender y encontrarnos en comunidad.</p>
+<div class="c6-eyebrow"><span class="c6-light"></span> VILLA ALEMANA · COMUNIDAD EN CONSTRUCCIÓN</div>
+<h1 id="c6-title">Hablemos de sexualidad <span>sin tabúes.</span></h1>
+<p class="c6-subhead">Un lugar para conversar sobre deseo, afectividad e intimidad. Diferentes historias, distintas formas de vivir la vejez y una misma libertad: ser escuchados.</p>
 <div class="c6-actions"><button type="button" id="heroLogin" class="c6-primary">Conocer la comunidad <span aria-hidden="true">→</span></button><button type="button" id="explore" class="c6-secondary"><span aria-hidden="true">▷</span> Cómo funciona</button></div>
-<p class="c6-caption">Participar, escuchar o guardar silencio: siempre es tu decisión.</p>
+<p class="c6-caption">Puedes conversar, escuchar o simplemente acompañar. Sin presiones.</p>
 </div>
-<div class="c6-drift" aria-hidden="true">«A cualquier edad tenemos algo que decir»</div>
-<div class="c6-credit">Fotografía referencial: Alena Darmel / Pexels. No corresponde a integrantes del proyecto.</div>
+<div class="c6-drift" aria-hidden="true">«Tu historia también tiene lugar»</div>
+<div class="c6-credit">Imagen referencial: Kampus Production / Pexels. No representa a participantes del proyecto.</div>
 <div class="c6-quick" aria-label="Elige cómo explorar la comunidad">
 <button type="button" data-open="conversaciones"><span class="c6-quick-icon">◌</span><span class="c6-quick-text"><strong>Conversar</strong><small>Tu voz tiene lugar</small></span><span class="c6-quick-arrow">↗</span></button>
 <button type="button" data-open="psicologia"><span class="c6-quick-icon">♡</span><span class="c6-quick-text"><strong>Con Psicología</strong><small>Reflexionar sin juicios</small></span><span class="c6-quick-arrow">↗</span></button>
@@ -205,7 +254,7 @@ body{background:#f7f1e9;color:var(--c6-ink)}
 </div>
 <div class="c6-proof">
 <span class="c6-proof-kicker">UN PROGRAMA CON SENTIDO</span>
-<div><b>01</b><span>Diseñado con las personas mayores</span></div>
+<div><b>01</b><span>Diagnóstico junto a personas mayores</span></div>
 <div><b>02</b><span>Psicoeducación y diálogo grupal</span></div>
 <div><b>03</b><span>Evaluación de beneficios y riesgos</span></div>
 <button type="button" class="c6-proof-cta" data-info="proyecto">Conocer el modelo <span aria-hidden="true">↗</span></button>
