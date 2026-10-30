@@ -1277,13 +1277,45 @@ async function saveProductControls(productId){
     var row=Array.isArray(r)?r[0]:r,idx=products.findIndex(function(p){return p.id===productId});if(idx>=0&&row)products[idx]=row;render();
   }catch(err){alert(err.message)}
 }
+function showPricingStatus(message,failed){
+  var notice=document.getElementById('mscPricingStatus');
+  if(!notice){notice=document.createElement('div');notice.id='mscPricingStatus';notice.setAttribute('role','status');notice.setAttribute('aria-live','polite');document.body.appendChild(notice)}
+  notice.textContent=message;
+  notice.style.cssText='position:fixed;right:18px;bottom:18px;z-index:3000;max-width:min(440px,calc(100vw - 36px));padding:14px 18px;border:1px solid '+(failed?'#e5877f':'#7ec99a')+';border-radius:8px;background:#10171b;color:#fff;box-shadow:0 12px 35px rgba(0,0,0,.4);font-size:14px;font-weight:700;';
+  clearTimeout(showPricingStatus.timer);
+  showPricingStatus.timer=setTimeout(function(){notice.remove()},4500);
+}
 async function saveProductPricing(productId){
-  var root=el('productRows'),cost=Number(root.querySelector('.costInput[data-product="'+productId+'"]').value),markup=Number(root.querySelector('.markupInput[data-product="'+productId+'"]').value);
-  if(!Number.isFinite(cost)||cost<0||!Number.isFinite(markup)||markup<0){alert('Ingresa costo y markup válidos.');return}
+  var root=el('productRows');
+  var costField=root.querySelector('.costInput[data-product="'+productId+'"]');
+  var markupField=root.querySelector('.markupInput[data-product="'+productId+'"]');
+  var button=root.querySelector('.savePrice[data-product="'+productId+'"]');
+  if(!costField||!markupField||!button)return;
+  if(costField.value.trim()===''||markupField.value.trim()===''){showPricingStatus('Completa el costo y el markup antes de guardar.',true);return}
+  var cost=Number(costField.value),markup=Number(markupField.value);
+  if(!Number.isFinite(cost)||cost<0||!Number.isFinite(markup)||markup<0){showPricingStatus('Ingresa costo y markup válidos.',true);return}
+  var idx=products.findIndex(function(p){return p.id===productId});
+  var old=idx>=0?products[idx]:null;
+  var cents=function(n){return Math.round(Number(n)*100)/100};
+  if(old&&old.cost_price!=null&&old.markup_percent!=null&&cents(old.cost_price)===cents(cost)&&cents(old.markup_percent)===cents(markup)){
+    showPricingStatus('Estos precios ya están guardados. No hay cambios pendientes.',false);
+    return;
+  }
+  button.disabled=true;
+  button.textContent='Guardando…';
   try{
     var r=await authFetch('/rest/v1/rpc/msc_set_product_pricing',{method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify({p_product_id:productId,p_cost_price:cost,p_markup_percent:markup})});
-    var row=Array.isArray(r)?r[0]:r,idx=products.findIndex(function(p){return p.id===productId});if(idx>=0&&row)products[idx]=row;render();
-  }catch(err){alert(err.message)}
+    var row=Array.isArray(r)?r[0]:r;
+    if(!row||row.id!==productId)throw new Error('No se pudo confirmar el guardado. Actualiza la página y revisa el valor antes de intentar otra vez.');
+    if(idx>=0)products[idx]=row;
+    render();
+    showPricingStatus('Precio guardado correctamente para '+(row.sku||row.name||'el producto')+'.',false);
+  }catch(err){
+    showPricingStatus('No se guardó el precio: '+err.message,true);
+  }finally{
+    button.disabled=false;
+    button.textContent='Guardar';
+  }
 }
 function logout(){sessionStorage.removeItem('msc_token');sessionStorage.removeItem('msc_refresh');sessionStorage.removeItem('msc_role');token='';location.reload()}
 el('loginForm').addEventListener('submit',async function(e){e.preventDefault();el('loginMsg').textContent='Ingresando…';try{await login(el('email').value,el('password').value)}catch(err){el('loginMsg').textContent=err.message}})
