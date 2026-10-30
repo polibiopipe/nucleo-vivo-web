@@ -421,7 +421,7 @@ table{max-width:100%}
           </div>
           <div class="formbox"><h2>Criterio de identificación</h2><div class="notice">SKU MSC identifica internamente. EAN/GTIN y código fabricante se conservan como identificadores externos.</div><p>Formato: <span class="sku">MSC-FAM-SUB-TIPO-VAR-000</span></p><p class="muted">El correlativo nunca se reutiliza. Las variantes inventariables deben tener SKU propio.</p></div>
         </div>
-        <div class="panel"><div class="panel-head"><h2>Maestro de productos</h2><input id="productSearch" class="search" placeholder="Buscar SKU, producto, modelo, color..."></div><div class="table-wrap"><table><thead><tr><th>SKU</th><th>Producto</th><th>Marca</th><th>Costo neto</th><th>Markup</th><th>Venta neta</th><th>Venta c/IVA</th><th>Utilidad</th><th>Parámetros stock</th><th>Catálogo</th><th>Alerta</th><th>Estado</th></tr></thead><tbody id="productRows"></tbody></table></div></div>
+        <div class="panel"><div class="panel-head"><h2>Maestro de productos</h2><span id="productResultsInfo" class="muted" style="font-size:12px"></span><input id="productSearch" class="search" placeholder="Buscar SKU, producto, modelo, color..."></div><div class="table-wrap"><table><thead><tr><th>SKU</th><th>Producto</th><th>Marca</th><th>Costo neto</th><th>Markup</th><th>Venta neta</th><th>Venta c/IVA</th><th>Utilidad</th><th>Parámetros stock</th><th>Catálogo</th><th>Alerta</th><th>Estado</th></tr></thead><tbody id="productRows"></tbody></table></div></div>
       </section>
 
       <section class="view" id="view-documentos">
@@ -796,11 +796,22 @@ async function login(email,password){
   token=d.access_token;sessionStorage.setItem('msc_token',token);if(d.refresh_token)sessionStorage.setItem('msc_refresh',d.refresh_token);await loadRoleAndEnter()
 }
 function showApp(){role=role||sessionStorage.getItem('msc_role')||'';el('login').classList.add('hidden');el('app').classList.remove('hidden');el('roleLabel').textContent='Rol: '+role+(currentEmail?' · '+currentEmail:'');var wf=el('weekStockField');if(wf)wf.classList.toggle('hidden',currentEmail!=='marsella.solis@nucleovivo.net');loadAll()}
+// Pagina las consultas grandes: Supabase devuelve como máximo 1.000 filas por solicitud.
+async function loadAllProducts(){
+  var all=[],pageSize=500;
+  for(var offset=0;offset<50000;offset+=pageSize){
+    var batch=await authFetch('/rest/v1/msc_products?select=*&order=created_at.desc,id.desc&limit='+pageSize+'&offset='+offset);
+    if(!Array.isArray(batch))throw new Error('No fue posible cargar el maestro completo de productos.');
+    all=all.concat(batch);
+    if(batch.length<pageSize)return all;
+  }
+  throw new Error('El maestro supera el límite de seguridad de 50.000 registros.');
+}
 async function loadAll(){
   try{
     try{if(['admin','bodega'].indexOf(role)>=0)await authFetch('/rest/v1/rpc/msc_refresh_notifications',{method:'POST',body:'{}'})}catch(_){}
     var rs=await Promise.all([
-      authFetch('/rest/v1/msc_products?select=*&order=created_at.desc'),
+      loadAllProducts(),
       authFetch('/rest/v1/msc_locations?select=*&order=code'),
       authFetch('/rest/v1/msc_documents?select=*,msc_purchase_orders(po_number)&order=created_at.desc&limit=100'),
       authFetch('/rest/v1/msc_stock_movements?select=*,msc_products(sku,name,unit),msc_documents(folio)&order=created_at.desc&limit=500'),
@@ -1071,7 +1082,9 @@ function render(){
   var undef=products.filter(function(p){return p.week_stock_units==null}).length;
   el('kLowStock').textContent=low;
   el('kUndefined').textContent=undef;
-  el('stockRows').innerHTML=products.map(function(p){
+  // La tabla del resumen muestra una selección útil; el maestro completo se consulta en Productos / SKU.
+  var stockPreview=products.slice().sort(function(a,b){return Number(stock[b.id]||0)-Number(stock[a.id]||0)}).slice(0,200);
+  el('stockRows').innerHTML=stockPreview.map(function(p){
     var s=Number(stock[p.id]||0),defined=p.week_stock_units!=null,threshold=defined?Number(p.week_stock_units):null;
     var status=!defined?'<span class="pill warn">Pendiente Marsella</span>':(s<=0?'<span class="pill bad">Sin stock</span>':(p.stock_alert_enabled!==false&&s<=threshold?'<span class="pill warn">1 semana o menos</span>':'<span class="pill ok">Normal</span>'));
     return '<tr><td class="sku">'+esc(p.sku)+'</td><td><b>'+esc(p.name)+'</b><div class="muted">'+esc([p.manufacturer_code||p.model,p.product_color?('Color '+p.product_color):'',p.variant_code?('Talla '+p.variant_code):''].filter(Boolean).join(' · '))+'</div></td><td>'+esc(p.brand)+'</td><td><b>'+s.toLocaleString('es-CL')+'</b></td><td>'+(defined?threshold.toLocaleString('es-CL'):'—')+'</td><td>'+status+'</td><td>'+esc(p.unit)+'</td></tr>'
@@ -1247,7 +1260,11 @@ function money(v){return v==null||v===''?'—':'$'+Math.round(Number(v)).toLocal
 function renderProducts(list){
   var canControl=currentEmail==='marsella.solis@nucleovivo.net';
   var canPrice=['admin','bodega'].indexOf(role)>=0;
-  el('productRows').innerHTML=list.map(function(p){
+  // Evita crear miles de campos editables simultáneamente; la búsqueda filtra sobre TODO el catálogo.
+  var visibleProducts=list.slice(0,150);
+  var resultNote=el('productResultsInfo');
+  if(resultNote)resultNote.textContent='Mostrando '+visibleProducts.length+' de '+list.length+' coincidencias ('+products.length+' SKU registrados). Usa la búsqueda para localizar otros.';
+  el('productRows').innerHTML=visibleProducts.map(function(p){
     var cost=p.cost_price==null?'':Number(p.cost_price),markup=p.markup_percent==null?'':Number(p.markup_percent);
     var sale=p.sale_price==null?null:Number(p.sale_price),gross=sale==null?null:sale*1.19,profit=(sale!=null&&p.cost_price!=null)?sale-Number(p.cost_price):null;
     var pricing=canPrice?'<div style="display:grid;grid-template-columns:90px 75px auto;gap:6px;align-items:center"><input class="costInput" data-product="'+p.id+'" type="number" min="0" step="0.01" value="'+esc(cost)+'" placeholder="Costo" style="width:90px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><input class="markupInput" data-product="'+p.id+'" type="number" min="0" step="0.01" value="'+esc(markup)+'" placeholder="Markup %" style="width:75px;border:1px solid #343a40;background:#090b0d;color:#fff;padding:7px"><button class="btn alt savePrice" data-product="'+p.id+'" type="button" style="padding:7px 9px">Guardar</button></div>':'';
