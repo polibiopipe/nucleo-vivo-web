@@ -122,52 +122,97 @@ body:has(#publicView:not(.hidden)) .footer{display:none}
 .sep-text-large .landing-screen{height:auto;min-height:calc(100dvh - 76px);overflow:visible;grid-template-rows:minmax(530px,auto) auto auto auto}.sep-text-large .gateway-hero{min-height:530px}.sep-text-large .gateway-modules{min-height:190px}.sep-text-large .gateway-module{min-height:190px}
 @media(prefers-reduced-motion:reduce){.gateway-module{transition:none}}
 
+
+/* V6: identidad editorial cinematográfica, bajo ruido visual y accesibilidad */
+:root {--c6-ink:#2e1c32;--c6-plum:#38213c;--c6-accent:#d47b68;--c6-cream:#f8f2e9;--c6-sage:#80a295;--c6-mist:#e7ded2}
+html{scroll-padding-top:78px}
+body{background:#f7f1e9;color:var(--c6-ink)}
+.c6-header{height:80px;position:sticky;top:0;z-index:40;background:rgba(255,252,248,.97);border-bottom:1px solid #e8ddd3;box-shadow:none}
+.c6-container{max-width:1740px;margin:auto;padding:0 clamp(18px,3.7vw,62px)}
+.c6-nav{height:80px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.c6-brand{display:flex;gap:13px;align-items:center;text-decoration:none;min-width:235px;color:var(--c6-plum)}
+.c6-logo{width:51px;height:51px;flex:0 0 51px}
+.c6-brand-name{display:grid;line-height:1.03}.c6-brand-name strong{font-size:1.22rem;letter-spacing:-.05em}.c6-brand-name em{font-family:Georgia,serif;font-size:1.3rem;color:#b95f63;margin-top:2px}.c6-brand-name small{font-size:.52rem;letter-spacing:.13em;font-weight:800;color:#78697a;margin-top:8px}
+.c6-links{display:flex;align-items:center;justify-content:center;gap:clamp(11px,1.4vw,27px);flex:1}
+.c6-links button{background:none;border:0;color:#59495c;font-size:.91rem;font-weight:680;padding:11px 3px}.c6-links button:hover{color:#af5c64}
+.c6-controls{display:flex;align-items:center;gap:7px}.c6-font{border:1px solid #e7dcd4;border-radius:50%;width:37px;height:37px;background:#fff8f2;color:#49334e;font-weight:800}.c6-login{min-height:43px;margin-left:7px;background:#3c2546;color:white;border:0;border-radius:100px;padding:9px 22px;font-weight:750;white-space:nowrap}
+.c6-login:hover{background:#5c3760}
+#publicView{min-height:calc(100dvh - 80px)}
+.c6-shell{height:calc(100dvh - 80px);min-height:635px;display:grid;grid-template-rows:minmax(0,1fr) 67px 17px;gap:10px;padding:12px 16px 8px;max-width:1920px;margin:0 auto;overflow:hidden}
+.c6-cinema{border-radius:22px;position:relative;overflow:hidden;isolation:isolate;background:#463447;min-height:0;box-shadow:0 22px 50px rgba(39,22,39,.15)}
+.c6-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 43%;z-index:-3;filter:contrast(1.045) saturate(.82) sepia(.08);animation:c6SlowFilm 28s ease-in-out alternate infinite}
+.c6-overlay{position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,rgba(36,25,40,.95) 0%,rgba(42,28,43,.88) 22%,rgba(46,31,42,.62) 43%,rgba(36,27,35,.08) 70%,rgba(32,26,32,.14) 100%),linear-gradient(0deg,rgba(25,20,27,.62) 0%,transparent 29%)}
+.c6-content{position:absolute;left:clamp(24px,5.3vw,92px);top:43%;transform:translateY(-50%);width:min(45%,650px);color:white;display:grid;justify-items:start;gap:clamp(14px,2vh,24px)}
+.c6-eyebrow{color:#f9e4ce;font-size:clamp(.72rem,.83vw,.85rem);font-weight:800;letter-spacing:.15em;line-height:1.2}
+.c6-light{display:inline-block;background:#d88977;width:7px;height:7px;border-radius:50%;margin-right:7px}
+.c6-content h1{font-family:Georgia,"Times New Roman",serif;color:white;line-height:.99;font-size:clamp(3.15rem,5vw,5.65rem);letter-spacing:-.052em;font-weight:500;margin:0;max-width:630px;text-wrap:balance}
+.c6-content h1 span{display:block;font-style:italic;font-weight:500;color:#eab3a1}
+.c6-subhead{font-size:clamp(1.01rem,1.17vw,1.3rem);line-height:1.57;color:#f4e8e2;margin:0;max-width:520px}
+.c6-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.c6-primary,.c6-secondary{border:0;border-radius:100px;min-height:48px;padding:12px 20px;font-size:.95rem;font-weight:800;display:inline-flex;gap:13px;align-items:center;justify-content:center}
+.c6-primary{background:#dc8172;color:#2d172b;box-shadow:0 9px 25px #27162266}.c6-primary:hover{background:#f2a28c}
+.c6-secondary{border:1px solid #e7d3ce;background:#ffffff14;color:#fff;backdrop-filter:blur(10px)}.c6-secondary:hover{background:#ffffff2b}
+.c6-caption{margin:0;font-size:.84rem;color:#e8d3cf}
+.c6-drift{position:absolute;right:4.3%;top:8%;color:#fff4e8;font-family:Georgia,serif;font-style:italic;font-size:clamp(.93rem,1.4vw,1.5rem);max-width:260px;text-align:right;text-shadow:0 2px 6px #2b1729b0;opacity:.9}
+.c6-credit{position:absolute;right:22px;bottom:103px;font-size:.63rem;color:#fff8edce;background:#271d29a3;padding:4px 8px;border-radius:8px}
+.c6-quick{position:absolute;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;background:rgba(255,249,241,.94);backdrop-filter:blur(16px);border-top:1px solid #fff8}
+.c6-quick button{padding:16px clamp(18px,3vw,46px);display:flex;align-items:center;gap:13px;background:none;border:0;border-right:1px solid #d5c8c5;text-align:left;color:var(--c6-plum);min-width:0}.c6-quick button:last-child{border-right:0}.c6-quick button:hover{background:#efe3d9}
+.c6-quick-icon{width:42px;height:42px;flex:0 0 42px;border:1px solid #bcb1b0;border-radius:50%;display:grid;place-items:center;font-family:Georgia,serif;font-size:1.45rem;color:#916469}
+.c6-quick-text{display:grid;min-width:0;gap:3px}.c6-quick-text strong{font-size:1.02rem;color:#37243c}.c6-quick-text small{font-size:.82rem;color:#6d6267}.c6-quick-arrow{font-size:1.2rem;color:#a06d6b;margin-left:auto}
+.c6-proof{border:1px solid #e6d9cd;background:#fbf7f0;border-radius:16px;display:grid;grid-template-columns:1.06fr 1fr 1.03fr 1.08fr auto;align-items:center;gap:18px;padding:0 17px;box-shadow:0 3px 13px #402b3710}
+.c6-proof-kicker{font-size:.74rem;letter-spacing:.09em;font-weight:850;color:#65505c}
+.c6-proof div{display:flex;align-items:center;gap:9px}.c6-proof b{font-family:Georgia,serif;font-size:1.24rem;color:#c58072;font-weight:500}.c6-proof div span{font-size:.81rem;line-height:1.25;color:#554b52}
+.c6-proof-cta{white-space:nowrap;border:0;border-radius:100px;background:#efe4db;color:#4e374d;font-size:.82rem;font-weight:780;padding:10px 13px}.c6-proof-cta:hover{background:#e5d4c8}
+.c6-status{align-self:center;text-align:center;color:#75656b;font-size:.66rem;line-height:1.2;margin:0}
+.c6-ethos{background:#fcf6ee}
+.c6-font:focus-visible,.c6-login:focus-visible,.c6-quick button:focus-visible,.c6-proof-cta:focus-visible{outline:3px solid #13827a;outline-offset:3px}
+.c6-text-large .c6-shell{height:auto;min-height:calc(100dvh - 80px);grid-template-rows:minmax(600px,auto) auto auto;overflow:visible}.c6-text-large .c6-cinema{min-height:600px}
+@keyframes c6SlowFilm{from{transform:scale(1)}to{transform:scale(1.055)}}
+@media(max-height:740px) and (min-width:1051px){.c6-shell{grid-template-rows:minmax(0,1fr) 57px 13px;gap:8px}.c6-content{gap:12px}.c6-content h1{font-size:clamp(2.7rem,4.1vw,4.3rem)}.c6-quick button{padding:11px 24px}.c6-quick-icon{width:35px;height:35px;flex-basis:35px}.c6-credit{bottom:86px}.c6-proof{gap:9px}.c6-proof div span{font-size:.73rem}}
+@media(max-width:1170px){.c6-links{gap:8px}.c6-links button{font-size:.79rem}.c6-brand{min-width:204px}.c6-content{width:54%}.c6-drift{right:2%}.c6-proof{gap:9px;grid-template-columns:1.1fr 1fr 1fr auto}.c6-proof div:nth-of-type(3){display:none}}
+@media(max-width:950px){.c6-header,.c6-nav{height:auto;min-height:70px}.c6-nav{flex-wrap:wrap;padding-top:10px;padding-bottom:8px}.c6-links{order:3;flex:1 0 100%;overflow-x:auto;justify-content:flex-start;gap:18px}.c6-links button{flex:0 0 auto;white-space:nowrap}.c6-shell{height:auto;min-height:0;overflow:visible;grid-template-rows:auto auto auto}.c6-cinema{height:650px}.c6-content{width:60%;top:42%}.c6-content h1{font-size:clamp(3rem,6vw,4.6rem)}.c6-proof{min-height:70px}}
+@media(max-width:690px){.c6-nav{gap:9px}.c6-brand{min-width:0}.c6-logo{width:43px;height:43px;flex-basis:43px}.c6-brand-name strong{font-size:1rem}.c6-brand-name em{font-size:1.08rem}.c6-brand-name small{font-size:.43rem}.c6-controls{margin-left:auto}.c6-font{width:32px;height:32px}.c6-login{min-height:36px;padding:8px 12px;font-size:.81rem}.c6-shell{padding:7px}.c6-cinema{height:750px;border-radius:14px}.c6-photo{object-position:60% center}.c6-overlay{background:linear-gradient(180deg,rgba(37,24,38,.90) 0%,rgba(37,24,38,.76) 31%,rgba(37,24,38,.16) 60%,rgba(37,24,38,.77) 84%)}.c6-content{left:20px;right:20px;top:24px;transform:none;width:auto;gap:15px}.c6-content h1{font-size:clamp(2.75rem,10vw,3.85rem)}.c6-subhead{font-size:1rem;max-width:510px}.c6-drift{display:none}.c6-quick{grid-template-columns:1fr;gap:0}.c6-quick button{padding:10px 16px}.c6-quick-icon{height:33px;width:33px;flex-basis:33px;font-size:1.14rem}.c6-quick-text strong{font-size:.96rem}.c6-quick-text small{font-size:.75rem}.c6-credit{bottom:194px;right:10px;max-width:180px}.c6-proof{grid-template-columns:1fr 1fr;gap:9px;padding:13px}.c6-proof-kicker{grid-column:1/-1}.c6-proof div:nth-of-type(3){display:flex}.c6-proof-cta{grid-column:1/-1}.c6-status{line-height:1.4}}
+@media(max-width:380px){.c6-controls .c6-font:first-child{display:none}.c6-cinema{height:800px}.c6-actions{gap:8px}.c6-primary,.c6-secondary{min-height:41px;padding:9px 14px;font-size:.82rem}}
+@media(prefers-reduced-motion:reduce){.c6-photo{animation:none}}
+
 </style>
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
-<header class="site-header sep-header"><div class="wrap top">
-<a class="brand" href="#inicio" aria-label="Sexualidad en Plenitud · inicio"><span class="symbol brand-heart" aria-hidden="true"><span>♥</span></span><span><span class="brand-title">Sexualidad <em>en Plenitud</em></span><span class="brand-sub">CONVERSAR · APRENDER · SENTIR · DECIDIR</span></span></a>
-<nav class="nav-main sep-top-nav" aria-label="Accesos de la comunidad"><button type="button" data-home>Inicio</button><button type="button" data-open="conversaciones">💬 Comunidad</button><button type="button" data-open="actividades">🗓️ Encuentros</button><button type="button" data-open="psicologia">🫶 Psicología</button><button type="button" data-open="aprender">📖 Aprender</button><button type="button" data-info="voluntariado">🤝 Voluntariado</button></nav>
-<div class="access-controls"><span class="control-label">Letra</span><button class="tiny" id="decrease" title="Reducir letra" aria-label="Reducir tamaño de letra">A−</button><button class="tiny" id="increase" title="Aumentar letra" aria-label="Aumentar tamaño de letra">A+</button><button class="pill sm coral" id="loginTop">Entrar ↗</button></div></div></header>
+<header class="site-header c6-header"><div class="c6-container c6-nav">
+<a href="#inicio" class="c6-brand" aria-label="Sexualidad en Plenitud, inicio"><svg class="c6-logo" aria-hidden="true" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M32 26C17 18 15 4 29 5c14 1 13 14 3 21Z" fill="#e07c69"/><path d="M34 29C46 8 63 14 57 28 51 40 42 37 34 29Z" fill="#659c89"/><path d="M29 31C5 23 1 38 12 46c9 7 16-6 17-15Z" fill="#f0b86d"/><path d="M33 33C40 56 56 61 57 45c0-11-14-13-24-12Z" fill="#8e668c"/><path d="M30 36C17 49 20 61 32 59c13-3 8-15-2-23Z" fill="#31575e"/><path d="M18 30c0-9 7-15 15-15s14 6 14 15c0 8-9 16-14 20-6-4-15-12-15-20Z" fill="#fff8f1"/><path d="M23 29c0-5 6-7 10-2 5-6 12-2 11 3-1 5-7 10-11 13-5-4-10-8-10-14Z" fill="#e17b76"/></svg><span class="c6-brand-name"><strong>Sexualidad</strong><em>en Plenitud</em><small>CONVERSAR · APRENDER · SENTIR</small></span></a>
+<nav class="c6-links" aria-label="Navegación"><button type="button" data-home>Inicio</button><button type="button" data-open="conversaciones">Comunidad</button><button type="button" data-open="psicologia">Psicología</button><button type="button" data-open="actividades">Encuentros</button><button type="button" data-open="aprender">Aprender</button><button type="button" data-info="voluntariado">Voluntariado</button></nav>
+<div class="c6-controls"><button class="c6-font" type="button" id="decrease" aria-label="Reducir letra">A−</button><button class="c6-font" type="button" id="increase" aria-label="Aumentar letra">A+</button><button type="button" class="c6-login" id="loginTop">Ingresar <span aria-hidden="true">↗</span></button></div></div></header>
 <main id="contenido"><div id="publicView">
-<section class="landing-screen" id="inicio" aria-labelledby="sep-landing-heading">
-<div class="gateway-hero">
-<img class="gateway-photo" src="https://images.unsplash.com/photo-1764173039259-3cdf3d9a56e2?auto=format&fit=crop&w=1800&q=86" alt="Personas mayores conversan espontáneamente en una mesa de café, compartiendo un momento de encuentro comunitario" loading="eager" fetchpriority="high" decoding="async">
-<div class="gateway-shade" aria-hidden="true"></div>
-<div class="gateway-copy">
-<span class="gateway-location">✦ Una comunidad que conversa · Villa Alemana</span>
-<h1 id="sep-landing-heading">Hablemos de <em>sexualidad</em> sin tabúes.</h1>
-<p>Sexualidad, afecto y bienestar sin juicios. Conversemos a nuestro ritmo, en línea y en nuestros clubes.</p>
-<div class="gateway-buttons"><button type="button" class="gateway-cta" id="heroLogin">Quiero ser parte <span aria-hidden="true">→</span></button><button type="button" class="gateway-secondary" id="explore">Conocer el proyecto <span aria-hidden="true">ⓘ</span></button></div>
-<span class="gateway-promise">Sin «match» · Sin presión para compartir · Tu voz importa</span>
+<section id="inicio" class="c6-shell" aria-labelledby="c6-title">
+<div class="c6-cinema">
+<img class="c6-photo" src="https://images.pexels.com/photos/8153898/pexels-photo-8153898.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Personas mayores conversando y disfrutando de un encuentro en un café. Imagen de referencia." decoding="async" fetchpriority="high" loading="eager">
+<div class="c6-overlay" aria-hidden="true"></div>
+<div class="c6-content">
+<div class="c6-eyebrow"><span class="c6-light"></span> VILLA ALEMANA · UNA COMUNIDAD PARA CONVERSAR</div>
+<h1 id="c6-title">La vida también <span>se conversa.</span></h1>
+<p class="c6-subhead">Sexualidad, afecto y vínculos sin tabúes. Un espacio para compartir con libertad, aprender y encontrarnos en comunidad.</p>
+<div class="c6-actions"><button type="button" id="heroLogin" class="c6-primary">Conocer la comunidad <span aria-hidden="true">→</span></button><button type="button" id="explore" class="c6-secondary"><span aria-hidden="true">▷</span> Cómo funciona</button></div>
+<p class="c6-caption">Participar, escuchar o guardar silencio: siempre es tu decisión.</p>
 </div>
-<aside class="gateway-access" aria-labelledby="gateway-access-title">
-<div class="gateway-access-icon" aria-hidden="true">♥</div>
-<div class="gateway-access-eyebrow">BIENVENIDOS</div>
-<h2 id="gateway-access-title">Aquí hay un lugar para ti.</h2>
-<p>Puedes conversar, escuchar o simplemente acompañar. Tú eliges cómo participar.</p>
-<button type="button" class="gateway-access-main" data-demo-login="participante">Entrar como participante <span aria-hidden="true">↗</span></button>
-<button type="button" class="gateway-access-alt" data-demo-login="moderacion">Explorar rol de Psicología</button>
-<div class="gateway-access-note">Accesos de prueba. Aún no hay inscripciones reales.</div>
-</aside>
-<div class="gateway-deco gateway-deco-one" aria-hidden="true">✳</div>
-<div class="gateway-deco gateway-deco-two" aria-hidden="true">✳</div>
+<div class="c6-drift" aria-hidden="true">«A cualquier edad tenemos algo que decir»</div>
+<div class="c6-credit">Fotografía referencial: Alena Darmel / Pexels. No corresponde a integrantes del proyecto.</div>
+<div class="c6-quick" aria-label="Elige cómo explorar la comunidad">
+<button type="button" data-open="conversaciones"><span class="c6-quick-icon">◌</span><span class="c6-quick-text"><strong>Conversar</strong><small>Tu voz tiene lugar</small></span><span class="c6-quick-arrow">↗</span></button>
+<button type="button" data-open="psicologia"><span class="c6-quick-icon">♡</span><span class="c6-quick-text"><strong>Con Psicología</strong><small>Reflexionar sin juicios</small></span><span class="c6-quick-arrow">↗</span></button>
+<button type="button" data-open="actividades"><span class="c6-quick-icon">✳</span><span class="c6-quick-text"><strong>Encuentros</strong><small>En nuestros clubes</small></span><span class="c6-quick-arrow">↗</span></button>
 </div>
-<div class="gateway-modules" aria-label="Elige tu espacio">
-<button class="gateway-module gm-coral" type="button" data-open="conversaciones"><img class="gm-photo" src="https://images.unsplash.com/photo-1764173039543-f9f197744e1b?auto=format&fit=crop&w=420&q=75" alt="" loading="lazy"><span class="gm-symbol" aria-hidden="true">💬</span><strong>Comunidad</strong><span>Conversa en grupos moderados.</span><span class="gm-arrow" aria-hidden="true">↗</span></button>
-<button class="gateway-module gm-lav" type="button" data-open="actividades"><img class="gm-photo" src="https://images.unsplash.com/photo-1773227059881-ef8ecf22aac8?auto=format&fit=crop&w=420&q=75" alt="" loading="lazy"><span class="gm-symbol" aria-hidden="true">🗓️</span><strong>Encuentros</strong><span>Actividades en clubes y círculos.</span><span class="gm-arrow" aria-hidden="true">↗</span></button>
-<button class="gateway-module gm-mint" type="button" data-open="psicologia"><span class="gm-symbol" aria-hidden="true">🫶</span><strong>Con Psicología</strong><span>Psicoeducación y reflexión grupal.</span><span class="gm-arrow" aria-hidden="true">↗</span></button>
-<button class="gateway-module gm-sun" type="button" data-open="aprender"><span class="gm-symbol" aria-hidden="true">📚</span><strong>Aprende</strong><span>Sexualidad, derechos y bienestar.</span><span class="gm-arrow" aria-hidden="true">↗</span></button>
-<button class="gateway-module gm-sky" type="button" data-info="voluntariado"><span class="gm-symbol" aria-hidden="true">🤝</span><strong>Voluntariado</strong><span>Profesionales que quieren aportar.</span><span class="gm-arrow" aria-hidden="true">↗</span></button>
 </div>
-<div class="gateway-trust">
-<span><b aria-hidden="true">◉</b> Grupos moderados</span><span><b aria-hidden="true">♡</b> Respeto y autonomía</span><span><b aria-hidden="true">🎙</b> Dictado y lectura por voz</span><span><b aria-hidden="true">♧</b> Encuentros en los clubes</span><span><b aria-hidden="true">⚿</b> Privacidad y derechos</span>
+<div class="c6-proof">
+<span class="c6-proof-kicker">UN PROGRAMA CON SENTIDO</span>
+<div><b>01</b><span>Diseñado con las personas mayores</span></div>
+<div><b>02</b><span>Psicoeducación y diálogo grupal</span></div>
+<div><b>03</b><span>Evaluación de beneficios y riesgos</span></div>
+<button type="button" class="c6-proof-cta" data-info="proyecto">Conocer el modelo <span aria-hidden="true">↗</span></button>
 </div>
-<p class="gateway-disclaimer">Prototipo académico · Fotos: Centre for Ageing Better y Age Cymru / Unsplash · Actividades y convenios aún por confirmar.</p>
+<p class="c6-status">Prototipo académico en desarrollo · Sin inscripciones reales ni atención clínica activa · Encuentros y voluntariado sujetos a acuerdos futuros.</p>
 <button id="ribbonLogin" class="hidden" type="button" tabindex="-1">Ingresar</button>
-</section>
-</div>
+</section></div>
 <div id="memberView" class="hidden"><section class="wrap app-shell"><div class="member-bar"><div><div class="eyebrow">Bienvenida a tu círculo <span class="badge-demo">DEMO</span></div><h2 id="greeting">Hola</h2><p>Tu voz importa. Participa a tu ritmo y con tranquilidad.</p></div><div class="member-actions"><button class="pill white sm" id="readSection">🔊 Leer esta sección</button><button class="pill white sm" id="stopVoice">Detener lectura</button><button class="pill white sm" id="signOut">Cerrar sesión</button></div></div>
 <nav class="tabbar" aria-label="Secciones de la comunidad"><button class="current" data-page="inicio">🏠 Mi comunidad</button><button data-page="conversaciones">💬 Conversaciones</button><button data-page="actividades">🗓️ Actividades</button><button data-page="aprender">📖 Aprender</button><button data-page="psicologia">🫶 Con Psicología</button><button data-page="encuesta">📝 Encuesta</button><button id="moderationNav" data-page="moderacion" hidden>🛡️ Moderación</button></nav>
 <div class="page" id="page-inicio"><div class="member-grid"><div class="spotlight"><span class="eyebrow">Pregunta de la semana</span><h3>¿Por qué a veces nos cuesta hablar de sexualidad después de los 60?</h3><p>Una invitación a compartir ideas con respeto. Puedes comentar, dictar o simplemente escuchar.</p><button class="pill coral" data-jump="conversaciones">Participar en la conversación →</button></div><aside class="panel"><h3>Tu comunidad, a tu ritmo</h3><div class="mini-stat"><span class="icon">🎙️</span><div><strong>Hablar también es participar</strong><span>Dictado por voz para evitar escribir.</span></div></div><div class="mini-stat"><span class="icon">🔊</span><div><strong>Escuchar los contenidos</strong><span>Lectura en voz alta de esta sección.</span></div></div><div class="mini-stat"><span class="icon">🤝</span><div><strong>Encuentros en clubes</strong><span>Actividades acompañadas y voluntarias.</span></div></div></aside></div><div class="section-intro" style="margin-top:31px"><div><div class="eyebrow">Elige cómo quieres continuar</div><h2>Este espacio es tuyo</h2></div></div><div class="tiles"><button class="tile mint" data-jump="conversaciones"><span class="icon">💬</span><h3>Conversar</h3><p>Leer y compartir preguntas</p><span class="arrow">↗</span></button><button class="tile peach" data-jump="conversaciones"><span class="icon">🎙️</span><h3>Usar mi voz</h3><p>Dictar antes de publicar</p><span class="arrow">↗</span></button><button class="tile lav" data-jump="actividades"><span class="icon">🗓️</span><h3>Mi club</h3><p>Actividades y encuentros</p><span class="arrow">↗</span></button><button class="tile butter" data-jump="aprender"><span class="icon">📖</span><h3>Aprender</h3><p>Contenido psicoeducativo</p><span class="arrow">↗</span></button></div></div>
@@ -194,10 +239,10 @@ const accounts={'elena@demo.cl':{password:'1234',name:'Elena',role:'participante
 const state={user:null,scale:1,posts:[{author:'Reflexión ilustrativa',message:'Me parece importante que podamos conversar sobre deseo y cariño sin sentir que estamos haciendo algo incorrecto.'},{author:'Reflexión ilustrativa',message:'A veces hablar de compañía e intimidad resulta tan importante como hablar de sexualidad.'}],pending:[],interest:{}};
 let toastTimer,recognition=null,requestedPage=null;function notify(message){const el=$('#toast');el.textContent=message;el.classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.add('hidden'),4000)}
 function showLogin(){ $('#loginError').textContent='';$('#loginOverlay').classList.remove('hidden');$('#username').focus() }
-function closeLogin(){$('#loginOverlay').classList.add('hidden'); if(!state.user)requestedPage=null}
+function closeLogin(){$('#loginOverlay').classList.add('hidden')}
 $('#loginTop').addEventListener('click',()=>state.user ? showPage('inicio') : showLogin());$('#heroLogin').onclick=showLogin;$('#ribbonLogin').onclick=showLogin;$('#explore').onclick=()=>showSepInfo('proyecto');$('#closeLogin').onclick=closeLogin;
 $('#loginOverlay').addEventListener('click',e=>{if(e.target.id==='loginOverlay')closeLogin()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#loginOverlay').classList.contains('hidden'))closeLogin()});
-function showSepInfo(which){const isVolunteer=which==='voluntariado';$('#sepInfoTitle').textContent=isVolunteer?'Psicólogos voluntarios: una propuesta con responsabilidad.':'Una aplicación que acompaña encuentros humanos.';const area=$('#sepInfoBody');area.replaceChildren();const p=document.createElement('p');p.textContent=isVolunteer?'Proyectamos una futura red de profesionales voluntarios que acompañen conversaciones grupales, con acreditación, capacitación, supervisión y resguardo de la confidencialidad. Todavía no existe una convocatoria ni fundación constituida.':'Queremos facilitar el diálogo sobre sexualidad, afectividad y envejecimiento con personas mayores de clubes de Villa Alemana. La participación será voluntaria; el programa propone diagnóstico participativo, círculos digitales, talleres presenciales y evaluación de bienestar y posibles molestias.';area.append(p);const ul=document.createElement('ul');const items=isVolunteer?['Psicólogos con título verificado y funciones delimitadas.','Trabajo grupal psicoeducativo; no atención clínica por chat.','Estudiantes pueden apoyar solo bajo supervisión profesional.']:['Las conversaciones pueden dictarse y leerse en voz alta.','Los encuentros se proponen dentro de clubes, no con desconocidos.','El piloto requiere permisos, consentimiento y privacidad antes de admitir participantes reales.'];items.forEach(t=>{const li=document.createElement('li');li.textContent=t;ul.append(li)});area.append(ul);$('#sepInfoOverlay').classList.remove('hidden');$('#sepInfoClose').focus();}
+function showSepInfo(which){const volunteer=which==='voluntariado';$('#sepInfoTitle').textContent=volunteer?'Psicólogos voluntarios: una red responsable.':'Del diálogo digital al encuentro comunitario.';const area=$('#sepInfoBody');area.replaceChildren();const p=document.createElement('p');p.textContent=volunteer?'La futura red se proyecta con psicólogos acreditados, supervisión, protocolos de protección y autocuidado. La fundación y la convocatoria aún no se han constituido.':'La aplicación es una puerta de entrada, no el tratamiento. El piloto se diseñaría junto a clubes de personas mayores de Villa Alemana, combinando conversación moderada, psicoeducación sexual y encuentros presenciales voluntarios.';area.append(p);const ul=document.createElement('ul');const items=volunteer?['Psicólogos voluntarios con funciones y formación verificadas.','Facilitación de grupos y orientación general, nunca psicoterapia pública.','Estudiantes de Psicología participan bajo supervisión y resguardo ético.']:['1. Escuchar a la comunidad: diagnóstico participativo y consentimiento.','2. Conversar: seis encuentros con facilitación psicológica y acceso digital por voz o texto.','3. Evaluar: antes y después, medir comodidad al hablar, conocimientos y percepción de seguridad; registrar también posibles efectos adversos.','4. Ajustar: revisar resultados y decidir con las personas mayores si el programa continúa.'];for(const v of items){const li=document.createElement('li');li.textContent=v;ul.append(li)}area.append(ul);const end=document.createElement('p');end.textContent='Propuesta académica: aún no se han ejecutado encuentros ni demostrado resultados. La futura implementación requerirá acuerdos con los clubes, credenciales, seguridad de los datos y autorizaciones pertinentes.';end.style.fontSize='.88rem';area.append(end);$('#sepInfoOverlay').classList.remove('hidden');$('#sepInfoClose').focus();}
 function closeSepInfo(){$('#sepInfoOverlay').classList.add('hidden')}
 $('#sepInfoClose').onclick=closeSepInfo;$('#sepInfoDismiss').onclick=closeSepInfo;$('#sepInfoExplore').onclick=()=>{closeSepInfo();showLogin()};$('#sepInfoOverlay').addEventListener('click',e=>{if(e.target.id==='sepInfoOverlay')closeSepInfo()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#sepInfoOverlay').classList.contains('hidden'))closeSepInfo()});
 $('[data-home]').forEach(el=>el.onclick=()=>state.user?showPage('inicio'):window.scrollTo({top:0,behavior:'smooth'}));
@@ -226,7 +271,7 @@ $('#readSection').onclick=()=>speak($('.page:not(.hidden)')?.innerText||'');$('#
 const SpeechRec=window.SpeechRecognition||window.webkitSpeechRecognition;
 $('#record').onclick=()=>{if(!SpeechRec){notify('El navegador no admite reconocimiento de voz. Puedes utilizar el micrófono del teclado.');return}if(recognition)return;const rec=new SpeechRec();recognition=rec;rec.lang='es-CL';rec.continuous=false;rec.interimResults=true;const base=$('#comment').value.trim();rec.onresult=e=>{let speech='';for(let i=0;i<e.results.length;i++)speech+=e.results[i][0].transcript+' ';$('#comment').value=[base,speech.trim()].filter(Boolean).join(' ')};rec.onstart=()=>{$('#recordState').textContent='Escuchando... No dictes nombres ni información íntima identificable. El navegador puede procesar audio en servidores externos.';$('#record').disabled=true;$('#stopRecord').disabled=false};rec.onerror=e=>notify('Micrófono no disponible: '+e.error);rec.onend=()=>{$('#recordState').textContent='Dictado finalizado. Revisa y corrige el texto antes de enviarlo.';$('#record').disabled=false;$('#stopRecord').disabled=true;recognition=null};try{rec.start()}catch(_){recognition=null;notify('No se pudo iniciar el micrófono.')}};
 $('#stopRecord').onclick=()=>{if(recognition)recognition.stop()};
-$('#increase').onclick=()=>{state.scale=Math.min(1.5,+(state.scale+.1).toFixed(2));document.documentElement.style.setProperty('--fontScale',state.scale);document.documentElement.classList.toggle('sep-text-large',state.scale>1.12)};$('#decrease').onclick=()=>{state.scale=Math.max(.9,+(state.scale-.1).toFixed(2));document.documentElement.style.setProperty('--fontScale',state.scale);document.documentElement.classList.toggle('sep-text-large',state.scale>1.12)};
+$('#increase').onclick=()=>{state.scale=Math.min(1.5,+(state.scale+.1).toFixed(2));document.documentElement.style.setProperty('--fontScale',state.scale);document.documentElement.classList.toggle('c6-text-large',state.scale>1.12)};$('#decrease').onclick=()=>{state.scale=Math.max(.9,+(state.scale-.1).toFixed(2));document.documentElement.style.setProperty('--fontScale',state.scale);document.documentElement.classList.toggle('c6-text-large',state.scale>1.12)};
 try{const stored=JSON.parse(sessionStorage.getItem('sep-session')||'null');if(stored && accounts[stored.username] && accounts[stored.username].role===stored.role){$('#username').value=stored.username;$('#password').value=accounts[stored.username].password;login();$('#password').value=''}}catch(_){}
 })();
 </script>
