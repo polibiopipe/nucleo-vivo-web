@@ -97,10 +97,15 @@ async function hub(){
  const items=get("sepFbEvents");
  if(!member.clubId){const p=document.createElement("p");p.className="sep-note";p.textContent="Cuando tu club confirme la vinculación, podrás solicitar actividades compartidas.";items.append(p);return;}
  try{
- const s=await firebase(),q=s.db.query(s.db.collection(s.store,"events"),s.db.where("status","==","published"),s.db.limit(30));
- const docs=await s.db.getDocs(q);
- if(docs.empty){items.textContent="Aún no hay actividades oficialmente publicadas.";return;}
- for(const document of docs.docs){
+ const s=await firebase(),col=s.db.collection(s.store,"events");
+ const queries=[
+   s.db.query(col,s.db.where("status","==","published"),s.db.where("allVerifiedClubs","==",true),s.db.limit(30)),
+   s.db.query(col,s.db.where("status","==","published"),s.db.where("invitedClubIds","array-contains",member.clubId),s.db.limit(30))
+ ];
+ const [one,two]=await Promise.all(queries.map(q=>s.db.getDocs(q)));
+ const docs=new Map();[...one.docs,...two.docs].forEach(d=>docs.set(d.id,d));
+ if(docs.size===0){items.textContent="Aún no hay actividades oficialmente publicadas.";return;}
+ for(const document of docs.values()){
  const e=document.data(),card=document.createElement("article");card.className="sep-event";
  const h=document.createElement("h4");h.textContent=String(e.title||"Encuentro");
  const desc=document.createElement("p");desc.textContent=String(e.summary||"");
