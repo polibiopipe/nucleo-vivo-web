@@ -163,7 +163,7 @@ body:has(#publicView:not(.hidden)) .footer{display:none}
 <div class="gateway-trust">
 <span><b aria-hidden="true">◉</b> Grupos moderados</span><span><b aria-hidden="true">♡</b> Respeto y autonomía</span><span><b aria-hidden="true">🎙</b> Dictado y lectura por voz</span><span><b aria-hidden="true">♧</b> Encuentros en los clubes</span><span><b aria-hidden="true">⚿</b> Privacidad y derechos</span>
 </div>
-<p class="gateway-disclaimer">Prototipo académico en desarrollo · Fotografías documentales de referencia · Los clubes, profesionales y actividades aún no han sido formalmente incorporados.</p>
+<p class="gateway-disclaimer">Prototipo académico · Imagen: Centre for Ageing Better / Unsplash · Clubes, profesionales y actividades todavía por confirmar.</p>
 <button id="ribbonLogin" class="hidden" type="button" tabindex="-1">Ingresar</button>
 </section>
 </div>
@@ -201,7 +201,7 @@ function closeSepInfo(){$('#sepInfoOverlay').classList.add('hidden')}
 $('#sepInfoClose').onclick=closeSepInfo;$('#sepInfoDismiss').onclick=closeSepInfo;$('#sepInfoExplore').onclick=()=>{closeSepInfo();showLogin()};$('#sepInfoOverlay').addEventListener('click',e=>{if(e.target.id==='sepInfoOverlay')closeSepInfo()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#sepInfoOverlay').classList.contains('hidden'))closeSepInfo()});
 $('[data-home]').forEach(el=>el.onclick=()=>state.user?showPage('inicio'):window.scrollTo({top:0,behavior:'smooth'}));
 $('[data-info]').forEach(el=>el.onclick=()=>showSepInfo(el.dataset.info));
-$('[data-demo-login]').forEach(el=>el.onclick=()=>{requestedPage=el.dataset.demoLogin==='moderacion'?'psicologia':'inicio';showLogin();if(el.dataset.demoLogin==='moderacion')$('#username').value='psicologa@demo.cl';});
+$('[data-demo-login]').forEach(el=>el.onclick=()=>{requestedPage=el.dataset.demoLogin==='moderacion'?'moderacion':'inicio';showLogin();if(el.dataset.demoLogin==='moderacion')$('#username').value='psicologa@demo.cl';});
 $('[data-open]').forEach(el=>el.onclick=()=>{if(!state.user){requestedPage=el.dataset.open;showLogin();return}showPage(el.dataset.open)});
 function fillDemo(username){$('#username').value=username;$('#password').value='1234';login()};$('#demoParticipant').onclick=()=>fillDemo('elena@demo.cl');$('#demoMod').onclick=()=>fillDemo('psicologa@demo.cl');
 function login(){const username=$('#username').value.trim().toLowerCase();const pass=$('#password').value;const u=accounts[username];if(!u||u.password!==pass){$('#loginError').textContent='Los datos no coinciden con los usuarios de esta demostración.';return}state.user={username,name:u.name,role:u.role};try{sessionStorage.setItem('sep-session',JSON.stringify(state.user))}catch(_){}closeLogin();$('#publicView').classList.add('hidden');$('#memberView').classList.remove('hidden');$('#loginTop').textContent='Mi comunidad';$('#greeting').textContent='Hola, '+u.name+' 👋';$('#moderationNav').hidden=u.role!=='moderacion';showPage(requestedPage||'inicio');requestedPage=null;window.scrollTo({top:0,behavior:'instant'});notify('Bienvenida a Sexualidad en Plenitud · acceso demostrativo')}
