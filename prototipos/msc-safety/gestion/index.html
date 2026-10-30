@@ -278,6 +278,7 @@ table{max-width:100%}
           <div class="card"><span>Movimientos</span><strong id="kMoves">0</strong></div>
           <div class="card"><span>Alerta · 1 semana</span><strong id="kLowStock">0</strong></div>
           <div class="card"><span>Sin umbral definido</span><strong id="kUndefined">0</strong></div>
+          <div class="card"><span>Stock negativo · conciliar</span><strong id="kNegativeStock" style="color:#f58b86">0</strong></div>
         </div>
         <div class="panel"><div class="panel-head"><h2>Stock por producto</h2><span class="muted">Calculado desde movimientos</span></div><div class="table-wrap"><table><thead><tr><th>SKU</th><th>Producto</th><th>Marca</th><th>Stock</th><th>1 semana</th><th>Estado</th><th>Unidad</th></tr></thead><tbody id="stockRows"></tbody></table></div></div>
       </section>
@@ -1084,11 +1085,19 @@ function render(){
   var undef=products.filter(function(p){return p.week_stock_units==null}).length;
   el('kLowStock').textContent=low;
   el('kUndefined').textContent=undef;
+  el('kNegativeStock').textContent=products.filter(function(p){return Number(stock[p.id]||0)<0}).length;
   // La tabla del resumen muestra una selección útil; el maestro completo se consulta en Productos / SKU.
-  var stockPreview=products.slice().sort(function(a,b){return Number(stock[b.id]||0)-Number(stock[a.id]||0)}).slice(0,200);
+  var stockPreview=products.slice().sort(function(a,b){
+    var aQty=Number(stock[a.id]||0),bQty=Number(stock[b.id]||0);
+    if(aQty<0&&bQty>=0)return -1;
+    if(bQty<0&&aQty>=0)return 1;
+    if(aQty>0&&bQty===0)return -1;
+    if(bQty>0&&aQty===0)return 1;
+    return bQty-aQty;
+  }).slice(0,200);
   el('stockRows').innerHTML=stockPreview.map(function(p){
     var s=Number(stock[p.id]||0),defined=p.week_stock_units!=null,threshold=defined?Number(p.week_stock_units):null;
-    var status=!defined?'<span class="pill warn">Pendiente Marsella</span>':(s<=0?'<span class="pill bad">Sin stock</span>':(p.stock_alert_enabled!==false&&s<=threshold?'<span class="pill warn">1 semana o menos</span>':'<span class="pill ok">Normal</span>'));
+    var status=s<0?'<span class="pill bad">STOCK NEGATIVO · CONCILIAR</span>':(!defined?'<span class="pill warn">Umbral pendiente</span>':(s===0?'<span class="pill bad">Sin stock</span>':(p.stock_alert_enabled!==false&&s<=threshold?'<span class="pill warn">1 semana o menos</span>':'<span class="pill ok">Normal</span>')));
     return '<tr><td class="sku">'+esc(p.sku)+'</td><td><b>'+esc(p.name)+'</b><div class="muted">'+esc([p.manufacturer_code||p.model,p.product_color?('Color '+p.product_color):'',p.variant_code?('Talla '+p.variant_code):''].filter(Boolean).join(' · '))+'</div></td><td>'+esc(p.brand)+'</td><td><b>'+s.toLocaleString('es-CL')+'</b></td><td>'+(defined?threshold.toLocaleString('es-CL'):'—')+'</td><td>'+status+'</td><td>'+esc(p.unit)+'</td></tr>'
   }).join('');
   renderProducts(products);renderControl();renderOrderControl();renderManagement();renderERP();
