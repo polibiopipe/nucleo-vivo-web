@@ -105,9 +105,11 @@ alter table public.sep_event_signups enable row level security;
 alter table public.sep_consents enable row level security;
 alter table public.sep_privacy_requests enable row level security;
 
-revoke all on all tables in schema public from anon, authenticated;
--- ¡ATENCIÓN! La revocación global anterior NO es apta para bases con otras aplicaciones.
--- En un proyecto dedicado se ejecuta aquí; en una base compartida jamás ejecutar este archivo.
+revoke all on public.sep_clubs,public.sep_profiles,public.sep_join_requests,
+ public.sep_staff,public.sep_events,public.sep_event_clubs,
+ public.sep_event_signups,public.sep_consents,public.sep_privacy_requests
+ from anon, authenticated;
+-- Importante: no se modifican privilegios de ninguna otra tabla.
 grant usage on schema public to anon, authenticated;
 grant select on public.sep_clubs to anon, authenticated;
 grant select, insert on public.sep_profiles to authenticated;
