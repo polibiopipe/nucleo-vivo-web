@@ -286,6 +286,11 @@ body{background:#fffaf2}
 @media(max-width:400px){.c6-cinema{height:875px}.c6-content h1{font-size:2.45rem}.c6-photo{height:58%}.c6-quick .c8-card{min-height:70px}}
 @media(prefers-reduced-motion:reduce){.c6-photo{animation:none}.c6-quick .c8-card{transition:none}}
 
+
+/* Participación real se habilitará solo con backend independiente */
+.c6-register{min-height:43px;border:1px solid #d9c4e1;background:#fff9f2;border-radius:999px;padding:9px 14px;color:#6a2c70;font-weight:850;white-space:nowrap}.c6-register:hover{background:#f6e9f6}
+.c9-soft-cta{background:#e8f8f1;border:1px solid #b2e5d3;border-radius:999px;color:#086c68;font-size:.86rem;font-weight:850;padding:9px 16px;cursor:pointer}.c9-soft-cta:hover{background:#d6f4e5}
+@media(max-width:690px){.c6-register{font-size:.8rem;min-height:37px;padding:8px 10px}.c6-content{gap:10px}.c9-soft-cta{font-size:.79rem;padding:8px 11px}}
 </style>
 </head>
 <body>
@@ -293,7 +298,7 @@ body{background:#fffaf2}
 <header class="site-header c6-header"><div class="c6-container c6-nav">
 <a href="#inicio" class="c6-brand" aria-label="Sexualidad en Plenitud, inicio"><svg class="c6-logo" aria-hidden="true" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M32 26C17 18 15 4 29 5c14 1 13 14 3 21Z" fill="#e07c69"/><path d="M34 29C46 8 63 14 57 28 51 40 42 37 34 29Z" fill="#659c89"/><path d="M29 31C5 23 1 38 12 46c9 7 16-6 17-15Z" fill="#f0b86d"/><path d="M33 33C40 56 56 61 57 45c0-11-14-13-24-12Z" fill="#8e668c"/><path d="M30 36C17 49 20 61 32 59c13-3 8-15-2-23Z" fill="#31575e"/><path d="M18 30c0-9 7-15 15-15s14 6 14 15c0 8-9 16-14 20-6-4-15-12-15-20Z" fill="#fff8f1"/><path d="M23 29c0-5 6-7 10-2 5-6 12-2 11 3-1 5-7 10-11 13-5-4-10-8-10-14Z" fill="#e17b76"/></svg><span class="c6-brand-name"><strong>Sexualidad</strong><em>en Plenitud</em><small>CONVERSAR · APRENDER · SENTIR</small></span></a>
 <nav class="c6-links" aria-label="Navegación"><button type="button" data-home>Inicio</button><button type="button" data-open="conversaciones">Comunidad</button><button type="button" data-open="psicologia">Psicología</button><button type="button" data-open="actividades">Encuentros</button><button type="button" data-open="aprender">Aprender</button><button type="button" data-info="voluntariado">Voluntariado</button></nav>
-<div class="c6-controls"><button class="c6-font" type="button" id="decrease" aria-label="Reducir letra">A−</button><button class="c6-font" type="button" id="increase" aria-label="Aumentar letra">A+</button><button type="button" class="c6-login" id="loginTop">Ingresar <span aria-hidden="true">↗</span></button></div></div></header>
+<div class="c6-controls"><button class="c6-font" type="button" id="decrease" aria-label="Reducir letra">A−</button><button class="c6-font" type="button" id="increase" aria-label="Aumentar letra">A+</button><button type="button" class="c6-register" id="sepJoinTop">Crear usuario</button><button type="button" class="c6-login" id="loginTop">Ingresar <span aria-hidden="true">↗</span></button></div></div></header>
 <main id="contenido"><div id="publicView">
 <section id="inicio" class="c6-shell" aria-labelledby="c6-title">
 <div class="c6-cinema">
@@ -304,7 +309,7 @@ body{background:#fffaf2}
 <h1 id="c6-title">Hablemos de <em>sexualidad</em><span>sin tabúes.</span></h1>
 <p class="c6-subhead">Una comunidad para conversar de afecto, deseo e intimidad con libertad, alegría y respeto. Sin etiquetas. Sin juicios.</p>
 <div class="c6-actions"><button type="button" id="heroLogin" class="c6-primary">Conocer la comunidad <span aria-hidden="true">→</span></button><button type="button" id="explore" class="c6-secondary"><span aria-hidden="true">▷</span> Cómo funciona</button></div>
-<p class="c6-caption">Puedes conversar, escuchar o simplemente acompañar. Sin presiones.</p>
+<p class="c6-caption">Puedes conversar, escuchar o simplemente acompañar. Sin presiones.</p><button type="button" id="sepClubPreview" class="c9-soft-cta">✦ Mi club y actividades interclubes <span aria-hidden="true">↗</span></button>
 </div>
 <div class="c6-drift" aria-hidden="true"><span class="c6-spark">✳</span>«Aquí hay espacio para tu voz»</div>
 <div class="c6-credit">Imagen referencial: Kampus Production / Pexels. No representa a participantes del proyecto.</div>
@@ -342,6 +347,7 @@ body{background:#fffaf2}
 <!-- Login demo. Not secure or production authentication. -->
 <div class="overlay hidden" id="loginOverlay" role="presentation"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="loginTitle"><button class="close" id="closeLogin" aria-label="Cerrar">×</button><span class="eyebrow">Bienvenido a la comunidad</span><h2 id="loginTitle">Un espacio seguro comienza con una buena conversación.</h2><p>Accede para conocer el funcionamiento del proyecto.</p><label class="field-label" for="username">Correo de acceso</label><input class="field" id="username" type="email" autocomplete="username" placeholder="nombre@ejemplo.cl"><label class="field-label" for="password">Contraseña</label><input class="field" id="password" type="password" autocomplete="current-password" placeholder="Tu contraseña"><div class="error" id="loginError" role="alert"></div><button class="pill teal" id="login" style="width:100%">Ingresar a mi comunidad →</button><div class="demo-note"><strong>Acceso de demostración.</strong> Estas cuentas no son cuentas reales y no protegen información personal. El piloto con participantes requiere autenticación segura y autorización institucional.</div><div class="demo-accounts"><button id="demoParticipant" type="button">👤 Entrar como participante<br><small>elena@demo.cl</small></button><button id="demoMod" type="button">🛡️ Entrar como moderadora<br><small>psicologa@demo.cl</small></button></div></div></div>
 <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+<link rel="stylesheet" href="./sep-onboarding.css"><script src="./sep-backend-config.js"></script>
 <script>
 (()=>{
 'use strict';
@@ -349,9 +355,9 @@ const $=q=>document.querySelector(q), $$=q=>Array.from(document.querySelectorAll
 const accounts={'elena@demo.cl':{password:'1234',name:'Elena',role:'participante'},'psicologa@demo.cl':{password:'1234',name:'Daniela',role:'moderacion'}};
 const state={user:null,scale:1,posts:[{author:'Reflexión ilustrativa',message:'Me parece importante que podamos conversar sobre deseo y cariño sin sentir que estamos haciendo algo incorrecto.'},{author:'Reflexión ilustrativa',message:'A veces hablar de compañía e intimidad resulta tan importante como hablar de sexualidad.'}],pending:[],interest:{}};
 let toastTimer,recognition=null,requestedPage=null;function notify(message){const el=$('#toast');el.textContent=message;el.classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.add('hidden'),4000)}
-function showLogin(){ $('#loginError').textContent='';$('#loginOverlay').classList.remove('hidden');$('#username').focus() }
+function showLogin(){if(window.SEP_ACCOUNT){window.SEP_ACCOUNT.openLogin();return;}$('#loginError').textContent='';$('#loginOverlay').classList.remove('hidden');$('#username').focus()}
 function closeLogin(){$('#loginOverlay').classList.add('hidden')}
-$('#loginTop').addEventListener('click',()=>state.user ? showPage('inicio') : showLogin());$('#heroLogin').onclick=showLogin;$('#ribbonLogin').onclick=showLogin;$('#explore').onclick=()=>showSepInfo('proyecto');$('#closeLogin').onclick=closeLogin;
+$('#loginTop').addEventListener('click',()=>state.user ? showPage('inicio') : showLogin());$('#heroLogin').onclick=()=>window.SEP_ACCOUNT?window.SEP_ACCOUNT.openRegister():showLogin();$('#ribbonLogin').onclick=showLogin;$('#sepJoinTop').onclick=()=>window.SEP_ACCOUNT?window.SEP_ACCOUNT.openRegister():showLogin();$('#sepClubPreview').onclick=()=>window.SEP_ACCOUNT?window.SEP_ACCOUNT.openPreview():showLogin();$('#explore').onclick=()=>showSepInfo('proyecto');$('#closeLogin').onclick=closeLogin;
 $('#loginOverlay').addEventListener('click',e=>{if(e.target.id==='loginOverlay')closeLogin()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#loginOverlay').classList.contains('hidden'))closeLogin()});
 function showSepInfo(which){const volunteer=which==='voluntariado';$('#sepInfoTitle').textContent=volunteer?'Psicólogos voluntarios: una red responsable.':'Del diálogo digital al encuentro comunitario.';const area=$('#sepInfoBody');area.replaceChildren();const p=document.createElement('p');p.textContent=volunteer?'La futura red se proyecta con psicólogos acreditados, supervisión, protocolos de protección y autocuidado. La fundación y la convocatoria aún no se han constituido.':'La aplicación es una puerta de entrada, no el tratamiento. El piloto se diseñaría junto a clubes de personas mayores de Villa Alemana, combinando conversación moderada, psicoeducación sexual y encuentros presenciales voluntarios.';area.append(p);const ul=document.createElement('ul');const items=volunteer?['Psicólogos voluntarios con funciones y formación verificadas.','Facilitación de grupos y orientación general, nunca psicoterapia pública.','Estudiantes de Psicología participan bajo supervisión y resguardo ético.']:['1. Escuchar a la comunidad: diagnóstico participativo y consentimiento.','2. Conversar: seis encuentros con facilitación psicológica y acceso digital por voz o texto.','3. Evaluar: antes y después, medir comodidad al hablar, conocimientos y percepción de seguridad; registrar también posibles efectos adversos.','4. Ajustar: revisar resultados y decidir con las personas mayores si el programa continúa.'];for(const v of items){const li=document.createElement('li');li.textContent=v;ul.append(li)}area.append(ul);const end=document.createElement('p');end.textContent='Propuesta académica: aún no se han ejecutado encuentros ni demostrado resultados. La futura implementación requerirá acuerdos con los clubes, credenciales, seguridad de los datos y autorizaciones pertinentes.';end.style.fontSize='.88rem';area.append(end);$('#sepInfoOverlay').classList.remove('hidden');$('#sepInfoClose').focus();}
 function closeSepInfo(){$('#sepInfoOverlay').classList.add('hidden')}
@@ -386,4 +392,5 @@ $('#increase').onclick=()=>{state.scale=Math.min(1.5,+(state.scale+.1).toFixed(2
 try{const stored=JSON.parse(sessionStorage.getItem('sep-session')||'null');if(stored && accounts[stored.username] && accounts[stored.username].role===stored.role){$('#username').value=stored.username;$('#password').value=accounts[stored.username].password;login();$('#password').value=''}}catch(_){}
 })();
 </script>
+<script src="./sep-onboarding.js" defer></script>
 </body></html>
