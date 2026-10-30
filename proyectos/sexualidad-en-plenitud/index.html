@@ -105,7 +105,7 @@ body:has(#publicView:not(.hidden)) .footer{display:none}
 .gm-sun{background:linear-gradient(135deg,#fff2cb,#ffdc88)}
 .gm-sky{background:linear-gradient(135deg,#e4f1ff,#bddfff)}
 .gm-symbol{display:grid;place-items:center;width:43px;height:43px;font-size:1.33rem;border-radius:15px;background:#ffffffaf;margin-bottom:4px}
-.gateway-module strong{font-size:clamp(.92rem,1.08vw,1.22rem);line-height:1.08;letter-spacing:-.02em}
+.gateway-module .gm-photo{position:absolute;right:0;top:0;width:39%;height:100%;object-fit:cover;object-position:center;opacity:.58;mask-image:linear-gradient(90deg,transparent,black 45%);pointer-events:none;z-index:0}.gateway-module>.gm-symbol,.gateway-module>strong,.gateway-module>span:not(.gm-photo){position:relative;z-index:1}.gateway-module .gm-arrow{position:absolute;z-index:2}.gateway-module strong{font-size:clamp(.92rem,1.08vw,1.22rem);line-height:1.08;letter-spacing:-.02em}
 .gateway-module>span:not(.gm-symbol):not(.gm-arrow){font-size:clamp(.72rem,.77vw,.88rem);line-height:1.32;padding-right:12px;max-width:180px;color:#4e3857}
 .gm-arrow{position:absolute;bottom:11px;right:12px;border-radius:50%;height:31px;width:31px;display:grid;place-items:center;background:#fff;font-size:1.07rem;color:#81295d}
 .gateway-trust{border-radius:18px;background:#fff7e8;display:flex;justify-content:space-around;align-items:center;gap:12px;padding:7px 12px;border:1px solid #f8e6d6;color:#3a2b50;font-weight:750;font-size:clamp(.68rem,.81vw,.9rem)}
@@ -154,8 +154,8 @@ body:has(#publicView:not(.hidden)) .footer{display:none}
 <div class="gateway-deco gateway-deco-two" aria-hidden="true">✳</div>
 </div>
 <div class="gateway-modules" aria-label="Elige tu espacio">
-<button class="gateway-module gm-coral" type="button" data-open="conversaciones"><span class="gm-symbol" aria-hidden="true">💬</span><strong>Comunidad</strong><span>Conversa en grupos moderados.</span><span class="gm-arrow" aria-hidden="true">↗</span></button>
-<button class="gateway-module gm-lav" type="button" data-open="actividades"><span class="gm-symbol" aria-hidden="true">🗓️</span><strong>Encuentros</strong><span>Actividades en clubes y círculos.</span><span class="gm-arrow" aria-hidden="true">↗</span></button>
+<button class="gateway-module gm-coral" type="button" data-open="conversaciones"><img class="gm-photo" src="https://images.unsplash.com/photo-1764173039543-f9f197744e1b?auto=format&fit=crop&w=420&q=75" alt="" loading="lazy"><span class="gm-symbol" aria-hidden="true">💬</span><strong>Comunidad</strong><span>Conversa en grupos moderados.</span><span class="gm-arrow" aria-hidden="true">↗</span></button>
+<button class="gateway-module gm-lav" type="button" data-open="actividades"><img class="gm-photo" src="https://images.unsplash.com/photo-1773227059881-ef8ecf22aac8?auto=format&fit=crop&w=420&q=75" alt="" loading="lazy"><span class="gm-symbol" aria-hidden="true">🗓️</span><strong>Encuentros</strong><span>Actividades en clubes y círculos.</span><span class="gm-arrow" aria-hidden="true">↗</span></button>
 <button class="gateway-module gm-mint" type="button" data-open="psicologia"><span class="gm-symbol" aria-hidden="true">🫶</span><strong>Con Psicología</strong><span>Psicoeducación y reflexión grupal.</span><span class="gm-arrow" aria-hidden="true">↗</span></button>
 <button class="gateway-module gm-sun" type="button" data-open="aprender"><span class="gm-symbol" aria-hidden="true">📚</span><strong>Aprende</strong><span>Sexualidad, derechos y bienestar.</span><span class="gm-arrow" aria-hidden="true">↗</span></button>
 <button class="gateway-module gm-sky" type="button" data-info="voluntariado"><span class="gm-symbol" aria-hidden="true">🤝</span><strong>Voluntariado</strong><span>Profesionales que quieren aportar.</span><span class="gm-arrow" aria-hidden="true">↗</span></button>
@@ -163,7 +163,7 @@ body:has(#publicView:not(.hidden)) .footer{display:none}
 <div class="gateway-trust">
 <span><b aria-hidden="true">◉</b> Grupos moderados</span><span><b aria-hidden="true">♡</b> Respeto y autonomía</span><span><b aria-hidden="true">🎙</b> Dictado y lectura por voz</span><span><b aria-hidden="true">♧</b> Encuentros en los clubes</span><span><b aria-hidden="true">⚿</b> Privacidad y derechos</span>
 </div>
-<p class="gateway-disclaimer">Prototipo académico · Imagen: Centre for Ageing Better / Unsplash · Clubes, profesionales y actividades todavía por confirmar.</p>
+<p class="gateway-disclaimer">Prototipo académico · Fotos: Centre for Ageing Better y Age Cymru / Unsplash · Actividades y convenios aún por confirmar.</p>
 <button id="ribbonLogin" class="hidden" type="button" tabindex="-1">Ingresar</button>
 </section>
 </div>
