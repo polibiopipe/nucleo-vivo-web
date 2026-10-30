@@ -8,13 +8,23 @@
 4. La app permite solicitar cupo en encuentros realizados en sedes de clubes y en actividades interclubes con clubes previamente invitados.
 5. No se publican directorios de miembros ni listas de asistentes.
 
-## Supabase y activación
-Se preparó el SQL backend/001_sep_schema_dedicated_only.sql para un proyecto Supabase independiente, con tablas de clubes, afiliaciones solicitadas, perfiles mínimos, eventos, consentimientos y peticiones sobre datos. Incluye políticas de seguridad por fila (RLS). Las funciones de publicación de conversaciones íntimas permanecen deshabilitadas.
+## Supabase y activación — situación comprobada al 30-10-2026
+El proyecto **nucleo-vivo-aula-staging** (ref ygfmpwlpmaasooltjujb) está activo. Aunque Aula Viva prácticamente no tiene contenido académico, **NO es una base vacía**: contiene tablas activas de MSC Safety y otras de Somnograph. Las cuentas comparten auth.users y tres triggers: uno crea aula_profiles y dos revisan la relación con MSC.
 
-**No ejecutar el esquema en Núcleo Vivo Aula ni en bases de MSC Safety o Escucha Viva.** El entorno activo de Aula comparte la autenticación y contiene advertencias de seguridad preexistentes. El antiguo proyecto Núcleo Vivo Conecta no se pudo restaurar porque la organización alcanzó el límite de dos proyectos gratuitos activos. No se pausó ningún proyecto ni se autorizó un gasto.
+Se instaló exclusivamente la migración aditiva **sep_aula_staging_memberships_v1**, documentada en backend/002_sep_aula_staging.sql. Crea nueve tablas nuevas con prefijo sep_ para registro mínimo, clubes y actividades interclubes, consentimientos, roles profesionales y solicitudes sobre derechos. Se verificó RLS en las nueve tablas, permisos de lectura/escritura y ausencia de nuevas alertas de los advisors que nombren sep_. No se modificaron tablas, credenciales ni triggers de Aula, MSC o Somnograph.
 
-La configuración pública sep-backend-config.js deja registro real deshabilitado. Para activarlo deben definirse responsable legal y contacto verificable, proyecto aislado, revisión de riesgos, consentimiento validado y pruebas adversariales.
+**Estado: BASE PREPARADA PARA ENSAYOS SIN USUARIOS, PERO REGISTRO PÚBLICO NO ABIERTO.** El archivo sep-backend-config.js continúa con mode: preview y registrationOpen: false. El esquema implementado no permite por sí solo separar las sesiones Auth de los otros productos.
 
+Condiciones particulares antes de habilitar cuentas:
+1. Definir responsable identificable del tratamiento y contacto de privacidad, con textos aprobados de información y consentimiento.
+2. Decidir y verificar solución de identidad: al crear un usuario se dispara actualmente un trigger de Aula y dos de MSC. No modificar estos triggers sin pruebas de regresión de las aplicaciones existentes.
+3. Ejecutar pruebas adversariales de RLS con usuarios reales de prueba y confirmar que una cuenta nueva no da acceso involuntario a otros módulos.
+4. Validar procedimientos de afiliación e inscripción con las directivas de clubes, sin inventar convenios.
+5. Revisión de riesgos de co-alojamiento y retención; mantener deshabilitados los relatos íntimos mientras siga compartida esta base.
+6. Realizar EIPD, revisión jurídica y protección de credenciales de profesionales.
+
+**No activar automáticamente el modo live ni introducir conversaciones sensibles.** Si el proyecto escala más allá de un piloto de mínima información, evaluar migración a una base independiente antes de tratar datos de sexualidad.
+ 
 ## Ley chilena 21.719
 Fuente oficial: Biblioteca del Congreso Nacional, https://www.bcn.cl/leychile/Navegar?idNorma=1209272&idVersion=2026-12-01. Su entrada en vigencia está prevista para el **1 de diciembre de 2026**. Hasta el 30 de noviembre de 2026 rige el régimen correspondiente de la Ley 19.628.
 
