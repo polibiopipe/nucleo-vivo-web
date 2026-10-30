@@ -224,6 +224,68 @@ body{background:#fffaf2}
 @media(max-width:690px){.c6-cinema{height:770px}.c6-photo{height:58%;object-position:center 55%;filter:saturate(1.07) brightness(1.06)}.c6-overlay{background:linear-gradient(180deg,#fff9ef 0%,#fff8ed 36%,rgba(255,248,237,.74) 49%,rgba(255,248,237,.05) 67%,rgba(53,39,48,.10) 80%)}.c6-content{top:24px;left:20px;right:20px;width:auto;transform:none;gap:11px}.c6-content h1{font-size:clamp(2.7rem,9vw,3.5rem)}.c6-eyebrow{font-size:.74rem}.c6-subhead{font-size:1rem;max-width:95%}.c6-caption{font-size:.78rem}.c6-drift{bottom:194px;right:10px;max-width:180px;padding:7px 9px;font-size:.85rem}.c6-credit{bottom:185px;left:8px;right:auto;max-width:135px;line-height:1.22;font-size:.53rem}.c6-quick button:nth-child(n){background:#fffcf8}.c6-quick button:nth-child(2){background:#f4fcf9}.c6-quick button:nth-child(3){background:#f9f5fc}}
 @media(max-width:400px){.c6-cinema{height:815px}.c6-content h1{font-size:2.65rem}.c6-photo{height:54%}.c6-actions{gap:7px}}
 
+
+/* V8. Una portada vital y cinematográfica sin sobrecarga ni edadismo */
+:root{--c8-cream:#fff8ec;--c8-plum:#361947;--c8-rose:#df386e;--c8-coral:#f77862;--c8-teal:#007e80;--c8-gold:#ffbe58;--c8-lav:#9166af;}
+.c6-header{height:73px;background:#fffdf8;box-shadow:0 3px 16px #5e2c4210;border-bottom:1px solid #f3dfd8}
+.c6-nav{height:73px}
+.c6-brand-name strong{color:#321547}.c6-brand-name em{color:var(--c8-rose)}
+.c6-links button{color:#3d2a50}.c6-links button:hover{color:#c22f68}
+.c6-login{background:linear-gradient(110deg,#c02d72,#ea517b);color:white;box-shadow:0 6px 17px #c02d722c}
+#publicView{min-height:calc(100dvh - 73px)}
+.c6-shell{height:calc(100dvh - 73px);min-height:580px;padding:9px clamp(10px,1.3vw,22px) 6px;gap:9px;grid-template-rows:minmax(280px,1fr) 50px 13px;background:#fff9f2;overflow:hidden}
+.c6-cinema{border-radius:27px;box-shadow:0 13px 30px #602c4220;background:#fff3df;min-height:0}
+.c6-photo{left:auto;right:0;top:0;bottom:0;width:66%;height:100%;object-fit:cover;object-position:58% center;filter:contrast(1.1) saturate(1.21) brightness(1.05);animation:c6SlowFilm 25s ease-in-out alternate infinite}
+.c6-overlay{background:linear-gradient(90deg,#fff7e8 0%,#fff7e8 33%,rgba(255,247,232,.99) 39%,rgba(255,247,232,.8) 48%,rgba(255,247,232,.08) 63%,rgba(255,247,232,0) 76%),linear-gradient(0deg,rgba(44,29,32,.17),transparent 25%);z-index:-2}
+.c6-cinema:before{left:-115px;top:-135px;width:300px;height:300px;border:29px solid #ffd379bb;z-index:0;opacity:1;mix-blend-mode:multiply;pointer-events:none}
+.c6-cinema:after{top:auto;bottom:67px;right:-40px;width:140px;height:140px;border:31px solid #fd8a8fbd;z-index:0;mix-blend-mode:multiply;pointer-events:none}
+.c6-content{z-index:1;left:clamp(23px,4.5vw,75px);top:42%;width:min(48%,670px);gap:clamp(10px,1.5vh,20px)}
+.c6-eyebrow{display:inline-flex;align-items:center;background:#dbf5e9;border:1px solid #a6ded1;border-radius:100px;padding:8px 12px;color:#056d70;font-size:clamp(.65rem,.73vw,.83rem);letter-spacing:.04em;line-height:1.2;font-weight:850}
+.c6-light{background:#e7557b;flex:0 0 7px;margin-right:4px}
+.c6-content h1{color:#361947;font-family:Georgia,"Times New Roman",serif;line-height:.99;font-size:clamp(3rem,4.8vw,5.25rem);letter-spacing:-.055em;font-weight:760;max-width:700px;margin:0;text-wrap:balance}
+.c6-content h1 em{color:#d93b72;font-style:italic;display:block;font-weight:740}
+.c6-content h1 span{color:#007e80;font-style:italic;font-weight:740;display:block;position:relative;width:fit-content}
+.c6-content h1 span:after{content:"";display:block;width:77%;height:5px;background:#ffc15a;border-radius:80%;transform:translate(3%,3px) rotate(-2deg)}
+.c6-subhead{font-size:clamp(1rem,1.19vw,1.24rem);line-height:1.52;max-width:505px;color:#4d3c4f;font-weight:480}
+.c6-primary{background:linear-gradient(110deg,#df376d,#f56d62);color:white;border:1px solid transparent;padding:12px 24px;box-shadow:0 10px 21px #d73c6940}
+.c6-primary:hover{background:linear-gradient(110deg,#bc2b60,#e45a59)}
+.c6-secondary{background:white;border:1px solid #ead2d7;color:#4b2b4d}
+.c6-secondary:hover{background:#fef2ee}
+.c6-caption{font-size:.82rem;color:#725670}
+.c6-drift{top:6%;right:2.9%;display:flex;align-items:center;gap:8px;max-width:250px;background:#fffaeccf;border:1px solid #fff6d5;border-radius:18px 18px 4px 18px;color:#3b2b46;padding:11px 13px;font-size:clamp(.83rem,1vw,1.15rem);line-height:1.24;font-style:italic;z-index:1;box-shadow:0 10px 22px #281a2a23}
+.c6-spark{color:#e1597a;font-size:1.55rem;font-style:normal}
+.c6-credit{right:10px;bottom:155px;font-size:.54rem;padding:3px 6px;z-index:1;opacity:.85}
+.c6-quick{position:absolute;left:15px;right:15px;bottom:15px;z-index:3;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;backdrop-filter:none;background:transparent;border:0;}
+.c6-quick .c8-card{min-height:118px;border:1px solid #fff9;border-radius:22px;box-shadow:0 10px 26px #40223f23;display:flex;align-items:center;gap:11px;padding:18px 17px;background:none;transition:transform .18s,box-shadow .18s}
+.c6-quick .c8-card:hover{transform:translateY(-5px);box-shadow:0 16px 27px #42223d33}
+.c6-quick .c8-card.c8-coral{background:linear-gradient(120deg,#ffe2dd,#ffc9c5)}
+.c6-quick .c8-card.c8-mint{background:linear-gradient(120deg,#d5f6e9,#b7eedc)}
+.c6-quick .c8-card.c8-lilac{background:linear-gradient(120deg,#eee0ff,#dcc4f8)}
+.c6-quick .c8-card:nth-child(n):hover{background-color:#fff}
+.c6-quick .c8-card .c6-quick-icon{width:54px;height:54px;flex:0 0 54px;border-radius:17px;display:grid;place-items:center;background:#fffaf2;border:0;color:#c94068;font-size:2.1rem;box-shadow:0 5px 14px #52204d16}
+.c6-quick .c8-mint .c6-quick-icon{color:#008b85}
+.c6-quick .c8-lilac .c6-quick-icon{color:#814bae}
+.c6-quick .c8-card .c6-quick-text{gap:6px;z-index:1}
+.c6-quick .c8-card .c6-quick-text strong{color:#3a1b45;font-size:clamp(1.12rem,1.4vw,1.57rem);line-height:1.1;letter-spacing:-.025em}
+.c6-quick .c8-card .c6-quick-text small{color:#624f69;font-size:clamp(.78rem,.89vw,.94rem);line-height:1.28}
+.c6-quick .c8-card .c6-quick-arrow{color:#b8396e;background:#fffaf7;border-radius:50%;width:33px;height:33px;flex:0 0 33px;display:grid;place-items:center;font-size:1.2rem}
+.c6-quick .c8-mint .c6-quick-arrow{color:#008985}
+.c6-quick .c8-lilac .c6-quick-arrow{color:#8756a5}
+.c6-proof{grid-template-columns:1fr 1fr 1fr 1fr auto;gap:14px;border:1px solid #f3e2dc;background:#fffdf7;box-shadow:none;padding:0 15px;border-radius:15px}
+.c6-proof-kicker{color:#d13a75;font-size:.77rem}
+.c6-proof div b{font-weight:760;color:#e55b73;font-size:1.25rem}
+.c6-proof div span{font-weight:630;color:#4e4055;font-size:.82rem}
+.c6-proof-cta{background:#e3f8ed;color:#086862;border:1px solid #c1e6d8;padding:9px 13px}
+.c6-proof-cta:hover{background:#c9f1df}
+.c6-status{font-size:.65rem;color:#836c7a}
+@media(min-width:1051px) and (max-height:810px){.c6-content{top:36%;gap:9px}.c6-content h1{font-size:clamp(2.65rem,3.7vw,4.2rem)}.c6-subhead{font-size:clamp(.92rem,1.04vw,1.1rem)}.c6-actions .c6-primary,.c6-actions .c6-secondary{min-height:41px;padding:9px 16px}.c6-quick .c8-card{min-height:102px;padding:12px 16px}.c6-quick .c8-card .c6-quick-icon{width:45px;height:45px;flex-basis:45px;font-size:1.7rem}.c6-credit{bottom:135px}.c6-drift{padding:8px 10px}}
+@media(min-width:1051px) and (max-height:670px){.c6-content{top:33%}.c6-content h1{font-size:clamp(2.4rem,3.3vw,3.8rem)}.c6-drift{display:none}.c6-quick .c8-card{min-height:87px;padding:9px 12px}.c6-quick .c8-card .c6-quick-text strong{font-size:1.1rem}.c6-quick .c8-card .c6-quick-text small{font-size:.74rem}.c6-credit{bottom:112px}}
+@media(max-width:1170px) and (min-width:951px){.c6-content h1{font-size:clamp(2.7rem,4.2vw,4.3rem)}.c6-drift{display:none}.c6-quick .c8-card .c6-quick-icon{width:40px;height:40px;flex-basis:40px;font-size:1.5rem}.c6-quick .c8-card{padding:13px 12px}}
+@media(max-width:950px){.c6-header{height:auto}.c6-shell{height:auto;min-height:0;overflow:visible;grid-template-rows:auto auto auto}.c6-cinema{height:700px}.c6-photo{left:0;right:0;top:auto;bottom:0;width:100%;height:63%;object-position:50% 35%}.c6-overlay{background:linear-gradient(180deg,#fff7e8 0%,#fff7e8 28%,rgba(255,247,232,.96) 38%,rgba(255,247,232,.44) 52%,transparent 70%)}.c6-content{top:6%;left:26px;width:90%;max-width:700px;transform:none;gap:12px}.c6-content h1{font-size:clamp(2.7rem,6vw,4.4rem)}.c6-quick{left:11px;right:11px;bottom:11px}.c6-quick .c8-card{min-height:102px;padding:11px;gap:8px}.c6-quick .c8-card .c6-quick-icon{width:36px;height:36px;flex-basis:36px;font-size:1.4rem}.c6-quick .c8-card .c6-quick-text strong{font-size:1.03rem}.c6-quick .c8-card .c6-quick-text small{font-size:.75rem}.c6-quick .c8-card .c6-quick-arrow{width:27px;height:27px;flex-basis:27px}.c6-credit{bottom:122px}.c6-drift{display:none}}
+@media(max-width:690px){.c6-cinema{height:825px}.c6-photo{height:59%;object-position:center 47%}.c6-overlay{background:linear-gradient(180deg,#fff7e8 0%,#fff7e8 35%,rgba(255,247,232,.88) 46%,rgba(255,247,232,.23) 62%,transparent 77%)}.c6-content{left:18px;right:18px;top:24px;width:auto;gap:12px}.c6-content h1{font-size:clamp(2.65rem,9.5vw,3.65rem)}.c6-subhead{font-size:1rem}.c6-quick{grid-template-columns:1fr;gap:7px}.c6-quick .c8-card{min-height:66px;padding:8px 11px;border-radius:15px}.c6-quick .c8-card .c6-quick-icon{width:35px;height:35px;flex-basis:35px;font-size:1.4rem}.c6-quick .c8-card .c6-quick-text{gap:1px}.c6-quick .c8-card .c6-quick-text strong{font-size:1.06rem}.c6-quick .c8-card .c6-quick-text small{font-size:.76rem}.c6-credit{left:10px;right:auto;bottom:232px}.c6-proof{display:grid;grid-template-columns:1fr 1fr;min-height:0;gap:10px;padding:13px}.c6-proof-kicker{grid-column:1/-1}.c6-proof div:nth-of-type(3){display:flex}.c6-proof-cta{grid-column:1/-1}}
+@media(max-width:400px){.c6-cinema{height:875px}.c6-content h1{font-size:2.45rem}.c6-photo{height:58%}.c6-quick .c8-card{min-height:70px}}
+@media(prefers-reduced-motion:reduce){.c6-photo{animation:none}.c6-quick .c8-card{transition:none}}
+
 </style>
 </head>
 <body>
@@ -238,28 +300,28 @@ body{background:#fffaf2}
 <img class="c6-photo" src="https://images.pexels.com/photos/6838536/pexels-photo-6838536.jpeg?auto=compress&cs=tinysrgb&w=1700" alt="Grupo de personas mayores conversando y compartiendo un momento al aire libre." decoding="async" fetchpriority="high" loading="eager">
 <div class="c6-overlay" aria-hidden="true"></div>
 <div class="c6-content">
-<div class="c6-eyebrow"><span class="c6-light"></span> VILLA ALEMANA · COMUNIDAD EN CONSTRUCCIÓN</div>
-<h1 id="c6-title">Hablemos de sexualidad <span>sin tabúes.</span></h1>
-<p class="c6-subhead">Un lugar para conversar sobre deseo, afectividad e intimidad. Diferentes historias, distintas formas de vivir la vejez y una misma libertad: ser escuchados.</p>
+<div class="c6-eyebrow"><span class="c6-light"></span> UN ESPACIO PARA CONVERSAR · VILLA ALEMANA</div>
+<h1 id="c6-title">Hablemos de <em>sexualidad</em><span>sin tabúes.</span></h1>
+<p class="c6-subhead">Una comunidad para conversar de afecto, deseo e intimidad con libertad, alegría y respeto. Sin etiquetas. Sin juicios.</p>
 <div class="c6-actions"><button type="button" id="heroLogin" class="c6-primary">Conocer la comunidad <span aria-hidden="true">→</span></button><button type="button" id="explore" class="c6-secondary"><span aria-hidden="true">▷</span> Cómo funciona</button></div>
 <p class="c6-caption">Puedes conversar, escuchar o simplemente acompañar. Sin presiones.</p>
 </div>
-<div class="c6-drift" aria-hidden="true">«Tu historia también tiene lugar»</div>
+<div class="c6-drift" aria-hidden="true"><span class="c6-spark">✳</span>«Aquí hay espacio para tu voz»</div>
 <div class="c6-credit">Imagen referencial: Kampus Production / Pexels. No representa a participantes del proyecto.</div>
 <div class="c6-quick" aria-label="Elige cómo explorar la comunidad">
-<button type="button" data-open="conversaciones"><span class="c6-quick-icon">◌</span><span class="c6-quick-text"><strong>Conversar</strong><small>Tu voz tiene lugar</small></span><span class="c6-quick-arrow">↗</span></button>
-<button type="button" data-open="psicologia"><span class="c6-quick-icon">♡</span><span class="c6-quick-text"><strong>Con Psicología</strong><small>Reflexionar sin juicios</small></span><span class="c6-quick-arrow">↗</span></button>
-<button type="button" data-open="actividades"><span class="c6-quick-icon">✳</span><span class="c6-quick-text"><strong>Encuentros</strong><small>En nuestros clubes</small></span><span class="c6-quick-arrow">↗</span></button>
+<button type="button" data-open="conversaciones" class="c8-card c8-coral"><span class="c6-quick-icon">❝</span><span class="c6-quick-text"><strong>Hablemos</strong><small>En nuestros círculos de conversación</small></span><span class="c6-quick-arrow">↗</span></button>
+<button type="button" data-open="psicologia" class="c8-card c8-mint"><span class="c6-quick-icon">✳</span><span class="c6-quick-text"><strong>Con Psicología</strong><small>Preguntas y reflexión sin juicios</small></span><span class="c6-quick-arrow">↗</span></button>
+<button type="button" data-open="actividades" class="c8-card c8-lilac"><span class="c6-quick-icon">✧</span><span class="c6-quick-text"><strong>Nos encontramos</strong><small>Actividades en clubes y comunidad</small></span><span class="c6-quick-arrow">↗</span></button>
 </div>
 </div>
 <div class="c6-proof">
-<span class="c6-proof-kicker">UN PROGRAMA CON SENTIDO</span>
-<div><b>01</b><span>Diagnóstico junto a personas mayores</span></div>
-<div><b>02</b><span>Psicoeducación y diálogo grupal</span></div>
-<div><b>03</b><span>Evaluación de beneficios y riesgos</span></div>
+<span class="c6-proof-kicker">ASÍ LO CONSTRUIREMOS</span>
+<div><b>01</b><span>Escuchar a los clubes</span></div>
+<div><b>02</b><span>Conversar con Psicología</span></div>
+<div><b>03</b><span>Evaluar y mejorar</span></div>
 <button type="button" class="c6-proof-cta" data-info="proyecto">Conocer el modelo <span aria-hidden="true">↗</span></button>
 </div>
-<p class="c6-status">Prototipo académico en desarrollo · Sin inscripciones reales ni atención clínica activa · Encuentros y voluntariado sujetos a acuerdos futuros.</p>
+<p class="c6-status">Prototipo académico en desarrollo · Actividades, voluntariado y atención profesional aún no están operativos.</p>
 <button id="ribbonLogin" class="hidden" type="button" tabindex="-1">Ingresar</button>
 </section></div>
 <div id="memberView" class="hidden"><section class="wrap app-shell"><div class="member-bar"><div><div class="eyebrow">Bienvenida a tu círculo <span class="badge-demo">DEMO</span></div><h2 id="greeting">Hola</h2><p>Tu voz importa. Participa a tu ritmo y con tranquilidad.</p></div><div class="member-actions"><button class="pill white sm" id="readSection">🔊 Leer esta sección</button><button class="pill white sm" id="stopVoice">Detener lectura</button><button class="pill white sm" id="signOut">Cerrar sesión</button></div></div>
