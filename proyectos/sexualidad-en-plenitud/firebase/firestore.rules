@@ -1,0 +1,119 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function verified() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+    function owns(uid) { return verified() && request.auth.uid == uid; }
+    function isMember() {
+      return verified() &&
+        exists(/databases/$(database)/documents/members/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/members/$(request.auth.uid)).data.clubId is string;
+    }
+    function memberClub() {
+      return get(/databases/$(database)/documents/members/$(request.auth.uid)).data.clubId;
+    }
+    function clubVerified(id) {
+      return exists(/databases/$(database)/documents/clubs/$(id)) &&
+        get(/databases/$(database)/documents/clubs/$(id)).data.status == 'verified';
+    }
+    function eligibleForEvent() {
+      return isMember() && clubVerified(memberClub()) &&
+        (resource.data.allVerifiedClubs == true ||
+        memberClub() in resource.data.invitedClubIds);
+    }
+    match /clubs/{clubId} {
+      allow get, list: if verified() && resource.data.status == 'verified';
+      allow write: if false; // Solo administración confiable en consola/SDK Admin
+    }
+    match /members/{uid} {
+      allow get: if owns(uid);
+      allow list: if false;
+      allow create: if owns(uid) &&
+        request.resource.data.keys().hasOnly(['nickname','clubId','createdAt','updatedAt']) &&
+        request.resource.data.keys().hasAll(['nickname','clubId','createdAt','updatedAt']) &&
+        request.resource.data.nickname is string &&
+        request.resource.data.nickname.size() >= 2 &&
+        request.resource.data.nickname.size() <= 60 &&
+        request.resource.data.clubId == null &&
+        request.resource.data.createdAt == request.time &&
+        request.resource.data.updatedAt == request.time;
+      allow update: if owns(uid) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nickname','updatedAt']) &&
+        request.resource.data.nickname is string &&
+        request.resource.data.nickname.size() >= 2 &&
+        request.resource.data.nickname.size() <= 60 &&
+        request.resource.data.updatedAt == request.time;
+      allow delete: if false; // Borrado de cuentas: proceso verificado por encargado
+    }
+    match /clubRequests/{uid} {
+      allow get: if owns(uid);
+      allow list: if false;
+      allow create: if owns(uid) &&
+        request.resource.data.keys().hasOnly(['clubId','proposedClubName','status','createdAt']) &&
+        request.resource.data.keys().hasAll(['clubId','proposedClubName','status','createdAt']) &&
+        request.resource.data.status == 'pending' &&
+        request.resource.data.createdAt == request.time &&
+        (
+          (request.resource.data.clubId is string &&
+            request.resource.data.proposedClubName == null &&
+            clubVerified(request.resource.data.clubId)) ||
+          (request.resource.data.clubId == null &&
+            request.resource.data.proposedClubName is string &&
+            request.resource.data.proposedClubName.size() >= 3 &&
+            request.resource.data.proposedClubName.size() <= 120)
+        );
+      allow update, delete: if false;
+    }
+    match /consents/{uid} {
+      allow get: if owns(uid);
+      allow list: if false;
+      allow create: if owns(uid) &&
+        request.resource.data.keys().hasOnly(['purpose','version','acceptedAt']) &&
+        request.resource.data.keys().hasAll(['purpose','version','acceptedAt']) &&
+        request.resource.data.purpose == 'community-account' &&
+        request.resource.data.version is string &&
+        request.resource.data.version.size() >= 3 &&
+        request.resource.data.version.size() <= 40 &&
+        request.resource.data.acceptedAt == request.time;
+      allow update, delete: if false;
+    }
+    match /staff/{uid} {
+      allow get: if owns(uid);
+      allow list, write: if false;
+    }
+    match /events/{eventId} {
+      allow get, list: if verified() && resource.data.status == 'published' &&
+        eligibleForEvent();
+      allow create, update, delete: if false;
+      match /signups/{uid} {
+        allow get: if owns(uid);
+        allow list: if false;
+        allow create: if owns(uid) &&
+          exists(/databases/$(database)/documents/events/$(eventId)) &&
+          get(/databases/$(database)/documents/events/$(eventId)).data.status == 'published' &&
+          isMember() && clubVerified(memberClub()) &&
+          (get(/databases/$(database)/documents/events/$(eventId)).data.allVerifiedClubs == true ||
+          memberClub() in get(/databases/$(database)/documents/events/$(eventId)).data.invitedClubIds) &&
+          request.resource.data.keys().hasOnly(['status','createdAt']) &&
+          request.resource.data.keys().hasAll(['status','createdAt']) &&
+          request.resource.data.status == 'requested' &&
+          request.resource.data.createdAt == request.time;
+        allow update, delete: if false;
+      }
+    }
+    match /privacyRequests/{id} {
+      allow get: if verified() && resource.data.uid == request.auth.uid;
+      allow list: if false;
+      allow create: if verified() &&
+        request.resource.data.keys().hasOnly(['uid','type','status','createdAt']) &&
+        request.resource.data.keys().hasAll(['uid','type','status','createdAt']) &&
+        request.resource.data.uid == request.auth.uid &&
+        request.resource.data.type in ['access','rectification','deletion','consent-withdrawal'] &&
+        request.resource.data.status == 'open' &&
+        request.resource.data.createdAt == request.time;
+      allow update, delete: if false;
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}
