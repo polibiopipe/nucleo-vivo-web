@@ -21,7 +21,7 @@
  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!root.hidden)close()});
  async function backend(){
    if(!ready)throw Error("Registro real no disponible");
-   if(!api){const mod=await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.91.0/+esm");api=mod.createClient(cfg.supabaseUrl,cfg.supabasePublishableKey,{auth:{persistSession:true,detectSessionInUrl:true,autoRefreshToken:true}})}
+   if(!api){const mod=await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/+esm");api=mod.createClient(cfg.supabaseUrl,cfg.supabasePublishableKey,{auth:{persistSession:true,detectSessionInUrl:true,autoRefreshToken:true}})}
    return api;
  }
  function show(t){tab=t;if(t==="register")register();else if(t==="signin")signin();else if(t==="preview")preview();else if(t==="hub")hub();else if(t==="privacy")privacy();}
