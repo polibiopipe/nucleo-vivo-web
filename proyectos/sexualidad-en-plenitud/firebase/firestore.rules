@@ -84,7 +84,9 @@ service cloud.firestore {
     }
     match /events/{eventId} {
       allow get, list: if verified() && resource.data.status == 'published' &&
-        isMember() && clubVerified(memberClub());
+        isMember() && clubVerified(memberClub()) &&
+        (resource.data.allVerifiedClubs == true ||
+         memberClub() in resource.data.invitedClubIds);
       allow create, update, delete: if false;
       match /signups/{uid} {
         allow get: if owns(uid);
